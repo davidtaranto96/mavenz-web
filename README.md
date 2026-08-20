@@ -89,14 +89,22 @@ mismo gesto reducido a una línea de un solo trazo, pensado para dibujarse con a
 
 ### `assets/video/` — lo mejor que hay
 
-Recortados para sacarles el subtitulado del video original, sin audio, listos para usar de fondo
-con `autoplay muted loop playsinline`.
+| Archivo | Qué muestra | Medidas | Peso |
+|---|---|---|---|
+| `banda-aerea-1.mp4` | Dron sobre San Lorenzo Chico, montañas de fondo, 13 s | 1600×360 | 0,5 MB |
+| `banda-aerea-2.mp4` | Dron, plano más abierto del valle, 12 s | 1600×360 | 0,4 MB |
 
-| Archivo | Qué muestra | Peso |
-|---|---|---|
-| `aereo-1.mp4` | Dron sobre San Lorenzo Chico, 7 s | 0,5 MB |
-| `aereo-2.mp4` | Dron, plano más abierto con montañas, 8 s | 1,0 MB |
-| `renders.mp4` | Recorrido por los renders del proyecto, 6 s | 1,4 MB |
+Sin audio, listos para `autoplay muted loop playsinline`.
+
+**Por qué son ultrawide y no cuadro completo.** Los videos originales son posteos de Instagram ya
+terminados, con el subtitulado quemado **en el centro del cuadro**, no abajo. No hay forma de
+sacarlo recortando por abajo. Lo que sí funciona es quedarse con el 40% superior del cuadro, que
+queda arriba del texto: da cielo, montaña y barrio, en una banda cinematográfica de 4,4:1 sin una
+sola letra encima. Es el formato que mejor le sienta a un hero de plataforma.
+
+**Si hace falta el cuadro completo en movimiento, hay que pedirle a Vero el metraje original sin
+subtitular.** Quien editó esos videos lo tiene. Sería el mejor upgrade posible de todo el paquete:
+hay tomas de dron muy buenas debajo de esos carteles.
 
 ### `assets/aereas/` — tomas reales de dron
 
