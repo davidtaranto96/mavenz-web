@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="dt-efectos.css">
+<link rel="stylesheet" href="mavenz-fx.css">
 <script src="dt-efectos.js"></script>
 <noscript><style>[data-fx]{opacity:1!important;transform:none!important}</style></noscript>
 <style>
@@ -36,6 +37,19 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 @keyframes mvMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes mvFloat{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
 @keyframes mvPan{from{transform:translateX(0)}to{transform:translateX(-10%)}}
+
+  /* ---- cabecera en mobile ---------------------------------------------------
+     Los cinco enlaces no entran en 375px y se salian del ancho. En pantalla
+     chica queda el logo y el unico enlace que sale del sitio; el resto de las
+     secciones se alcanzan scrolleando, que es como se lee una pagina asi. */
+  @media (max-width:860px){
+    header nav a:not([target="_blank"]){ display:none }
+    header nav{ gap:0 !important }
+  }
+  @media (max-width:400px){
+    header{ padding:14px 5vw !important }
+    header nav a[target="_blank"]{ padding:9px 16px !important; font-size:13.5px }
+  }
 </style>
 
 <style id="dt-contraste">
@@ -58,7 +72,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mavenz — Generamos movimiento">
 <meta property="og:description" content="El partner estratégico que mueve el Real Estate de Salta.">
-<meta property="og:image" content="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg">
+<meta property="og:image" content="../assets/aereas/aerea-dia.jpg">
 <meta property="og:image:width" content="1600">
 <meta property="og:image:height" content="738">
 <meta property="og:locale" content="es_AR">
@@ -66,7 +80,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"RealEstateAgent",
 "name":"Mavenz","description":"Partner estratégico de Real Estate en Salta. Detecta oportunidades, diseña estrategias y potencia la comercialización.",
-"image":"https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg","url":"https://mavenz.com.ar",
+"image":"../assets/aereas/aerea-dia.jpg","url":"https://mavenz.com.ar",
 "areaServed":[{"@type":"City","name":"Salta"},{"@type":"Place","name":"San Lorenzo"},{"@type":"Place","name":"Vaqueros"},{"@type":"Place","name":"Cafayate"}],
 "address":{"@type":"PostalAddress","addressLocality":"Salta","addressRegion":"Salta","addressCountry":"AR"},
 "knowsAbout":["Desarrollos inmobiliarios","Comercialización","Inversión patrimonial","Análisis de territorio"]}
@@ -338,8 +352,107 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     .cta-p.press,.cta-s.press,.cta-arena.press,.btn-mv.press,.pf.press,#arriba.press,.wa.press{transform:none}
   }
 </style>
+
+<style id="dt-tres">
+  /* ---- 3.0 · gramatica grafica de la marca --------------------------------- */
+
+  /* el isotipo enorme, recortado, como suelo. Sale de sus propias portadas. */
+  .mv-marca--hero{
+    top:-8%; right:-24%;
+    width:84%; height:116%;
+    transform-origin:70% 50%;
+    animation:mvEntra 1500ms cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes mvEntra{
+    from{ opacity:0; transform:translateX(5%) scale(1.07) }
+    to  { opacity:1; transform:none }
+  }
+
+  /* ---- hero ---------------------------------------------------------------- */
+  .hero-rej{ grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr) }
+  @media (max-width:1023px){
+    .hero-rej{ grid-template-columns:minmax(0,1fr) !important; gap:40px !important }
+    .mv-marca--hero{ top:auto; bottom:-8%; right:-46%; width:150%; height:70% }
+  }
+
+  .hero-pila{ position:relative; padding-bottom:6px }
+  .hero-pila figure{
+    margin:0;
+    border-radius:16px;
+    overflow:hidden;
+    background:#e8e2da;
+    box-shadow:0 30px 60px -30px rgba(42,27,28,.5), 0 6px 18px -10px rgba(42,27,28,.32);
+    transform:rotate(var(--g,0deg));
+    transition:transform 520ms var(--fx-out), box-shadow 520ms var(--fx-out);
+    z-index:var(--z,0);
+    position:relative;
+  }
+  .hero-pila figure + figure{ margin-top:-5% }
+  .hero-pila figure:nth-child(1){ margin-left:0;    margin-right:13% }
+  .hero-pila figure:nth-child(2){ margin-left:11%;  margin-right:0   }
+  .hero-pila figure:nth-child(3){ margin-left:3.5%; margin-right:8%  }
+  .hero-pie{
+    margin:20px 0 0;
+    font:440 12.5px/1.5 'Urbanist',system-ui,sans-serif;
+    letter-spacing:.02em;
+    color:#5b484a;
+  }
+  .hero-pila img{ display:block; width:100%; height:auto; aspect-ratio:1920/830; object-fit:cover }
+  @media (hover:hover) and (pointer:fine){
+    .hero-pila:hover figure{ transform:rotate(calc(var(--g,0deg) * .35)) }
+    .hero-pila figure:hover{
+      transform:rotate(0deg) translateY(-8px) scale(1.025);
+      z-index:9;
+      box-shadow:0 44px 80px -34px rgba(42,27,28,.58);
+    }
+  }
+  @media (max-width:639px){
+    .hero-pila figure + figure{ margin-top:-4% }
+    .hero-pila figure:nth-child(1){ margin-right:8% }
+    .hero-pila figure:nth-child(2){ margin-left:7% }
+    .hero-pila figure:nth-child(3){ margin-left:2%; margin-right:4% }
+  }
+
+  /* ---- el film a sangre ---------------------------------------------------- */
+  .film-v{
+    display:block; width:100%;
+    aspect-ratio:1920/830;
+    object-fit:cover;
+    background:#2a1b1c;
+  }
+
+  /* ---- ondas del propio kit de marca como fondo ---------------------------- */
+  /* No es una textura decorativa comprada: son los videos que estan en
+     "5. Multimedia" de su kit. Ondas que se propagan, sobre una marca que se
+     llama Generamos movimiento. */
+  .mv-onda{
+    position:absolute; inset:0; z-index:0;
+    pointer-events:none; overflow:hidden;
+    line-height:0;
+  }
+  .mv-onda video{
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:.42;
+    mix-blend-mode:multiply;
+    filter:saturate(0) contrast(1.12);
+  }
+  .mv-onda::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(90deg,#ffffff 0%,rgba(255,255,255,.72) 42%,rgba(255,255,255,.1) 78%,transparent);
+  }
+  .mv-onda--oscura video{ opacity:.3; mix-blend-mode:screen; filter:saturate(0) contrast(1.2) }
+  .mv-onda--oscura::after{
+    background:linear-gradient(90deg,#342223 0%,rgba(52,34,35,.78) 40%,rgba(52,34,35,.2) 76%,transparent);
+  }
+  .mv-suelo > .mv-onda ~ *{ position:relative; z-index:1 }
+
+  @media (prefers-reduced-motion: reduce){ .mv-onda video{ display:none } }
+</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="mv-iso" viewBox="0 0 900 572"><path fill="currentColor" fill-rule="evenodd" d="M 357.00 170.00 C 359.80 169.86 371.10 169.44 376.00 170.00 C 380.90 170.56 388.78 172.88 392.00 174.00 C 395.22 175.12 396.90 176.32 399.00 178.00 C 401.10 179.68 405.18 183.48 407.00 186.00 C 408.82 188.52 411.16 191.38 412.00 196.00 C 412.84 200.62 413.28 213.82 413.00 219.00 C 412.72 224.18 411.54 228.10 410.00 233.00 C 408.46 237.90 404.66 248.40 402.00 254.00 C 399.34 259.60 395.20 266.98 391.00 273.00 C 386.80 279.02 377.74 290.70 372.00 297.00 C 366.26 303.30 356.72 312.40 350.00 318.00 C 343.28 323.60 330.30 332.94 324.00 337.00 C 317.70 341.06 305.14 349.94 305.00 347.00 C 304.86 344.06 319.08 324.12 323.00 316.00 C 326.92 307.88 331.04 296.00 333.00 289.00 C 334.96 282.00 336.72 273.00 337.00 266.00 C 337.28 259.00 335.84 244.18 335.00 239.00 C 334.16 233.82 332.96 231.94 331.00 229.00 C 329.04 226.06 324.36 220.38 321.00 218.00 C 317.64 215.62 311.76 212.56 307.00 212.00 C 302.24 211.44 293.02 212.32 287.00 214.00 C 280.98 215.68 270.02 220.64 264.00 224.00 C 257.98 227.36 250.16 232.68 244.00 238.00 C 237.84 243.32 225.74 255.42 220.00 262.00 C 214.26 268.58 207.48 277.58 203.00 285.00 C 198.52 292.42 190.52 308.98 188.00 315.00 C 185.48 321.02 185.42 323.94 185.00 328.00 C 184.58 332.06 184.58 340.22 185.00 344.00 C 185.42 347.78 186.88 352.20 188.00 355.00 C 189.12 357.80 191.18 361.62 193.00 364.00 C 194.82 366.38 198.48 370.04 201.00 372.00 C 203.52 373.96 207.50 376.60 211.00 378.00 C 214.50 379.40 220.68 381.44 226.00 382.00 C 231.32 382.56 242.98 382.56 249.00 382.00 C 255.02 381.44 262.70 379.82 269.00 378.00 C 275.30 376.18 284.76 373.34 294.00 369.00 C 303.24 364.66 313.16 361.42 335.00 347.00 C 356.84 332.58 426.06 282.38 450.00 266.00 C 473.94 249.62 490.60 238.68 506.00 230.00 C 521.40 221.32 547.68 208.90 560.00 204.00 C 572.32 199.10 587.14 196.40 594.00 195.00 C 600.86 193.60 604.80 193.86 609.00 194.00 C 613.20 194.14 620.78 195.16 624.00 196.00 C 627.22 196.84 630.04 198.60 632.00 200.00 C 633.96 201.40 636.60 204.04 638.00 206.00 C 639.40 207.96 641.30 211.06 642.00 214.00 C 642.70 216.94 643.28 223.08 643.00 227.00 C 642.72 230.92 642.38 234.72 640.00 242.00 C 637.62 249.28 629.08 270.04 626.00 279.00 C 622.92 287.96 618.98 299.84 618.00 306.00 C 617.02 312.16 617.60 319.08 619.00 323.00 C 620.40 326.92 625.76 332.04 628.00 334.00 C 630.24 335.96 630.38 336.72 635.00 337.00 C 639.62 337.28 654.00 337.12 661.00 336.00 C 668.00 334.88 675.62 332.64 685.00 329.00 C 694.38 325.36 725.34 309.72 728.00 310.00 C 730.66 310.28 711.56 325.12 704.00 331.00 C 696.44 336.88 684.36 345.84 674.00 352.00 C 663.64 358.16 638.82 370.80 630.00 375.00 C 621.18 379.20 617.30 380.18 611.00 382.00 C 604.70 383.82 593.12 387.30 585.00 388.00 C 576.88 388.70 558.74 387.70 553.00 387.00 C 547.26 386.30 546.38 384.68 544.00 383.00 C 541.62 381.32 537.54 377.24 536.00 375.00 C 534.46 372.76 533.42 369.38 533.00 367.00 C 532.58 364.62 532.16 362.34 533.00 358.00 C 533.84 353.66 535.22 345.80 539.00 336.00 C 542.78 326.20 556.78 295.84 560.00 288.00 C 563.22 280.16 561.72 282.66 562.00 280.00 C 562.28 277.34 562.42 271.52 562.00 269.00 C 561.58 266.48 560.12 263.68 559.00 262.00 C 557.88 260.32 555.54 258.12 554.00 257.00 C 552.46 255.88 552.06 254.42 548.00 254.00 C 543.94 253.58 532.28 252.60 525.00 254.00 C 517.72 255.40 503.56 260.64 496.00 264.00 C 488.44 267.36 490.18 265.12 471.00 278.00 C 451.82 290.88 378.88 342.56 359.00 356.00 C 339.12 369.44 336.28 369.94 329.00 374.00 C 321.72 378.06 313.86 382.06 307.00 385.00 C 300.14 387.94 287.00 392.90 280.00 395.00 C 273.00 397.10 263.72 399.16 257.00 400.00 C 250.28 400.84 238.58 401.42 232.00 401.00 C 225.42 400.58 215.60 398.82 210.00 397.00 C 204.40 395.18 196.06 390.80 192.00 388.00 C 187.94 385.20 183.52 380.22 181.00 377.00 C 178.48 373.78 175.54 368.78 174.00 365.00 C 172.46 361.22 170.56 354.34 170.00 350.00 C 169.44 345.66 169.44 339.04 170.00 334.00 C 170.56 328.96 171.48 321.14 174.00 314.00 C 176.52 306.86 184.08 290.14 188.00 283.00 C 191.92 275.86 198.22 267.90 202.00 263.00 C 205.78 258.10 210.38 252.76 215.00 248.00 C 219.62 243.24 228.56 234.46 235.00 229.00 C 241.44 223.54 254.70 213.48 261.00 209.00 C 267.30 204.52 273.70 200.50 280.00 197.00 C 286.30 193.50 298.72 187.08 306.00 184.00 C 313.28 180.92 325.00 176.82 332.00 175.00 C 339.00 173.18 352.50 171.70 356.00 171.00 C 359.50 170.30 354.20 170.14 357.00 170.00 Z"/></symbol></svg>
+
 
 
 <div style="font-family:'Urbanist',sans-serif;background:#ffffff;color:#342223;overflow-x:hidden">
@@ -355,30 +468,58 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 </header>
 
 
-<section id="inicio" data-screen-label="Hero" style="position:relative;background:#ffffff;color:#342223;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
-  <div style="display:flex;flex-direction:column;justify-content:center;padding:64px 5vw 40px;position:relative">
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.22;pointer-events:none">
-      <path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="2" style="stroke-dasharray:1;animation:mvDraw 2.8s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path>
-    </svg>
-    <h1 style="margin:0;font-size:clamp(56px,9.5vw,150px);line-height:.95;letter-spacing:-0.038em;font-weight:600;position:relative;text-wrap:balance">Generamos<br><span style="color:#9c8976">movimiento.</span></h1>
-    <p style="margin:34px 0 0;font-size:clamp(17px,1.4vw,22px);line-height:1.55;color:#5b484a;max-width:540px;font-weight:400;position:relative">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:38px;position:relative">
-      <a href="#mapa" class="cta-p">Ver el Mapa Mavenz</a>
-      <a href="#proyectos" class="cta-s">Conocer los proyectos</a>
-      <a href="#inversiones" class="cta-s">Invertir con Mavenz</a>
+<section id="inicio" data-screen-label="Hero" class="mv-suelo" style="position:relative;background:#ffffff;color:#342223;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
+
+  <!-- El isotipo enorme y recortado, en dos tonos planos. Es la propia
+       gramatica de la marca: asi resuelve ella sus portadas de LinkedIn. -->
+  <span class="mv-marca mv-marca--hero" style="--mv-figura:#e7e2dd">
+    <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
+  </span>
+
+  <div class="hero-rej" style="display:grid;gap:52px;align-items:center;padding:60px 5vw 44px;position:relative">
+    <div>
+      <p style="margin:0 0 26px;font-size:12px;font-weight:700;letter-spacing:.19em;color:#7a6863">SALTA, ARGENTINA</p>
+      <h1 style="margin:0;font-size:clamp(54px,8.6vw,132px);line-height:.93;letter-spacing:-0.042em;font-weight:640;position:relative;text-wrap:balance">Generamos<br><span style="color:#9c8976">movimiento.</span></h1>
+      <p style="margin:32px 0 0;font-size:clamp(17px,1.35vw,21px);line-height:1.55;color:#5b484a;max-width:520px;font-weight:400">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:36px">
+        <a href="#mapa" class="cta-p fx-esp fx-iman">Ver el Mapa Mavenz</a>
+        <a href="#proyectos" class="cta-s fx-esp fx-esp--claro">Conocer los proyectos</a>
+        <a href="#inversiones" class="cta-s fx-esp fx-esp--claro">Invertir con Mavenz</a>
+      </div>
+    </div>
+
+    <!-- Pila de obra: material real, sin buscador de propiedades encima de una foto -->
+    <div class="hero-pila" aria-label="Proyectos de Mavenz">
+      <figure class="fx-cortina" style="--g:-6deg;--z:1">
+        <img src="../assets/vida/esquina-viva.jpg" alt="Esquina comercial de CARDINAL con gente en las veredas" loading="eager" decoding="async" width="1920" height="830">
+      </figure>
+      <figure class="fx-cortina" style="--g:4deg;--z:2">
+        <img src="../assets/vida/pileta-gente.jpg" alt="Pileta y quincho de CARDINAL" loading="lazy" decoding="async" width="1920" height="830">
+      </figure>
+      <figure class="fx-cortina" style="--g:-2deg;--z:3">
+        <img src="../assets/vida/sanlorenzo-aereo.jpg" alt="Vista aérea de San Lorenzo Chico con las montañas de fondo" loading="lazy" decoding="async" width="1920" height="830">
+      </figure>
+      <p class="hero-pie">CARDINAL, San Lorenzo Chico &middot; los dos primeros son renders; el tercero, foto aérea</p>
     </div>
   </div>
-  <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#e8e2da"></video>
+
+  <video preload="metadata" src="../assets/video/banda-aerea-1.mp4" poster="../assets/video/banda-aerea-1.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1920/432;object-fit:cover;background:#e8e2da"></video>
   <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 22px;font-size:13px;color:#5b484a;letter-spacing:.03em">
     <span>San Lorenzo Chico, Salta &middot; imagen aérea propia</span>
     <a href="#no-somos" style="color:#5b484a;font-weight:640">Seguir bajando ↓</a>
   </div>
 </section>
-<section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" style="background:#ffffff;color:#342223;padding:150px 5vw 130px;max-width:1200px">
+<section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" class="mv-suelo" style="position:relative;background:#ffffff;color:#342223;padding:150px 5vw 130px;overflow:hidden">
+  <span class="mv-onda" aria-hidden="true">
+    <video preload="metadata" poster="../assets/video/ondas.jpg" autoplay muted loop playsinline
+           src="../assets/video/ondas.mp4"></video>
+  </span>
+  <div style="max-width:1200px">
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una inmobiliaria tradicional.</p>
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos solamente una comercializadora.</p>
   <p data-reveal style="margin:0 0 48px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una agencia.</p>
   <p data-reveal style="margin:0;font-size:clamp(34px,4.8vw,72px);font-weight:680;line-height:1.08;letter-spacing:-0.025em;color:#342223">Somos el partner estratégico que <span style="color:#5b484a">mueve</span> el Real Estate.</p>
+</div>
 </section>
 
 <section data-screen-label="Universo Mavenz" data-fx="reveal" data-fx-desde="izq" style="background:#b7a18a;color:#342223;padding:96px 5vw">
@@ -427,7 +568,29 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   </div>
 </section>
 
-<section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" style="background:#342223;color:#ffffff;padding:150px 5vw">
+<!-- ====================== EL FILM · material propio ======================= -->
+<section id="film" data-screen-label="El film" class="mv-suelo" style="position:relative;background:#342223;color:#ffffff;padding:0;overflow:hidden">
+  <span class="mv-marca" style="--mv-figura:rgba(255,255,255,.05);top:-14%;left:-16%;width:70%;height:128%">
+    <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
+  </span>
+  <div style="padding:104px 5vw 44px;max-width:900px">
+    <p style="margin:0 0 20px;font-size:12px;font-weight:700;letter-spacing:.19em;color:#b7a18a">SAN LORENZO CHICO</p>
+    <h2 style="margin:0;font-size:clamp(34px,4.4vw,66px);font-weight:640;letter-spacing:-0.028em;line-height:1.04;text-wrap:balance">Todo eso ya estaba ahí.<br><span style="color:#b7a18a">Nosotros leímos el movimiento.</span></h2>
+  </div>
+  <video class="film-v" preload="metadata" poster="../assets/video/cardinal-film.jpg" autoplay muted loop playsinline
+         src="../assets/video/cardinal-film.mp4"></video>
+  <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 5vw 96px;font-size:13px;color:#a1a7a8;letter-spacing:.025em">
+    <span>Tomas aéreas propias y renders de CARDINAL &middot; sin sonido</span>
+    <a href="#proyectos" style="color:#b7a18a;font-weight:640">Ver los proyectos ↓</a>
+  </div>
+</section>
+
+<section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" class="mv-suelo" style="position:relative;background:#342223;color:#ffffff;padding:150px 5vw;overflow:hidden">
+  <span class="mv-onda mv-onda--oscura" aria-hidden="true">
+    <video preload="metadata" poster="../assets/video/agua.jpg" autoplay muted loop playsinline
+           src="../assets/video/agua.mp4"></video>
+  </span>
+
   <div data-reveal style="max-width:900px;margin-bottom:56px">
     <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">El Mapa Mavenz</h2>
     <p style="margin:0;font-size:17px;line-height:1.55;color:#a1a7a8">Seis territorios leídos con las mismas cuatro preguntas: qué está cambiando, quién lo elige, qué oportunidades aparecen y qué ve Mavenz.</p>
@@ -503,8 +666,78 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   </div>
   
   <div data-reveal style="display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;margin-top:110px;border-top:1px solid rgba(52,34,35,.2);border-bottom:1px solid rgba(52,34,35,.2);padding:44px 0">
-    <div style="font-size:clamp(48px,6vw,88px);font-weight:800;letter-spacing:.02em;color:transparent;-webkit-text-stroke:2px #b7a18a">CAFAY</div>
+    <div style="font-size:clamp(48px,6vw,88px);font-weight:800;letter-spacing:.02em;color:transparent;-webkit-text-stroke:2.5px #7a6863">CAFAY</div>
     <p style="margin:0;font-size:16px;line-height:1.55;color:#5b484a;max-width:420px">Cafayate · en desarrollo. La próxima lectura del territorio hecha proyecto.</p>
+  </div>
+</section>
+
+<!-- ============ LA OBRA · carrusel en profundidad + cinta =============== -->
+<section id="obra" data-screen-label="La obra" class="mv-suelo" style="position:relative;background:#342223;color:#ffffff;padding:130px 0 118px;overflow:hidden">
+  <span class="mv-marca" style="--mv-figura:rgba(255,255,255,.045);top:-6%;right:-22%;width:78%;height:112%">
+    <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
+  </span>
+
+  <div data-fx="reveal" style="padding:0 5vw">
+    <div data-reveal style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;max-width:1180px;margin:0 auto 54px">
+      <h2 style="margin:0;font-size:clamp(38px,4.8vw,72px);font-weight:660;letter-spacing:-0.028em">La obra</h2>
+      <p style="margin:0;font-size:16.5px;line-height:1.55;color:#d6d2cd;max-width:430px">Arrastrá para recorrerla. Lo que es render lo decimos; lo que es foto, también.</p>
+    </div>
+  </div>
+
+  <div class="fx-prof" data-fx-prof data-fx-z="245" data-fx-spread="168" data-fx-tilt="16" data-fx-vis="3"
+       style="--fx-ancho:520px;--fx-alto-t:388px;--fx-alto:520px;--fx-alto-m:350px;--fx-alto-tm:258px"
+       aria-label="Galería de obra de Mavenz">
+    <div class="fx-prof__esc">
+      <figure class="fx-prof__t"><img src="../assets/vida/esquina-viva.jpg" loading="lazy" decoding="async" alt="Esquina comercial de CARDINAL"><figcaption><b>La esquina comercial</b>CARDINAL <span>· render</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/pileta-gente.jpg" loading="lazy" decoding="async" alt="Pileta y quincho de CARDINAL"><figcaption><b>Los amenities</b>CARDINAL <span>· render</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/interior-vivido.jpg" loading="lazy" decoding="async" alt="Interior de una casa de CARDINAL"><figcaption><b>Adentro de una casa</b>CARDINAL <span>· render</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/calle-casas.jpg" loading="lazy" decoding="async" alt="Calle arbolada con casas de CARDINAL"><figcaption><b>La calle</b>CARDINAL <span>· render</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/sanlorenzo-aereo.jpg" loading="lazy" decoding="async" alt="Vista aérea de San Lorenzo Chico"><figcaption><b>San Lorenzo Chico</b>Salta <span>· foto aérea propia</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/atardecer.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico al atardecer desde el aire"><figcaption><b>El valle al atardecer</b>Salta <span>· foto aérea propia</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="Pasillo de storages numerados"><figcaption><b>Storages</b>WA <span>· foto</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="Cocheras cubiertas"><figcaption><b>Cocheras cubiertas</b>WA <span>· foto</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/proyectos/porto-01.jpg" loading="lazy" decoding="async" alt="Oficina con ventanal en Porto"><figcaption><b>Oficinas</b>Porto <span>· foto</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="Zona verde con la avenida principal"><figcaption><b>La avenida principal</b>San Lorenzo <span>· foto aérea propia</span></figcaption></figure>
+    </div>
+    <button class="fx-prof__f fx-prof__f--ant" type="button" aria-label="Anterior">&#8592;</button>
+    <button class="fx-prof__f fx-prof__f--sig" type="button" aria-label="Siguiente">&#8594;</button>
+    <div class="fx-prof__p" role="tablist" aria-label="Ir a una imagen">
+      <button type="button" aria-label="Imagen 1"></button><button type="button" aria-label="Imagen 2"></button>
+      <button type="button" aria-label="Imagen 3"></button><button type="button" aria-label="Imagen 4"></button>
+      <button type="button" aria-label="Imagen 5"></button><button type="button" aria-label="Imagen 6"></button>
+      <button type="button" aria-label="Imagen 7"></button><button type="button" aria-label="Imagen 8"></button>
+      <button type="button" aria-label="Imagen 9"></button><button type="button" aria-label="Imagen 10"></button>
+    </div>
+  </div>
+
+  <!-- la cinta corre sola y el scroll la empuja -->
+  <div class="fx-cinta" data-fx-vel="34" style="--fx-pieza:290px;--fx-pieza-m:210px;--fx-hueco:16px;margin-top:76px">
+    <div class="fx-cinta__p">
+      <div class="fx-cinta__g">
+        <figure><img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt="Render de las casas de CARDINAL"><figcaption>CARDINAL · las casas</figcaption></figure>
+        <figure><img src="../assets/proyectos/porto-02.jpg" loading="lazy" decoding="async" alt="Baño de oficina en Porto"><figcaption>Porto · oficinas</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt="Plano abierto del valle"><figcaption>El valle · foto aérea</figcaption></figure>
+        <figure><img src="../assets/proyectos/wa-storages-02.jpg" loading="lazy" decoding="async" alt="Storages con iluminación lineal"><figcaption>WA · storages</figcaption></figure>
+        <figure><img src="../assets/marca/agenda.jpg" loading="lazy" decoding="async" alt="Agenda de la marca Mavenz"><figcaption>La marca, aplicada</figcaption></figure>
+        <figure><img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt="Render de pileta y quincho"><figcaption>CARDINAL · amenities</figcaption></figure>
+        <figure><img src="../assets/proyectos/porto-03.jpg" loading="lazy" decoding="async" alt="Palier con ascensor en Porto"><figcaption>Porto · palier</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico de día"><figcaption>San Lorenzo · foto aérea</figcaption></figure>
+        <figure><img src="../assets/marca/carpeta.jpg" loading="lazy" decoding="async" alt="Carpeta institucional de Mavenz"><figcaption>Generamos movimiento</figcaption></figure>
+        <figure><img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt="Render de interior con hogar a leña"><figcaption>CARDINAL · interior</figcaption></figure>
+      </div>
+      <div class="fx-cinta__g" aria-hidden="true">
+        <figure><img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · las casas</figcaption></figure>
+        <figure><img src="../assets/proyectos/porto-02.jpg" loading="lazy" decoding="async" alt=""><figcaption>Porto · oficinas</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt=""><figcaption>El valle · foto aérea</figcaption></figure>
+        <figure><img src="../assets/proyectos/wa-storages-02.jpg" loading="lazy" decoding="async" alt=""><figcaption>WA · storages</figcaption></figure>
+        <figure><img src="../assets/marca/agenda.jpg" loading="lazy" decoding="async" alt=""><figcaption>La marca, aplicada</figcaption></figure>
+        <figure><img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · amenities</figcaption></figure>
+        <figure><img src="../assets/proyectos/porto-03.jpg" loading="lazy" decoding="async" alt=""><figcaption>Porto · palier</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt=""><figcaption>San Lorenzo · foto aérea</figcaption></figure>
+        <figure><img src="../assets/marca/carpeta.jpg" loading="lazy" decoding="async" alt=""><figcaption>Generamos movimiento</figcaption></figure>
+        <figure><img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · interior</figcaption></figure>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -532,6 +765,51 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
 
 <!-- ══════════ QUÉ QUERÉS HACER ══════════ -->
+<!-- =============== MENU FLUIDO · todo lo que Mavenz mueve =============== -->
+<section id="mueve" data-screen-label="Lo que Mavenz mueve" data-fx="reveal" style="background:#ffffff;color:#342223;padding:132px 5vw 138px">
+  <div data-reveal style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:46px">
+    <h2 style="margin:0;font-size:clamp(38px,4.8vw,72px);font-weight:660;letter-spacing:-0.028em">Lo que movemos</h2>
+    <p style="margin:0;font-size:16.5px;line-height:1.55;color:#5b484a;max-width:400px">Una marca madre, muchos destinos. Pasá por encima de cada uno.</p>
+  </div>
+  <nav class="fx-flu" data-reveal aria-label="Proyectos y canales de Mavenz">
+      <a class="fx-flu__i" href="#proyectos">
+        <span class="fx-flu__c">
+          <span class="fx-flu__t">CARDINAL</span>
+          <span class="fx-flu__d">San Lorenzo Chico · en comercialización</span>
+        </span>
+        <span class="fx-flu__m" aria-hidden="true"><span class="fx-flu__mw"><span class="fx-flu__in"><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span><span><em>CARDINAL</em><i style="background-image:url(../assets/vida/esquina-viva.jpg)"></i></span></span></span></span>
+      </a>
+      <a class="fx-flu__i" href="#proyectos">
+        <span class="fx-flu__c">
+          <span class="fx-flu__t">WA</span>
+          <span class="fx-flu__d">Storages y cocheras · renta</span>
+        </span>
+        <span class="fx-flu__m" aria-hidden="true"><span class="fx-flu__mw"><span class="fx-flu__in"><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span><span><em>WA</em><i style="background-image:url(../assets/proyectos/wa-storages-01.jpg)"></i></span></span></span></span>
+      </a>
+      <a class="fx-flu__i" href="#proyectos">
+        <span class="fx-flu__c">
+          <span class="fx-flu__t">PORTO</span>
+          <span class="fx-flu__d">Oficinas · Salta</span>
+        </span>
+        <span class="fx-flu__m" aria-hidden="true"><span class="fx-flu__mw"><span class="fx-flu__in"><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span><span><em>PORTO</em><i style="background-image:url(../assets/proyectos/porto-01.jpg)"></i></span></span></span></span>
+      </a>
+      <a class="fx-flu__i" href="#proyectos">
+        <span class="fx-flu__c">
+          <span class="fx-flu__t">CAFAY</span>
+          <span class="fx-flu__d">Cafayate · en desarrollo</span>
+        </span>
+        <span class="fx-flu__m" aria-hidden="true"><span class="fx-flu__mw"><span class="fx-flu__in"><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span><span><em>CAFAY</em><i style="background-image:url(../assets/aereas/aerea-amplia.jpg)"></i></span></span></span></span>
+      </a>
+      <a class="fx-flu__i" href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">
+        <span class="fx-flu__c">
+          <span class="fx-flu__t">ESPACIO MAVENZ</span>
+          <span class="fx-flu__d">El canal de comercialización</span>
+        </span>
+        <span class="fx-flu__m" aria-hidden="true"><span class="fx-flu__mw"><span class="fx-flu__in"><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span><span><em>ESPACIO MAVENZ</em><i style="background-image:url(../assets/vida/sanlorenzo-aereo.jpg)"></i></span></span></span></span>
+      </a>
+  </nav>
+</section>
+
 <section id="perfil" data-screen-label="Qué querés hacer" data-fx="reveal" style="background:#ffffff;color:#342223;padding:130px 5vw">
   <div style="max-width:1200px;margin:0 auto">
     <h2 style="margin:0 0 16px;font-size:clamp(36px,4.6vw,68px);font-weight:640;letter-spacing:-0.028em;line-height:1.05;max-width:16ch">Empezá por lo que querés hacer.</h2>
@@ -548,32 +826,32 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <div><h3>Dónde vivir en Salta, según cómo querés vivir</h3>
         <p>No empezamos por la propiedad. Empezamos por el territorio: qué está cambiando en cada zona, quién la elige y por qué. Después aparece la casa.</p>
         <ul><li>San Lorenzo Chico, para vivir y trabajar en el mismo entorno</li><li>Zona Norte, para quienes buscan naturaleza sin perder la ciudad</li><li>Vaqueros, verde y ciudad en quince minutos</li><li>Microcentro, patrimonio reconvertido y vida urbana</li></ul>
-        <a class="cta-p" href="#contacto">Contarnos qué buscás</a></div>
-      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/casas.jpg" alt="Render de CARDINAL, San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Render de CARDINAL, San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>CARDINAL</b><span>San Lorenzo Chico &middot; 35 hogares &middot; en comercialización</span><a href="#proyectos">Ver el proyecto →</a></div>
+        <a class="cta-p fx-esp" href="#contacto">Contarnos qué buscás</a></div>
+      <figure class="pf-img"><img src="../assets/renders/casas.jpg" alt="Render de CARDINAL, San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Render de CARDINAL, San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>CARDINAL</b><span>San Lorenzo Chico &middot; 35 hogares &middot; en comercialización</span><a href="#proyectos">Ver el proyecto →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-invertir" hidden role="tabpanel">
       <div><h3>Invertir donde el territorio todavía se está moviendo</h3>
         <p>La diferencia entre una buena y una mala inversión rara vez es la propiedad. Es el momento de la curva en que entrás.</p>
         <ul><li>Renta temporaria en Cafayate, con patrimonio y disfrute en la misma decisión</li><li>Storages y cocheras en San Lorenzo Chico, ticket bajo y demanda sostenida</li><li>Vaqueros antes del pico, con valores de compra reales</li><li>Reconversión de casonas patrimoniales en el centro</li></ul>
-        <a class="cta-p" href="#inversiones">Ver las oportunidades</a></div>
-      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/proyectos/wa-storages-01.jpg" alt="Storages de WA en San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Storages de WA en San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>Desde USD 35.000</b><span>Storage de 14,09 m² en WA, San Lorenzo Chico &middot; ref. MAV-226174</span><a href="#inversiones">Ver disponibilidad →</a></div>
+        <a class="cta-p fx-esp" href="#inversiones">Ver las oportunidades</a></div>
+      <figure class="pf-img"><img src="../assets/proyectos/wa-storages-01.jpg" alt="Storages de WA en San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Storages de WA en San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>Desde USD 35.000</b><span>Storage de 14,09 m² en WA, San Lorenzo Chico &middot; ref. MAV-226174</span><a href="#inversiones">Ver disponibilidad →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-desarrollar" hidden role="tabpanel">
       <div><h3>De la tierra al proyecto, y del proyecto al mercado</h3>
         <p>Trabajamos con desarrolladores desde antes de que exista el proyecto: lectura de territorio, definición de producto, estrategia comercial y comercialización.</p>
         <ul><li>Análisis de oportunidad y de producto</li><li>Estrategia comercial y de posicionamiento</li><li>Comercialización con equipo propio</li><li>Reporte de avance para el desarrollista</li></ul>
-        <a class="cta-p" href="#desarrollistas">Cómo acompañamos un proyecto</a></div>
-      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async"><figcaption>Render de la esquina comercial de CARDINAL</figcaption></figure><div class="pf-dato"><b>El Método Mavenz</b><span>Descubrir &middot; Diseñar &middot; Conectar &middot; Activar &middot; Generar movimiento</span><a href="#metodo">Ver el método →</a></div>
+        <a class="cta-p fx-esp" href="#desarrollistas">Cómo acompañamos un proyecto</a></div>
+      <figure class="pf-img"><img src="../assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async"><figcaption>Render de la esquina comercial de CARDINAL</figcaption></figure><div class="pf-dato"><b>El Método Mavenz</b><span>Descubrir &middot; Diseñar &middot; Conectar &middot; Activar &middot; Generar movimiento</span><a href="#metodo">Ver el método →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-vender" hidden role="tabpanel">
       <div><h3>Comercializar con criterio, no con volumen</h3>
         <p>Preferimos tres opciones explicadas a treinta sin criterio. Si una propiedad no encaja con quien pregunta, lo decimos y explicamos por qué.</p>
         <ul><li>Tasación con lectura de zona, no solo de metros</li><li>Publicación en Espacio Mavenz y en los portales</li><li>Seguimiento registrado de cada consulta y cada visita</li><li>Un solo interlocutor durante toda la operación</li></ul>
-        <a class="cta-p" href="#contacto">Consultar por tu propiedad</a></div>
-      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-verde.jpg" alt="Vista aérea de San Lorenzo, imagen propia" loading="lazy" decoding="async"><figcaption>Vista aérea de San Lorenzo, imagen propia</figcaption></figure><div class="pf-dato"><b>Espacio Mavenz</b><span>El canal donde vive el listado completo</span><a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Abrir ↗</a></div>
+        <a class="cta-p fx-esp" href="#contacto">Consultar por tu propiedad</a></div>
+      <figure class="pf-img"><img src="../assets/aereas/aerea-verde.jpg" alt="Vista aérea de San Lorenzo, imagen propia" loading="lazy" decoding="async"><figcaption>Vista aérea de San Lorenzo, imagen propia</figcaption></figure><div class="pf-dato"><b>Espacio Mavenz</b><span>El canal donde vive el listado completo</span><a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Abrir ↗</a></div>
     </div>
   </div>
 </section>
@@ -613,7 +891,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
     <div class="inv-cta">
       <p>Antes de mandarte una opción preferimos entender para qué, para cuándo y con qué margen se decide. Una propuesta que llega antes de esa conversación es una propuesta que hay que rehacer.</p>
-      <a class="cta-arena" href="#contacto">Conversar una inversión</a>
+      <a class="cta-arena fx-esp fx-esp--claro" href="#contacto">Conversar una inversión</a>
     </div>
   </div>
 </section>
@@ -630,12 +908,12 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <div class="paso"><b>Comercializamos</b><p>Con equipo propio, con cada conversación registrada y con reporte de avance para vos.</p></div>
     </div>
     <figure class="dev-banda">
-      <img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async">
+      <img src="../assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async">
       <figcaption>CARDINAL, San Lorenzo Chico &middot; render del proyecto</figcaption>
     </figure>
     <div class="dev-cta">
       <p><b>Hoy comercializamos CARDINAL</b>, en San Lorenzo Chico, y acompañamos el desarrollo de CAFAY en los Valles Calchaquíes.</p>
-      <a class="cta-p" href="#contacto">Conversar un desarrollo</a>
+      <a class="cta-p fx-esp" href="#contacto">Conversar un desarrollo</a>
     </div>
   </div>
 </section>
@@ -666,12 +944,12 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
         <select id="fq" name="busca"><option>Vivir</option><option>Invertir</option><option>Desarrollar</option><option>Vender o comercializar</option></select></div>
       <div><label for="fm" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">Mensaje</label>
         <textarea id="fm" name="mensaje" rows="3"></textarea></div>
-      <div><button type="submit" class="btn-mv">Escribirnos</button>
+      <div><button type="submit" class="btn-mv fx-esp">Escribirnos</button>
         <p id="fmv-msg" role="status" style="margin:12px 0 0;font-size:13px;color:#5b484a"></p></div>
     </form>
     </div>
     <div class="contacto-media">
-      <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-2.mp4" poster="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-amplia.jpg" autoplay muted loop playsinline></video>
+      <video preload="metadata" src="../assets/video/banda-aerea-2.mp4" poster="../assets/aereas/aerea-amplia.jpg" autoplay muted loop playsinline></video>
       <div class="cm-pie"><b>San Lorenzo Chico</b><span>Imagen aérea propia &middot; el territorio que leemos todos los días</span></div>
     </div>
   </div>
@@ -957,5 +1235,6 @@ class Component extends DCLogic {
   document.addEventListener('keyup', off);
 })();
 </script>
+<script src="mavenz-fx.js" defer></script>
 </body>
 </html>
