@@ -471,7 +471,7 @@
 
       var alto0 = panel.getBoundingClientRect().height;
       panel.innerHTML = PREGUNTAS.map(function(q){
-        return '<div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">' + esc(q[0]) +
+        return '<div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a28b">' + esc(q[0]) +
                '</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">' + esc(d[q[1]]) + '</p></div>';
       }).join('');
 

@@ -41,19 +41,19 @@ const CSS = `
   70%  { transform:scale(3.4); opacity:0 }
   100% { transform:scale(3.4); opacity:0 }
 }
-.mv-pin:hover i, .mv-pin:focus-visible i{ transform:scale(1.32); background:#342223 }
-.mv-pin.mv-on i{ background:#342223; transform:scale(1.4) }
+.mv-pin:hover i, .mv-pin:focus-visible i{ transform:scale(1.32); background:#3c2527 }
+.mv-pin.mv-on i{ background:#3c2527; transform:scale(1.4) }
 
 /* ---- la etiqueta ---- */
 .mv-tip{
-  background:#fffdfa; color:#342223;
+  background:#fffdfa; color:#3c2527;
   border:1px solid rgba(52,34,35,.18);
   border-radius:999px; padding:5px 13px;
   font:640 12.5px Urbanist,system-ui,sans-serif; letter-spacing:.01em;
   box-shadow:0 3px 12px rgba(42,27,28,.22);
   transition:background .22s ease, color .22s ease, border-color .22s ease;
 }
-.mv-tip.mv-on{ background:#342223; color:#fff; border-color:#342223 }
+.mv-tip.mv-on{ background:#3c2527; color:#fff; border-color:#3c2527 }
 .leaflet-tooltip-top:before{ display:none }
 
 /* ---- la invitacion a tocar ---- */
@@ -75,10 +75,10 @@ const CSS = `
 .mv-mapa.mv-tocado .mv-toca{ opacity:0; transform:translateX(-50%) translateY(-9px) }
 
 /* ---- controles y creditos, en el idioma de la marca ---- */
-.leaflet-control-attribution{ background:rgba(255,253,250,.88)!important; color:#5b484a!important; font-size:10.5px }
+.leaflet-control-attribution{ background:rgba(255,253,250,.88)!important; color:#715d55!important; font-size:10.5px }
 .leaflet-control-attribution a{ color:#8c6d4f!important }
 .leaflet-bar a{
-  background:#fffdfa!important; color:#342223!important;
+  background:#fffdfa!important; color:#3c2527!important;
   border-color:rgba(52,34,35,.16)!important;
   width:44px!important; height:44px!important; line-height:44px!important;
   font-size:19px!important;

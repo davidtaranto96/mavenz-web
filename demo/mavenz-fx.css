@@ -13,13 +13,13 @@
   --fx-out:cubic-bezier(.16,1,.3,1);
   --fx-suave:cubic-bezier(.22,.61,.36,1);
 
-  --mv-tinta:#342223;
-  --mv-tinta-alta:#3d2729;
-  --mv-medio:#5b484a;
-  --mv-arena:#b7a18a;
-  --mv-arena-oscuro:#9c8976;
-  --mv-gris:#a1a7a8;
-  --mv-humo:#7a6863;
+  --mv-tinta:#3c2527;
+  --mv-tinta-alta:#452b2d;
+  --mv-medio:#715d55;
+  --mv-arena:#b7a28b;
+  --mv-arena-oscuro:#9c8a77;
+  --mv-gris:#d3cfc8;
+  --mv-humo:#715d55;
   --mv-piedra:#d6d2cd;
 }
 
