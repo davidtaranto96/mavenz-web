@@ -50,6 +50,38 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   [style*="background:#b7a18a"] [style*="color:#ffffff"]{ color:#b7a18a !important }
   [style*="background:#b7a18a"] [style*="color:#ffffff"]{ color:#342223 !important }
 </style>
+
+<meta name="description" content="Mavenz es el partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mavenz — Generamos movimiento">
+<meta property="og:description" content="El partner estratégico que mueve el Real Estate de Salta.">
+<meta property="og:image" content="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="738">
+<meta property="og:locale" content="es_AR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"RealEstateAgent",
+"name":"Mavenz","description":"Partner estratégico de Real Estate en Salta. Detecta oportunidades, diseña estrategias y potencia la comercialización.",
+"image":"https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg","url":"https://mavenz.com.ar",
+"areaServed":[{"@type":"City","name":"Salta"},{"@type":"Place","name":"San Lorenzo"},{"@type":"Place","name":"Vaqueros"},{"@type":"Place","name":"Cafayate"}],
+"address":{"@type":"PostalAddress","addressLocality":"Salta","addressRegion":"Salta","addressCountry":"AR"},
+"knowsAbout":["Desarrollos inmobiliarios","Comercialización","Inversión patrimonial","Análisis de territorio"]}
+</script>
+<style id="dt-tipo">
+  /* el tracking es por tamano, nunca uno solo para todo */
+  h1,[style*="font-size:clamp(64px"],[style*="font-size:clamp(56px"]{ letter-spacing:-.035em }
+  h2,[style*="font-size:clamp(40px"],[style*="font-size:clamp(36px"],[style*="font-size:clamp(34px"]{ letter-spacing:-.026em }
+  h3,h4{ letter-spacing:-.012em }
+  p,li,td,label{ letter-spacing:0 }
+  h1,h2,h3{ text-wrap:balance }
+  p{ text-wrap:pretty }
+  /* ligaduras y cifras */
+  body{ font-feature-settings:"kern" 1,"liga" 1 }
+  [style*="tabular"],.cifra,time{ font-variant-numeric:tabular-nums lining-nums }
+</style>
 </head>
 <body>
 
@@ -58,7 +90,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
 <header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(52,34,35,.94);border-bottom:1px solid rgba(183,161,138,.18)">
   <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-claro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
-  <nav style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
+  <nav data-fx-nav-hijo style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
     <a href="#metodo" style="color:#ffffff" style-hover="color:#b7a18a">El Método</a>
     <a href="#mapa" style="color:#ffffff" style-hover="color:#b7a18a">Mapa Mavenz</a>
     <a href="#proyectos" style="color:#ffffff" style-hover="color:#b7a18a">Proyectos</a>
@@ -240,6 +272,60 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   </div>
 </section>
 
+
+<section id="contacto" data-screen-label="Contacto" data-fx="reveal" style="background:#ffffff;color:#342223;padding:130px 5vw">
+  <div style="max-width:1200px;margin:0 auto;display:grid;gap:56px;grid-template-columns:minmax(0,1fr)">
+    <div>
+      <h2 data-fx="split" style="margin:0 0 18px;font-size:clamp(36px,4.6vw,68px);font-weight:660;letter-spacing:-0.028em;line-height:1.05;max-width:16ch">Las oportunidades no aparecen por casualidad. Se reconocen.</h2>
+      <p style="margin:0;font-size:18px;line-height:1.6;color:#5b484a;max-width:46ch">Contanos qué estás buscando y te decimos qué vemos. Te contestamos por WhatsApp dentro del día hábil.</p>
+    </div>
+    <form id="fmv" novalidate style="max-width:520px;display:grid;gap:24px">
+      <div><label for="fn" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">Nombre</label>
+        <input id="fn" name="nombre" type="text" required autocomplete="name"></div>
+      <div><label for="fw" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">WhatsApp</label>
+        <input id="fw" name="whatsapp" type="tel" required autocomplete="tel"></div>
+      <div><label for="fq" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">Qué estás buscando</label>
+        <select id="fq" name="busca"><option>Vivir</option><option>Invertir</option><option>Desarrollar</option><option>Vender o comercializar</option></select></div>
+      <div><label for="fm" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">Mensaje</label>
+        <textarea id="fm" name="mensaje" rows="3"></textarea></div>
+      <div><button type="submit" class="btn-mv">Escribirnos</button>
+        <p id="fmv-msg" role="status" style="margin:12px 0 0;font-size:13px;color:#5b484a"></p></div>
+    </form>
+  </div>
+</section>
+<style>
+  #fmv input,#fmv select,#fmv textarea{width:100%;font:inherit;font-size:16px;color:#342223;
+    background:transparent;border:0;border-bottom:1px solid rgba(52,34,35,.22);padding:11px 0;
+    border-radius:0;appearance:none;transition:border-color .18s cubic-bezier(.22,.61,.36,1)}
+  #fmv input:focus,#fmv select:focus,#fmv textarea:focus{outline:none;border-bottom-color:#342223}
+  #fmv textarea{resize:vertical;min-height:84px}
+  #fmv input[aria-invalid="true"],#fmv select[aria-invalid="true"]{border-bottom-color:#a33}
+  .btn-mv{font:inherit;font-size:15px;font-weight:640;letter-spacing:.01em;cursor:pointer;
+    background:#342223;color:#fff;border:0;padding:15px 26px;
+    transition:background-color .18s cubic-bezier(.22,.61,.36,1),transform .12s cubic-bezier(.22,.61,.36,1)}
+  .btn-mv:hover{background:#3d2729}
+  .btn-mv:active{transform:translateY(1px)}
+  @media(min-width:900px){#contacto>div{grid-template-columns:1.05fr .95fr;gap:80px;align-items:start}}
+</style>
+<script>
+(function(){
+  var f=document.getElementById('fmv'); if(!f) return;
+  var msg=document.getElementById('fmv-msg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=f.elements.nombre, w=f.elements.whatsapp;
+    [n,w].forEach(function(c){ c.setAttribute('aria-invalid', c.value.trim()?'false':'true'); });
+    if(!n.value.trim()||!w.value.trim()){
+      msg.textContent='Completá tu nombre y tu WhatsApp para que podamos contestarte.';
+      (n.value.trim()?w:n).focus(); return;
+    }
+    msg.textContent='Abriendo WhatsApp…';
+    var t='Hola Mavenz, soy '+n.value.trim()+'. Busco: '+f.elements.busca.value+'.'+
+      (f.elements.mensaje.value.trim()?' '+f.elements.mensaje.value.trim():'');
+    window.open('https://wa.me/5493875918813?text='+encodeURIComponent(t),'_blank','noopener');
+  });
+})();
+</script>
 <footer data-screen-label="Footer" style="background:#2a1b1c;padding:72px 5vw 40px">
   <svg viewBox="0 0 1200 400" aria-hidden="true" style="width:240px;height:auto;display:block;margin-bottom:40px"><path pathLength="1" fill="none" stroke="#9c8976" stroke-width="6" style="stroke-dasharray:1;stroke-dashoffset:1;animation:mvDraw 3s 1s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap">
@@ -341,5 +427,67 @@ class Component extends DCLogic {
 })();
 </script>
 <script src="mapa-mavenz.js" defer></script>
+
+<a class="wa" href="https://wa.me/5493875918813?text=Hola%20Mavenz%2C%20vi%20la%20web%20y%20quiero%20consultar" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.2 5.07 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.02h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.23 8.24c0 4.54-3.7 8.22-8.23 8.22z"/></svg>
+</a>
+<style>
+  .wa{position:fixed;right:20px;bottom:20px;z-index:900;width:56px;height:56px;border-radius:50%;
+    display:grid;place-items:center;background:#25D366;color:#fff;text-decoration:none;
+    box-shadow:0 6px 20px rgba(0,0,0,.28);
+    transition:transform .16s cubic-bezier(.22,.61,.36,1),box-shadow .16s cubic-bezier(.22,.61,.36,1);
+    opacity:0;transform:translateY(12px) scale(.9);pointer-events:none}
+  .wa.vis{opacity:1;transform:none;pointer-events:auto}
+  .wa:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.34)}
+  .wa:active{transform:scale(.95)}
+  @media(min-width:768px){.wa{right:28px;bottom:28px;width:60px;height:60px}}
+  @media(prefers-reduced-motion:reduce){.wa{transition:none;opacity:1;transform:none;pointer-events:auto}}
+</style>
+<script>
+(function(){var w=document.querySelector('.wa');if(!w)return;
+ var s=document.createElement('div');s.style.cssText='position:absolute;top:70vh;height:1px;width:1px';
+ document.body.appendChild(s);
+ new IntersectionObserver(function(e){w.classList.toggle('vis',!e[0].isIntersecting)}).observe(s);
+ setTimeout(function(){w.classList.add('vis')},4000);})();
+</script>
+
+<dialog id="lb" aria-label="Imagen ampliada">
+  <button id="lb-x" aria-label="Cerrar">&times;</button>
+  <img id="lb-img" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+  <p id="lb-pie"></p>
+</dialog>
+<style>
+  #lb{border:0;padding:0;background:transparent;max-width:min(94vw,1500px);max-height:94vh;color:#fff}
+  #lb::backdrop{background:rgba(26,17,17,.92)}
+  #lb img{display:block;max-width:100%;max-height:84vh;margin:0 auto;object-fit:contain}
+  #lb-pie{margin:14px 2px 0;font-size:13px;letter-spacing:.02em;color:#c9cfd0;text-align:center}
+  #lb-x{position:fixed;top:18px;right:20px;width:44px;height:44px;border:0;border-radius:50%;
+    background:#2a1b1c;color:#fff;font-size:26px;line-height:1;cursor:pointer;
+    transition:background-color .16s cubic-bezier(.22,.61,.36,1)}
+  #lb-x:hover{background:#3d2729}
+  [data-lb]{cursor:zoom-in;transition:transform .3s cubic-bezier(.22,.61,.36,1),filter .3s cubic-bezier(.22,.61,.36,1)}
+  @media(hover:hover) and (pointer:fine){ [data-lb]:hover{transform:scale(1.015);filter:brightness(1.06)} }
+  @media(prefers-reduced-motion:reduce){ [data-lb]{transition:none} [data-lb]:hover{transform:none} }
+</style>
+<script>
+(function(){
+  var d=document.getElementById('lb'); if(!d||!d.showModal) return;
+  var img=document.getElementById('lb-img'), pie=document.getElementById('lb-pie');
+  // ampliables: renders y fotos de proyecto, no logos ni planos chicos
+  document.querySelectorAll('img').forEach(function(i){
+    if(/\/(renders|proyectos|planos)\//.test(i.getAttribute('src')||'')){
+      i.setAttribute('data-lb','');
+      i.setAttribute('tabindex','0');
+      i.setAttribute('role','button');
+      i.setAttribute('aria-label','Ampliar imagen');
+      function abrir(){ img.src=i.currentSrc||i.src; img.alt=i.alt||''; pie.textContent=i.alt||''; d.showModal(); }
+      i.addEventListener('click',abrir);
+      i.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();} });
+    }
+  });
+  document.getElementById('lb-x').addEventListener('click',function(){d.close()});
+  d.addEventListener('click',function(e){ if(e.target===d) d.close(); });
+})();
+</script>
 </body>
 </html>
