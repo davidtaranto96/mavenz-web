@@ -1,0 +1,66 @@
+{
+  "_fuente": "CARDINAL Sector PRIVADO.pdf — brochure comercial de la clienta, 17 páginas. Todo lo de acá está en ese PDF: no hay un solo dato inventado.",
+  "_editable": "Este archivo es la fuente única. Si cambia un metraje o una distancia, se cambia acá y en ningún otro lado.",
+
+  "proyecto": {
+    "nombre": "CARDINAL",
+    "bajada": "san lorenzo chico",
+    "ubicacion": "Av. Yerba Buena · San Lorenzo Chico, Salta",
+    "claim": "Corazón de San Lorenzo Chico",
+    "descripcion": "Un lugar donde la vida cotidiana se vuelve excepcional. Treinta y cinco hogares. Un solo lenguaje.",
+    "estado": "En comercialización"
+  },
+
+  "cifras": [
+    { "dato": "6.069", "unidad": "m²", "que": "de terreno" },
+    { "dato": "35", "unidad": "", "que": "unidades" },
+    { "dato": "5", "unidad": "", "que": "bloques residenciales" },
+    { "dato": "8", "unidad": "", "que": "tipologías, de 74 a 160 m²" }
+  ],
+
+  "distancias": [
+    { "a": "Centro médico", "min": 2 },
+    { "a": "El Punto Shopping", "min": 2 },
+    { "a": "Gastronomía", "min": 3 },
+    { "a": "Escuelas", "min": 5 },
+    { "a": "Combustible", "min": 6 },
+    { "a": "Salta capital", "min": 18 },
+    { "a": "Aeropuerto", "min": 18 }
+  ],
+
+  "amenities": [
+    "Piscina",
+    "SUM con asador",
+    "Vestuarios",
+    "Cocheras de cortesía",
+    "Caminerías",
+    "Juegos para niños",
+    "Espacios verdes"
+  ],
+
+  "tipologias": [
+    { "id": "A", "planta": "Planta baja", "propia": "77,00", "cubierta": "51,90", "semicubierta": "25,10", "jardin": "28,30", "cocheras": 1 },
+    { "id": "B", "planta": "Planta baja", "propia": "75,90", "cubierta": "50,80", "semicubierta": "25,10", "jardin": "27,40", "cocheras": 1 },
+    { "id": "C", "planta": "Planta baja", "propia": "83,70", "cubierta": "64,70", "semicubierta": "19,00", "jardin": "83,10", "cocheras": 2 },
+    { "id": "D", "planta": "Planta baja", "propia": "84,40", "cubierta": "65,20", "semicubierta": "19,20", "jardin": "83,10", "cocheras": 2 },
+    { "id": "E", "planta": "Planta alta", "propia": "74,50", "cubierta": "51,90", "semicubierta": "22,60", "jardin": null, "cocheras": 1 },
+    { "id": "F", "planta": "Planta alta", "propia": "82,50", "cubierta": "55,10", "semicubierta": "27,40", "jardin": null, "cocheras": 1 },
+    { "id": "G", "planta": "Planta alta", "propia": "81,50", "cubierta": "53,70", "semicubierta": "27,80", "jardin": null, "cocheras": 1 },
+    { "id": "H", "planta": "Planta alta", "propia": "160,30", "cubierta": "116,00", "semicubierta": "44,30", "jardin": "110,40", "cocheras": 3 }
+  ],
+
+  "incluye": [
+    "Galería con asador privado en cada unidad",
+    "Parquización y espacios verdes propios en planta baja",
+    "Unificación opcional a tres dormitorios, o dos más flexroom",
+    "Cocheras techadas privadas"
+  ],
+
+  "memoria": [
+    { "rubro": "Estructura", "detalle": "Steel Framing combinado con estructura metálica pesada (HBE/IPN). Terminación EIFS con látex acrílico arquitectónico y detalles en piedra natural." },
+    { "rubro": "Cocina", "detalle": "Mesadas de piedra sinterizada tipo Neostone, bachas Johnson, grifería FV o similar, mobiliario con apertura oculta e iluminación LED." },
+    { "rubro": "Carpinterías", "detalle": "Aberturas de aluminio anodizado bronce medio con doble vidriado hermético." },
+    { "rubro": "Baños", "detalle": "Inodoros Ferrum, griferías FV, mesadas Neostone, porcelanato Alberdi en grandes placas." },
+    { "rubro": "Instalaciones", "detalle": "Calefacción por caldera Peisa dual y preinstalación para aire acondicionado." }
+  ]
+}

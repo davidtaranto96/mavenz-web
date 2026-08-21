@@ -338,7 +338,10 @@
   line-height:0;
 }
 .mv-suelo > .mv-marca svg{ width:100%; height:100%; display:block }
-.mv-suelo > :not(.mv-marca){ position:relative; z-index:1 }
+/* El fondo de video (.mv-onda) tambien es una capa de fondo: si esta regla lo
+   agarra le devuelve position:relative y el video se cae adentro del flujo,
+   convertido en un bloque gigante en el medio de la seccion. */
+.mv-suelo > :not(.mv-marca):not(.mv-onda){ position:relative; z-index:1 }
 
 /* ==========================================================================
    6. REVELADO DE IMAGEN POR CORTINA

@@ -425,8 +425,13 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   /* No es una textura decorativa comprada: son los videos que estan en
      "5. Multimedia" de su kit. Ondas que se propagan, sobre una marca que se
      llama Generamos movimiento. */
+  /* Iba con .mv-onda a secas y la regla de abajo, .mv-suelo > :not(.mv-marca),
+     le ganaba por especificidad y le devolvia position:relative. Resultado: el
+     video se salia del fondo y quedaba como un bloque gigante en el medio de la
+     seccion. Va calificado con el padre para que pese mas. */
+  .mv-suelo > .mv-onda,
   .mv-onda{
-    position:absolute; inset:0; z-index:0;
+    position:absolute !important; inset:0; z-index:0 !important;
     pointer-events:none; overflow:hidden;
     line-height:0;
   }
