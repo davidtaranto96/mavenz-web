@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   dt-efectos.css — micro-libreria de efectos para webs estaticas DT System
+   Sin build, sin framework, sin dependencias. Un <link> y un <script>.
+
+   USO
+     <head>
+       <link rel="stylesheet" href="dt-efectos.css">
+       <script src="dt-efectos.js"></script>   <!-- en head, SIN defer -->
+       <noscript><style>[data-fx]{opacity:1!important;transform:none!important}</style></noscript>
+     </head>
+     <h2 data-fx="reveal">Titulo</h2>
+     <div data-fx="reveal" data-fx-stagger>...tarjetas...</div>
+
+   REGLAS DE LA CASA
+     - Solo se animan transform, opacity y filter. Nada de width/top/left.
+     - Todo pasa por prefers-reduced-motion: se suaviza, no se apaga.
+     - Los efectos de hover se limitan a punteros finos (nada en tactil).
+     - Las duraciones salen de los tokens de abajo. No inventar valores sueltos.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* Curvas — las mismas tres para todo el sitio */
+  --fx-out:      cubic-bezier(.23, 1, .32, 1);      /* entradas y reveals */
+  --fx-in-out:   cubic-bezier(.77, 0, .175, 1);     /* cambios de estado */
+  --fx-suave:    cubic-bezier(.32, .72, 0, 1);      /* paneles y drawers */
+
+  /* Duraciones — presupuesto de UI: nada por encima de 300ms salvo reveals */
+  --fx-tap:      140ms;   /* feedback de pulsado */
+  --fx-rapido:   180ms;   /* hover, tooltips */
+  --fx-medio:    260ms;   /* dropdowns, acordeones */
+  --fx-lento:    620ms;   /* reveals de scroll */
+
+  --fx-stagger:  70ms;    /* retardo entre hijos de un grupo */
+  --fx-desp:     16px;    /* cuanto sube un elemento al aparecer */
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   1. REVEAL AL SCROLL  ·  data-fx="reveal"
+   El estado oculto solo existe si el JS arranco (html.fx-on). Si el script
+   falla o no carga, el contenido queda visible: nunca una pagina en blanco.
+   ─────────────────────────────────────────────────────────────────────── */
+.fx-on [data-fx~="reveal"]{
+  opacity: 0;
+  transform: translate3d(0, var(--fx-desp), 0);
+  transition: opacity var(--fx-lento) var(--fx-out),
+              transform var(--fx-lento) var(--fx-out);
+  transition-delay: var(--fx-delay, 0ms);
+  will-change: opacity, transform;
+}
+/* direcciones alternativas */
+.fx-on [data-fx~="reveal"][data-fx-desde="izq"]  { transform: translate3d(calc(var(--fx-desp) * -1.5), 0, 0); }
+.fx-on [data-fx~="reveal"][data-fx-desde="der"]  { transform: translate3d(calc(var(--fx-desp) *  1.5), 0, 0); }
+.fx-on [data-fx~="reveal"][data-fx-desde="escala"]{ transform: scale(.965); }
+.fx-on [data-fx~="reveal"][data-fx-desde="blur"] { filter: blur(10px); transition: opacity var(--fx-lento) var(--fx-out), transform var(--fx-lento) var(--fx-out), filter var(--fx-lento) var(--fx-out); }
+
+.fx-on [data-fx~="reveal"].fx-visto{
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   2. TEXTO PARTIDO  ·  data-fx="split"   (el JS envuelve cada palabra)
+   Para titulares de seccion. Una sola vez por pantalla, no en cada h3.
+   ─────────────────────────────────────────────────────────────────────── */
+.fx-on [data-fx~="split"] .fx-palabra{
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, .55em, 0);
+  transition: opacity 700ms var(--fx-out), transform 700ms var(--fx-out);
+  transition-delay: var(--fx-i-delay, 0ms);
+  will-change: opacity, transform;
+}
+.fx-on [data-fx~="split"].fx-visto .fx-palabra{ opacity: 1; transform: none; will-change: auto; }
+
+/* ───────────────────────────────────────────────────────────────────────
+   3. FEEDBACK DE PULSADO  ·  clase .fx-tap  (o aplicalo a tus botones)
+   El unico efecto que conviene poner en TODO lo clickeable.
+   ─────────────────────────────────────────────────────────────────────── */
+.fx-tap{ transition: transform var(--fx-tap) var(--fx-out); }
+.fx-tap:active{ transform: scale(.97); }
+
+/* ───────────────────────────────────────────────────────────────────────
+   4. TILT  ·  data-fx="tilt"   — la tarjeta se inclina hacia el cursor
+   Solo con puntero fino. En tactil no hace nada, y esta bien asi.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="tilt"]{
+  transform-style: preserve-3d;
+  transition: transform var(--fx-medio) var(--fx-out);
+}
+@media (hover: hover) and (pointer: fine){
+  /* La especificidad de abajo no es casual: tiene que ganarle a la regla del
+     reveal ya visto (.fx-on [data-fx~="reveal"].fx-visto, que pone
+     transform:none), porque una tarjeta normalmente lleva los dos efectos
+     juntos — data-fx="reveal tilt". Sin esto, el tilt no se ve nunca. */
+  .fx-on [data-fx~="tilt"].fx-activo:hover,
+  [data-fx~="tilt"].fx-activo:hover{
+    transition: none;
+    transform: perspective(900px)
+               rotateX(var(--fx-rx, 0deg))
+               rotateY(var(--fx-ry, 0deg))
+               scale(var(--fx-tilt-escala, 1.015));
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   5. SPOTLIGHT  ·  data-fx="spotlight"  — halo que sigue al cursor
+   Va sobre tarjetas oscuras. Sobre fondo claro casi no se ve: no lo uses.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="spotlight"]{ position: relative; isolation: isolate; }
+[data-fx~="spotlight"]::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--fx-medio) var(--fx-out);
+  background: radial-gradient(
+    var(--fx-spot-radio, 320px) circle at var(--fx-x, 50%) var(--fx-y, 50%),
+    var(--fx-spot-color, rgba(255,255,255,.10)),
+    transparent 62%);
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine){
+  [data-fx~="spotlight"]:hover::before{ opacity: 1; }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   6. BRILLO QUE CRUZA  ·  data-fx="brillo"  — 100% CSS, sin JS
+   Para un CTA principal o un badge. Uno por pagina.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="brillo"]{
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+[data-fx~="brillo"]::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 38%,
+    var(--fx-brillo-color, rgba(255,255,255,.28)) 50%,
+    transparent 62%);
+  transform: translateX(-100%);
+  animation: fx-barrido var(--fx-brillo-dur, 4.5s) var(--fx-in-out) infinite;
+  pointer-events: none;
+}
+@keyframes fx-barrido{
+  0%, 55% { transform: translateX(-100%); }
+  100%    { transform: translateX(100%); }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   7. MARQUEE  ·  data-fx="marquee"   (el JS duplica el contenido)
+   Para logos de clientes o testimonios. Se frena al pasar el mouse.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="marquee"]{
+  display: flex;
+  overflow: hidden;
+  gap: var(--fx-marquee-gap, 3rem);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+[data-fx~="marquee"] > *{ flex: 0 0 auto; }
+[data-fx~="marquee"] .fx-pista{
+  display: flex;
+  gap: var(--fx-marquee-gap, 3rem);
+  flex: 0 0 auto;
+  animation: fx-correr var(--fx-marquee-dur, 32s) linear infinite;
+}
+[data-fx~="marquee"][data-fx-sentido="der"] .fx-pista{ animation-direction: reverse; }
+[data-fx~="marquee"]:hover .fx-pista{ animation-play-state: paused; }
+@keyframes fx-correr{ to{ transform: translateX(calc(-100% - var(--fx-marquee-gap, 3rem))); } }
+
+/* ───────────────────────────────────────────────────────────────────────
+   8. BARRA DE PROGRESO DE SCROLL  ·  <div data-fx="progreso"></div>
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="progreso"]{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--fx-progreso-alto, 3px);
+  z-index: 9999;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--fx-progreso, 0));
+  background: var(--fx-progreso-color, currentColor);
+  pointer-events: none;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   9. NAV QUE REACCIONA AL SCROLL  ·  data-fx="nav"
+   El JS agrega .fx-scrolleado. Vos definis como se ve — esto es el default.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="nav"]{
+  transition: background-color var(--fx-medio) var(--fx-out),
+              box-shadow var(--fx-medio) var(--fx-out),
+              transform var(--fx-medio) var(--fx-suave);
+}
+[data-fx~="nav"].fx-oculto{ transform: translate3d(0, -102%, 0); }
+
+/* ───────────────────────────────────────────────────────────────────────
+   10. PARALLAX SUAVE  ·  data-fx="parallax"
+   Recorrido corto (default 40px). Mas que eso marea y rompe el layout.
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="parallax"]{ will-change: transform; transform: translate3d(0, var(--fx-par, 0px), 0); }
+
+/* ───────────────────────────────────────────────────────────────────────
+   11. CHISPA AL CLICK  ·  data-fx="chispa"  (ondas tipo ripple)
+   ─────────────────────────────────────────────────────────────────────── */
+[data-fx~="chispa"]{ position: relative; overflow: hidden; }
+.fx-onda{
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: var(--fx-chispa-color, rgba(255,255,255,.35));
+  animation: fx-expandir 600ms var(--fx-out) forwards;
+  pointer-events: none;
+}
+@keyframes fx-expandir{ to{ transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+
+/* ───────────────────────────────────────────────────────────────────────
+   12. BORDE VIVO  ·  data-fx="borde"  — 100% CSS
+   El acento gira alrededor del borde. Para UNA tarjeta destacada.
+   ─────────────────────────────────────────────────────────────────────── */
+@property --fx-ang{ syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+[data-fx~="borde"]{
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(var(--fx-borde-fondo, #111), var(--fx-borde-fondo, #111)) padding-box,
+    conic-gradient(from var(--fx-ang),
+      transparent 0turn, var(--fx-borde-color, #fff) .12turn, transparent .28turn) border-box;
+  border: var(--fx-borde-ancho, 1px) solid transparent;
+  animation: fx-girar var(--fx-borde-dur, 5s) linear infinite;
+}
+@keyframes fx-girar{ to{ --fx-ang: 360deg; } }
+
+/* ───────────────────────────────────────────────────────────────────────
+   ACCESIBILIDAD — se suaviza, no se apaga.
+   El contenido siempre termina visible; lo que se corta es el movimiento
+   grande, los bucles infinitos y todo lo que sigue al cursor.
+   ─────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  :root{ --fx-desp: 0px; --fx-stagger: 0ms; --fx-lento: 220ms; }
+
+  .fx-on [data-fx~="reveal"],
+  .fx-on [data-fx~="reveal"][data-fx-desde="izq"],
+  .fx-on [data-fx~="reveal"][data-fx-desde="der"],
+  .fx-on [data-fx~="reveal"][data-fx-desde="escala"],
+  .fx-on [data-fx~="reveal"][data-fx-desde="blur"]{
+    transform: none;
+    filter: none;
+    transition-delay: 0ms;
+  }
+  .fx-on [data-fx~="split"] .fx-palabra{ transform: none; transition-delay: 0ms; }
+
+  [data-fx~="brillo"]::after,
+  [data-fx~="marquee"] .fx-pista,
+  [data-fx~="borde"]{ animation: none; }
+  [data-fx~="brillo"]::after{ display: none; }
+  [data-fx~="marquee"]{ overflow-x: auto; }
+
+  .fx-on [data-fx~="tilt"].fx-activo:hover,
+  [data-fx~="tilt"].fx-activo:hover{ transform: none; }
+  [data-fx~="spotlight"]:hover::before{ opacity: 0; }
+  [data-fx~="parallax"]{ transform: none; }
+  .fx-onda{ animation: none; display: none; }
+}

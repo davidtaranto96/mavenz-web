@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="dt-efectos.css">
+<script src="dt-efectos.js"></script>
+<noscript><style>[data-fx]{opacity:1!important;transform:none!important}</style></noscript>
+<style>
+  html{ scroll-padding-top:5rem }
+  :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+    outline:2px solid #b7a18a; outline-offset:3px; border-radius:2px;
+  }
+  header.fx-scrolleado{ box-shadow:0 1px 0 rgba(183,161,138,.22) }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto }
+    *,*::before,*::after{
+      animation-duration:.01ms !important; animation-iteration-count:1 !important;
+      transition-duration:.01ms !important; scroll-behavior:auto !important;
+    }
+    [data-fx]{ opacity:1 !important; transform:none !important }
+  }
+</style>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<style>
+@font-face{font-family:'Urbanist';src:url('../assets/marca/Urbanist-Variable.ttf') format('truetype');font-weight:100 900;font-display:swap}
+html{scroll-behavior:smooth}
+body{margin:0;background:#342223;-webkit-font-smoothing:antialiased}
+a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
+::selection{background:#b7a18a;color:#342223}
+@keyframes mvDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes mvTravel{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes mvMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mvFloat{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
+@keyframes mvPan{from{transform:translateX(0)}to{transform:translateX(-10%)}}
+</style>
+</helmet>
+<div style="font-family:'Urbanist',sans-serif;background:#342223;color:#ffffff;overflow-x:hidden">
+
+<header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(52,34,35,.94);border-bottom:1px solid rgba(183,161,138,.18)">
+  <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-claro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
+  <nav style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
+    <a href="#metodo" style="color:#ffffff" style-hover="color:#b7a18a">El Método</a>
+    <a href="#mapa" style="color:#ffffff" style-hover="color:#b7a18a">Mapa Mavenz</a>
+    <a href="#proyectos" style="color:#ffffff" style-hover="color:#b7a18a">Proyectos</a>
+    <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#b7a18a;color:#342223;padding:10px 22px;border-radius:999px;font-weight:700" style-hover="background:#9c8976;color:#342223">Espacio Mavenz</a>
+  </nav>
+</header>
+
+<sc-if value="{{ heroCine }}" hint-placeholder-val="{{ true }}">
+<section id="inicio" data-screen-label="Hero cinematográfico" style="position:relative;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
+  <div style="display:flex;flex-direction:column;justify-content:center;padding:56px 5vw 32px;position:relative">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.32;pointer-events:none"><path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="2.5" style="stroke-dasharray:1;animation:mvDraw 2.8s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
+    <h1 style="margin:0;font-size:clamp(64px,10.5vw,172px);line-height:.94;letter-spacing:-0.035em;font-weight:640;position:relative">Generamos<br><span style="color:#b7a18a">movimiento.</span></h1>
+    <p style="margin:30px 0 0;font-size:clamp(17px,1.4vw,22px);line-height:1.5;color:#a1a7a8;max-width:580px;font-weight:450;position:relative">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
+  </div>
+  <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ true }}">
+    <video ref="{{ videoRef }}" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" onError="{{ videoFail }}" style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#3d2729"></video>
+  </sc-if>
+  <sc-if value="{{ heroFoto }}" hint-placeholder-val="{{ false }}">
+    <div style="width:100%;aspect-ratio:1600/360;overflow:hidden;background:#3d2729"><img src="../assets/aereas/aerea-dia.jpg" fetchpriority="high" decoding="async" alt="San Lorenzo Chico desde el aire" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
+  </sc-if>
+  <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 20px;font-size:13px;color:#a1a7a8;letter-spacing:.04em"><span>Salta, Argentina</span><a href="#no-somos" style="color:#b7a18a">Seguir bajando ↓</a></div>
+</section>
+</sc-if>
+
+<sc-if value="{{ heroEditorial }}" hint-placeholder-val="{{ false }}">
+
+</sc-if>
+
+<sc-if value="{{ heroTerr }}" hint-placeholder-val="{{ false }}">
+
+</sc-if>
+
+<section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" style="padding:150px 5vw 130px;max-width:1200px">
+  <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una inmobiliaria tradicional.</p>
+  <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos solamente una comercializadora.</p>
+  <p data-reveal style="margin:0 0 48px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una agencia.</p>
+  <p data-reveal style="margin:0;font-size:clamp(34px,4.8vw,72px);font-weight:680;line-height:1.08;letter-spacing:-0.025em;color:#ffffff">Somos el partner estratégico que <span style="color:#b7a18a">mueve</span> el Real Estate.</p>
+</section>
+
+<section data-screen-label="Universo Mavenz" data-fx="reveal" data-fx-desde="izq" style="background:#b7a18a;color:#342223;padding:96px 5vw">
+  <div data-reveal style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:56px">
+    <h2 style="margin:0;font-size:clamp(34px,4vw,56px);font-weight:680;letter-spacing:-0.02em">El universo Mavenz</h2>
+    <p style="margin:0;font-size:16px;color:#5b484a;font-weight:500">Cuatro áreas, un mismo criterio.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0">
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Estrategia</h3>
+      <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Leemos el mercado antes de que se mueva.</p>
+    </div>
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Desarrollo de Negocios</h3>
+      <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Detectamos y estructuramos oportunidades.</p>
+    </div>
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Comercialización</h3>
+      <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Activamos la venta con foco y con criterio.</p>
+    </div>
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Gestión y Evolución</h3>
+      <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Acompañamos el ciclo completo de cada proyecto.</p>
+    </div>
+  </div>
+</section>
+
+<section id="metodo" data-screen-label="El Método" data-fx="reveal" style="background:#3d2729;padding:150px 5vw">
+  <div data-reveal style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:24px">
+    <h2 style="margin:0;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">El Método</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:#a1a7a8;max-width:420px">Un ciclo que no termina: cuando el movimiento se genera, vuelve a empezar.</p>
+  </div>
+  <div data-reveal style="margin:0 -2vw">
+    <svg viewBox="0 0 1200 400" aria-hidden="true" style="width:100%;height:auto;display:block">
+      <path pathLength="1" fill="none" stroke="rgba(183,161,138,.35)" stroke-width="2" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path>
+      <path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="3" style="stroke-dasharray:1;stroke-dashoffset:1;animation:mvDraw 3.2s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path>
+      <circle r="11" fill="#b7a18a" style="offset-path:path('M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272');animation:mvTravel 9s linear infinite"></circle>
+    </svg>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:28px;margin-top:48px">
+    <div data-reveal><h3 style="margin:0 0 8px;font-size:20px;font-weight:720;color:#b7a18a">Descubrir</h3><p style="margin:0;font-size:14.5px;line-height:1.5;color:#a1a7a8">Escuchamos el territorio y los datos antes que las tendencias.</p></div>
+    <div data-reveal><h3 style="margin:0 0 8px;font-size:20px;font-weight:720;color:#b7a18a">Diseñar</h3><p style="margin:0;font-size:14.5px;line-height:1.5;color:#a1a7a8">Estrategia y marca a medida de cada proyecto.</p></div>
+    <div data-reveal><h3 style="margin:0 0 8px;font-size:20px;font-weight:720;color:#b7a18a">Conectar</h3><p style="margin:0;font-size:14.5px;line-height:1.5;color:#a1a7a8">Unimos desarrolladores, inversores y personas.</p></div>
+    <div data-reveal><h3 style="margin:0 0 8px;font-size:20px;font-weight:720;color:#b7a18a">Activar</h3><p style="margin:0;font-size:14.5px;line-height:1.5;color:#a1a7a8">Lanzamos la comercialización en el momento justo.</p></div>
+    <div data-reveal><h3 style="margin:0 0 8px;font-size:20px;font-weight:720;color:#ffffff">Generar movimiento</h3><p style="margin:0;font-size:14.5px;line-height:1.5;color:#a1a7a8">El proyecto toma vida propia. Y el ciclo vuelve a empezar.</p></div>
+  </div>
+</section>
+
+<section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" style="padding:150px 5vw">
+  <div data-reveal style="max-width:900px;margin-bottom:56px">
+    <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">El Mapa Mavenz</h2>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:#a1a7a8">Seis territorios leídos con las mismas cuatro preguntas: qué está cambiando, quién lo elige, qué oportunidades aparecen y qué ve Mavenz.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:44px;align-items:start">
+    <x-import component-from-global-scope="mapa-mavenz" from="./mapa-mavenz.js" hint-size="100%,580px" style="display:block;width:100%;height:580px;border:1px solid rgba(183,161,138,.25);position:relative;z-index:1"></x-import>
+    <div>
+      <div style="display:flex;flex-direction:column">
+        <button onClick="{{ sel.micro }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.micro }}">Micro y Macrocentro</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Donde el patrimonio comienza a transformarse</span></button>
+        <button onClick="{{ sel.norte }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.norte }}">Zona Norte</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">La ciudad crece hacia la naturaleza</span></button>
+        <button onClick="{{ sel.sanlorenzo }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.sanlorenzo }}">San Lorenzo</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Dos territorios, dos formas distintas de vivir</span></button>
+        <button onClick="{{ sel.aeropuerto }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.aeropuerto }}">Zona Aeropuerto y San Luis</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Conectividad que impulsa crecimiento</span></button>
+        <button onClick="{{ sel.cafayate }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.cafayate }}">Cafayate y Cachi</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Invertir también es elegir una forma de vivir</span></button>
+        <button onClick="{{ sel.vaqueros }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.vaqueros }}">Vaqueros</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Una respuesta eco-cultural</span></button>
+      </div>
+      <sc-if value="{{ act.micro }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Casonas y edificios patrimoniales entran en reconversión.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Profesionales que quieren vivir cerca de todo.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Reciclaje de unidades con valor histórico.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Un centro que vuelve a ser deseable.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ act.norte }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">La mancha urbana avanza hacia el verde.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Familias que buscan aire sin salir de la ciudad.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Suelo en etapa temprana de desarrollo.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El próximo eje residencial de Salta.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ act.sanlorenzo }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El pueblo y San Lorenzo Chico maduran a ritmos distintos.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Quienes ya decidieron vivir entre montañas.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Proyectos de escala barrial, como CARDINAL.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El territorio donde hoy pone el cuerpo.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ act.aeropuerto }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">La logística y los accesos reordenan la zona.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Empresas e inversores de renta.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Storages, cocheras y usos mixtos.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Infraestructura que llega antes que el precio.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ act.cafayate }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El enoturismo trae demanda todo el año.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Inversores que compran paisaje y renta.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Hospedaje y lotes con vocación turística.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Un destino, no solo una ubicación.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ act.vaqueros }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Crece una comunidad con otra idea de hábitat.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Quienes buscan naturaleza con identidad.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Desarrollos de baja escala y alto sentido.</p></div>
+          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El contrapeso cultural del crecimiento.</p></div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<section id="proyectos" data-screen-label="Proyectos" data-fx="reveal" style="background:#ffffff;color:#342223;padding:150px 5vw">
+  <div data-reveal style="max-width:900px;margin-bottom:72px">
+    <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">Los proyectos</h2>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:#5b484a">Cada proyecto vive dentro de Mavenz con su propia identidad y su propio destino.</p>
+  </div>
+  <div data-reveal style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:52px;align-items:start">
+    <div>
+      <img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt="Render de las casas de CARDINAL" style="width:100%;display:block">
+      <p style="margin:10px 0 0;font-size:12.5px;color:#5b484a">Render del masterplan — es render, no fotografía. Preferimos decirlo.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px">
+        <img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt="Render de pileta y quincho" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+        <img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt="Render de interior con hogar" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+        <img src="../assets/renders/comercial.jpg" loading="lazy" decoding="async" alt="Render de la esquina comercial" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+      </div>
+    </div>
+    <div>
+      <h3 style="margin:0;font-size:clamp(40px,4.5vw,64px);font-weight:760;letter-spacing:.01em;line-height:1">CARDINAL</h3>
+      <p style="margin:10px 0 0;font-size:16px;font-weight:650;color:#9c8976">San Lorenzo Chico · Salta</p>
+      <p style="margin:22px 0 0;font-size:16px;line-height:1.6;color:#5b484a">Un barrio pensado para quedarse: casas, amenities y una esquina comercial al pie de las montañas.</p>
+      <div style="display:flex;gap:18px;align-items:center;margin-top:32px;border-top:1px solid rgba(52,34,35,.15);padding-top:24px">
+        <img src="../assets/proyectos/cardinal-cardenal.jpg" loading="lazy" decoding="async" alt="El cardenal, pieza de marca de CARDINAL" style="width:92px;height:92px;object-fit:cover;flex-shrink:0">
+        <p style="margin:0;font-size:14px;line-height:1.55;color:#5b484a">¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia. Movimiento. Identidad.</p>
+      </div>
+      <a href="https://espaciomavenz.com.ar" target="_blank" style="display:inline-block;margin-top:32px;font-size:16px;font-weight:700;color:#9c8976">Conocer CARDINAL →</a>
+    </div>
+  </div>
+  <sc-if value="{{ mostrarWa }}" hint-placeholder-val="{{ true }}">
+  <div data-reveal style="display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:52px;align-items:start;margin-top:110px">
+    <div>
+      <h3 style="margin:0;font-size:clamp(40px,4.5vw,64px);font-weight:760;letter-spacing:.01em;line-height:1">WA</h3>
+      <p style="margin:10px 0 0;font-size:16px;font-weight:650;color:#9c8976">Storages, cocheras y oficinas · Salta</p>
+      <p style="margin:22px 0 0;font-size:16px;line-height:1.6;color:#5b484a">Inversión de renta en unidades de guardado, cocheras cubiertas y oficinas con la escala justa.</p>
+      <p style="margin:22px 0 0;font-size:15px;line-height:1.6;color:#342223;font-weight:600">Storages disponibles: unidades 9 a 26, de 4,86 a 24,84 m².</p>
+      <a href="https://espaciomavenz.com.ar" target="_blank" style="display:inline-block;margin-top:28px;font-size:16px;font-weight:700;color:#9c8976">Ver disponibilidad →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:12px">
+      <img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="Pasillo de storages numerados" style="width:100%;height:100%;object-fit:cover;display:block;grid-row:span 2">
+      <img src="../assets/proyectos/porto-01.jpg" loading="lazy" decoding="async" alt="Oficina con ventanal en Porto" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+      <img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="Cocheras cubiertas" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+    </div>
+  </div>
+  </sc-if>
+  <div data-reveal style="display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;margin-top:110px;border-top:1px solid rgba(52,34,35,.2);border-bottom:1px solid rgba(52,34,35,.2);padding:44px 0">
+    <div style="font-size:clamp(48px,6vw,88px);font-weight:800;letter-spacing:.02em;color:transparent;-webkit-text-stroke:2px #b7a18a">CAFAY</div>
+    <p style="margin:0;font-size:16px;line-height:1.55;color:#5b484a;max-width:420px">Cafayate · en desarrollo. La próxima lectura del territorio hecha proyecto.</p>
+  </div>
+</section>
+
+<section id="espacio" data-screen-label="Espacio Mavenz" data-fx="reveal" data-fx-desde="izq" style="padding:150px 5vw;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center">
+  <div data-reveal>
+    <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">Espacio <span style="color:#b7a18a">Mavenz</span></h2>
+    <p style="margin:0;font-size:17px;line-height:1.6;color:#a1a7a8;max-width:480px">El canal de comercialización: todo lo que está a la venta, en un solo lugar. El listado completo vive en espaciomavenz.com.ar.</p>
+    <div style="display:flex;gap:20px;align-items:center;margin-top:36px;flex-wrap:wrap">
+      <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#b7a18a;color:#342223;padding:14px 30px;border-radius:999px;font-weight:700;font-size:16px" style-hover="background:#9c8976;color:#342223">Entrar a Espacio Mavenz ↗</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" style="font-size:15px;font-weight:600;color:#b7a18a">Ver storages disponibles</a>
+    </div>
+  </div>
+  <div data-reveal style="background:#3d2729;padding:28px">
+    <img src="../assets/planos/storages-disponibles.jpg" loading="lazy" decoding="async" alt="Plano de storages con disponibilidad" style="width:100%;display:block">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-top:22px">
+      <div>
+        <p style="margin:0;font-size:18px;font-weight:720">Storage · Unidad 9</p>
+        <p style="margin:4px 0 0;font-size:14px;color:#a1a7a8">14,09 m² · WA · Ref. MAV-226174</p>
+      </div>
+      <p style="margin:0;font-size:26px;font-weight:760;color:#b7a18a;white-space:nowrap">USD 35.000</p>
+    </div>
+  </div>
+</section>
+
+<footer data-screen-label="Footer" style="background:#2a1b1c;padding:72px 5vw 40px">
+  <svg viewBox="0 0 1200 400" aria-hidden="true" style="width:240px;height:auto;display:block;margin-bottom:40px"><path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="6" style="stroke-dasharray:1;stroke-dashoffset:1;animation:mvDraw 3s 1s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap">
+    <div>
+      <img src="../assets/marca/logo-horizontal-claro.png" loading="lazy" decoding="async" alt="Mavenz" style="height:26px;display:block">
+      <p style="margin:14px 0 0;font-size:15px;color:#a1a7a8">Generamos movimiento.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:15px">
+      <a href="https://mavenz.com.ar" target="_blank">mavenz.com.ar</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank">espaciomavenz.com.ar</a>
+    </div>
+  </div>
+  <p style="margin:56px 0 0;font-size:12.5px;color:#5b484a">Salta, Argentina · Identidad por Fractura Studio</p>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;hero&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cinematografico&quot;,&quot;editorial&quot;,&quot;territorial&quot;],&quot;default&quot;:&quot;cinematografico&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;mostrarWa&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;}}">
+class Component extends DCLogic {
+  state = { active: 'micro', videoOk: true };
+  componentDidMount() {
+    this._setupReveals();
+    this._lis = (e) => this.setState({ active: e.detail.id });
+    window.addEventListener('mavenz:territory', this._lis);
+  }
+  componentDidUpdate() { this._setupReveals(); }
+  componentWillUnmount() {
+    window.removeEventListener('mavenz:territory', this._lis);
+    if (this._io) this._io.disconnect();
+  }
+  _setupReveals() {
+    if (!this._io) {
+      this._io = new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          this._io.unobserve(e.target);
+        }
+      }), { threshold: 0.12 });
+    }
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      if (el.__mv) return; el.__mv = 1;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(28px)';
+      el.style.transition = 'opacity .9s ease, transform .9s ease';
+      this._io.observe(el);
+    });
+  }
+  _sel(id) {
+    this.setState({ active: id });
+    window.dispatchEvent(new CustomEvent('mavenz:flyto', { detail: { id } }));
+  }
+  renderVals() {
+    const hero = this.props.hero ?? 'cinematografico';
+    const ids = ['micro', 'norte', 'sanlorenzo', 'aeropuerto', 'cafayate', 'vaqueros'];
+    const sel = {}, act = {}, c = {};
+    ids.forEach((id) => {
+      sel[id] = () => this._sel(id);
+      act[id] = this.state.active === id;
+      c[id] = this.state.active === id ? '#b7a18a' : '#ffffff';
+    });
+    const video = (this.props.heroVideo ?? true) && this.state.videoOk;
+    return {
+      heroCine: hero === 'cinematografico',
+      heroEditorial: hero === 'editorial',
+      heroTerr: hero === 'territorial',
+      heroVideo: video, heroFoto: !video,
+      mostrarWa: this.props.mostrarWa ?? true,
+      sel, act, c,
+      videoRef: (el) => { if (el) { el.muted = true; const p = el.play && el.play(); if (p) p.catch(() => {}); } },
+      videoFail: () => this.setState({ videoOk: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
