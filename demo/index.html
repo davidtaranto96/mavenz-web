@@ -375,49 +375,125 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
     to  { opacity:1; transform:none }
   }
 
-  /* ---- hero ---------------------------------------------------------------- */
-  .hero-rej{ grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr) }
-  @media (max-width:1023px){
-    .hero-rej{ grid-template-columns:minmax(0,1fr) !important; gap:40px !important }
-    .mv-marca--hero{ top:auto; bottom:-8%; right:-46%; width:150%; height:70% }
+  /* ---- hero -----------------------------------------------------------------
+     Sin la pila de fotos: eran cuatro sistemas de imagen en la misma pagina y
+     en el hero se veian quietas al lado de un fondo que se mueve. El hero
+     queda en tipografia, corriente y la banda de video. */
+  .hero-campo{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+    display:block;
+    pointer-events:none;
   }
-
-  .hero-pila{ position:relative; padding-bottom:6px }
-  .hero-pila figure{
-    margin:0;
-    border-radius:16px;
-    overflow:hidden;
-    background:#e8e2da;
-    box-shadow:0 30px 60px -30px rgba(42,27,28,.5), 0 6px 18px -10px rgba(42,27,28,.32);
-    transform:rotate(var(--g,0deg));
-    transition:transform 520ms var(--fx-out), box-shadow 520ms var(--fx-out);
-    z-index:var(--z,0);
+  /* el texto necesita su propio aire: un velo blanco que se abre desde la izquierda */
+  .hero-caja::before{
+    content:""; position:absolute; inset:-6% -20% -6% -12%;
+    background:radial-gradient(46% 62% at 26% 50%,
+      rgba(255,255,255,.96) 0%, rgba(255,255,255,.88) 46%, rgba(255,255,255,.42) 74%, rgba(255,255,255,0) 100%);
+    pointer-events:none;
+  }
+  .hero-caja{
     position:relative;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:60px 5vw 44px;
+    max-width:1220px;
   }
-  .hero-pila figure + figure{ margin-top:-5% }
-  .hero-pila figure:nth-child(1){ margin-left:0;    margin-right:13% }
-  .hero-pila figure:nth-child(2){ margin-left:11%;  margin-right:0   }
-  .hero-pila figure:nth-child(3){ margin-left:3.5%; margin-right:8%  }
-  .hero-pie{
-    margin:20px 0 0;
-    font:440 12.5px/1.5 'Urbanist',system-ui,sans-serif;
-    letter-spacing:.02em;
+  .hero-caja > *{ position:relative }
+
+  .hero-lugar{
+    margin:0 0 26px;
+    font-size:12px; font-weight:700; letter-spacing:.19em;
     color:#715d55;
   }
-  .hero-pila img{ display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover }
-  @media (hover:hover) and (pointer:fine){
-    .hero-pila:hover figure{ transform:rotate(calc(var(--g,0deg) * .35)) }
-    .hero-pila figure:hover{
-      transform:rotate(0deg) translateY(-8px) scale(1.025);
-      z-index:9;
-      box-shadow:0 44px 80px -34px rgba(42,27,28,.58);
-    }
+  .hero-t{
+    margin:0;
+    font-size:clamp(54px,8.6vw,132px);
+    line-height:.93;
+    letter-spacing:-0.042em;
+    font-weight:640;
+    text-wrap:balance;
   }
-  @media (max-width:639px){
-    .hero-pila figure + figure{ margin-top:-4% }
-    .hero-pila figure:nth-child(1){ margin-right:8% }
-    .hero-pila figure:nth-child(2){ margin-left:7% }
-    .hero-pila figure:nth-child(3){ margin-left:2%; margin-right:4% }
+  /* Cada linea sube desde su propia mascara. Es una sola vez, rapido y por
+     linea, no letra por letra: el mensaje se lee al instante. */
+  .hero-l{ display:block; overflow:hidden; padding-bottom:.06em }
+  .hero-l > span{ display:block }
+  html.fx-on .hero-l > span{
+    animation:heroSube 760ms cubic-bezier(.16,1,.3,1) both;
+  }
+  html.fx-on .hero-l:nth-child(2) > span{ animation-delay:90ms }
+  @keyframes heroSube{ from{ transform:translateY(105%) } to{ transform:none } }
+
+  /* "movimiento" lleva la corriente adentro: el mismo campo del fondo, recortado
+     por la palabra. La palabra se lee completa desde el primer cuadro; lo que
+     se mueve es lo que hay dentro, no la tipografia. */
+  /* La palabra se lee entera desde el primer cuadro: es tinta plana. Lo unico
+     que se mueve es un filo de luz que la cruza cada tanto, el mismo idioma
+     que el borde de los botones. Nada de texto con degradado. */
+  .hero-mov{
+    position:relative;
+    display:inline-block;
+    color:#9c8a77;
+  }
+  .hero-mov::after{
+    content:attr(data-t);
+    position:absolute; inset:0;
+    /* El filo va en tinta, no en blanco: la palabra es arena sobre blanco, y un
+       barrido claro sobre claro no se ve. Lo que la cruza es una sombra. */
+    color:#3c2527;
+    background-image:linear-gradient(104deg,
+      rgba(60,37,39,0) 38%, rgba(60,37,39,.85) 50%, rgba(60,37,39,0) 62%);
+    background-size:280% 100%;
+    background-position:-90% 0;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    pointer-events:none;
+  }
+  @supports not ((-webkit-background-clip:text) or (background-clip:text)){
+    .hero-mov::after{ display:none }
+  }
+  html.fx-on .hero-mov::after{ animation:heroFilo 7.5s cubic-bezier(.5,0,.5,1) 1.6s infinite }
+  @keyframes heroFilo{
+    0%   { background-position:-90% 0 }
+    38%  { background-position:190% 0 }
+    100% { background-position:190% 0 }
+  }
+
+  .hero-baja{
+    margin:32px 0 0;
+    font-size:clamp(17px,1.35vw,21px);
+    line-height:1.55;
+    color:#715d55;
+    max-width:48ch;
+    font-weight:400;
+  }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:12px 14px; margin-top:36px }
+
+  .hero-banda{
+    display:block; width:100%;
+    aspect-ratio:1920/432;
+    object-fit:cover;
+    background:#e8e2da;
+    position:relative; z-index:1;
+  }
+  .hero-pie2{
+    position:relative; z-index:1;
+    display:flex; justify-content:space-between; gap:16px;
+    padding:16px 5vw 22px;
+    font-size:13px; color:#715d55; letter-spacing:.03em;
+  }
+  .hero-pie2 a{ color:#715d55; font-weight:640 }
+
+  @media (max-width:1023px){
+    .mv-marca--hero{ top:auto; bottom:-8%; right:-46%; width:150%; height:70% }
+    .hero-caja::before{ inset:-8% -30% -8% -20% }
+  }
+  @media (max-width:700px){
+    /* el boton flotante de WhatsApp vive en esa esquina */
+    .hero-pie2{ flex-direction:column; gap:6px; padding-right:26vw }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html.fx-on .hero-l > span{ animation:none }
+    html.fx-on .hero-mov::after{ animation:none; display:none }
   }
 
   /* ---- el film a sangre ---------------------------------------------------- */
@@ -640,49 +716,42 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 </header>
 
 
-<section id="inicio" data-screen-label="Hero" class="mv-suelo" style="position:relative;background:#ffffff;color:#3c2527;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
+<section id="inicio" data-screen-label="Hero" class="mv-suelo hero" data-fx-campo
+         data-fx-tintas="183,162,139|113,93,85|156,138,119" data-fx-estela="0.10"
+         style="position:relative;background:#ffffff;color:#3c2527;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
+
+  <!-- El campo de flujo: miles de particulas siguiendo una corriente de ruido.
+       No es decoracion: la marca se llama Generamos movimiento. -->
+  <canvas class="mv-fondo hero-campo" aria-hidden="true"></canvas>
 
   <!-- El isotipo enorme y recortado, en dos tonos planos. Es la propia
        gramatica de la marca: asi resuelve ella sus portadas de LinkedIn. -->
-  <span class="mv-marca mv-marca--hero" style="--mv-figura:#e7e2dd">
+  <span class="mv-fondo mv-marca mv-marca--hero" style="--mv-figura:#ebe6e1">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
 
-  <div class="hero-rej" style="display:grid;gap:52px;align-items:center;padding:60px 5vw 44px;position:relative">
-    <div>
-      <p style="margin:0 0 26px;font-size:12px;font-weight:700;letter-spacing:.19em;color:#715d55">SALTA, ARGENTINA</p>
-      <h1 style="margin:0;font-size:clamp(54px,8.6vw,132px);line-height:.93;letter-spacing:-0.042em;font-weight:640;position:relative;text-wrap:balance">Generamos<br><span style="color:#9c8a77">movimiento.</span></h1>
-      <p style="margin:32px 0 0;font-size:clamp(17px,1.35vw,21px);line-height:1.55;color:#715d55;max-width:520px;font-weight:400">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
-      <div style="display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:36px">
-        <a href="#mapa" class="cta-p fx-esp fx-iman">Ver el Mapa Mavenz</a>
-        <a href="#proyectos" class="cta-s fx-esp fx-esp--claro">Conocer los proyectos</a>
-        <a href="#inversiones" class="cta-s fx-esp fx-esp--claro">Invertir con Mavenz</a>
-      </div>
-    </div>
-
-    <!-- Pila de obra: material real, sin buscador de propiedades encima de una foto -->
-    <div class="hero-pila" aria-label="Proyectos de Mavenz">
-      <figure class="fx-cortina" style="--g:-6deg;--z:1">
-        <img src="../assets/vida/esquina-viva.jpg" alt="Esquina comercial de CARDINAL con gente en las veredas" loading="eager" decoding="async" width="1920" height="830">
-      </figure>
-      <figure class="fx-cortina" style="--g:4deg;--z:2">
-        <img src="../assets/vida/pileta-gente.jpg" alt="Pileta y quincho de CARDINAL" loading="lazy" decoding="async" width="1920" height="830">
-      </figure>
-      <figure class="fx-cortina" style="--g:-2deg;--z:3">
-        <img src="../assets/vida/sanlorenzo-aereo.jpg" alt="Vista aérea de San Lorenzo Chico con las montañas de fondo" loading="lazy" decoding="async" width="1920" height="830">
-      </figure>
-      <p class="hero-pie">CARDINAL, San Lorenzo Chico &middot; los dos primeros son renders; el tercero, un fotomontaje sobre toma aérea</p>
+  <div class="hero-caja">
+    <p class="hero-lugar">SALTA, ARGENTINA</p>
+    <h1 class="hero-t">
+      <span class="hero-l"><span>Generamos</span></span>
+      <span class="hero-l"><span class="hero-mov" data-t="movimiento.">movimiento.</span></span>
+    </h1>
+    <p class="hero-baja">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
+    <div class="hero-ctas">
+      <a href="#mapa" class="cta-p fx-esp fx-iman">Ver el Mapa Mavenz</a>
+      <a href="#proyectos" class="cta-s fx-esp fx-esp--claro">Conocer los proyectos</a>
+      <a href="#inversiones" class="cta-s fx-esp fx-esp--claro">Invertir con Mavenz</a>
     </div>
   </div>
 
-  <video preload="none" data-src="../assets/video/banda-aerea-1.mp4" poster="../assets/video/banda-aerea-1.jpg" muted loop playsinline style="display:block;width:100%;aspect-ratio:1920/432;object-fit:cover;background:#e8e2da"></video>
-  <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 22px;font-size:13px;color:#715d55;letter-spacing:.03em">
+  <video class="hero-banda" preload="metadata" data-src="../assets/video/banda-aerea-1.mp4" poster="../assets/video/banda-aerea-1.jpg" muted loop playsinline></video>
+  <div class="hero-pie2">
     <span>San Lorenzo Chico, Salta &middot; toma aérea propia</span>
-    <a href="#no-somos" style="color:#715d55;font-weight:640">Seguir bajando ↓</a>
+    <a href="#no-somos">Seguir bajando ↓</a>
   </div>
 </section>
 <section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" class="mv-suelo" style="position:relative;background:#ffffff;color:#3c2527;padding:150px 5vw 130px;overflow:hidden">
-  <span class="mv-onda" aria-hidden="true">
+  <span class="mv-fondo mv-onda" aria-hidden="true">
     <video preload="none" poster="../assets/video/ondas.jpg" muted loop playsinline
            data-src="../assets/video/ondas.mp4"></video>
   </span>
@@ -781,7 +850,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ====================== EL FILM · material propio ======================= -->
 <section id="film" data-screen-label="El film" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:0;overflow:hidden">
-  <span class="mv-marca" style="--mv-figura:rgba(255,255,255,.05);top:-14%;left:-16%;width:70%;height:128%">
+  <span class="mv-fondo mv-marca" style="--mv-figura:rgba(255,255,255,.05);top:-14%;left:-16%;width:70%;height:128%">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
   <div style="padding:104px 5vw 44px;max-width:900px">
@@ -797,7 +866,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 </section>
 
 <section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:150px 5vw;overflow:hidden">
-  <span class="mv-onda mv-onda--oscura" aria-hidden="true">
+  <span class="mv-fondo mv-onda mv-onda--oscura" aria-hidden="true">
     <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline
            data-src="../assets/video/agua.mp4"></video>
   </span>
@@ -935,7 +1004,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ============ LA OBRA · carrusel en profundidad + cinta =============== -->
 <section id="obra" data-screen-label="La obra" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:130px 0 118px;overflow:hidden">
-  <span class="mv-marca" style="--mv-figura:rgba(255,255,255,.045);top:-6%;right:-22%;width:78%;height:112%">
+  <span class="mv-fondo mv-marca" style="--mv-figura:rgba(255,255,255,.045);top:-6%;right:-22%;width:78%;height:112%">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
 
@@ -1120,7 +1189,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ══════════ INVERSIONES ══════════ -->
 <section id="inversiones" data-screen-label="Inversiones" data-fx="reveal" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:140px 5vw;overflow:hidden">
-  <span class="mv-onda mv-onda--oscura" aria-hidden="true">
+  <span class="mv-fondo mv-onda mv-onda--oscura" aria-hidden="true">
     <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline data-src="../assets/video/onda.mp4"></video>
   </span>
   <div style="max-width:1200px;margin:0 auto">

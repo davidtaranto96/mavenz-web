@@ -338,10 +338,12 @@
   line-height:0;
 }
 .mv-suelo > .mv-marca svg{ width:100%; height:100%; display:block }
-/* El fondo de video (.mv-onda) tambien es una capa de fondo: si esta regla lo
-   agarra le devuelve position:relative y el video se cae adentro del flujo,
-   convertido en un bloque gigante en el medio de la seccion. */
-.mv-suelo > :not(.mv-marca):not(.mv-onda){ position:relative; z-index:1 }
+/* Las capas de fondo se marcan con .mv-fondo y quedan afuera de esta regla.
+   Ya paso dos veces: si la regla las agarra les devuelve position:relative,
+   se caen adentro del flujo y aparecen como bloques gigantes en el medio de
+   la seccion. Marcar es mas seguro que ir sumando :not() de a uno. */
+.mv-suelo > :not(.mv-fondo){ position:relative; z-index:1 }
+.mv-marca, .mv-onda, .hero-campo{ /* todas llevan .mv-fondo en el markup */ }
 
 /* ==========================================================================
    6. REVELADO DE IMAGEN POR CORTINA
