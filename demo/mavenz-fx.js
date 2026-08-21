@@ -620,55 +620,106 @@
 
   /* ------------------------------------------------------------------------
      12. ORBITA
-     Las fichas van sobre una elipse. La escala, la opacidad y el orden salen
-     de la profundidad: cos(angulo) va de -1 atras a 1 adelante.
-     Gira sola, el scroll la empuja y se puede arrastrar. La ficha que queda
-     al frente manda el nombre y la foto del centro.
+     Muchas fichas, muy juntas, cada una girada en direccion RADIAL: a los
+     costados se ven de frente y arriba y abajo de canto. Eso es lo que la
+     hace leer como una cinta doblada en anillo y no como una ronda de fotos.
+     La profundidad (arriba lejos, abajo cerca) manda escala y opacidad.
      ------------------------------------------------------------------------ */
   function orbita(){
     lista('[data-fx-orbita]').forEach(function(raiz){
       var anillo = raiz.querySelector('.fx-orbita__anillo');
-      var fichas = lista('.fx-orbita__p', raiz);
-      var n = fichas.length;
-      if (!anillo || n < 3) return;
+      var escena = raiz.querySelector('.fx-orbita__escena') || raiz;
+      if (!anillo) return;
+
+      // el catalogo real: una ficha por imagen, con su nombre
+      var base = lista('.fx-orbita__p', anillo);
+      var m = base.length;
+      if (m < 3) return;
+
+      var datos = base.map(function(f){
+        return { src: f.querySelector('img').getAttribute('src'),
+                 nombre: f.dataset.nombre || '', pie: f.dataset.pie || '' };
+      });
+
+      // el anillo se rellena hasta quedar denso: las fichas se repiten y cada
+      // una muestra apenas una astilla, que es justamente el efecto
+      var N = +(raiz.dataset.fxN || 76);
+      anillo.innerHTML = '';
+      var fichas = [];
+      for (var i = 0; i < N; i++){
+        var d = datos[i % m];
+        var f = document.createElement('figure');
+        f.className = 'fx-orbita__p';
+        f.dataset.k = String(i % m);
+        var im = document.createElement('img');
+        im.src = d.src; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
+        f.appendChild(im);
+        anillo.appendChild(f);
+        fichas.push(f);
+      }
 
       var nombre = raiz.querySelector('.fx-orbita__nombre');
+      var pie    = raiz.querySelector('.fx-orbita__pie');
       var fotos  = lista('.fx-orbita__foto img', raiz);
 
-      var ang = 0, empuje = 0, t = 0, vivo = false, corriendo = false, frente = -1;
-      var vel = +(raiz.dataset.fxVel || 5);       // grados por segundo
-      var arr = null;
+      var ang = 0, empuje = 0, t = 0, vivo = false, corriendo = false;
+      var elegido = -1, fijado = -1, fMarcada = null;
+      var vel = +(raiz.dataset.fxVel || 4.5);
+      var arr = null, R = medir();
 
-      var escena = raiz.querySelector('.fx-orbita__escena') || raiz;
       function medir(){
         var r = escena.getBoundingClientRect();
-        var chico = r.width < 900;
-        return { rx: r.width * (chico ? 0.40 : 0.455), ry: r.height * (chico ? 0.32 : 0.345) };
+        return { rx: r.width * 0.405, ry: r.height * 0.40 };
       }
-      var R = medir();
       addEventListener('resize', function(){ R = medir(); colocar(); }, { passive: true });
 
+      function mostrar(k){
+        if (k === elegido) return;
+        elegido = k;
+        var d = datos[k];
+        if (nombre) nombre.textContent = d.nombre;
+        if (pie)    pie.textContent    = d.pie;
+        fotos.forEach(function(im, j){ im.classList.toggle('mv-on', j === k); });
+        fichas.forEach(function(f){ f.classList.toggle('mv-on', +f.dataset.k === k && f === fMarcada); });
+      }
       function colocar(){
-        var mejor = 0, mejorP = -2;
-        for (var i = 0; i < n; i++){
-          var a = (ang + (i / n) * 360) * Math.PI / 180;
-          var x = R.rx * Math.sin(a);
-          var y = -R.ry * Math.cos(a);
-          var prof = (1 - Math.cos(a)) / 2;          // 0 atras, 1 adelante
-          var esc = 0.42 + 0.58 * prof;
-          fichas[i].style.transform =
+        var elegida = null, dMin = 1e9;
+        for (var i = 0; i < N; i++){
+          var a = (ang + (i / N) * 360) * Math.PI / 180;
+          var ca = Math.cos(a), sa = Math.sin(a);
+          var x = R.rx * ca;
+          var y = R.ry * sa;
+
+          // profundidad: arriba (sa=-1) lejos, abajo (sa=1) cerca
+          var prof = (sa + 1) / 2;
+          var esc = 0.80 + 0.32 * prof;
+          // el giro sigue el radio
+          var giro = Math.atan2(y, x) * 180 / Math.PI;
+          /* Y el escorzo, que es lo que hace el efecto: la ficha se aplasta
+             sobre su propio alto a medida que se pone de canto. A los costados
+             (|ca|=1) se ve entera; arriba y abajo (|ca|=0) queda en una astilla.
+             Va despues del rotate en la cadena, o sea que se aplica en el eje
+             local de la ficha y no en el de la pantalla. */
+          var canto = 0.10 + 0.90 * Math.pow(Math.abs(ca), 1.35);
+
+          var f = fichas[i];
+          f.style.transform =
             'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
-            ' scale(' + esc.toFixed(3) + ') rotate(' + (Math.sin(a) * 7).toFixed(2) + 'deg)';
-          fichas[i].style.opacity = (0.3 + 0.7 * prof).toFixed(3);
-          fichas[i].style.zIndex = String(Math.round(prof * 50));
-          if (prof > mejorP){ mejorP = prof; mejor = i; }
+            ' rotate(' + giro.toFixed(2) + 'deg) scale(' + esc.toFixed(3) + ')' +
+            ' scaleY(' + canto.toFixed(3) + ')';
+          f.style.opacity = (0.2 + 0.8 * prof).toFixed(3);
+          f.style.zIndex = String(Math.round(prof * 40));
+
+          // la que manda el centro es la que pasa por el extremo izquierdo,
+          // que es donde las fichas se ven mas de frente
+          if (ca < 0){
+            var dd = Math.abs(sa) + (1 + ca);
+            if (dd < dMin){ dMin = dd; elegida = f; }
+          }
         }
-        if (mejor !== frente){
-          frente = mejor;
-          var f = fichas[mejor];
-          if (nombre) nombre.innerHTML = '<span>' + (f.dataset.nombre || '') +
-            (f.dataset.pie ? '<small>' + f.dataset.pie + '</small>' : '') + '</span>';
-          fotos.forEach(function(im, k){ im.classList.toggle('mv-on', k === mejor); });
+        if (elegida && fijado < 0){
+          fMarcada = elegida;
+          mostrar(+elegida.dataset.k);
         }
       }
 
@@ -678,7 +729,7 @@
         var dt = t ? Math.min((ahora - t) / 1000, 0.05) : 0.016;
         t = ahora;
         empuje *= 0.93;
-        if (!arr) ang += (vel + empuje * 34) * dt;
+        if (!arr) ang += (vel + empuje * 30) * dt;
         colocar();
         requestAnimationFrame(paso);
       }
@@ -687,10 +738,9 @@
       addEventListener('scroll', function(){
         var d = window.scrollY - ultimo;
         ultimo = window.scrollY;
-        empuje = limitar(empuje + d / 220, -4, 4);
+        empuje = limitar(empuje + d / 200, -4, 4);
       }, { passive: true });
 
-      // arrastre
       raiz.addEventListener('pointerdown', function(e){
         if (e.button) return;
         arr = { x: e.clientX, a: ang, id: e.pointerId };
@@ -698,34 +748,27 @@
       });
       raiz.addEventListener('pointermove', function(e){
         if (!arr || e.pointerId !== arr.id) return;
-        ang = arr.a + (e.clientX - arr.x) * 0.42;
+        ang = arr.a + (e.clientX - arr.x) * 0.4;
         colocar();
       });
       function soltar(){ arr = null; }
       raiz.addEventListener('pointerup', soltar);
       raiz.addEventListener('pointercancel', soltar);
 
-      // click en una ficha la trae al frente
-      fichas.forEach(function(f, i){
-        f.addEventListener('click', function(){
-          if (arr) return;
-          var actual = ((ang % 360) + 360) % 360;
-          var deseado = (360 - (i / n) * 360 + 180) % 360;
-          var d = ((deseado - actual + 540) % 360) - 180;
-          empuje = 0;
-          var desde = ang, hasta = ang + d, t0 = null;
-          (function anim(ts){
-            if (t0 === null) t0 = ts;
-            var k = Math.min((ts - t0) / 620, 1);
-            var e = 1 - Math.pow(1 - k, 3);
-            ang = desde + (hasta - desde) * e;
-            colocar();
-            if (k < 1) requestAnimationFrame(anim);
-          })(performance.now());
+      // pasar por encima de una ficha la trae al centro; al salir, sigue sola
+      if (fino.matches){
+        anillo.addEventListener('pointerover', function(e){
+          var f = e.target.closest('.fx-orbita__p');
+          if (!f || arr) return;
+          fijado = +f.dataset.k;
+          fMarcada = f;
+          mostrar(fijado);
         });
-      });
+        anillo.addEventListener('pointerleave', function(){ fijado = -1; });
+      }
 
-      if (quieto.matches){ colocar(); return; }
+      colocar();
+      if (quieto.matches) return;
 
       if ('IntersectionObserver' in window){
         new IntersectionObserver(function(es){
@@ -733,8 +776,6 @@
           if (vivo && !corriendo){ t = 0; requestAnimationFrame(paso); }
         }, { rootMargin: '160px' }).observe(raiz);
       } else { vivo = true; requestAnimationFrame(paso); }
-
-      colocar();
     });
   }
 
