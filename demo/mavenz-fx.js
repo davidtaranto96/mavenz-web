@@ -617,6 +617,127 @@
     }, 9000);
   }
 
+
+  /* ------------------------------------------------------------------------
+     12. ORBITA
+     Las fichas van sobre una elipse. La escala, la opacidad y el orden salen
+     de la profundidad: cos(angulo) va de -1 atras a 1 adelante.
+     Gira sola, el scroll la empuja y se puede arrastrar. La ficha que queda
+     al frente manda el nombre y la foto del centro.
+     ------------------------------------------------------------------------ */
+  function orbita(){
+    lista('[data-fx-orbita]').forEach(function(raiz){
+      var anillo = raiz.querySelector('.fx-orbita__anillo');
+      var fichas = lista('.fx-orbita__p', raiz);
+      var n = fichas.length;
+      if (!anillo || n < 3) return;
+
+      var nombre = raiz.querySelector('.fx-orbita__nombre');
+      var fotos  = lista('.fx-orbita__foto img', raiz);
+
+      var ang = 0, empuje = 0, t = 0, vivo = false, corriendo = false, frente = -1;
+      var vel = +(raiz.dataset.fxVel || 5);       // grados por segundo
+      var arr = null;
+
+      var escena = raiz.querySelector('.fx-orbita__escena') || raiz;
+      function medir(){
+        var r = escena.getBoundingClientRect();
+        var chico = r.width < 900;
+        return { rx: r.width * (chico ? 0.40 : 0.455), ry: r.height * (chico ? 0.32 : 0.345) };
+      }
+      var R = medir();
+      addEventListener('resize', function(){ R = medir(); colocar(); }, { passive: true });
+
+      function colocar(){
+        var mejor = 0, mejorP = -2;
+        for (var i = 0; i < n; i++){
+          var a = (ang + (i / n) * 360) * Math.PI / 180;
+          var x = R.rx * Math.sin(a);
+          var y = -R.ry * Math.cos(a);
+          var prof = (1 - Math.cos(a)) / 2;          // 0 atras, 1 adelante
+          var esc = 0.42 + 0.58 * prof;
+          fichas[i].style.transform =
+            'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
+            ' scale(' + esc.toFixed(3) + ') rotate(' + (Math.sin(a) * 7).toFixed(2) + 'deg)';
+          fichas[i].style.opacity = (0.3 + 0.7 * prof).toFixed(3);
+          fichas[i].style.zIndex = String(Math.round(prof * 50));
+          if (prof > mejorP){ mejorP = prof; mejor = i; }
+        }
+        if (mejor !== frente){
+          frente = mejor;
+          var f = fichas[mejor];
+          if (nombre) nombre.innerHTML = '<span>' + (f.dataset.nombre || '') +
+            (f.dataset.pie ? '<small>' + f.dataset.pie + '</small>' : '') + '</span>';
+          fotos.forEach(function(im, k){ im.classList.toggle('mv-on', k === mejor); });
+        }
+      }
+
+      function paso(ahora){
+        if (!vivo){ corriendo = false; return; }
+        corriendo = true;
+        var dt = t ? Math.min((ahora - t) / 1000, 0.05) : 0.016;
+        t = ahora;
+        empuje *= 0.93;
+        if (!arr) ang += (vel + empuje * 34) * dt;
+        colocar();
+        requestAnimationFrame(paso);
+      }
+
+      var ultimo = window.scrollY;
+      addEventListener('scroll', function(){
+        var d = window.scrollY - ultimo;
+        ultimo = window.scrollY;
+        empuje = limitar(empuje + d / 220, -4, 4);
+      }, { passive: true });
+
+      // arrastre
+      raiz.addEventListener('pointerdown', function(e){
+        if (e.button) return;
+        arr = { x: e.clientX, a: ang, id: e.pointerId };
+        raiz.setPointerCapture(e.pointerId);
+      });
+      raiz.addEventListener('pointermove', function(e){
+        if (!arr || e.pointerId !== arr.id) return;
+        ang = arr.a + (e.clientX - arr.x) * 0.42;
+        colocar();
+      });
+      function soltar(){ arr = null; }
+      raiz.addEventListener('pointerup', soltar);
+      raiz.addEventListener('pointercancel', soltar);
+
+      // click en una ficha la trae al frente
+      fichas.forEach(function(f, i){
+        f.addEventListener('click', function(){
+          if (arr) return;
+          var actual = ((ang % 360) + 360) % 360;
+          var deseado = (360 - (i / n) * 360 + 180) % 360;
+          var d = ((deseado - actual + 540) % 360) - 180;
+          empuje = 0;
+          var desde = ang, hasta = ang + d, t0 = null;
+          (function anim(ts){
+            if (t0 === null) t0 = ts;
+            var k = Math.min((ts - t0) / 620, 1);
+            var e = 1 - Math.pow(1 - k, 3);
+            ang = desde + (hasta - desde) * e;
+            colocar();
+            if (k < 1) requestAnimationFrame(anim);
+          })(performance.now());
+        });
+      });
+
+      if (quieto.matches){ colocar(); return; }
+
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(es){
+          vivo = es[0].isIntersecting;
+          if (vivo && !corriendo){ t = 0; requestAnimationFrame(paso); }
+        }, { rootMargin: '160px' }).observe(raiz);
+      } else { vivo = true; requestAnimationFrame(paso); }
+
+      colocar();
+    });
+  }
+
   /* ------------------------------------------------------------------------
      arranque
      ------------------------------------------------------------------------ */
@@ -631,6 +752,7 @@
     montar('territorios', territorios);
     montar('videos',      videos);
     montar('trazos',      trazos);
+    montar('orbita',      orbita);
     montar('pausar',      pausar);
   }
 

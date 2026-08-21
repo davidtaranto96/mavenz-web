@@ -503,3 +503,145 @@ html:not(.fx-on) .fx-flu__m{ display:none }
   clip:rect(0 0 0 0); clip-path:inset(50%);
   white-space:nowrap; border:0;
 }
+
+/* ==========================================================================
+   12. ORBITA
+   Los proyectos girando alrededor de la marca, y las cuatro areas fijas
+   alrededor de la orbita. Es la idea de Mavenz dicha sin texto: una marca
+   madre que contiene proyectos, y cada proyecto pasa por las cuatro areas.
+
+   No es un anillo 3D: son fichas ubicadas sobre una elipse en 2D, con la
+   escala y la opacidad saliendo de la profundidad. Se controla mejor y no
+   necesita preserve-3d, que en Safari se pelea con overflow:hidden.
+   ========================================================================== */
+
+.fx-orbita{
+  position:relative;
+  height:var(--fx-orb-alto, clamp(440px, 46vw, 620px));
+  margin:0 auto;
+  max-width:1180px;
+  -webkit-user-select:none; user-select:none;
+  touch-action:pan-y;
+}
+.fx-orbita__escena{ position:absolute; inset:0 }
+.fx-orbita__anillo{ position:absolute; inset:0 }
+
+.fx-orbita__p{
+  position:absolute;
+  top:50%; left:50%;
+  width:var(--fx-orb-pieza, 132px);
+  margin:0;
+  aspect-ratio:4/3;
+  border-radius:7px;
+  overflow:hidden;
+  background:rgba(60,37,39,.14);
+  box-shadow:0 10px 26px -12px rgba(42,27,28,.5);
+  will-change:transform,opacity;
+  transform:translate(-50%,-50%);
+}
+.fx-orbita__p img{ width:100%; height:100%; object-fit:cover; display:block; pointer-events:none }
+
+/* el centro: la ficha grande y su nombre */
+.fx-orbita__centro{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:min(40%, 372px);
+  text-align:center;
+  z-index:26;
+  pointer-events:none;
+}
+.fx-orbita__nombre{
+  margin:0 0 14px;
+  font:660 clamp(17px,1.7vw,23px)/1.25 'Urbanist',system-ui,sans-serif;
+  letter-spacing:-.014em;
+  color:var(--mv-burgundy,#3c2527);
+  min-height:2.5em;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.fx-orbita__nombre small{ display:block; font-weight:500; font-size:.72em; color:#715d55 }
+.fx-orbita__foto{
+  position:relative;
+  aspect-ratio:16/10;
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(60,37,39,.1);
+  box-shadow:0 20px 44px -20px rgba(42,27,28,.5);
+}
+.fx-orbita__foto img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  opacity:0;
+  transition:opacity .34s cubic-bezier(.22,.61,.36,1);
+}
+.fx-orbita__foto img.mv-on{ opacity:1 }
+
+/* las cuatro areas, fijas alrededor */
+.fx-orbita__a{
+  position:absolute;
+  z-index:70;
+  max-width:min(30%, 230px);
+  font:inherit;
+}
+.fx-orbita__a b{
+  display:block;
+  font:700 clamp(15px,1.35vw,19px)/1.2 'Urbanist',system-ui,sans-serif;
+  letter-spacing:-.008em;
+  color:var(--mv-burgundy,#3c2527);
+}
+.fx-orbita__a span{
+  display:block; margin-top:5px;
+  font-size:13.5px; line-height:1.45;
+  color:#715d55;
+}
+.fx-orbita__a::before{
+  content:""; position:absolute; top:.5em;
+  width:22px; height:1px;
+  background:rgba(60,37,39,.4);
+}
+.fx-orbita__a--tl{ top:2%;  left:0 }
+.fx-orbita__a--tr{ top:2%;  right:0; text-align:right }
+.fx-orbita__a--bl{ bottom:2%; left:0 }
+.fx-orbita__a--br{ bottom:2%; right:0; text-align:right }
+.fx-orbita__a--tl::before, .fx-orbita__a--bl::before{ left:-30px }
+.fx-orbita__a--tr::before, .fx-orbita__a--br::before{ right:-30px }
+
+@media (max-width:899px){
+  /* En pantalla chica las cuatro areas no entran en las esquinas sin pisarse
+     con el anillo ni con los botones flotantes: bajan a una grilla debajo. */
+  .fx-orbita{ height:auto }
+  .fx-orbita__escena{
+    position:relative; inset:auto;
+    height:var(--fx-orb-alto-m, 430px);
+    overflow:hidden;
+  }
+  .fx-orbita__p{ width:var(--fx-orb-pieza-m, 84px) }
+  .fx-orbita__centro{ width:74% }
+  .fx-orbita__a{
+    position:static; max-width:none; text-align:left !important;
+  }
+  .fx-orbita__a::before{ display:none }
+  .fx-areas{
+    display:grid; grid-template-columns:1fr 1fr; gap:22px 20px;
+    margin-top:30px; padding-top:26px;
+    border-top:1px solid rgba(60,37,39,.28);
+  }
+  /* debajo de 560px los botones flotantes se comen la columna derecha */
+  @media (max-width:560px){
+    .fx-areas{ grid-template-columns:1fr; gap:20px }
+  }
+}
+@media (min-width:900px){
+  .fx-areas{ display:contents }
+}
+
+/* sin JS: las fichas quedan en una fila que se scrollea y las areas en su sitio */
+html:not(.fx-on) .fx-orbita{ height:auto }
+html:not(.fx-on) .fx-orbita__anillo{
+  position:static; display:flex; gap:12px; overflow-x:auto; padding-bottom:12px;
+}
+html:not(.fx-on) .fx-orbita__p{ position:static; transform:none; flex:0 0 auto; width:180px }
+html:not(.fx-on) .fx-orbita__centro, html:not(.fx-on) .fx-orbita__a{ position:static; transform:none; max-width:none; text-align:left }
+
+@media (prefers-reduced-motion: reduce){
+  .fx-orbita__foto img{ transition:none }
+}

@@ -692,29 +692,67 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 </div>
 </section>
 
-<section data-screen-label="Universo Mavenz" data-fx="reveal" data-fx-desde="izq" style="background:#b7a28b;color:#3c2527;padding:96px 5vw">
-  <div data-reveal style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:56px">
+<section data-screen-label="Universo Mavenz" data-fx="reveal" style="background:#b7a28b;color:#3c2527;padding:96px 5vw 104px">
+  <div data-reveal style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:20px">
     <h2 style="margin:0;font-size:clamp(34px,4vw,56px);font-weight:680;letter-spacing:-0.02em">El universo Mavenz</h2>
-    <p style="margin:0;font-size:16px;color:#715d55;font-weight:500">Cuatro áreas, un mismo criterio.</p>
+    <p style="margin:0;font-size:16px;color:#715d55;font-weight:500">Cuatro áreas, un mismo criterio. Y todos los proyectos girando alrededor.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0">
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
-      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Estrategia</h3>
-      <p style="margin:0;font-size:15px;line-height:1.5;color:#715d55">Leemos el mercado antes de que se mueva.</p>
+
+  <!-- La orbita: los proyectos dan vueltas y las cuatro areas quedan fijas.
+       Es la idea de la marca dicha sin explicarla. -->
+  <div class="fx-orbita" data-fx-orbita data-fx-vel="5" aria-hidden="true">
+    <div class="fx-orbita__escena">
+    <div class="fx-orbita__anillo">
+        <figure class="fx-orbita__p" data-nombre="El ingreso a CARDINAL" data-pie="San Lorenzo Chico · render"><img src="../assets/cardinal/ingreso.jpg" loading="lazy" decoding="async" alt="El ingreso a CARDINAL — San Lorenzo Chico · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="La plaza" data-pie="CARDINAL · render"><img src="../assets/cardinal/plaza-chicos.jpg" loading="lazy" decoding="async" alt="La plaza — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="La esquina comercial" data-pie="CARDINAL · render"><img src="../assets/renders/comercial.jpg" loading="lazy" decoding="async" alt="La esquina comercial — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="El SUM" data-pie="CARDINAL · render"><img src="../assets/cardinal/sum.jpg" loading="lazy" decoding="async" alt="El SUM — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="Los amenities" data-pie="CARDINAL · render"><img src="../assets/cardinal/pileta.jpg" loading="lazy" decoding="async" alt="Los amenities — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="Adentro de una unidad" data-pie="CARDINAL · render"><img src="../assets/cardinal/cocina-comedor.jpg" loading="lazy" decoding="async" alt="Adentro de una unidad — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="La galería con hogar" data-pie="CARDINAL · render"><img src="../assets/cardinal/galeria.jpg" loading="lazy" decoding="async" alt="La galería con hogar — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="La calle arbolada" data-pie="CARDINAL · render"><img src="../assets/cardinal/cesped.jpg" loading="lazy" decoding="async" alt="La calle arbolada — CARDINAL · render"></figure>
+        <figure class="fx-orbita__p" data-nombre="Storages" data-pie="WA · foto"><img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="Storages — WA · foto"></figure>
+        <figure class="fx-orbita__p" data-nombre="Cocheras cubiertas" data-pie="WA · foto"><img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="Cocheras cubiertas — WA · foto"></figure>
+        <figure class="fx-orbita__p" data-nombre="Oficinas" data-pie="Porto · foto"><img src="../assets/proyectos/porto-01.jpg" loading="lazy" decoding="async" alt="Oficinas — Porto · foto"></figure>
+        <figure class="fx-orbita__p" data-nombre="La avenida principal" data-pie="San Lorenzo · toma aérea"><img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="La avenida principal — San Lorenzo · toma aérea"></figure>
+        <figure class="fx-orbita__p" data-nombre="El terreno desde arriba" data-pie="CARDINAL · fotomontaje"><img src="../assets/cardinal/aerea-terreno.jpg" loading="lazy" decoding="async" alt="El terreno desde arriba — CARDINAL · fotomontaje"></figure>
+        <figure class="fx-orbita__p" data-nombre="La vida cotidiana" data-pie="CARDINAL · render"><img src="../assets/cardinal/paseo-perro.jpg" loading="lazy" decoding="async" alt="La vida cotidiana — CARDINAL · render"></figure>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
-      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Desarrollo de Negocios</h3>
-      <p style="margin:0;font-size:15px;line-height:1.5;color:#715d55">Detectamos y estructuramos oportunidades.</p>
+    <div class="fx-orbita__centro">
+      <p class="fx-orbita__nombre"></p>
+      <div class="fx-orbita__foto">
+          <img src="../assets/cardinal/ingreso.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/plaza-chicos.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/renders/comercial.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/sum.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/pileta.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/cocina-comedor.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/galeria.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/cesped.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/proyectos/porto-01.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/aerea-terreno.jpg" loading="lazy" decoding="async" alt="">
+          <img src="../assets/cardinal/paseo-perro.jpg" loading="lazy" decoding="async" alt="">
+      </div>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
-      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Comercialización</h3>
-      <p style="margin:0;font-size:15px;line-height:1.5;color:#715d55">Activamos la venta con foco y con criterio.</p>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
-      <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Gestión y Evolución</h3>
-      <p style="margin:0;font-size:15px;line-height:1.5;color:#715d55">Acompañamos el ciclo completo de cada proyecto.</p>
+    <div class="fx-areas">
+      <div class="fx-orbita__a fx-orbita__a--tl"><b>Estrategia</b><span>Leemos el mercado antes de que se mueva.</span></div>
+      <div class="fx-orbita__a fx-orbita__a--tr"><b>Desarrollo de Negocios</b><span>Detectamos y estructuramos oportunidades.</span></div>
+      <div class="fx-orbita__a fx-orbita__a--bl"><b>Comercialización</b><span>Activamos la venta con foco y con criterio.</span></div>
+      <div class="fx-orbita__a fx-orbita__a--br"><b>Gestión y Evolución</b><span>Acompañamos el ciclo completo de cada proyecto.</span></div>
     </div>
   </div>
+
+  <!-- Las cuatro areas en texto plano, para lector de pantalla y para cuando no hay JS -->
+  <ul class="mv-oculto">
+    <li><b>Estrategia.</b> Leemos el mercado antes de que se mueva.</li>
+    <li><b>Desarrollo de Negocios.</b> Detectamos y estructuramos oportunidades.</li>
+    <li><b>Comercialización.</b> Activamos la venta con foco y con criterio.</li>
+    <li><b>Gestión y Evolución.</b> Acompañamos el ciclo completo de cada proyecto.</li>
+  </ul>
 </section>
 
 <section id="metodo" data-screen-label="El Método" data-fx="reveal" style="background:#ffffff;color:#3c2527;padding:150px 5vw">
