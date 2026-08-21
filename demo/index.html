@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es-AR">
 <head>
 <title>Mavenz — Generamos movimiento</title>
 <meta charset="utf-8">
@@ -43,12 +43,12 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
      chica queda el logo y el unico enlace que sale del sitio; el resto de las
      secciones se alcanzan scrolleando, que es como se lee una pagina asi. */
   @media (max-width:860px){
-    header nav a:not([target="_blank"]){ display:none }
+    header nav a:not([target="_blank" rel="noopener"]){ display:none }
     header nav{ gap:0 !important }
   }
   @media (max-width:400px){
     header{ padding:14px 5vw !important }
-    header nav a[target="_blank"]{ padding:9px 16px !important; font-size:13.5px }
+    header nav a[target="_blank" rel="noopener"]{ padding:9px 16px !important; font-size:13.5px }
   }
 </style>
 
@@ -72,7 +72,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mavenz — Generamos movimiento">
 <meta property="og:description" content="El partner estratégico que mueve el Real Estate de Salta.">
-<meta property="og:image" content="../assets/aereas/aerea-dia.jpg">
+<meta property="og:image" content="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg">
 <meta property="og:image:width" content="1600">
 <meta property="og:image:height" content="738">
 <meta property="og:locale" content="es_AR">
@@ -80,7 +80,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"RealEstateAgent",
 "name":"Mavenz","description":"Partner estratégico de Real Estate en Salta. Detecta oportunidades, diseña estrategias y potencia la comercialización.",
-"image":"../assets/aereas/aerea-dia.jpg","url":"https://mavenz.com.ar",
+"image":"https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-dia.jpg","url":"https://mavenz.com.ar",
 "areaServed":[{"@type":"City","name":"Salta"},{"@type":"Place","name":"San Lorenzo"},{"@type":"Place","name":"Vaqueros"},{"@type":"Place","name":"Cafayate"}],
 "address":{"@type":"PostalAddress","addressLocality":"Salta","addressRegion":"Salta","addressCountry":"AR"},
 "knowsAbout":["Desarrollos inmobiliarios","Comercialización","Inversión patrimonial","Análisis de territorio"]}
@@ -152,7 +152,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   /* ── selector de perfil ── */
   .perfiles{display:grid;gap:12px;grid-template-columns:1fr;margin-bottom:44px}
   @media(min-width:760px){.perfiles{grid-template-columns:repeat(4,1fr)}}
-  .pf{all:unset;cursor:pointer;box-sizing:border-box;padding:20px 22px;
+  .pf{background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;box-sizing:border-box;padding:20px 22px;
     border:1px solid rgba(52,34,35,.16);display:flex;flex-direction:column;gap:5px;min-height:44px;
     transition:border-color .18s cubic-bezier(.22,.61,.36,1),background-color .18s cubic-bezier(.22,.61,.36,1),transform .14s cubic-bezier(.22,.61,.36,1)}
   .pf b{font-size:19px;font-weight:660;letter-spacing:-.012em}
@@ -264,7 +264,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   #arriba:active{transform:translateY(1px)}
   @media(min-width:768px){#arriba{right:28px;bottom:100px}}
   /* copiar el link de una seccion */
-  .anc{all:unset;cursor:pointer;margin-left:10px;font-size:13px;color:#9c8976;opacity:0;
+  .anc{background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;margin-left:10px;font-size:13px;color:#9c8976;opacity:0;
     transition:opacity .18s cubic-bezier(.22,.61,.36,1)}
   h2:hover .anc,.anc:focus-visible{opacity:1}
   @media(pointer:coarse){.anc{display:none}}
@@ -466,6 +466,19 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     border-radius:3px;
   }
   .terr:focus-visible{ outline:2px solid #b7a18a; outline-offset:2px }
+  /* viven encima de agua.mp4, en la zona donde el degradado ya casi no tapa:
+     el estado activo necesita un fondo propio, no solo un cambio de color */
+  .terr:hover{ background:rgba(255,255,255,.05) }
+  .terr.terr-on{ background:rgba(183,161,138,.13) }
+  .terr{ position:relative; transition:background .22s cubic-bezier(.22,.61,.36,1) }
+  .terr::before{
+    content:""; position:absolute; left:0; top:14%; bottom:14%;
+    width:2px; background:#b7a18a;
+    transform:scaleY(0); transform-origin:center;
+    transition:transform .28s cubic-bezier(.22,.61,.36,1);
+  }
+  .terr.terr-on::before{ transform:scaleY(1) }
+  .terr.terr-on span:first-of-type{ color:#b7a18a !important }
   #terr-panel{ transition:height .26s cubic-bezier(.2,0,0,1); contain:layout paint }
   #terr-panel > div{ animation:terrIn .34s cubic-bezier(.16,1,.3,1) both }
   #terr-panel > div:nth-child(2){ animation-delay:.04s }
@@ -475,6 +488,16 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   @media (prefers-reduced-motion: reduce){
     #terr-panel{ transition:none }
     #terr-panel > div{ animation:none }
+  }
+
+  /* El foco visible se repite al final del documento a proposito: la regla
+     global esta arriba de todo y cualquier estilo posterior con la misma
+     especificidad se la come. */
+  :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+    outline:2px solid #b7a18a; outline-offset:3px; border-radius:2px;
+  }
+  .pf:focus-visible, .anc:focus-visible, .terr:focus-visible{
+    outline:2px solid #b7a18a; outline-offset:2px;
   }
 </style>
 </head>
@@ -488,10 +511,10 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 <header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(255,255,255,.9);color:#342223;border-bottom:1px solid rgba(52,34,35,.10);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px)">
   <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-oscuro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
   <nav data-fx-nav-hijo style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
-    <a href="#metodo" style="color:#342223" style-hover="color:#b7a18a">El Método</a>
-    <a href="#mapa" style="color:#342223" style-hover="color:#b7a18a">Mapa Mavenz</a>
-    <a href="#proyectos" style="color:#342223" style-hover="color:#b7a18a">Proyectos</a><a href="#inversiones" style="color:#342223">Inversiones</a>
-    <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#342223;color:#ffffff;padding:10px 22px;border-radius:999px;font-weight:700" style-hover="background:#b7a18a;color:#342223">Espacio Mavenz</a>
+    <a href="#metodo" style="color:#342223">El Método</a>
+    <a href="#mapa" style="color:#342223">Mapa Mavenz</a>
+    <a href="#proyectos" style="color:#342223">Proyectos</a><a href="#inversiones" style="color:#342223">Inversiones</a>
+    <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" style="background:#342223;color:#ffffff;padding:10px 22px;border-radius:999px;font-weight:700">Espacio Mavenz</a>
   </nav>
 </header>
 
@@ -527,20 +550,20 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <figure class="fx-cortina" style="--g:-2deg;--z:3">
         <img src="../assets/vida/sanlorenzo-aereo.jpg" alt="Vista aérea de San Lorenzo Chico con las montañas de fondo" loading="lazy" decoding="async" width="1920" height="830">
       </figure>
-      <p class="hero-pie">CARDINAL, San Lorenzo Chico &middot; los dos primeros son renders; el tercero, foto aérea</p>
+      <p class="hero-pie">CARDINAL, San Lorenzo Chico &middot; los dos primeros son renders; el tercero, un fotomontaje sobre toma aérea</p>
     </div>
   </div>
 
-  <video preload="metadata" src="../assets/video/banda-aerea-1.mp4" poster="../assets/video/banda-aerea-1.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1920/432;object-fit:cover;background:#e8e2da"></video>
+  <video preload="none" data-src="../assets/video/banda-aerea-1.mp4" poster="../assets/video/banda-aerea-1.jpg" muted loop playsinline style="display:block;width:100%;aspect-ratio:1920/432;object-fit:cover;background:#e8e2da"></video>
   <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 22px;font-size:13px;color:#5b484a;letter-spacing:.03em">
-    <span>San Lorenzo Chico, Salta &middot; imagen aérea propia</span>
+    <span>San Lorenzo Chico, Salta &middot; toma aérea propia</span>
     <a href="#no-somos" style="color:#5b484a;font-weight:640">Seguir bajando ↓</a>
   </div>
 </section>
 <section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" class="mv-suelo" style="position:relative;background:#ffffff;color:#342223;padding:150px 5vw 130px;overflow:hidden">
   <span class="mv-onda" aria-hidden="true">
-    <video preload="metadata" poster="../assets/video/ondas.jpg" autoplay muted loop playsinline
-           src="../assets/video/ondas.mp4"></video>
+    <video preload="none" poster="../assets/video/ondas.jpg" muted loop playsinline
+           data-src="../assets/video/ondas.mp4"></video>
   </span>
   <div style="max-width:1200px">
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una inmobiliaria tradicional.</p>
@@ -556,19 +579,19 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     <p style="margin:0;font-size:16px;color:#5b484a;font-weight:500">Cuatro áreas, un mismo criterio.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0">
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
       <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Estrategia</h3>
       <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Leemos el mercado antes de que se mueva.</p>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
       <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Desarrollo de Negocios</h3>
       <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Detectamos y estructuramos oportunidades.</p>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
       <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Comercialización</h3>
       <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Activamos la venta con foco y con criterio.</p>
     </div>
-    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)" style-hover="background:rgba(52,34,35,.07)">
+    <div data-reveal style="padding:28px 26px 32px;border-top:1px solid rgba(52,34,35,.3)">
       <h3 style="margin:0 0 10px;font-size:clamp(22px,1.8vw,28px);font-weight:720">Gestión y Evolución</h3>
       <p style="margin:0;font-size:15px;line-height:1.5;color:#5b484a">Acompañamos el ciclo completo de cada proyecto.</p>
     </div>
@@ -605,8 +628,8 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     <p style="margin:0 0 20px;font-size:12px;font-weight:700;letter-spacing:.19em;color:#b7a18a">SAN LORENZO CHICO</p>
     <h2 style="margin:0;font-size:clamp(34px,4.4vw,66px);font-weight:640;letter-spacing:-0.028em;line-height:1.04;text-wrap:balance">Todo eso ya estaba ahí.<br><span style="color:#b7a18a">Nosotros leímos el movimiento.</span></h2>
   </div>
-  <video class="film-v" preload="metadata" poster="../assets/video/cardinal-film.jpg" autoplay muted loop playsinline
-         src="../assets/video/cardinal-film.mp4"></video>
+  <video class="film-v" preload="none" poster="../assets/video/cardinal-film.jpg" muted loop playsinline
+         data-src="../assets/video/cardinal-film.mp4"></video>
   <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 5vw 96px;font-size:13px;color:#a1a7a8;letter-spacing:.025em">
     <span>Tomas aéreas propias y renders de CARDINAL &middot; sin sonido</span>
     <a href="#proyectos" style="color:#b7a18a;font-weight:640">Ver los proyectos ↓</a>
@@ -615,8 +638,8 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
 <section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" class="mv-suelo" style="position:relative;background:#342223;color:#ffffff;padding:150px 5vw;overflow:hidden">
   <span class="mv-onda mv-onda--oscura" aria-hidden="true">
-    <video preload="metadata" poster="../assets/video/agua.jpg" autoplay muted loop playsinline
-           src="../assets/video/agua.mp4"></video>
+    <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline
+           data-src="../assets/video/agua.mp4"></video>
   </span>
 
   <div data-reveal style="max-width:900px;margin-bottom:56px">
@@ -735,7 +758,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <p style="margin:10px 0 0;font-size:16px;font-weight:650;color:#5b484a">Storages, cocheras y oficinas · Salta</p>
       <p style="margin:22px 0 0;font-size:16px;line-height:1.6;color:#5b484a">Inversión de renta en unidades de guardado, cocheras cubiertas y oficinas con la escala justa.</p>
       <p style="margin:22px 0 0;font-size:15px;line-height:1.6;color:#342223;font-weight:600">Storages disponibles: unidades 9 a 26, de 4,86 a 24,84 m².</p>
-      <a href="https://espaciomavenz.com.ar" target="_blank" style="display:inline-block;margin-top:28px;font-size:16px;font-weight:700;color:#5b484a">Ver disponibilidad →</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" style="display:inline-block;margin-top:28px;font-size:16px;font-weight:700;color:#5b484a">Ver disponibilidad →</a>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:12px">
       <img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="Pasillo de storages numerados" style="width:100%;height:100%;object-fit:cover;display:block;grid-row:span 2">
@@ -771,12 +794,12 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <figure class="fx-prof__t"><img src="../assets/vida/pileta-gente.jpg" loading="lazy" decoding="async" alt="Pileta y quincho de CARDINAL"><figcaption><b>Los amenities</b>CARDINAL <span>· render</span></figcaption></figure>
       <figure class="fx-prof__t"><img src="../assets/vida/interior-vivido.jpg" loading="lazy" decoding="async" alt="Interior de una casa de CARDINAL"><figcaption><b>Adentro de una casa</b>CARDINAL <span>· render</span></figcaption></figure>
       <figure class="fx-prof__t"><img src="../assets/vida/calle-casas.jpg" loading="lazy" decoding="async" alt="Calle arbolada con casas de CARDINAL"><figcaption><b>La calle</b>CARDINAL <span>· render</span></figcaption></figure>
-      <figure class="fx-prof__t"><img src="../assets/vida/sanlorenzo-aereo.jpg" loading="lazy" decoding="async" alt="Vista aérea de San Lorenzo Chico"><figcaption><b>San Lorenzo Chico</b>Salta <span>· foto aérea propia</span></figcaption></figure>
-      <figure class="fx-prof__t"><img src="../assets/vida/atardecer.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico al atardecer desde el aire"><figcaption><b>El valle al atardecer</b>Salta <span>· foto aérea propia</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/sanlorenzo-aereo.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico visto desde el aire, con CARDINAL integrado"><figcaption><b>San Lorenzo Chico</b>Salta <span>· fotomontaje sobre toma aérea</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/vida/atardecer.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico al atardecer, con CARDINAL integrado"><figcaption><b>El valle al atardecer</b>Salta <span>· fotomontaje sobre toma aérea</span></figcaption></figure>
       <figure class="fx-prof__t"><img src="../assets/proyectos/wa-storages-01.jpg" loading="lazy" decoding="async" alt="Pasillo de storages numerados"><figcaption><b>Storages</b>WA <span>· foto</span></figcaption></figure>
       <figure class="fx-prof__t"><img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="Cocheras cubiertas"><figcaption><b>Cocheras cubiertas</b>WA <span>· foto</span></figcaption></figure>
       <figure class="fx-prof__t"><img src="../assets/proyectos/porto-01.jpg" loading="lazy" decoding="async" alt="Oficina con ventanal en Porto"><figcaption><b>Oficinas</b>Porto <span>· foto</span></figcaption></figure>
-      <figure class="fx-prof__t"><img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="Zona verde con la avenida principal"><figcaption><b>La avenida principal</b>San Lorenzo <span>· foto aérea propia</span></figcaption></figure>
+      <figure class="fx-prof__t"><img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="Zona verde con la avenida principal"><figcaption><b>La avenida principal</b>San Lorenzo <span>· toma aérea propia</span></figcaption></figure>
     </div>
     <button class="fx-prof__f fx-prof__f--ant" type="button" aria-label="Anterior">&#8592;</button>
     <button class="fx-prof__f fx-prof__f--sig" type="button" aria-label="Siguiente">&#8594;</button>
@@ -795,24 +818,24 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <div class="fx-cinta__g">
         <figure><img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt="Render de las casas de CARDINAL"><figcaption>CARDINAL · las casas</figcaption></figure>
         <figure><img src="../assets/proyectos/porto-02.jpg" loading="lazy" decoding="async" alt="Baño de oficina en Porto"><figcaption>Porto · oficinas</figcaption></figure>
-        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt="Plano abierto del valle"><figcaption>El valle · foto aérea</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt="Plano abierto del valle"><figcaption>El valle · fotomontaje</figcaption></figure>
         <figure><img src="../assets/proyectos/wa-storages-02.jpg" loading="lazy" decoding="async" alt="Storages con iluminación lineal"><figcaption>WA · storages</figcaption></figure>
         <figure><img src="../assets/marca/agenda.jpg" loading="lazy" decoding="async" alt="Agenda de la marca Mavenz"><figcaption>La marca, aplicada</figcaption></figure>
         <figure><img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt="Render de pileta y quincho"><figcaption>CARDINAL · amenities</figcaption></figure>
         <figure><img src="../assets/proyectos/porto-03.jpg" loading="lazy" decoding="async" alt="Palier con ascensor en Porto"><figcaption>Porto · palier</figcaption></figure>
-        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico de día"><figcaption>San Lorenzo · foto aérea</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico de día"><figcaption>San Lorenzo · fotomontaje</figcaption></figure>
         <figure><img src="../assets/marca/carpeta.jpg" loading="lazy" decoding="async" alt="Carpeta institucional de Mavenz"><figcaption>Generamos movimiento</figcaption></figure>
         <figure><img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt="Render de interior con hogar a leña"><figcaption>CARDINAL · interior</figcaption></figure>
       </div>
       <div class="fx-cinta__g" aria-hidden="true">
         <figure><img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · las casas</figcaption></figure>
         <figure><img src="../assets/proyectos/porto-02.jpg" loading="lazy" decoding="async" alt=""><figcaption>Porto · oficinas</figcaption></figure>
-        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt=""><figcaption>El valle · foto aérea</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt=""><figcaption>El valle · fotomontaje</figcaption></figure>
         <figure><img src="../assets/proyectos/wa-storages-02.jpg" loading="lazy" decoding="async" alt=""><figcaption>WA · storages</figcaption></figure>
         <figure><img src="../assets/marca/agenda.jpg" loading="lazy" decoding="async" alt=""><figcaption>La marca, aplicada</figcaption></figure>
         <figure><img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · amenities</figcaption></figure>
         <figure><img src="../assets/proyectos/porto-03.jpg" loading="lazy" decoding="async" alt=""><figcaption>Porto · palier</figcaption></figure>
-        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt=""><figcaption>San Lorenzo · foto aérea</figcaption></figure>
+        <figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt=""><figcaption>San Lorenzo · fotomontaje</figcaption></figure>
         <figure><img src="../assets/marca/carpeta.jpg" loading="lazy" decoding="async" alt=""><figcaption>Generamos movimiento</figcaption></figure>
         <figure><img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt=""><figcaption>CARDINAL · interior</figcaption></figure>
       </div>
@@ -825,8 +848,8 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">Espacio <span style="color:#5b484a">Mavenz</span></h2>
     <p style="margin:0;font-size:17px;line-height:1.6;color:#5b484a;max-width:480px">El canal de comercialización: todo lo que está a la venta, en un solo lugar. El listado completo vive en espaciomavenz.com.ar.</p>
     <div style="display:flex;gap:20px;align-items:center;margin-top:36px;flex-wrap:wrap">
-      <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#b7a18a;color:#342223;padding:14px 30px;border-radius:999px;font-weight:700;font-size:16px" style-hover="background:#b7a18a;color:#342223">Entrar a Espacio Mavenz ↗</a>
-      <a href="https://espaciomavenz.com.ar" target="_blank" style="font-size:15px;font-weight:600;color:#5b484a">Ver storages disponibles</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" style="background:#b7a18a;color:#342223;padding:14px 30px;border-radius:999px;font-weight:700;font-size:16px">Entrar a Espacio Mavenz ↗</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" style="font-size:15px;font-weight:600;color:#5b484a">Ver storages disponibles</a>
     </div>
   </div>
   <div data-reveal style="background:#3d2729;padding:28px">
@@ -1028,7 +1051,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     </form>
     </div>
     <div class="contacto-media">
-      <video preload="metadata" src="../assets/video/banda-aerea-2.mp4" poster="../assets/aereas/aerea-amplia.jpg" autoplay muted loop playsinline></video>
+      <video preload="none" data-src="../assets/video/banda-aerea-2.mp4" poster="../assets/aereas/aerea-amplia.jpg" muted loop playsinline></video>
       <div class="cm-pie"><b>San Lorenzo Chico</b><span>Imagen aérea propia &middot; el territorio que leemos todos los días</span></div>
     </div>
   </div>
@@ -1074,72 +1097,15 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <p style="margin:14px 0 0;font-size:15px;color:#5b484a">Generamos movimiento.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;font-size:15px">
-      <a href="https://mavenz.com.ar" target="_blank">mavenz.com.ar</a>
-      <a href="https://espaciomavenz.com.ar" target="_blank">espaciomavenz.com.ar</a>
+      <a href="https://mavenz.com.ar" target="_blank" rel="noopener">mavenz.com.ar</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">espaciomavenz.com.ar</a>
     </div>
   </div>
   <p style="margin:56px 0 0;font-size:12.5px;color:#5b484a">Salta, Argentina · Identidad por Fractura Studio</p>
 </footer>
 </div>
 
-<script type="text/x-dc" data-dc-script data-props="{&quot;hero&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cinematografico&quot;,&quot;editorial&quot;,&quot;territorial&quot;],&quot;default&quot;:&quot;cinematografico&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;mostrarWa&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;}}">
-class Component extends DCLogic {
-  state = { active: 'micro', videoOk: true };
-  componentDidMount() {
-    this._setupReveals();
-    this._lis = (e) => this.setState({ active: e.detail.id });
-    window.addEventListener('mavenz:territory', this._lis);
-  }
-  componentDidUpdate() { this._setupReveals(); }
-  componentWillUnmount() {
-    window.removeEventListener('mavenz:territory', this._lis);
-    if (this._io) this._io.disconnect();
-  }
-  _setupReveals() {
-    if (!this._io) {
-      this._io = new IntersectionObserver((es) => es.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'none';
-          this._io.unobserve(e.target);
-        }
-      }), { threshold: 0.12 });
-    }
-    document.querySelectorAll('[data-reveal]').forEach((el) => {
-      if (el.__mv) return; el.__mv = 1;
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(28px)';
-      el.style.transition = 'opacity .9s ease, transform .9s ease';
-      this._io.observe(el);
-    });
-  }
-  _sel(id) {
-    this.setState({ active: id });
-    window.dispatchEvent(new CustomEvent('mavenz:flyto', { detail: { id } }));
-  }
-  renderVals() {
-    const hero = this.props.hero ?? 'cinematografico';
-    const ids = ['micro', 'norte', 'sanlorenzo', 'aeropuerto', 'cafayate', 'vaqueros'];
-    const sel = {}, act = {}, c = {};
-    ids.forEach((id) => {
-      sel[id] = () => this._sel(id);
-      act[id] = this.state.active === id;
-      c[id] = this.state.active === id ? '#9c8976' : '#342223';
-    });
-    const video = (this.props.heroVideo ?? true) && this.state.videoOk;
-    return {
-      heroCine: hero === 'cinematografico',
-      heroEditorial: hero === 'editorial',
-      heroTerr: hero === 'territorial',
-      heroVideo: video, heroFoto: !video,
-      mostrarWa: this.props.mostrarWa ?? true,
-      sel, act, c,
-      videoRef: (el) => { if (el) { el.muted = true; const p = el.play && el.play(); if (p) p.catch(() => {}); } },
-      videoFail: () => this.setState({ videoOk: false })
-    };
-  }
-}
-</script>
+
 
 <script>
 (function(){

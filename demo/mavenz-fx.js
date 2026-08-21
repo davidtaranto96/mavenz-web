@@ -516,6 +516,62 @@
       .catch(function(){ /* sin JSON queda el territorio por defecto del HTML */ });
   }
 
+
+  /* ------------------------------------------------------------------------
+     10. PRESUPUESTO DE VIDEO
+     Habia cinco videos con autoplay+loop a la vez. autoplay ignora
+     preload="none": el navegador los baja igual, y en Salta con datos eso ES
+     la pagina. Ahora el src se enchufa recien cuando el video entra en vista,
+     y suena uno solo: el que este mas cerca del centro de la pantalla.
+     ------------------------------------------------------------------------ */
+  function videos(){
+    var vs = lista('video[data-src]');
+    if (!vs.length) return;
+
+    var ahorro = navigator.connection && navigator.connection.saveData;
+    if (ahorro || quieto.matches) return;      // queda el poster, que ya esta puesto
+
+    /* La visibilidad se recalcula de los rectangulos, no de un array que va
+       llenando el observador: mantener ese estado sincronizado se desfasa en
+       cuanto hay dos scrolls seguidos, y el video queda en pausa a la vista. */
+    function elegir(){
+      var centro = innerHeight / 2, mejor = null, dMin = Infinity;
+      vs.forEach(function(v){
+        var r = v.getBoundingClientRect();
+        var visible = r.bottom > innerHeight * 0.1 && r.top < innerHeight * 0.9 && r.height > 0;
+        if (!visible) return;
+        var d = Math.abs(r.top + r.height / 2 - centro);
+        if (d < dMin){ dMin = d; mejor = v; }
+      });
+      vs.forEach(function(v){
+        if (v === mejor){
+          if (!v.src && v.dataset.src) v.src = v.dataset.src;
+          if (v.paused){
+            var p = v.play();
+            if (p && p.catch) p.catch(function(){});
+          }
+        } else if (!v.paused) v.pause();
+      });
+    }
+
+    if (!('IntersectionObserver' in window)){
+      vs.forEach(function(v){ if (v.dataset.src) v.src = v.dataset.src; });
+      return;
+    }
+
+    var obs = new IntersectionObserver(function(){ elegir(); }, { threshold: [0, 0.25, 0.6] });
+
+    vs.forEach(function(v){ obs.observe(v); });
+    requestAnimationFrame(elegir);
+
+    var pedido = false;
+    addEventListener('scroll', function(){
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(function(){ pedido = false; elegir(); });
+    }, { passive: true });
+  }
+
   /* ------------------------------------------------------------------------
      arranque
      ------------------------------------------------------------------------ */
@@ -528,6 +584,7 @@
     montar('iman',        iman);
     montar('malla',       malla);
     montar('territorios', territorios);
+    montar('videos',      videos);
     montar('pausar',      pausar);
   }
 
