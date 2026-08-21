@@ -669,12 +669,24 @@
 
       function medir(){
         var r = escena.getBoundingClientRect();
-        return { rx: r.width * 0.405, ry: r.height * 0.40 };
+        /* La relacion rx/ry es la inclinacion. Con 1,6 se leia como una rueda
+           de frente; achatando la elipse el anillo se ve desde el canto, que
+           es lo que hace la perspectiva de los anillos de un planeta. */
+        var chico = r.width < 900;
+        return { rx: r.width * (chico ? 0.45 : 0.45), ry: r.height * (chico ? 0.30 : 0.328) };
       }
       addEventListener('resize', function(){ R = medir(); colocar(); }, { passive: true });
 
-      function mostrar(k){
+      /* Con 120 fichas, cada una que pasa por el extremo izquierdo pedia un
+         cambio de foto: una cada 0,67s. Se veia como un pase de diapositivas
+         a medio fundir. La del centro tiene que quedarse un rato. Al senalar
+         una ficha con el puntero el cambio si es inmediato: ahi lo pidieron. */
+      var DESCANSO = 3200, ultimoCambio = -1e9;
+      function mostrar(k, yaMismo){
         if (k === elegido) return;
+        var t = performance.now();
+        if (!yaMismo && t - ultimoCambio < DESCANSO) return;
+        ultimoCambio = t;
         elegido = k;
         var d = datos[k];
         // reiniciar la animacion de entrada: si no, solo corre la primera vez
@@ -699,7 +711,7 @@
 
           // profundidad: arriba (sa=-1) lejos, abajo (sa=1) cerca
           var prof = (sa + 1) / 2;
-          var esc = 0.80 + 0.32 * prof;
+          var esc = 0.74 + 0.44 * prof;
           // el giro sigue el radio
           var giro = Math.atan2(y, x) * 180 / Math.PI;
           /* Y el escorzo, que es lo que hace el efecto: la ficha se aplasta
@@ -718,7 +730,7 @@
             'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
             ' rotate(' + (señalada ? giro * 0.35 : giro).toFixed(2) + 'deg) scale(' + escF.toFixed(3) + ')' +
             ' scaleY(' + cantoF.toFixed(3) + ')';
-          f.style.opacity = señalada ? '1' : (0.2 + 0.8 * prof).toFixed(3);
+          f.style.opacity = señalada ? '1' : (0.16 + 0.84 * prof).toFixed(3);
           f.style.zIndex = señalada ? '80' : String(Math.round(prof * 40));
 
           // la que manda el centro es la que pasa por el extremo izquierdo,
@@ -728,9 +740,12 @@
             if (dd < dMin){ dMin = dd; elegida = f; }
           }
         }
-        if (elegida && fijado < 0){
-          fMarcada = elegida;
-          mostrar(+elegida.dataset.k);
+        if (fijado < 0 && elegida){
+          // la que manda el centro se sostiene mientras dure el descanso
+          if (elegido < 0 || performance.now() - ultimoCambio >= DESCANSO){
+            fMarcada = elegida;
+            mostrar(+elegida.dataset.k);
+          }
         }
       }
 
@@ -773,7 +788,7 @@
           if (!f || arr) return;
           fijado = +f.dataset.k;
           fMarcada = f;
-          mostrar(fijado);
+          mostrar(fijado, true);
         });
         anillo.addEventListener('pointerleave', function(){ fijado = -1; });
       }

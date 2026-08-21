@@ -530,14 +530,14 @@ html:not(.fx-on) .fx-flu__m{ display:none }
   position:relative;
   width:100%;
   aspect-ratio:16/10;
-  max-height:82vh;
+  max-height:80vh;
 }
 .fx-orbita__anillo{ position:absolute; inset:0 }
 
 .fx-orbita__p{
   position:absolute;
   top:50%; left:50%;
-  width:var(--fx-orb-pieza, 118px);
+  width:var(--fx-orb-pieza, 84px);
   margin:0;
   aspect-ratio:16/10;
   overflow:hidden;
@@ -572,7 +572,7 @@ html:not(.fx-on) .fx-flu__m{ display:none }
 .fx-orbita__centro{
   position:absolute; left:50%; top:50%;
   transform:translate(-50%,-50%);
-  width:min(40%, 496px);
+  width:min(33%, 420px);
   text-align:center;
   z-index:20;
   pointer-events:none;
@@ -643,10 +643,10 @@ html:not(.fx-on) .fx-flu__m{ display:none }
 @media (max-width:899px){
   /* En pantalla chica las cuatro areas no entran en las esquinas sin pisarse
      con el anillo ni con los botones flotantes: bajan a una grilla debajo. */
-  .fx-orbita__escena{ aspect-ratio:1/1; max-height:none; overflow:hidden }
-  .fx-orbita__p{ width:var(--fx-orb-pieza-m, 62px) }
+  .fx-orbita__escena{ aspect-ratio:4/5; max-height:none; overflow:hidden }
+  .fx-orbita__p{ width:var(--fx-orb-pieza-m, 52px) }
   .fx-orbita__centro{ width:52% }
-  .fx-orbita__nombre{ margin-bottom:12px }
+  .fx-orbita__nombre{ margin-bottom:10px; font-size:17px }
   .fx-orbita__pie{ margin-top:11px; font-size:12.5px }
   .fx-orbita__a{
     position:static; max-width:none; text-align:left !important;
