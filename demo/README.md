@@ -189,3 +189,63 @@ salieron también los seis pares de color oficiales.
 
 **La tarjeta personal quedó afuera a propósito:** tiene teléfono y mail directos de una
 persona, legibles, y este repo es público.
+
+---
+
+## Lo que se sumó en la tanda completa
+
+### Efectos nuevos
+
+| Efecto | De dónde | Dónde vive |
+|---|---|---|
+| **Malla en movimiento** (`.fx-malla`) | idea de Grid Motion, React Bits | `#proyectos` — 28 renders de CARDINAL en cuatro hileras giradas que corren para lados opuestos según el puntero |
+| **Pastilla que se desliza + panel direccional** | **portado de `smooth-tab` de KokonutUI (MIT)** | `#perfil` — el panel entra por el lado del que venís |
+| **Las seis lecturas del mapa** | propio | `#mapa` — FLIP de alto entre el valor medido antes y después |
+
+**KokonutUI sí se portó.** Su licencia es MIT limpia, sin Commons Clause: se puede copiar
+código tal cual. React Bits no, y por eso todo lo demás está escrito de cero.
+
+### El mapa
+
+Pasó de gris invertido a **claro y a color**: CARTO Voyager de base y el sombreado de relieve
+de Esri encima, multiplicando al 50%. El relieve va **arriba** del callejero, que es como se
+compone un relieve en cartografía de verdad — abajo y con opacidad no se ve nunca. Con eso el
+Valle de Lerma se lee de una: no es "un mapa", es Salta.
+
+Los pines son `divIcon` con un aro que late hasta que alguien toca algo, y hay una invitación
+explícita (`Tocá un territorio`) que se va sola a la primera interacción o a los 26 segundos.
+
+### Presupuesto de video
+
+Había **cinco `<video>` con `autoplay loop` a la vez**. `autoplay` ignora `preload="none"`: el
+navegador los bajaba igual, unos 21 MB. Ahora el `src` vive en `data-src` y se enchufa cuando
+el video entra en vista; suena **uno solo**, el más cercano al centro de la pantalla. Con
+`prefers-reduced-motion` o `saveData` no arranca ninguno y queda el póster.
+
+La visibilidad se recalcula de los rectángulos y no de un array que va llenando el observador:
+mantener ese estado sincronizado se desfasa en cuanto hay dos scrolls seguidos, y el video
+queda en pausa a la vista.
+
+### La paleta
+
+El demo venía con **aproximaciones**, no con los colores de ella. El manual de Fractura dice
+`#3C2527` Old Burgundy y `#B7A28B` Grullo; el demo usaba `#342223` y `#b7a18a`. Están
+declarados como tokens en `:root` y reemplazados en todos los archivos.
+
+**El reemplazo va en minúscula a propósito.** El bloque `dt-contraste` selecciona por
+`[style*="background:#452b2d"]`: si cambiás la declaración y no el selector, los textos claros
+sobre fondo oscuro se vuelven ilegibles y no se nota hasta que alguien abre la página.
+
+### Rótulos honestos
+
+`aerea-dia`, `aerea-amplia`, `sanlorenzo-aereo` y `atardecer` estaban rotuladas como
+**"foto aérea propia"**. No lo son: son **fotomontajes** — una toma de dron real con el
+proyecto renderizado encima. Se ve comparándolas con la página 3 del brochure. Ya dicen
+"fotomontaje sobre toma aérea". `aerea-verde` sí es toma limpia, con el terreno todavía vacío.
+
+### Datos reales
+
+`contenido/cardinal.json` y `contenido/mapa.json` son la fuente única, según la convención de
+la casa. Salen del brochure de CARDINAL (17 páginas) y de `Mapa Mavenz.docx`. **Del documento
+del mapa quedaron afuera a propósito** las notas internas de trabajo, los valores en dólares
+del mercado de Vaqueros y los nombres de proyectos de terceros.
