@@ -50,9 +50,9 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 ::selection{background:#b7a28b;color:#3c2527}
 @keyframes mvDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes mvTravel{from{offset-distance:0%}to{offset-distance:100%}}
-@keyframes mvMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@keyframes mvFloat{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
-@keyframes mvPan{from{transform:translateX(0)}to{transform:translateX(-10%)}}
+}
+}
+}
 
   @media (max-width:400px){
     header{ padding:14px 5vw !important }
@@ -527,11 +527,13 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   .menu summary::-webkit-details-marker{ display:none }
   .menu summary span{
     display:block; width:24px; height:2px; background:#3c2527; border-radius:2px;
-    transition:transform .24s cubic-bezier(.16,1,.3,1), width .24s cubic-bezier(.16,1,.3,1);
+    transition:transform .24s cubic-bezier(.16,1,.3,1);
   }
-  .menu summary span:last-child{ width:17px }
+  .menu summary span{ transform-origin:right center }
+  .menu[open] summary span{ transform-origin:center center }
+  .menu summary span:last-child{ transform:scaleX(.71) }
   .menu[open] summary span:first-child{ transform:translateY(4px) rotate(45deg) }
-  .menu[open] summary span:last-child{ width:24px; transform:translateY(-4px) rotate(-45deg) }
+  .menu[open] summary span:last-child{ transform:translateY(-4px) rotate(-45deg) scaleX(1) }
   .menu-caja{
     position:absolute; right:0; top:calc(100% + 14px);
     min-width:min(74vw,260px);
