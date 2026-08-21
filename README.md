@@ -91,15 +91,15 @@ mismo gesto reducido a una línea de un solo trazo, pensado para dibujarse con a
 
 | Archivo | Qué muestra | Medidas | Peso |
 |---|---|---|---|
-| `banda-aerea-1.mp4` | Dron sobre San Lorenzo Chico, montañas de fondo, 13 s | 1600×360 | 0,5 MB |
-| `banda-aerea-2.mp4` | Dron, plano más abierto del valle, 12 s | 1600×360 | 0,4 MB |
+| `banda-aerea-1.mp4` | Dron sobre San Lorenzo Chico, montañas de fondo, 5,8 s | 1600×360 | 0,27 MB |
+| `banda-aerea-2.mp4` | Dron, plano más abierto del valle, 7,8 s | 1600×360 | 0,38 MB |
 
 Sin audio, listos para `autoplay muted loop playsinline`.
 
 **Por qué son ultrawide y no cuadro completo.** Los videos originales son posteos de Instagram ya
 terminados, con el subtitulado quemado **en el centro del cuadro**, no abajo. No hay forma de
-sacarlo recortando por abajo. Lo que sí funciona es quedarse con el 40% superior del cuadro, que
-queda arriba del texto: da cielo, montaña y barrio, en una banda cinematográfica de 4,4:1 sin una
+sacarlo recortando por abajo. Lo que sí funciona es quedarse con el 40% superior del cuadro y solo en la ventana donde
+tampoco hay rótulos arriba a la derecha (1 a 6,8 s en el primero, 1 a 8,8 s en el segundo): da cielo, montaña y barrio, en una banda cinematográfica de 4,4:1 sin una
 sola letra encima. Es el formato que mejor le sienta a un hero de plataforma.
 
 **Si hace falta el cuadro completo en movimiento, hay que pedirle a Vero el metraje original sin
