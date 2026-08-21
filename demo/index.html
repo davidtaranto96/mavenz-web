@@ -149,6 +149,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   .pf[aria-selected="true"] b{color:#fff}
   .pf[aria-selected="true"] span{color:#c9cfd0}
   .pf-panel{display:grid;gap:36px;grid-template-columns:1fr;animation:pfIn .34s cubic-bezier(.22,.61,.36,1)}
+  .pf-panel[hidden]{display:none !important}
   @media(min-width:900px){.pf-panel{grid-template-columns:1.35fr .65fr;gap:56px;align-items:start}}
   @keyframes pfIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .pf-panel h3{margin:0 0 12px;font-size:clamp(22px,2.4vw,30px);font-weight:640;letter-spacing:-.016em;line-height:1.2}
@@ -215,6 +216,126 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   @media(prefers-reduced-motion:reduce){
     .pf,.inv-c,.paso,.faq summary,.faq summary::after,.faq > div,.cta-arena{transition:none}
     .pf-panel{animation:none}
+  }
+</style>
+<style id="dt-terr">
+  /* el color del territorio se resuelve por CSS, no pintando estilos desde JS:
+     asi no depende del orden de los spans ni de que corra el script. */
+  [data-terr] span:first-of-type{ color:#ffffff !important }
+  [data-terr] span:last-of-type{ color:#a1a7a8 !important }
+  [data-terr].terr-on span:first-of-type{ color:#b7a18a !important }
+  [data-terr].terr-on{ background:rgba(183,161,138,.10) }
+  [data-terr]{ position:relative }
+  [data-terr]::before{
+    content:"";position:absolute;left:0;top:14%;bottom:14%;width:2px;background:#b7a18a;
+    transform:scaleY(0);transform-origin:center;
+    transition:transform .28s cubic-bezier(.22,.61,.36,1)
+  }
+  [data-terr].terr-on::before{ transform:scaleY(1) }
+  @media(prefers-reduced-motion:reduce){ [data-terr]::before{ transition:none } }
+</style>
+<style id="dt-extra">
+  /* barra de progreso de lectura: la pagina mide 12.000 px, justifica una */
+  #prog{position:fixed;top:0;left:0;height:2px;width:100%;z-index:950;transform-origin:0 50%;
+    transform:scaleX(0);background:#b7a18a;pointer-events:none}
+  /* volver arriba */
+  #arriba{position:fixed;right:20px;bottom:88px;z-index:900;width:46px;height:46px;
+    border:1px solid rgba(52,34,35,.18);background:rgba(255,255,255,.92);color:#342223;
+    border-radius:50%;display:grid;place-items:center;cursor:pointer;font-size:17px;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;transform:translateY(10px);pointer-events:none;
+    transition:opacity .2s cubic-bezier(.22,.61,.36,1),transform .2s cubic-bezier(.22,.61,.36,1),background-color .18s}
+  #arriba.vis{opacity:1;transform:none;pointer-events:auto}
+  #arriba:hover{background:#fff}
+  #arriba:active{transform:translateY(1px)}
+  @media(min-width:768px){#arriba{right:28px;bottom:100px}}
+  /* copiar el link de una seccion */
+  .anc{all:unset;cursor:pointer;margin-left:10px;font-size:13px;color:#9c8976;opacity:0;
+    transition:opacity .18s cubic-bezier(.22,.61,.36,1)}
+  h2:hover .anc,.anc:focus-visible{opacity:1}
+  @media(pointer:coarse){.anc{display:none}}
+  @media(prefers-reduced-motion:reduce){
+    #prog,#arriba,.anc{transition:none}
+    #arriba{opacity:1;transform:none;pointer-events:auto}
+  }
+</style>
+<style id="dt-media">
+  /* el inline gana a la hoja: por eso el contacto quedaba en una sola columna */
+  @media(min-width:960px){
+    #contacto > div{ grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr) !important;
+      gap:72px !important; align-items:start }
+  }
+  .contacto-media{position:relative;overflow:hidden;background:#e8e2da}
+  .contacto-media video{display:block;width:100%;height:100%;min-height:420px;object-fit:cover}
+  .cm-pie{position:absolute;left:0;right:0;bottom:0;padding:22px 24px;color:#fff;
+    background-color:rgba(42,27,28,.62);
+    background-image:linear-gradient(to top,rgba(42,27,28,.92),rgba(42,27,28,.28))}
+  .cm-pie b{display:block;font-size:19px;font-weight:660;letter-spacing:-.014em}
+  .cm-pie span{font-size:13px;color:#f0ece8}
+  @media(max-width:959px){ .contacto-media video{min-height:280px} }
+
+  /* imagen dentro de cada perfil */
+  .pf-img{margin:0 0 28px}
+  .pf-img img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;
+    transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+  .pf-img{overflow:hidden}
+  @media(hover:hover) and (pointer:fine){ .pf-img:hover img{transform:scale(1.03)} }
+  .pf-img figcaption{margin-top:9px;font-size:12.5px;color:#5b484a;letter-spacing:.01em}
+
+  /* banda del bloque de desarrollistas */
+  .dev-banda{margin:56px 0 0;width:100vw;margin-inline:calc(50% - 50vw);overflow:hidden}
+  .dev-banda img{display:block;width:100%;aspect-ratio:1920/560;object-fit:cover}
+  .dev-banda figcaption{width:min(1200px,100% - 10vw);margin:10px auto 0;
+    font-size:12.5px;color:#5b484a;letter-spacing:.01em}
+  @media(max-width:700px){ .dev-banda img{aspect-ratio:16/10} }
+
+  @media(prefers-reduced-motion:reduce){ .pf-img img{transition:none} .pf-img:hover img{transform:none} }
+</style>
+<style id="dt-botones">
+  /* Profundidad con dos capas de sombra: una de contacto, corta y densa, y una
+     ambiental, larga y suave. Es lo que separa un boton dibujado de uno que existe. */
+  .cta-p,.cta-s,.cta-arena,.btn-mv,.pf,#arriba{
+    --lift:0px;
+    transform:translateY(var(--lift));
+    will-change:transform;
+    transition:transform .18s cubic-bezier(.16,1,.3,1),
+               box-shadow .18s cubic-bezier(.16,1,.3,1),
+               background-color .18s cubic-bezier(.16,1,.3,1),
+               border-color .18s cubic-bezier(.16,1,.3,1);
+  }
+  .cta-p,.btn-mv{
+    box-shadow:0 1px 2px rgba(42,27,28,.22), 0 6px 16px -6px rgba(42,27,28,.34);
+    background-image:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,0) 58%);
+  }
+  .cta-arena{
+    box-shadow:0 1px 2px rgba(42,27,28,.18), 0 6px 16px -6px rgba(42,27,28,.30);
+    background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 58%);
+  }
+  .cta-s{ box-shadow:0 1px 2px rgba(42,27,28,.06) }
+
+  @media (hover:hover) and (pointer:fine){
+    .cta-p:hover,.btn-mv:hover{ --lift:-2px;
+      box-shadow:0 2px 4px rgba(42,27,28,.24), 0 14px 28px -10px rgba(42,27,28,.42) }
+    .cta-arena:hover{ --lift:-2px;
+      box-shadow:0 2px 4px rgba(42,27,28,.2), 0 14px 28px -10px rgba(42,27,28,.38) }
+    .cta-s:hover{ --lift:-1px; box-shadow:0 2px 6px rgba(42,27,28,.10) }
+    .pf:hover{ --lift:-2px; box-shadow:0 10px 24px -12px rgba(42,27,28,.30) }
+    #arriba:hover{ --lift:-2px; box-shadow:0 10px 22px -10px rgba(42,27,28,.34) }
+  }
+
+  /* el hundido responde al pointerdown, no al click: es lo que se siente inmediato */
+  .cta-p.press,.cta-s.press,.cta-arena.press,.btn-mv.press,.pf.press,#arriba.press{
+    --lift:1px;
+    transform:translateY(var(--lift)) scale(.978);
+    box-shadow:0 1px 1px rgba(42,27,28,.2) !important;
+    transition-duration:.09s;
+  }
+  .wa{ box-shadow:0 2px 6px rgba(0,0,0,.2), 0 12px 28px -8px rgba(0,0,0,.34) }
+  .wa.press{ transform:scale(.94); transition-duration:.09s }
+
+  @media(prefers-reduced-motion:reduce){
+    .cta-p,.cta-s,.cta-arena,.btn-mv,.pf,#arriba,.wa{transition:none;transform:none}
+    .cta-p.press,.cta-s.press,.cta-arena.press,.btn-mv.press,.pf.press,#arriba.press,.wa.press{transform:none}
   }
 </style>
 </head>
@@ -428,7 +549,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
         <p>No empezamos por la propiedad. Empezamos por el territorio: qué está cambiando en cada zona, quién la elige y por qué. Después aparece la casa.</p>
         <ul><li>San Lorenzo Chico, para vivir y trabajar en el mismo entorno</li><li>Zona Norte, para quienes buscan naturaleza sin perder la ciudad</li><li>Vaqueros, verde y ciudad en quince minutos</li><li>Microcentro, patrimonio reconvertido y vida urbana</li></ul>
         <a class="cta-p" href="#contacto">Contarnos qué buscás</a></div>
-      <div class="pf-dato"><b>CARDINAL</b><span>San Lorenzo Chico &middot; 35 hogares &middot; en comercialización</span><a href="#proyectos">Ver el proyecto →</a></div>
+      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/casas.jpg" alt="Render de CARDINAL, San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Render de CARDINAL, San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>CARDINAL</b><span>San Lorenzo Chico &middot; 35 hogares &middot; en comercialización</span><a href="#proyectos">Ver el proyecto →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-invertir" hidden role="tabpanel">
@@ -436,7 +557,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
         <p>La diferencia entre una buena y una mala inversión rara vez es la propiedad. Es el momento de la curva en que entrás.</p>
         <ul><li>Renta temporaria en Cafayate, con patrimonio y disfrute en la misma decisión</li><li>Storages y cocheras en San Lorenzo Chico, ticket bajo y demanda sostenida</li><li>Vaqueros antes del pico, con valores de compra reales</li><li>Reconversión de casonas patrimoniales en el centro</li></ul>
         <a class="cta-p" href="#inversiones">Ver las oportunidades</a></div>
-      <div class="pf-dato"><b>Desde USD 35.000</b><span>Storage de 14,09 m² en WA, San Lorenzo Chico &middot; ref. MAV-226174</span><a href="#inversiones">Ver disponibilidad →</a></div>
+      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/proyectos/wa-storages-01.jpg" alt="Storages de WA en San Lorenzo Chico" loading="lazy" decoding="async"><figcaption>Storages de WA en San Lorenzo Chico</figcaption></figure><div class="pf-dato"><b>Desde USD 35.000</b><span>Storage de 14,09 m² en WA, San Lorenzo Chico &middot; ref. MAV-226174</span><a href="#inversiones">Ver disponibilidad →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-desarrollar" hidden role="tabpanel">
@@ -444,7 +565,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
         <p>Trabajamos con desarrolladores desde antes de que exista el proyecto: lectura de territorio, definición de producto, estrategia comercial y comercialización.</p>
         <ul><li>Análisis de oportunidad y de producto</li><li>Estrategia comercial y de posicionamiento</li><li>Comercialización con equipo propio</li><li>Reporte de avance para el desarrollista</li></ul>
         <a class="cta-p" href="#desarrollistas">Cómo acompañamos un proyecto</a></div>
-      <div class="pf-dato"><b>El Método Mavenz</b><span>Descubrir &middot; Diseñar &middot; Conectar &middot; Activar &middot; Generar movimiento</span><a href="#metodo">Ver el método →</a></div>
+      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async"><figcaption>Render de la esquina comercial de CARDINAL</figcaption></figure><div class="pf-dato"><b>El Método Mavenz</b><span>Descubrir &middot; Diseñar &middot; Conectar &middot; Activar &middot; Generar movimiento</span><a href="#metodo">Ver el método →</a></div>
     </div>
 
     <div class="pf-panel" id="pf-vender" hidden role="tabpanel">
@@ -452,7 +573,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
         <p>Preferimos tres opciones explicadas a treinta sin criterio. Si una propiedad no encaja con quien pregunta, lo decimos y explicamos por qué.</p>
         <ul><li>Tasación con lectura de zona, no solo de metros</li><li>Publicación en Espacio Mavenz y en los portales</li><li>Seguimiento registrado de cada consulta y cada visita</li><li>Un solo interlocutor durante toda la operación</li></ul>
         <a class="cta-p" href="#contacto">Consultar por tu propiedad</a></div>
-      <div class="pf-dato"><b>Espacio Mavenz</b><span>El canal donde vive el listado completo</span><a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Abrir ↗</a></div>
+      <figure class="pf-img"><img src="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-verde.jpg" alt="Vista aérea de San Lorenzo, imagen propia" loading="lazy" decoding="async"><figcaption>Vista aérea de San Lorenzo, imagen propia</figcaption></figure><div class="pf-dato"><b>Espacio Mavenz</b><span>El canal donde vive el listado completo</span><a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Abrir ↗</a></div>
     </div>
   </div>
 </section>
@@ -508,6 +629,10 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <div class="paso"><b>Armamos la estrategia</b><p>Posicionamiento, canales, materiales de venta y el circuito por el que entra cada consulta.</p></div>
       <div class="paso"><b>Comercializamos</b><p>Con equipo propio, con cada conversación registrada y con reporte de avance para vos.</p></div>
     </div>
+    <figure class="dev-banda">
+      <img src="https://davidtaranto96.github.io/mavenz-web/assets/renders/comercial.jpg" alt="Render de la esquina comercial de CARDINAL" loading="lazy" decoding="async">
+      <figcaption>CARDINAL, San Lorenzo Chico &middot; render del proyecto</figcaption>
+    </figure>
     <div class="dev-cta">
       <p><b>Hoy comercializamos CARDINAL</b>, en San Lorenzo Chico, y acompañamos el desarrollo de CAFAY en los Valles Calchaquíes.</p>
       <a class="cta-p" href="#contacto">Conversar un desarrollo</a>
@@ -529,10 +654,9 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
 <section id="contacto" data-screen-label="Contacto" data-fx="reveal" style="background:#ffffff;color:#342223;padding:130px 5vw">
   <div style="max-width:1200px;margin:0 auto;display:grid;gap:56px;grid-template-columns:minmax(0,1fr)">
-    <div>
+    <div class="contacto-txt">
       <h2 data-fx="split" style="margin:0 0 18px;font-size:clamp(36px,4.6vw,68px);font-weight:660;letter-spacing:-0.028em;line-height:1.05;max-width:16ch">Las oportunidades no aparecen por casualidad. Se reconocen.</h2>
-      <p style="margin:0;font-size:18px;line-height:1.6;color:#5b484a;max-width:46ch">Contanos qué estás buscando y te decimos qué vemos. Te contestamos por WhatsApp dentro del día hábil.</p>
-    </div>
+      <p style="margin:0 0 40px;font-size:18px;line-height:1.6;color:#5b484a;max-width:46ch">Contanos qué estás buscando y te decimos qué vemos. Te contestamos por WhatsApp dentro del día hábil.</p>
     <form id="fmv" novalidate style="max-width:520px;display:grid;gap:24px">
       <div><label for="fn" style="display:block;font-size:13px;font-weight:600;letter-spacing:.02em;color:#5b484a;margin-bottom:8px">Nombre</label>
         <input id="fn" name="nombre" type="text" required autocomplete="name"></div>
@@ -545,6 +669,11 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
       <div><button type="submit" class="btn-mv">Escribirnos</button>
         <p id="fmv-msg" role="status" style="margin:12px 0 0;font-size:13px;color:#5b484a"></p></div>
     </form>
+    </div>
+    <div class="contacto-media">
+      <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-2.mp4" poster="https://davidtaranto96.github.io/mavenz-web/assets/aereas/aerea-amplia.jpg" autoplay muted loop playsinline></video>
+      <div class="cm-pie"><b>San Lorenzo Chico</b><span>Imagen aérea propia &middot; el territorio que leemos todos los días</span></div>
+    </div>
   </div>
 </section>
 <style>
@@ -768,6 +897,64 @@ class Component extends DCLogic {
   });
   // si llegan con #inversiones desde el hero, se abre el perfil correspondiente
   if(location.hash === '#inversiones') elegir('invertir');
+})();
+</script>
+<script>
+(function(){
+  // ── progreso de lectura, con rAF y sin tocar layout ──
+  var p=document.createElement('div'); p.id='prog'; document.body.appendChild(p);
+  var arr=document.createElement('button'); arr.id='arriba';
+  arr.setAttribute('aria-label','Volver arriba'); arr.textContent='↑';
+  document.body.appendChild(arr);
+  arr.addEventListener('click',function(){
+    var suave = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:0,behavior:suave?'smooth':'auto'});
+  });
+
+  var tick=false;
+  function pintar(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    var r=h>0?Math.min(scrollY/h,1):0;
+    p.style.transform='scaleX('+r+')';
+    arr.classList.toggle('vis', scrollY>innerHeight*1.4);
+    tick=false;
+  }
+  addEventListener('scroll',function(){ if(!tick){tick=true;requestAnimationFrame(pintar);} },{passive:true});
+  pintar();
+
+  // ── copiar el link directo de cada seccion ──
+  document.querySelectorAll('section[id] > div > h2, section[id] h2').forEach(function(h){
+    var sec=h.closest('section[id]'); if(!sec||h.querySelector('.anc')) return;
+    var b=document.createElement('button');
+    b.className='anc'; b.type='button'; b.textContent='copiar link';
+    b.setAttribute('aria-label','Copiar el link de esta sección');
+    b.addEventListener('click',function(e){
+      e.preventDefault();
+      var u=location.origin+location.pathname+'#'+sec.id;
+      var ok=function(){ b.textContent='copiado'; setTimeout(function(){b.textContent='copiar link'},1600); };
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(ok,ok); }
+      else { location.hash='#'+sec.id; ok(); }
+    });
+    h.appendChild(b);
+  });
+})();
+</script>
+<script>
+(function(){
+  // feedback en el pointerdown, no al soltar. Es la diferencia entre responder y confirmar.
+  var sel = '.cta-p,.cta-s,.cta-arena,.btn-mv,.pf,#arriba,.wa';
+  function on(e){ var t=e.target.closest(sel); if(t) t.classList.add('press'); }
+  function off(){ document.querySelectorAll('.press').forEach(function(el){ el.classList.remove('press'); }); }
+  document.addEventListener('pointerdown', on, {passive:true});
+  ['pointerup','pointercancel','pointerleave','blur'].forEach(function(ev){
+    document.addEventListener(ev, off, {passive:true});
+  });
+  // con teclado, el mismo feedback
+  document.addEventListener('keydown', function(e){
+    if(e.key!==' '&&e.key!=='Enter') return;
+    var a=document.activeElement; if(a&&a.matches&&a.matches(sel)) a.classList.add('press');
+  });
+  document.addEventListener('keyup', off);
 })();
 </script>
 </body>
