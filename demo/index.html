@@ -22,10 +22,6 @@
     [data-fx]{ opacity:1 !important; transform:none !important }
   }
 </style>
-</head>
-<body>
-<x-dc>
-<helmet>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <style>
@@ -40,7 +36,10 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
 @keyframes mvFloat{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
 @keyframes mvPan{from{transform:translateX(0)}to{transform:translateX(-10%)}}
 </style>
-</helmet>
+</head>
+<body>
+
+
 <div style="font-family:'Urbanist',sans-serif;background:#342223;color:#ffffff;overflow-x:hidden">
 
 <header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(52,34,35,.94);border-bottom:1px solid rgba(183,161,138,.18)">
@@ -53,30 +52,24 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
   </nav>
 </header>
 
-<sc-if value="{{ heroCine }}" hint-placeholder-val="{{ true }}">
+
 <section id="inicio" data-screen-label="Hero cinematográfico" style="position:relative;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
   <div style="display:flex;flex-direction:column;justify-content:center;padding:56px 5vw 32px;position:relative">
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.32;pointer-events:none"><path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="2.5" style="stroke-dasharray:1;animation:mvDraw 2.8s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
     <h1 style="margin:0;font-size:clamp(64px,10.5vw,172px);line-height:.94;letter-spacing:-0.035em;font-weight:640;position:relative">Generamos<br><span style="color:#b7a18a">movimiento.</span></h1>
     <p style="margin:30px 0 0;font-size:clamp(17px,1.4vw,22px);line-height:1.5;color:#a1a7a8;max-width:580px;font-weight:450;position:relative">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
   </div>
-  <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ true }}">
-    <video ref="{{ videoRef }}" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" onError="{{ videoFail }}" style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#3d2729"></video>
-  </sc-if>
-  <sc-if value="{{ heroFoto }}" hint-placeholder-val="{{ false }}">
-    <div style="width:100%;aspect-ratio:1600/360;overflow:hidden;background:#3d2729"><img src="../assets/aereas/aerea-dia.jpg" fetchpriority="high" decoding="async" alt="San Lorenzo Chico desde el aire" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
-  </sc-if>
+  
+    <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#3d2729"></video>
+  
+  
   <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 20px;font-size:13px;color:#a1a7a8;letter-spacing:.04em"><span>Salta, Argentina</span><a href="#no-somos" style="color:#b7a18a">Seguir bajando ↓</a></div>
 </section>
-</sc-if>
 
-<sc-if value="{{ heroEditorial }}" hint-placeholder-val="{{ false }}">
 
-</sc-if>
 
-<sc-if value="{{ heroTerr }}" hint-placeholder-val="{{ false }}">
 
-</sc-if>
+
 
 <section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" style="padding:150px 5vw 130px;max-width:1200px">
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una inmobiliaria tradicional.</p>
@@ -137,64 +130,29 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
     <p style="margin:0;font-size:17px;line-height:1.55;color:#a1a7a8">Seis territorios leídos con las mismas cuatro preguntas: qué está cambiando, quién lo elige, qué oportunidades aparecen y qué ve Mavenz.</p>
   </div>
   <div style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:44px;align-items:start">
-    <x-import component-from-global-scope="mapa-mavenz" from="./mapa-mavenz.js" hint-size="100%,580px" style="display:block;width:100%;height:580px;border:1px solid rgba(183,161,138,.25);position:relative;z-index:1"></x-import>
+    <mapa-mavenz style="display:block;width:100%;height:580px;border:1px solid rgba(183,161,138,.25);position:relative;z-index:1"></mapa-mavenz>
     <div>
       <div style="display:flex;flex-direction:column">
-        <button onClick="{{ sel.micro }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.micro }}">Micro y Macrocentro</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Donde el patrimonio comienza a transformarse</span></button>
-        <button onClick="{{ sel.norte }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.norte }}">Zona Norte</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">La ciudad crece hacia la naturaleza</span></button>
-        <button onClick="{{ sel.sanlorenzo }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.sanlorenzo }}">San Lorenzo</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Dos territorios, dos formas distintas de vivir</span></button>
-        <button onClick="{{ sel.aeropuerto }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.aeropuerto }}">Zona Aeropuerto y San Luis</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Conectividad que impulsa crecimiento</span></button>
-        <button onClick="{{ sel.cafayate }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.cafayate }}">Cafayate y Cachi</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Invertir también es elegir una forma de vivir</span></button>
-        <button onClick="{{ sel.vaqueros }}" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:{{ c.vaqueros }}">Vaqueros</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Una respuesta eco-cultural</span></button>
+        <button type="button" data-terr="micro" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Micro y Macrocentro</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Donde el patrimonio comienza a transformarse</span></button>
+        <button type="button" data-terr="norte" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Norte</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">La ciudad crece hacia la naturaleza</span></button>
+        <button type="button" data-terr="sanlorenzo" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">San Lorenzo</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Dos territorios, dos formas distintas de vivir</span></button>
+        <button type="button" data-terr="aeropuerto" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Aeropuerto y San Luis</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Conectividad que impulsa crecimiento</span></button>
+        <button type="button" data-terr="cafayate" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Cafayate y Cachi</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Invertir también es elegir una forma de vivir</span></button>
+        <button type="button" data-terr="vaqueros" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Vaqueros</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Una respuesta eco-cultural</span></button>
       </div>
-      <sc-if value="{{ act.micro }}" hint-placeholder-val="{{ true }}">
+      
         <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Casonas y edificios patrimoniales entran en reconversión.</p></div>
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Profesionales que quieren vivir cerca de todo.</p></div>
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Reciclaje de unidades con valor histórico.</p></div>
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Un centro que vuelve a ser deseable.</p></div>
         </div>
-      </sc-if>
-      <sc-if value="{{ act.norte }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">La mancha urbana avanza hacia el verde.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Familias que buscan aire sin salir de la ciudad.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Suelo en etapa temprana de desarrollo.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El próximo eje residencial de Salta.</p></div>
-        </div>
-      </sc-if>
-      <sc-if value="{{ act.sanlorenzo }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El pueblo y San Lorenzo Chico maduran a ritmos distintos.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Quienes ya decidieron vivir entre montañas.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Proyectos de escala barrial, como CARDINAL.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El territorio donde hoy pone el cuerpo.</p></div>
-        </div>
-      </sc-if>
-      <sc-if value="{{ act.aeropuerto }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">La logística y los accesos reordenan la zona.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Empresas e inversores de renta.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Storages, cocheras y usos mixtos.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Infraestructura que llega antes que el precio.</p></div>
-        </div>
-      </sc-if>
-      <sc-if value="{{ act.cafayate }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El enoturismo trae demanda todo el año.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Inversores que compran paisaje y renta.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Hospedaje y lotes con vocación turística.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Un destino, no solo una ubicación.</p></div>
-        </div>
-      </sc-if>
-      <sc-if value="{{ act.vaqueros }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Crece una comunidad con otra idea de hábitat.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Quienes buscan naturaleza con identidad.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Desarrollos de baja escala y alto sentido.</p></div>
-          <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué ve Mavenz?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">El contrapeso cultural del crecimiento.</p></div>
-        </div>
-      </sc-if>
+      
+      
+      
+      
+      
+      
     </div>
   </div>
 </section>
@@ -225,7 +183,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
       <a href="https://espaciomavenz.com.ar" target="_blank" style="display:inline-block;margin-top:32px;font-size:16px;font-weight:700;color:#9c8976">Conocer CARDINAL →</a>
     </div>
   </div>
-  <sc-if value="{{ mostrarWa }}" hint-placeholder-val="{{ true }}">
+  
   <div data-reveal style="display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:52px;align-items:start;margin-top:110px">
     <div>
       <h3 style="margin:0;font-size:clamp(40px,4.5vw,64px);font-weight:760;letter-spacing:.01em;line-height:1">WA</h3>
@@ -240,7 +198,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
       <img src="../assets/proyectos/wa-cocheras.jpg" loading="lazy" decoding="async" alt="Cocheras cubiertas" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
     </div>
   </div>
-  </sc-if>
+  
   <div data-reveal style="display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;margin-top:110px;border-top:1px solid rgba(52,34,35,.2);border-bottom:1px solid rgba(52,34,35,.2);padding:44px 0">
     <div style="font-size:clamp(48px,6vw,88px);font-weight:800;letter-spacing:.02em;color:transparent;-webkit-text-stroke:2px #b7a18a">CAFAY</div>
     <p style="margin:0;font-size:16px;line-height:1.55;color:#5b484a;max-width:420px">Cafayate · en desarrollo. La próxima lectura del territorio hecha proyecto.</p>
@@ -283,7 +241,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#9c8976}
   <p style="margin:56px 0 0;font-size:12.5px;color:#5b484a">Salta, Argentina · Identidad por Fractura Studio</p>
 </footer>
 </div>
-</x-dc>
+
 <script type="text/x-dc" data-dc-script data-props="{&quot;hero&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cinematografico&quot;,&quot;editorial&quot;,&quot;territorial&quot;],&quot;default&quot;:&quot;cinematografico&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;mostrarWa&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;}}">
 class Component extends DCLogic {
   state = { active: 'micro', videoOk: true };
@@ -342,5 +300,32 @@ class Component extends DCLogic {
   }
 }
 </script>
+
+<script>
+(function(){
+  var btns = document.querySelectorAll('[data-terr]');
+  if(!btns.length) return;
+  function marcar(id){
+    btns.forEach(function(b){
+      var t = b.querySelector('span');
+      var on = b.dataset.terr === id;
+      if(t) t.style.color = on ? '#b7a18a' : '#ffffff';
+      b.setAttribute('aria-current', on ? 'true' : 'false');
+    });
+  }
+  btns.forEach(function(b){
+    b.style.transition = 'background-color .18s cubic-bezier(.22,.61,.36,1)';
+    b.addEventListener('click', function(){
+      window.dispatchEvent(new CustomEvent('mavenz:flyto', {detail:{id: b.dataset.terr}}));
+      marcar(b.dataset.terr);
+    });
+    b.addEventListener('mouseenter', function(){ b.style.background = 'rgba(183,161,138,.07)'; });
+    b.addEventListener('mouseleave', function(){ b.style.background = 'transparent'; });
+  });
+  // si el clic viene desde un marcador del mapa, se marca el boton igual
+  window.addEventListener('mavenz:territory', function(e){ marcar(e.detail.id); });
+})();
+</script>
+<script src="mapa-mavenz.js" defer></script>
 </body>
 </html>

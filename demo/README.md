@@ -2,6 +2,19 @@
 
 Base generada en Claude Design, extraída del lienzo y con efectos aplicados.
 
+## Directivas de Claude Design que hubo que resolver
+
+El `.dc.html` es un documento de lienzo, no una página publicable. Trae directivas de plantilla que
+solo entiende `support.js`. Al sacarlo, cada una rompe de una forma distinta:
+
+| Directiva | Qué pasaba sin `support.js` | Cómo se resolvió |
+|---|---|---|
+| `<sc-if value="{{ x }}">` | **Se renderizaban las dos ramas.** Por eso aparecían el video y la foto aérea uno abajo del otro | Se resolvieron los 12 estáticamente, según su `hint-placeholder-val` |
+| `<x-import from="./mapa-mavenz.js">` | El mapa nunca cargaba | Reemplazado por `<mapa-mavenz>` más su `<script>` |
+| `<x-dc><helmet>` | Los `<link>` y `<script>` quedaban dentro del `<body>` | Movidos al `<head>` y desarmados los envoltorios |
+| `autoPlay="{{ true }}"` | Atributos estilo React. **Sin `muted` real el navegador bloquea la reproducción** | Pasados a atributos HTML |
+| `onClick="{{ sel.micro }}"` | Los seis botones del Mapa no hacían nada, y `color:{{ c.micro }}` era un color inválido | Cableados con `data-terr` a los eventos `mavenz:flyto` y `mavenz:territory` |
+
 ## Qué se hizo sobre la salida de Claude Design
 
 1. **Se sacó `support.js`.** Es el runtime del lienzo de Claude Design: envuelve todo en un
@@ -18,9 +31,20 @@ Base generada en Claude Design, extraída del lienzo y con efectos aplicados.
 
 ## Verificado
 
-- Desktop 1280 y mobile 375, scrolleando de verdad: 0 de 7 elementos quedan ocultos.
-- Con `prefers-reduced-motion: reduce`: 0 ocultos, todo el contenido visible.
-- Sin scroll horizontal en ninguno de los dos anchos.
+En 1280 y en 375, scrolleando de verdad:
+
+| Chequeo | Resultado |
+|---|---|
+| Errores de consola | 0 |
+| Recursos que fallan | 0 |
+| Imágenes rotas | 0 |
+| Marcadores de plantilla sin resolver | 0 |
+| Elementos que quedan ocultos | 0 de 7 |
+| Scroll horizontal | no |
+| Video | reproduciendo, `muted`, `loop` |
+| Mapa Leaflet | vivo, 8 marcadores, 6 botones cableados |
+
+Con `prefers-reduced-motion: reduce`: 0 ocultos, todo el contenido visible.
 
 ## Pendiente para la 2.0
 
