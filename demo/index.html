@@ -453,6 +453,29 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   .mv-suelo > .mv-onda ~ *{ position:relative; z-index:1 }
 
   @media (prefers-reduced-motion: reduce){ .mv-onda video{ display:none } }
+
+  /* ---- botones de territorio ------------------------------------------------
+     Antes iban con style="all:unset" inline, que ademas del estilo se comia el
+     outline de foco: con teclado no se veia donde estabas parado. */
+  .terr{
+    display:block; width:100%;
+    background:none; border:0; border-bottom:1px solid rgba(255,255,255,.12);
+    padding:14px 10px 14px 12px; margin:0;
+    font:inherit; color:inherit; text-align:left;
+    cursor:pointer;
+    border-radius:3px;
+  }
+  .terr:focus-visible{ outline:2px solid #b7a18a; outline-offset:2px }
+  #terr-panel{ transition:height .26s cubic-bezier(.2,0,0,1); contain:layout paint }
+  #terr-panel > div{ animation:terrIn .34s cubic-bezier(.16,1,.3,1) both }
+  #terr-panel > div:nth-child(2){ animation-delay:.04s }
+  #terr-panel > div:nth-child(3){ animation-delay:.08s }
+  #terr-panel > div:nth-child(4){ animation-delay:.12s }
+  @keyframes terrIn{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  @media (prefers-reduced-motion: reduce){
+    #terr-panel{ transition:none }
+    #terr-panel > div{ animation:none }
+  }
 </style>
 </head>
 <body>
@@ -604,15 +627,15 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     <mapa-mavenz style="display:block;width:100%;height:580px;border:1px solid rgba(183,161,138,.25);position:relative;z-index:1"></mapa-mavenz>
     <div>
       <div style="display:flex;flex-direction:column">
-        <button type="button" data-terr="micro" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Micro y Macrocentro</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Donde el patrimonio comienza a transformarse</span></button>
-        <button type="button" data-terr="norte" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Norte</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">La ciudad crece hacia la naturaleza</span></button>
-        <button type="button" data-terr="sanlorenzo" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">San Lorenzo</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Dos territorios, dos formas distintas de vivir</span></button>
-        <button type="button" data-terr="aeropuerto" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Aeropuerto y San Luis</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Conectividad que impulsa crecimiento</span></button>
-        <button type="button" data-terr="cafayate" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Cafayate y Cachi</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Invertir también es elegir una forma de vivir</span></button>
-        <button type="button" data-terr="vaqueros" style="all:unset;cursor:pointer;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Vaqueros</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Una respuesta eco-cultural</span></button>
+        <button type="button" data-terr="micro" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Micro y Macrocentro</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Donde el patrimonio comienza a transformarse</span></button>
+        <button type="button" data-terr="norte" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Norte</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">La ciudad crece hacia la naturaleza</span></button>
+        <button type="button" data-terr="sanlorenzo" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">San Lorenzo</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Dos territorios, dos formas distintas de vivir</span></button>
+        <button type="button" data-terr="aeropuerto" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Zona Aeropuerto y San Luis</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Conectividad que impulsa crecimiento</span></button>
+        <button type="button" data-terr="cafayate" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Cafayate y Cachi</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Invertir también es elegir una forma de vivir</span></button>
+        <button type="button" data-terr="vaqueros" class="terr"><span style="display:block;font-size:19px;font-weight:660;color:#ffffff">Vaqueros</span><span style="display:block;margin-top:3px;font-size:13.5px;color:#a1a7a8">Una respuesta eco-cultural</span></button>
       </div>
       
-        <div style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px">
+        <div id="terr-panel" aria-live="polite" style="margin-top:28px;background:#3d2729;padding:28px;display:grid;gap:18px;overflow:hidden">
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué está cambiando?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Casonas y edificios patrimoniales entran en reconversión.</p></div>
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Quién lo elige?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Profesionales que quieren vivir cerca de todo.</p></div>
           <div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">¿Qué oportunidades aparecen?</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">Reciclaje de unidades con valor histórico.</p></div>
@@ -633,25 +656,76 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">Los proyectos</h2>
     <p style="margin:0;font-size:17px;line-height:1.55;color:#5b484a">Cada proyecto vive dentro de Mavenz con su propia identidad y su propio destino.</p>
   </div>
-  <div data-reveal style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:52px;align-items:start">
-    <div>
-      <img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt="Render de las casas de CARDINAL" style="width:100%;display:block">
-      <p style="margin:10px 0 0;font-size:12.5px;color:#5b484a">Render del masterplan — es render, no fotografía. Preferimos decirlo.</p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px">
-        <img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt="Render de pileta y quincho" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
-        <img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt="Render de interior con hogar" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
-        <img src="../assets/renders/comercial.jpg" loading="lazy" decoding="async" alt="Render de la esquina comercial" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+  <!-- la malla: se corre con el puntero, hilera por hilera, para lados opuestos -->
+  <div class="fx-malla" data-fx-malla data-fx-amp="200" style="margin:0 -5vw 0;--fx-malla-alto:clamp(420px,44vw,580px)" aria-label="Imágenes de CARDINAL">
+    <div class="fx-malla__g" aria-hidden="true">
+        <div class="fx-malla__r"><figure><img src="../assets/cardinal/ingreso.jpg" loading="lazy" decoding="async" alt="Ingreso a CARDINAL"></figure><figure><img src="../assets/cardinal/plaza-chicos.jpg" loading="lazy" decoding="async" alt="Chicos jugando en la plaza"></figure><figure><img src="../assets/vida/esquina-viva.jpg" loading="lazy" decoding="async" alt="La esquina comercial"></figure><figure><img src="../assets/cardinal/pileta.jpg" loading="lazy" decoding="async" alt="La pileta"></figure><figure><img src="../assets/renders/casas.jpg" loading="lazy" decoding="async" alt="Las casas"></figure><figure><img src="../assets/cardinal/galeria.jpg" loading="lazy" decoding="async" alt="Galería con hogar"></figure><figure><img src="../assets/aereas/aerea-dia.jpg" loading="lazy" decoding="async" alt="San Lorenzo Chico de día"></figure></div>
+        <div class="fx-malla__r"><figure><img src="../assets/cardinal/cocina-comedor.jpg" loading="lazy" decoding="async" alt="Cocina y comedor"></figure><figure><img src="../assets/cardinal/aerea-valle.jpg" loading="lazy" decoding="async" alt="El valle desde el aire"></figure><figure><img src="../assets/cardinal/sum.jpg" loading="lazy" decoding="async" alt="El SUM"></figure><figure><img src="../assets/vida/calle-casas.jpg" loading="lazy" decoding="async" alt="La calle interior"></figure><figure><img src="../assets/cardinal/lectura.jpg" loading="lazy" decoding="async" alt="Los amenities"></figure><figure><img src="../assets/renders/comercial.jpg" loading="lazy" decoding="async" alt="La esquina comercial"></figure><figure><img src="../assets/cardinal/paseo-perro.jpg" loading="lazy" decoding="async" alt="Paseando el perro"></figure></div>
+        <div class="fx-malla__r"><figure><img src="../assets/cardinal/cesped.jpg" loading="lazy" decoding="async" alt="Familias en el césped"></figure><figure><img src="../assets/renders/amenities.jpg" loading="lazy" decoding="async" alt="Pileta y quincho"></figure><figure><img src="../assets/cardinal/mesa-familia.jpg" loading="lazy" decoding="async" alt="Tres generaciones en la mesa"></figure><figure><img src="../assets/cardinal/aerea-terreno.jpg" loading="lazy" decoding="async" alt="El terreno desde arriba"></figure><figure><img src="../assets/vida/interior-vivido.jpg" loading="lazy" decoding="async" alt="Adentro de una casa"></figure><figure><img src="../assets/cardinal/calle.jpg" loading="lazy" decoding="async" alt="La calle arbolada"></figure><figure><img src="../assets/aereas/aerea-verde.jpg" loading="lazy" decoding="async" alt="La avenida principal"></figure></div>
+        <div class="fx-malla__r"><figure><img src="../assets/vida/atardecer.jpg" loading="lazy" decoding="async" alt="El valle al atardecer"></figure><figure><img src="../assets/renders/interior.jpg" loading="lazy" decoding="async" alt="Interior con hogar a leña"></figure><figure><img src="../assets/cardinal/pileta.jpg" loading="lazy" decoding="async" alt="La pileta"></figure><figure><img src="../assets/vida/sanlorenzo-aereo.jpg" loading="lazy" decoding="async" alt="San Lorenzo desde el aire"></figure><figure><img src="../assets/cardinal/ingreso.jpg" loading="lazy" decoding="async" alt="El ingreso"></figure><figure><img src="../assets/aereas/aerea-amplia.jpg" loading="lazy" decoding="async" alt="Plano abierto del valle"></figure><figure><img src="../assets/cardinal/sum.jpg" loading="lazy" decoding="async" alt="El SUM"></figure></div>
+    </div>
+    <div class="fx-malla__t">
+      <div>
+        <h3 style="margin:0;font-size:clamp(52px,8vw,124px);font-weight:760;letter-spacing:.015em;line-height:.94;color:#ffffff;text-shadow:0 2px 40px rgba(20,10,11,.5)">CARDINAL</h3>
+        <p style="margin:16px 0 0;font-size:clamp(14px,1.3vw,17px);font-weight:600;letter-spacing:.14em;color:#f0ebe4;text-transform:uppercase">San Lorenzo Chico · Salta</p>
       </div>
     </div>
+  </div>
+  <p style="margin:14px 0 0;font-size:12.5px;color:#5b484a">Todas las imágenes de CARDINAL son renders del proyecto, no fotografías. Preferimos decirlo.</p>
+
+  <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:36px 28px;margin-top:64px;padding-bottom:48px;border-bottom:1px solid rgba(52,34,35,.14)">
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#342223">6.069<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#7a6863"> m²</span></b><span style="display:block;margin-top:8px;font-size:14px;color:#5b484a">de terreno</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#342223">35<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#7a6863"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#5b484a">unidades</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#342223">5<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#7a6863"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#5b484a">bloques residenciales</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#342223">8<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#7a6863"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#5b484a">tipologías, de 74 a 160 m²</span></div>
+  </div>
+
+  <div data-reveal style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:60px;align-items:start;margin-top:56px">
     <div>
-      <h3 style="margin:0;font-size:clamp(40px,4.5vw,64px);font-weight:760;letter-spacing:.01em;line-height:1">CARDINAL</h3>
-      <p style="margin:10px 0 0;font-size:16px;font-weight:650;color:#5b484a">San Lorenzo Chico · Salta</p>
-      <p style="margin:22px 0 0;font-size:16px;line-height:1.6;color:#5b484a">Un barrio pensado para quedarse: casas, amenities y una esquina comercial al pie de las montañas.</p>
-      <div style="display:flex;gap:18px;align-items:center;margin-top:32px;border-top:1px solid rgba(52,34,35,.15);padding-top:24px">
-        <img src="../assets/proyectos/cardinal-cardenal.jpg" loading="lazy" decoding="async" alt="El cardenal, pieza de marca de CARDINAL" style="width:92px;height:92px;object-fit:cover;flex-shrink:0">
+      <p style="margin:0;font-size:clamp(19px,1.8vw,25px);line-height:1.5;color:#342223;font-weight:560;max-width:36ch">Un barrio pensado para quedarse: cinco bloques, una calle interior tranquila y la sensación de llegar a un lugar que se siente propio.</p>
+      <h4 style="margin:44px 0 6px;font-size:13px;font-weight:700;letter-spacing:.14em;color:#7a6863">LAS OCHO TIPOLOGÍAS</h4>
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:15px;margin-top:12px">
+        <caption class="mv-oculto">Tipologías de CARDINAL con superficie propia y cubierta</caption>
+        <thead><tr>
+          <th scope="col" style="text-align:left;padding:0 14px 10px 0;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:#7a6863;border-bottom:1px solid rgba(52,34,35,.16)">TIPO</th>
+          <th scope="col" style="text-align:left;padding:0 14px 10px 0;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:#7a6863;border-bottom:1px solid rgba(52,34,35,.16)">PLANTA</th>
+          <th scope="col" style="text-align:right;padding:0 14px 10px 0;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:#7a6863;border-bottom:1px solid rgba(52,34,35,.16)">PROPIA</th>
+          <th scope="col" style="text-align:right;padding:0 0 10px;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:#7a6863;border-bottom:1px solid rgba(52,34,35,.16)">CUBIERTA</th>
+        </tr></thead>
+        <tbody>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">A</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta baja</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">77,00 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">51,90 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">B</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta baja</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">75,90 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">50,80 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">C</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta baja</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">83,70 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">64,70 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">D</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta baja</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">84,40 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">65,20 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">E</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta alta</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">74,50 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">51,90 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">F</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta alta</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">82,50 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">55,10 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">G</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta alta</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">81,50 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">53,70 m²</td></tr>
+        <tr><th scope="row" style="text-align:left;padding:10px 14px 10px 0;font-weight:700;color:#342223">H</th><td style="padding:10px 14px 10px 0;color:#5b484a;white-space:nowrap">Planta alta</td><td style="padding:10px 14px 10px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:640;color:#342223">160,30 m²</td><td style="padding:10px 0;text-align:right;font-variant-numeric:tabular-nums;color:#5b484a">116,00 m²</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin:18px 0 0;font-size:14px;line-height:1.6;color:#5b484a">Galería con asador privado en cada unidad. Unificación opcional a tres dormitorios, o dos más flexroom.</p>
+    </div>
+
+    <div>
+      <h4 style="margin:0 0 6px;font-size:13px;font-weight:700;letter-spacing:.14em;color:#7a6863">A CUÁNTO QUEDA TODO</h4>
+      <ul style="margin:12px 0 0;padding:0;list-style:none">
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Centro médico</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">2 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">El Punto Shopping</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">2 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Gastronomía</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">3 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Escuelas</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">5 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Combustible</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">6 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Salta capital</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">18 min</span></li>
+        <li style="display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(52,34,35,.1)"><span style="flex:1;font-size:15px;color:#342223">Aeropuerto</span><span style="font-variant-numeric:tabular-nums;font-weight:680;font-size:15px;color:#7a6863">18 min</span></li>
+      </ul>
+      <h4 style="margin:38px 0 10px;font-size:13px;font-weight:700;letter-spacing:.14em;color:#7a6863">ESPACIOS COMUNES</h4>
+      <p style="margin:0;font-size:15px;line-height:1.65;color:#5b484a">Piscina · SUM con asador · Vestuarios · Cocheras de cortesía · Caminerías · Juegos para niños · Espacios verdes</p>
+      <div style="display:flex;gap:18px;align-items:center;margin-top:38px;border-top:1px solid rgba(52,34,35,.15);padding-top:24px">
+        <img src="../assets/proyectos/cardinal-cardenal.jpg" loading="lazy" decoding="async" alt="El cardenal, pieza de marca de CARDINAL" style="width:92px;height:92px;object-fit:cover;flex-shrink:0;border-radius:8px">
         <p style="margin:0;font-size:14px;line-height:1.55;color:#5b484a">¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia. Movimiento. Identidad.</p>
       </div>
-      <a href="https://espaciomavenz.com.ar" target="_blank" style="display:inline-block;margin-top:32px;font-size:16px;font-weight:700;color:#5b484a">Conocer CARDINAL →</a>
+      <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" class="cta-p fx-esp" style="margin-top:30px">Conocer CARDINAL</a>
     </div>
   </div>
   

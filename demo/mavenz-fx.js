@@ -369,6 +369,153 @@
     else setTimeout(barrer, 400);
   }
 
+
+  /* ------------------------------------------------------------------------
+     8. MALLA EN MOVIMIENTO
+     Cada hilera persigue un objetivo que sale de la posicion del puntero.
+     Hileras impares para un lado, pares para el otro. Sin puntero fino, la
+     manda el avance del scroll por el bloque.
+     ------------------------------------------------------------------------ */
+  function malla(){
+    lista('[data-fx-malla]').forEach(function(raiz){
+      var hileras = lista('.fx-malla__r', raiz);
+      if (!hileras.length || quieto.matches) return;
+
+      var amp  = +(raiz.dataset.fxAmp || 190);
+      var pos  = hileras.map(function(){ return 0; });
+      var meta = hileras.map(function(){ return 0; });
+      var vivo = false, corriendo = false;
+
+      function objetivo(p){                       // p va de -1 a 1
+        for (var i = 0; i < hileras.length; i++){
+          var dir = i % 2 ? -1 : 1;
+          var peso = 1 + (i % 3) * 0.34;          // las hileras no van todas igual
+          meta[i] = p * amp * dir * peso;
+        }
+      }
+
+      function paso(){
+        if (!vivo){ corriendo = false; return; }
+        corriendo = true;
+        var quedan = false;
+        for (var i = 0; i < hileras.length; i++){
+          var d = meta[i] - pos[i];
+          if (Math.abs(d) > 0.12){ pos[i] += d * 0.085; quedan = true; }
+          else pos[i] = meta[i];
+          hileras[i].style.transform = 'translate3d(' + pos[i].toFixed(2) + 'px,0,0)';
+        }
+        if (quedan) requestAnimationFrame(paso);
+        else corriendo = false;
+      }
+      function arrancar(){ if (!corriendo && vivo) requestAnimationFrame(paso); }
+
+      if (fino.matches){
+        addEventListener('pointermove', function(e){
+          if (!vivo) return;
+          objetivo(limitar((e.clientX / innerWidth - 0.5) * 2, -1, 1));
+          arrancar();
+        }, { passive: true });
+      }
+      // en tactil no hay puntero: el avance del scroll por el bloque hace de eje
+      addEventListener('scroll', function(){
+        if (!vivo || fino.matches) return;
+        var r = raiz.getBoundingClientRect();
+        var p = 1 - 2 * ((r.top + r.height / 2) / innerHeight);
+        objetivo(limitar(p, -1, 1));
+        arrancar();
+      }, { passive: true });
+
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(es){
+          vivo = es[0].isIntersecting;
+          if (vivo) arrancar();
+        }, { rootMargin: '200px' }).observe(raiz);
+      } else { vivo = true; }
+    });
+  }
+
+
+  /* ------------------------------------------------------------------------
+     9. LAS SEIS LECTURAS DEL MAPA
+     La bajada promete seis territorios leidos con las mismas cuatro preguntas.
+     Hasta ahora el panel estaba clavado en el primero: se clickeaba otro, el
+     mapa volaba, y las respuestas seguian siendo las de Micro y Macrocentro.
+     Los textos salen de contenido/mapa.json — un dato, un solo lugar.
+     El alto se anima entre el valor medido antes y despues (FLIP), nunca
+     con height:auto, que no es animable.
+     ------------------------------------------------------------------------ */
+  function territorios(){
+    var panel = doc.getElementById('terr-panel');
+    var btns  = lista('.terr');
+    if (!panel || !btns.length) return;
+
+    var datos = null, actual = 'micro';
+
+    var PREGUNTAS = [
+      ['¿Qué está cambiando?',        'cambia'],
+      ['¿Quién lo elige?',            'quien'],
+      ['¿Qué oportunidades aparecen?','oportunidades'],
+      ['¿Qué ve Mavenz?',             'mavenz']
+    ];
+
+    function esc(t){
+      return String(t).replace(/[&<>"]/g, function(c){
+        return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+      });
+    }
+
+    function pintar(id){
+      var d = datos && datos[id];
+      if (!d) return;
+      actual = id;
+
+      var alto0 = panel.getBoundingClientRect().height;
+      panel.innerHTML = PREGUNTAS.map(function(q){
+        return '<div><p style="margin:0;font-size:13px;font-weight:720;color:#b7a18a">' + esc(q[0]) +
+               '</p><p style="margin:4px 0 0;font-size:15px;line-height:1.5;color:#ffffff">' + esc(d[q[1]]) + '</p></div>';
+      }).join('');
+
+      if (!quieto.matches){
+        panel.style.height = 'auto';
+        var alto1 = panel.getBoundingClientRect().height;
+        panel.style.height = alto0 + 'px';
+        void panel.offsetHeight;
+        panel.style.height = alto1 + 'px';
+        var fin = function(e){
+          if (e.propertyName !== 'height') return;
+          panel.style.height = '';
+          panel.removeEventListener('transitionend', fin);
+        };
+        panel.addEventListener('transitionend', fin);
+      }
+
+      btns.forEach(function(b){
+        var on = b.dataset.terr === id;
+        b.classList.toggle('terr-on', on);
+        b.setAttribute('aria-current', on ? 'true' : 'false');
+      });
+    }
+
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        window.dispatchEvent(new CustomEvent('mavenz:flyto', { detail: { id: b.dataset.terr } }));
+        pintar(b.dataset.terr);
+      });
+    });
+    // el click sobre el marcador del mapa tambien manda
+    window.addEventListener('mavenz:territory', function(e){ pintar(e.detail.id); });
+
+    fetch('contenido/mapa.json')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if (!j) return;
+        datos = j;
+        btns.forEach(function(b){ b.disabled = false; });
+        // el HTML ya trae el primero pintado: no hace falta repintarlo al cargar
+      })
+      .catch(function(){ /* sin JSON queda el territorio por defecto del HTML */ });
+  }
+
   /* ------------------------------------------------------------------------
      arranque
      ------------------------------------------------------------------------ */
@@ -379,6 +526,8 @@
     montar('cinta',       cinta);
     montar('cortina',     cortina);
     montar('iman',        iman);
+    montar('malla',       malla);
+    montar('territorios', territorios);
     montar('pausar',      pausar);
   }
 
