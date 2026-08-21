@@ -379,28 +379,17 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
      Sin la pila de fotos: eran cuatro sistemas de imagen en la misma pagina y
      en el hero se veian quietas al lado de un fondo que se mueve. El hero
      queda en tipografia, corriente y la banda de video. */
-  .hero-plasma{
-    position:absolute; inset:-22% -18% -22% 18%; z-index:0;
+  .hero-campo{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+    display:block;
     pointer-events:none;
-    filter:blur(38px) saturate(1.15);
-  }
-  .hero-plasma svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible }
-  html.fx-on .hp1{ animation:hpA 40s ease-in-out infinite alternate }
-  html.fx-on .hp2{ animation:hpB 46s ease-in-out infinite alternate }
-  html.fx-on .hp3{ animation:hpC 34s ease-in-out infinite alternate }
-  html.fx-on .hp4{ animation:hpD 58s ease-in-out infinite alternate }
-  @keyframes hpA{ from{transform:translate3d(4%,5%,0) scale(1.12) rotate(-4deg)}  to{transform:translate3d(-7%,-2%,0) scale(1.34) rotate(3deg)} }
-  @keyframes hpB{ from{transform:translate3d(8%,-4%,0) scale(1.3) rotate(6deg)}   to{transform:translate3d(-5%,6%,0) scale(1.08) rotate(-5deg)} }
-  @keyframes hpC{ from{transform:translate3d(-6%,2%,0) scale(1.05) rotate(-3deg)} to{transform:translate3d(7%,-5%,0) scale(1.22) rotate(4deg)} }
-  @keyframes hpD{ from{transform:translate3d(-3%,7%,0) scale(1.4) rotate(2deg)}   to{transform:translate3d(6%,-3%,0) scale(1.15) rotate(-6deg)} }
-  @media (prefers-reduced-motion: reduce){
-    html.fx-on .hp1, html.fx-on .hp2, html.fx-on .hp3, html.fx-on .hp4{ animation:none }
   }
   /* el texto necesita su propio aire: un velo blanco que se abre desde la izquierda */
   .hero-caja::before{
     content:""; position:absolute; inset:-6% -20% -6% -12%;
-    background:radial-gradient(50% 64% at 20% 50%,
-      rgba(255,255,255,.97) 0%, rgba(255,255,255,.86) 44%, rgba(255,255,255,.3) 72%, rgba(255,255,255,0) 100%);
+    background:radial-gradient(46% 62% at 26% 50%,
+      rgba(255,255,255,.96) 0%, rgba(255,255,255,.88) 46%, rgba(255,255,255,.42) 74%, rgba(255,255,255,0) 100%);
     pointer-events:none;
   }
   .hero-caja{
@@ -727,20 +716,13 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 </header>
 
 
-<section id="inicio" data-screen-label="Hero" class="mv-suelo hero"
+<section id="inicio" data-screen-label="Hero" class="mv-suelo hero" data-fx-campo
+         data-fx-tintas="183,162,139|113,93,85|156,138,119" data-fx-estela="0.10"
          style="position:relative;background:#ffffff;color:#3c2527;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
 
   <!-- El campo de flujo: miles de particulas siguiendo una corriente de ruido.
        No es decoracion: la marca se llama Generamos movimiento. -->
-  <!-- El trazo del isotipo, enorme y desenfocado, moviendose muy lento.
-       Cuatro formas grandes en vez de mil particulas: lo que se lee es un
-       campo blando, y la curva que lo forma es el gesto de la marca. -->
-  <div class="mv-fondo hero-plasma" aria-hidden="true">
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp1"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#e0d5c6" stroke-width="120" stroke-linecap="round" opacity=".55"/></g></svg>
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp2"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#c9b49a" stroke-width="86" stroke-linecap="round" opacity=".5"/></g></svg>
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp3"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#b7a28b" stroke-width="62" stroke-linecap="round" opacity=".62"/></g></svg>
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp4"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#8a7059" stroke-width="34" stroke-linecap="round" opacity=".28"/></g></svg>
-  </div>
+  <canvas class="mv-fondo hero-campo" aria-hidden="true"></canvas>
 
   <!-- El isotipo enorme y recortado, en dos tonos planos. Es la propia
        gramatica de la marca: asi resuelve ella sus portadas de LinkedIn. -->
@@ -1424,38 +1406,6 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   [data-lb]{cursor:zoom-in;transition:transform .3s cubic-bezier(.22,.61,.36,1),filter .3s cubic-bezier(.22,.61,.36,1)}
   @media(hover:hover) and (pointer:fine){ [data-lb]:hover{transform:scale(1.015);filter:brightness(1.06)} }
   @media(prefers-reduced-motion:reduce){ [data-lb]{transition:none} [data-lb]:hover{transform:none} }
-
-  /* ======================================================================
-     Correcciones de la ronda del 21/08
-     ====================================================================== */
-
-  /* 1. Los botones-enlace perdian el color del texto al pasar el puntero:
-        la regla global a:hover{color:#715d55} le gana por especificidad y
-        .cta-p:hover solo cambiaba el fondo. Daba 2,08:1, ilegible. */
-  .cta-p:hover, .btn-mv:hover, .nav-cta:hover{ color:#ffffff !important }
-  .cta-s:hover, .cta-arena:hover{ color:#3c2527 !important }
-  .cta-p:focus-visible, .btn-mv:focus-visible{ color:#ffffff !important }
-
-  @media (max-width:899px){
-    /* 2. Toda la pagina llevaba el padding de escritorio en el celular:
-          150px arriba y 150 abajo en trece secciones. Espacio Mavenz era
-          41% padding; entre Preguntas y Contacto quedaban 270px de nada. */
-    section[id]{ padding-top:76px !important; padding-bottom:68px !important }
-    #inicio{ padding-top:0 !important; padding-bottom:0 !important }
-    #film{ padding-top:0 !important; padding-bottom:0 !important }
-    #preguntas{ padding-top:12px !important; padding-bottom:56px !important }
-    #contacto{ padding-top:64px !important }
-    footer{ padding-top:52px !important }
-
-    /* 3. La onda de agua en el mapa iba en mix-blend-mode:screen sobre una
-          seccion de 1.804px y encima de un Leaflet vivo: 31 fps. Afuera. */
-    #mapa .mv-onda{ display:none !important }
-
-    /* 4. La obra se veia enorme y con aire de mas */
-    #obra{ padding-top:64px !important; padding-bottom:56px !important }
-    #obra .fx-prof{ --fx-alto-m:300px; --fx-alto-tm:222px }
-    #obra .fx-cinta{ margin-top:44px !important }
-  }
 </style>
 <script>
 (function(){
