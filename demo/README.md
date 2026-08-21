@@ -99,3 +99,93 @@ Del dossier de `subir-nivel` faltaban once funciones. Se sumaron las de mayor im
 | Mapa Leaflet | 8 marcadores | 8 marcadores |
 
 Puntaje de vida: **88/100** (`efectos-web`). Con `prefers-reduced-motion`, todo el contenido visible.
+
+---
+
+## 3.0 — los efectos
+
+Todo lo de abajo vive en `mavenz-fx.css` + `mavenz-fx.js`. **HTML/CSS/JS puro, cero
+dependencias, cero build.** Se copian los dos archivos y andan.
+
+### Por qué no se instaló React Bits ni KokonutUI
+
+Las dos son librerías de componentes **React**. Meterlas acá implicaba rehacer la demo
+como app Next.js, y esta es una estática en GitHub Pages. Va contra la regla de la casa
+(*nunca un framework para una web estática*) y contra el propio deploy.
+
+Hay además un tema de licencia concreto: **React Bits es MIT + Commons Clause**. Deja
+usar sus componentes en una web de cliente, pero prohíbe redistribuirlos —y el texto
+aclara *"ni siquiera en versión porteada"*. Este repo es **público**, así que publicar
+acá un port de su código sí sería redistribución.
+
+Lo que se hizo: **escribir cada efecto de cero, en vanilla**, tomando la idea y el ajuste
+fino de curvas y duraciones. Las tres que pidió David están las tres.
+
+| React Bits | Acá | Qué hace |
+|---|---|---|
+| Specular Button | `.fx-esp` | Filo de luz en el borde, con el ángulo mandado por el puntero |
+| Depth Carousel | `.fx-prof` | Fichas que retroceden en Z, no de costado |
+| Flowing Menu | `.fx-flu` | Panel que entra por el canto por donde entró el puntero |
+| Scroll Velocity | `.fx-cinta` | Cinta que corre sola y acelera con el scroll |
+| — | `.fx-cortina` | Revelado por cortina (`clip-path`) |
+| Magnet | `.fx-iman` | El botón se corre hacia el cursor |
+
+### Cómo se usa cada uno
+
+**Filo especular** — `class="fx-esp"` en cualquier cosa con `border-radius`. Sobre fondo
+claro, sumar `fx-esp--claro` para que la luz sea la tinta y no el blanco. Un solo listener
+para toda la página, con las medidas cacheadas y el trabajo dentro de un `rAF`. Radio de
+activación 300px. En táctil no se monta.
+
+**Carrusel en profundidad** — `data-fx-prof` en el contenedor, `.fx-prof__t` en cada ficha.
+Se ajusta con `data-fx-z` (profundidad), `data-fx-spread` (separación), `data-fx-tilt`
+(giro) y `data-fx-vis` (cuántas se ven). Arrastre, rueda **horizontal** (nunca secuestra el
+scroll vertical), flechas, puntos y teclado. La posición se persigue con amortiguado
+crítico: se puede agarrar a mitad de camino.
+
+**Menú fluido** — `.fx-flu__i` por fila, con `.fx-flu__m > .fx-flu__mw > .fx-flu__in`
+adentro. El panel calcula el canto más cercano al punto por donde entró el puntero y entra
+por ahí; al salir, se va por el canto por donde salió. Esa es toda la diferencia entre que
+se lea como una dirección o como un fundido.
+
+**Cinta** — `.fx-cinta` con dos `.fx-cinta__g` idénticos (el segundo con `aria-hidden`).
+`data-fx-vel` en px/s. Pausada mientras no se la ve.
+
+### Reglas que se respetaron
+
+- **Nada de bucles infinitos gratis.** Un módulo (`pausar()`) busca todo lo que tenga
+  iteración infinita y lo duerme al salir del viewport. La cinta del menú fluido arranca
+  pausada y solo corre con el panel abierto.
+- **Solo `transform`, `opacity` y `filter`.** Los puntos del carrusel se estiran con
+  `scaleX`, no con `width`: animar `width` dispara reflow en cada cuadro.
+- **`prefers-reduced-motion` es bloqueante** y nunca deja contenido invisible.
+- **Sin JS la página no se rompe**: el carrusel pasa a ser una fila que se scrollea, la
+  cinta una fila quieta, el menú una lista. Nada desaparece.
+- Nada que siga al cursor sin `@media (hover:hover) and (pointer:fine)`.
+
+Puntaje del auditor de `efectos-web`: **82/100** (los 3 bloqueantes que quedan son
+transiciones sobre layout dentro del CSS de Leaflet, no del nuestro).
+
+---
+
+## El isotipo como material gráfico
+
+`assets/marca/isotipo.svg` es el isotipo trazado a un `<path>` desde el PNG del kit
+(máscara alfa → contorno → Douglas-Peucker → Bézier). En la página entra una sola vez como
+`<symbol id="mv-iso">` y se reusa con `<use>`.
+
+**No es una decoración inventada.** Es exactamente lo que hace la marca en sus propias
+portadas de LinkedIn y Facebook: el isotipo enorme y recortado, en dos tonos planos. De ahí
+salieron también los seis pares de color oficiales.
+
+## Material nuevo
+
+| Archivo | De dónde salió |
+|---|---|
+| `video/cardinal-film.mp4` | `POST 2.mp4`, recorte superior 1920×830 entre 15,5s y 27,8s: el único tramo sin subtítulo ni marca de agua (ambos viven abajo de los 840px) |
+| `video/ondas.mp4` · `agua.mp4` · `onda.mp4` | **De su propio kit**, carpeta `5. Multimedia`. Ondas que se propagan, sobre una marca que se llama Generamos movimiento |
+| `vida/*.jpg` | Cuadros del mismo film: la calle, el interior con gente, la pileta, la esquina, el aéreo y el atardecer |
+| `marca/carpeta.jpg` · `agenda.jpg` | Aplicaciones del kit |
+
+**La tarjeta personal quedó afuera a propósito:** tiene teléfono y mail directos de una
+persona, legibles, y este repo es público.
