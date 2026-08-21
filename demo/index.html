@@ -724,6 +724,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
       <a class="nav-cta" href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Espacio Mavenz</a>
     </div>
   </details>
+  <span class="avance" aria-hidden="true"><i data-fx-avance></i></span>
 </header>
 
 
@@ -735,7 +736,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   <!-- El trazo del isotipo, enorme y desenfocado, moviendose muy lento.
        Cuatro formas grandes en vez de mil particulas: lo que se lee es un
        campo blando, y la curva que lo forma es el gesto de la marca. -->
-  <div class="mv-fondo hero-plasma" aria-hidden="true">
+  <div class="mv-fondo hero-plasma" data-fx-par="38" aria-hidden="true">
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp1"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#e0d5c6" stroke-width="120" stroke-linecap="round" opacity=".55"/></g></svg>
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp2"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#c9b49a" stroke-width="86" stroke-linecap="round" opacity=".5"/></g></svg>
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><g class="hp3"><path d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="#b7a28b" stroke-width="62" stroke-linecap="round" opacity=".62"/></g></svg>
@@ -744,7 +745,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
   <!-- El isotipo enorme y recortado, en dos tonos planos. Es la propia
        gramatica de la marca: asi resuelve ella sus portadas de LinkedIn. -->
-  <span class="mv-fondo mv-marca mv-marca--hero" style="--mv-figura:#ebe6e1">
+  <span class="mv-fondo mv-marca mv-marca--hero" data-fx-par="54" style="--mv-figura:#ebe6e1">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
 
@@ -769,7 +770,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   </div>
 </section>
 <section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" class="mv-suelo" style="position:relative;background:#ffffff;color:#3c2527;padding:150px 5vw 130px;overflow:hidden">
-  <span class="mv-fondo mv-onda" aria-hidden="true">
+  <span class="mv-fondo mv-onda" data-fx-par="30" aria-hidden="true">
     <video preload="none" poster="../assets/video/ondas.jpg" muted loop playsinline
            data-src="../assets/video/ondas.mp4"></video>
   </span>
@@ -868,7 +869,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ====================== EL FILM · material propio ======================= -->
 <section id="film" data-screen-label="El film" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:0;overflow:hidden">
-  <span class="mv-fondo mv-marca" style="--mv-figura:rgba(255,255,255,.05);top:-14%;left:-16%;width:70%;height:128%">
+  <span class="mv-fondo mv-marca" data-fx-par="54" style="--mv-figura:rgba(255,255,255,.05);top:-14%;left:-16%;width:70%;height:128%">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
   <div style="padding:104px 5vw 44px;max-width:900px">
@@ -884,7 +885,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 </section>
 
 <section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:150px 5vw;overflow:hidden">
-  <span class="mv-fondo mv-onda mv-onda--oscura" aria-hidden="true">
+  <span class="mv-fondo mv-onda mv-onda--oscura" data-fx-par="30" aria-hidden="true">
     <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline
            data-src="../assets/video/agua.mp4"></video>
   </span>
@@ -944,10 +945,10 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   <p style="margin:14px 0 0;font-size:12.5px;color:#715d55">Todas las imágenes de CARDINAL son renders del proyecto, no fotografías. Preferimos decirlo.</p>
 
   <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:36px 28px;margin-top:64px;padding-bottom:48px;border-bottom:1px solid rgba(52,34,35,.14)">
-      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527">6.069<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> m²</span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">de terreno</span></div>
-      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527">35<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">unidades</span></div>
-      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527">5<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">bloques residenciales</span></div>
-      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527">8<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">tipologías, de 74 a 160 m²</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527" data-cuenta="6069">6.069<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> m²</span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">de terreno</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527" data-cuenta="35">35<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">unidades</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527" data-cuenta="5">5<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">bloques residenciales</span></div>
+      <div><b style="display:block;font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#3c2527" data-cuenta="8">8<span style="font-size:.46em;font-weight:600;letter-spacing:0;color:#715d55"> </span></b><span style="display:block;margin-top:8px;font-size:14px;color:#715d55">tipologías, de 74 a 160 m²</span></div>
   </div>
 
   <div data-reveal style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:60px;align-items:start;margin-top:56px">
@@ -1022,7 +1023,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ============ LA OBRA · carrusel en profundidad + cinta =============== -->
 <section id="obra" data-screen-label="La obra" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:130px 0 118px;overflow:hidden">
-  <span class="mv-fondo mv-marca" style="--mv-figura:rgba(255,255,255,.045);top:-6%;right:-22%;width:78%;height:112%">
+  <span class="mv-fondo mv-marca" data-fx-par="54" style="--mv-figura:rgba(255,255,255,.045);top:-6%;right:-22%;width:78%;height:112%">
     <svg viewBox="0 0 900 572" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"><use href="#mv-iso"/></svg>
   </span>
 
@@ -1207,7 +1208,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
 
 <!-- ══════════ INVERSIONES ══════════ -->
 <section id="inversiones" data-screen-label="Inversiones" data-fx="reveal" class="mv-suelo" style="position:relative;background:#3c2527;color:#ffffff;padding:140px 5vw;overflow:hidden">
-  <span class="mv-fondo mv-onda mv-onda--oscura" aria-hidden="true">
+  <span class="mv-fondo mv-onda mv-onda--oscura" data-fx-par="30" aria-hidden="true">
     <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline data-src="../assets/video/onda.mp4"></video>
   </span>
   <div style="max-width:1200px;margin:0 auto">
@@ -1456,6 +1457,22 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
     #obra .fx-prof{ --fx-alto-m:300px; --fx-alto-tm:222px }
     #obra .fx-cinta{ margin-top:44px !important }
   }
+
+  /* ---- barra de avance -------------------------------------------------------
+     Una linea de 2px abajo del header. En una pagina de veinte pantallas
+     saber cuanto queda es orientacion, no adorno. */
+  .avance{
+    position:absolute; left:0; right:0; bottom:-1px;
+    height:2px; overflow:hidden;
+    pointer-events:none;
+  }
+  .avance i{
+    display:block; width:100%; height:100%;
+    background:linear-gradient(90deg,#b7a28b,#9c8a77);
+    transform:scaleX(0); transform-origin:0 50%;
+    will-change:transform;
+  }
+  @media (prefers-reduced-motion: reduce){ .avance{ display:none } }
 </style>
 <script>
 (function(){

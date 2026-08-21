@@ -677,6 +677,13 @@
         if (k === elegido) return;
         elegido = k;
         var d = datos[k];
+        // reiniciar la animacion de entrada: si no, solo corre la primera vez
+        [nombre, pie].forEach(function(e){
+          if (!e) return;
+          e.style.animation = 'none';
+          void e.offsetWidth;
+          e.style.animation = '';
+        });
         if (nombre) nombre.textContent = d.nombre;
         if (pie)    pie.textContent    = d.pie;
         fotos.forEach(function(im, j){ im.classList.toggle('mv-on', j === k); });
@@ -703,12 +710,16 @@
           var canto = 0.10 + 0.90 * Math.pow(Math.abs(ca), 1.35);
 
           var f = fichas[i];
+          var señalada = (f === fMarcada);
+          // la señalada sale del escorzo y crece: tiene que despegarse del anillo
+          var escF  = señalada ? esc * 1.55 : esc;
+          var cantoF = señalada ? Math.max(canto, 0.86) : canto;
           f.style.transform =
             'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
-            ' rotate(' + giro.toFixed(2) + 'deg) scale(' + esc.toFixed(3) + ')' +
-            ' scaleY(' + canto.toFixed(3) + ')';
-          f.style.opacity = (0.2 + 0.8 * prof).toFixed(3);
-          f.style.zIndex = String(Math.round(prof * 40));
+            ' rotate(' + (señalada ? giro * 0.35 : giro).toFixed(2) + 'deg) scale(' + escF.toFixed(3) + ')' +
+            ' scaleY(' + cantoF.toFixed(3) + ')';
+          f.style.opacity = señalada ? '1' : (0.2 + 0.8 * prof).toFixed(3);
+          f.style.zIndex = señalada ? '80' : String(Math.round(prof * 40));
 
           // la que manda el centro es la que pasa por el extremo izquierdo,
           // que es donde las fichas se ven mas de frente
@@ -780,6 +791,130 @@
   }
 
 
+
+  /* ------------------------------------------------------------------------
+     14. CONTADOR
+     Los numeros de CARDINAL suben al entrar en vista. Son datos reales del
+     brochure, no estadisticas de relleno: por eso se pueden animar sin que
+     huela a plantilla. El valor final ya esta escrito en el HTML, asi que
+     sin JS o con movimiento reducido se lee igual.
+     ------------------------------------------------------------------------ */
+  function contador(){
+    var els = lista('[data-cuenta]');
+    if (!els.length) return;
+    if (quieto.matches || !('IntersectionObserver' in window)) return;
+
+    function separar(n){
+      return n >= 1000 ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : String(n);
+    }
+
+    function correr(el){
+      var fin = +el.dataset.cuenta;
+      if (!isFinite(fin)) return;
+      // el primer nodo de texto es el numero; el <span> de la unidad no se toca
+      var nodo = null;
+      for (var i = 0; i < el.childNodes.length; i++){
+        if (el.childNodes[i].nodeType === 3 && el.childNodes[i].textContent.trim()){ nodo = el.childNodes[i]; break; }
+      }
+      if (!nodo) return;
+
+      var dur = 1100 + Math.min(fin, 6000) / 12;     // los numeros grandes tardan un poco mas
+      var t0 = null;
+      el.setAttribute('aria-label', separar(fin) + (el.textContent.replace(/[\d.]/g,'').trim() || ''));
+      (function paso(ts){
+        if (t0 === null) t0 = ts;
+        var k = Math.min((ts - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - k, 4);              // frena al final, no arranca de golpe
+        nodo.textContent = separar(Math.round(fin * e));
+        if (k < 1) requestAnimationFrame(paso);
+        else nodo.textContent = separar(fin);
+      })(performance.now());
+    }
+
+    var obs = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (!en.isIntersecting) return;
+        obs.unobserve(en.target);
+        correr(en.target);
+      });
+    }, { threshold: 0.6 });
+    els.forEach(function(el){ obs.observe(el); });
+  }
+
+
+  /* ------------------------------------------------------------------------
+     15. PARALLAX DE FONDOS
+     Los fondos de cada seccion se mueven mas lento que la pagina. Es lo que
+     hace que al bajar se sienta que hay capas y que un bloque lleva al
+     siguiente, en vez de una lista de secciones pegadas.
+
+     Se usa la propiedad translate y no transform: los fondos ya tienen su
+     propio transform (la entrada del hero, la deriva del plasma) y translate
+     se compone con el sin pisarlo.
+     ------------------------------------------------------------------------ */
+  function parallax(){
+    var els = lista('[data-fx-par]');
+    if (!els.length || quieto.matches) return;
+    if (!CSS || !CSS.supports || !CSS.supports('translate', '0 10px')) return;
+
+    var visibles = [];
+    if ('IntersectionObserver' in window){
+      var obs = new IntersectionObserver(function(es){
+        es.forEach(function(en){
+          var i = visibles.indexOf(en.target);
+          if (en.isIntersecting){ if (i === -1) visibles.push(en.target); }
+          else if (i !== -1) visibles.splice(i, 1);
+        });
+      }, { rootMargin: '15% 0px' });
+      els.forEach(function(el){ obs.observe(el); });
+    } else visibles = els;
+
+    var pedido = false;
+    function pintar(){
+      pedido = false;
+      var vh = innerHeight;
+      for (var i = 0; i < visibles.length; i++){
+        var el = visibles[i];
+        var caja = el.parentElement || el;
+        var r = caja.getBoundingClientRect();
+        // -1 cuando la seccion recien entra por abajo, 1 cuando termina de salir
+        var p = limitar(((vh - r.top) / (vh + r.height)) * 2 - 1, -1, 1);
+        el.style.translate = '0 ' + (p * (+el.dataset.fxPar || 40)).toFixed(1) + 'px';
+      }
+    }
+    addEventListener('scroll', function(){
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(pintar);
+    }, { passive: true });
+    addEventListener('resize', pintar, { passive: true });
+    pintar();
+  }
+
+  /* ------------------------------------------------------------------------
+     16. BARRA DE AVANCE
+     Una linea finita arriba de todo que dice cuanto queda. En una pagina de
+     veinte pantallas es orientacion, no adorno.
+     ------------------------------------------------------------------------ */
+  function avance(){
+    var barra = doc.querySelector('[data-fx-avance]');
+    if (!barra) return;
+    var pedido = false;
+    function pintar(){
+      pedido = false;
+      var d = doc.documentElement;
+      var max = d.scrollHeight - innerHeight;
+      barra.style.transform = 'scaleX(' + (max > 0 ? (d.scrollTop / max).toFixed(4) : 0) + ')';
+    }
+    addEventListener('scroll', function(){
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(pintar);
+    }, { passive: true });
+    addEventListener('resize', pintar, { passive: true });
+    pintar();
+  }
+
   /* ------------------------------------------------------------------------
      arranque
      ------------------------------------------------------------------------ */
@@ -795,6 +930,9 @@
     montar('videos',      videos);
     montar('trazos',      trazos);
     montar('orbita',      orbita);
+    montar('contador',    contador);
+    montar('parallax',    parallax);
+    montar('avance',      avance);
     montar('pausar',      pausar);
   }
 
