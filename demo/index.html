@@ -38,17 +38,8 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 @keyframes mvFloat{from{transform:translateY(-7px)}to{transform:translateY(9px)}}
 @keyframes mvPan{from{transform:translateX(0)}to{transform:translateX(-10%)}}
 
-  /* ---- cabecera en mobile ---------------------------------------------------
-     Los cinco enlaces no entran en 375px y se salian del ancho. En pantalla
-     chica queda el logo y el unico enlace que sale del sitio; el resto de las
-     secciones se alcanzan scrolleando, que es como se lee una pagina asi. */
-  @media (max-width:860px){
-    header nav a:not([target="_blank" rel="noopener"]){ display:none }
-    header nav{ gap:0 !important }
-  }
   @media (max-width:400px){
     header{ padding:14px 5vw !important }
-    header nav a[target="_blank" rel="noopener"]{ padding:9px 16px !important; font-size:13.5px }
   }
 </style>
 
@@ -499,6 +490,85 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   .pf:focus-visible, .anc:focus-visible, .terr:focus-visible{
     outline:2px solid #b7a18a; outline-offset:2px;
   }
+
+  /* ---- navegacion ----------------------------------------------------------- */
+  .nav{ display:flex; gap:30px; align-items:center; font-size:15px; font-weight:500 }
+  .nav a{ color:#342223 }
+  .nav a:hover{ color:#9c8976 }
+  .nav-cta{
+    background:#342223; color:#ffffff !important;
+    padding:10px 22px; border-radius:999px; font-weight:700;
+  }
+  .nav-cta:hover{ background:#b7a18a; color:#342223 !important }
+
+  .menu{ display:none; position:relative }
+  .menu summary{
+    list-style:none; cursor:pointer;
+    width:46px; height:46px; margin:-6px -8px -6px 0;
+    display:flex; flex-direction:column; justify-content:center; align-items:flex-end; gap:6px;
+    border-radius:8px;
+  }
+  .menu summary::-webkit-details-marker{ display:none }
+  .menu summary span{
+    display:block; width:24px; height:2px; background:#342223; border-radius:2px;
+    transition:transform .24s cubic-bezier(.16,1,.3,1), width .24s cubic-bezier(.16,1,.3,1);
+  }
+  .menu summary span:last-child{ width:17px }
+  .menu[open] summary span:first-child{ transform:translateY(4px) rotate(45deg) }
+  .menu[open] summary span:last-child{ width:24px; transform:translateY(-4px) rotate(-45deg) }
+  .menu-caja{
+    position:absolute; right:0; top:calc(100% + 14px);
+    min-width:min(74vw,260px);
+    display:flex; flex-direction:column; gap:2px;
+    padding:12px;
+    background:#ffffff;
+    border:1px solid rgba(52,34,35,.12);
+    border-radius:14px;
+    box-shadow:0 18px 44px -18px rgba(42,27,28,.4);
+    animation:menuIn .22s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes menuIn{ from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+  .menu-caja a{
+    padding:13px 14px; border-radius:9px;
+    color:#342223; font-size:16px; font-weight:560;
+  }
+  .menu-caja a:hover{ background:rgba(52,34,35,.05) }
+  .menu-caja .nav-cta{ margin-top:8px; text-align:center; font-weight:700 }
+
+  @media (max-width:900px){
+    .nav{ display:none }
+    .menu{ display:block }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .menu summary span, .menu-caja{ transition:none; animation:none }
+  }
+
+  /* ---- perfiles: pastilla que se desliza y panel con direccion --------------
+     El deslizamiento direccional viene de smooth-tab de KokonutUI (MIT).
+     Se puede portar: su licencia es MIT limpia, sin Commons Clause. */
+  .perfiles{ position:relative }
+  .pf-pastilla{
+    position:absolute; left:0; top:0; z-index:0;
+    border-radius:12px;
+    background:rgba(52,34,35,.055);
+    box-shadow:inset 0 0 0 1px rgba(52,34,35,.1);
+    opacity:0;
+    transition:transform .38s cubic-bezier(.16,1,.3,1),
+               width .38s cubic-bezier(.16,1,.3,1),
+               height .38s cubic-bezier(.16,1,.3,1),
+               opacity .2s ease;
+    pointer-events:none;
+  }
+  .pf{ position:relative; z-index:1 }
+  .pf-panel.pf-entra{ animation:pfDesliza .42s cubic-bezier(.16,1,.3,1) both }
+  @keyframes pfDesliza{
+    from{ opacity:0; transform:translateX(calc(var(--pf-dir,1) * 34px)) }
+    to  { opacity:1; transform:none }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pf-pastilla{ transition:none }
+    .pf-panel.pf-entra{ animation:none }
+  }
 </style>
 </head>
 <body>
@@ -510,12 +580,29 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 
 <header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(255,255,255,.9);color:#342223;border-bottom:1px solid rgba(52,34,35,.10);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px)">
   <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-oscuro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
-  <nav data-fx-nav-hijo style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
-    <a href="#metodo" style="color:#342223">El Método</a>
-    <a href="#mapa" style="color:#342223">Mapa Mavenz</a>
-    <a href="#proyectos" style="color:#342223">Proyectos</a><a href="#inversiones" style="color:#342223">Inversiones</a>
-    <a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener" style="background:#342223;color:#ffffff;padding:10px 22px;border-radius:999px;font-weight:700">Espacio Mavenz</a>
+  <nav data-fx-nav-hijo class="nav" aria-label="Secciones">
+    <a href="#metodo">El Método</a>
+    <a href="#mapa">Mapa Mavenz</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#inversiones">Inversiones</a>
+    <a class="nav-cta" href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Espacio Mavenz</a>
   </nav>
+
+  <!-- En mobile los cinco enlaces no entran. Va un <details>: abre y cierra
+       solo, responde a teclado y no necesita una linea de JS. -->
+  <details class="menu">
+    <summary aria-label="Abrir el menú"><span></span><span></span></summary>
+    <div class="menu-caja">
+      <a href="#metodo">El Método</a>
+      <a href="#mapa">Mapa Mavenz</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#obra">La obra</a>
+      <a href="#mueve">Lo que movemos</a>
+      <a href="#inversiones">Inversiones</a>
+      <a href="#contacto">Contacto</a>
+      <a class="nav-cta" href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Espacio Mavenz</a>
+    </div>
+  </details>
 </header>
 
 
@@ -803,7 +890,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     </div>
     <button class="fx-prof__f fx-prof__f--ant" type="button" aria-label="Anterior">&#8592;</button>
     <button class="fx-prof__f fx-prof__f--sig" type="button" aria-label="Siguiente">&#8594;</button>
-    <div class="fx-prof__p" role="tablist" aria-label="Ir a una imagen">
+    <div class="fx-prof__p" role="group" aria-label="Ir a una imagen">
       <button type="button" aria-label="Imagen 1"></button><button type="button" aria-label="Imagen 2"></button>
       <button type="button" aria-label="Imagen 3"></button><button type="button" aria-label="Imagen 4"></button>
       <button type="button" aria-label="Imagen 5"></button><button type="button" aria-label="Imagen 6"></button>
@@ -959,7 +1046,10 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 </section>
 
 <!-- ══════════ INVERSIONES ══════════ -->
-<section id="inversiones" data-screen-label="Inversiones" data-fx="reveal" style="background:#342223;color:#ffffff;padding:140px 5vw">
+<section id="inversiones" data-screen-label="Inversiones" data-fx="reveal" class="mv-suelo" style="position:relative;background:#342223;color:#ffffff;padding:140px 5vw;overflow:hidden">
+  <span class="mv-onda mv-onda--oscura" aria-hidden="true">
+    <video preload="none" poster="../assets/video/agua.jpg" muted loop playsinline data-src="../assets/video/onda.mp4"></video>
+  </span>
   <div style="max-width:1200px;margin:0 auto">
     <h2 style="margin:0 0 16px;font-size:clamp(36px,4.6vw,68px);font-weight:640;letter-spacing:-0.028em;line-height:1.05;max-width:17ch">Invertir es elegir el momento de la curva.</h2>
     <p style="margin:0 0 56px;font-size:18px;line-height:1.6;color:#c9cfd0;max-width:54ch">Las mejores oportunidades no aparecen de un día para el otro. Empiezan mucho antes, cuando un territorio comienza a transformarse. Estas son las que estamos mirando hoy.</p>
@@ -1199,14 +1289,57 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
 (function(){
   var btns = document.querySelectorAll('.pf');
   if(!btns.length) return;
+  /* El panel entra por el lado del que venis, no se funde en el lugar: si vas
+     de Vivir a Vender entra por la derecha, y al revés por la izquierda.
+     El mecanismo es el de smooth-tab de KokonutUI (MIT), escrito en vanilla. */
+  var indice = 0;
+  var barra = document.querySelector('.perfiles');
+  var pastilla = null;
+  if (barra){
+    pastilla = document.createElement('span');
+    pastilla.className = 'pf-pastilla';
+    pastilla.setAttribute('aria-hidden', 'true');
+    barra.appendChild(pastilla);
+  }
+  function moverPastilla(b){
+    if (!pastilla || !barra) return;
+    var rb = b.getBoundingClientRect(), rr = barra.getBoundingClientRect();
+    pastilla.style.width = rb.width + 'px';
+    pastilla.style.height = rb.height + 'px';
+    pastilla.style.transform = 'translate(' + (rb.left - rr.left) + 'px,' + (rb.top - rr.top) + 'px)';
+    pastilla.style.opacity = '1';
+  }
   function elegir(id){
+    var nuevo_i = 0;
+    btns.forEach(function(b, i){ if (b.dataset.pf === id) nuevo_i = i; });
+    var dir = nuevo_i > indice ? 1 : (nuevo_i < indice ? -1 : 0);
+    indice = nuevo_i;
     btns.forEach(function(b){
       var on = b.dataset.pf === id;
       b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
       var pan = document.getElementById('pf-' + b.dataset.pf);
-      if(pan) pan.hidden = !on;
+      if(!pan) return;
+      pan.hidden = !on;
+      if (on){
+        moverPastilla(b);
+        if (dir !== 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+          pan.style.setProperty('--pf-dir', dir);
+          pan.classList.remove('pf-entra');
+          void pan.offsetWidth;
+          pan.classList.add('pf-entra');
+        }
+      }
     });
   }
+  addEventListener('resize', function(){
+    var act = [].filter.call(btns, function(b){ return b.getAttribute('aria-selected') === 'true'; })[0];
+    if (act) moverPastilla(act);
+  }, { passive: true });
+  requestAnimationFrame(function(){
+    var act = [].filter.call(btns, function(b){ return b.getAttribute('aria-selected') === 'true'; })[0];
+    if (act) moverPastilla(act);
+  });
   btns.forEach(function(b){
     b.addEventListener('click', function(){ elegir(b.dataset.pf); });
     b.addEventListener('keydown', function(e){
