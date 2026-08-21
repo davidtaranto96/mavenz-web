@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Mavenz — Generamos movimiento</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -81,6 +82,22 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   /* ligaduras y cifras */
   body{ font-feature-settings:"kern" 1,"liga" 1 }
   [style*="tabular"],.cifra,time{ font-variant-numeric:tabular-nums lining-nums }
+</style>
+<style id="dt-tap">
+  /* 44x44 es el minimo tactil. Se agranda el area sin mover el diseño. */
+  header nav a, a[href^="#"], .lb-link,
+  [style*="color:#b7a18a"][href], footer a{ position:relative }
+  header nav a::after, footer a::after,
+  a[href^="#"]::after{
+    content:""; position:absolute; left:50%; top:50%;
+    width:max(100%,44px); height:max(100%,44px);
+    transform:translate(-50%,-50%);
+  }
+  @media (pointer:coarse){
+    header nav a::after, footer a::after, a[href^="#"]::after{
+      width:max(100%,48px); height:max(100%,48px);
+    }
+  }
 </style>
 </head>
 <body>
