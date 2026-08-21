@@ -97,6 +97,32 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     header nav a{ padding:15px 10px; margin:-15px -10px }
   }
 </style>
+<style id="dt-mobile">
+  /* Claude Design dejó las grillas de dos columnas sin punto de corte:
+     en 375 el titulo del proyecto y el precio se salen de su caja. */
+  @media (max-width: 899px){
+    [style*="grid-template-columns:minmax(0,1fr) minmax(0,1fr)"],
+    [style*="grid-template-columns:minmax(0,1.25fr)"],
+    [style*="grid-template-columns:minmax(0,1.15fr)"],
+    [style*="grid-template-columns:minmax(0,.75fr)"],
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns:1.05fr .95fr"],
+    [style*="grid-template-columns:repeat(3,1fr)"]{
+      grid-template-columns:minmax(0,1fr) !important;
+      gap:32px !important;
+    }
+    /* nada se sale de su caja */
+    [style*="grid"] > *{ min-width:0 }
+    h1,h2,h3,h4{ overflow-wrap:anywhere; hyphens:none }
+    /* el mapa necesita alto propio cuando queda solo */
+    mapa-mavenz{ height:420px !important }
+  }
+  @media (max-width: 560px){
+    /* el titular del proyecto no puede pasarse del ancho */
+    [style*="font-size:clamp(48px"],[style*="font-size:clamp(52px"],
+    [style*="font-size:clamp(56px"]{ font-size:clamp(34px,10vw,52px) !important }
+  }
+</style>
 </head>
 <body>
 
