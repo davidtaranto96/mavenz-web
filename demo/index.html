@@ -123,41 +123,136 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
     [style*="font-size:clamp(56px"]{ font-size:clamp(34px,10vw,52px) !important }
   }
 </style>
+<style id="dt-cta">
+  .cta-p,.cta-s{display:inline-flex;align-items:center;font:inherit;font-size:15px;font-weight:640;
+    letter-spacing:.01em;text-decoration:none;padding:15px 24px;border:1px solid transparent;
+    transition:background-color .18s cubic-bezier(.22,.61,.36,1),border-color .18s cubic-bezier(.22,.61,.36,1),transform .12s cubic-bezier(.22,.61,.36,1)}
+  .cta-p{background:#342223;color:#fff}
+  .cta-p:hover{background:#3d2729}
+  .cta-s{border-color:rgba(52,34,35,.24);color:#342223}
+  .cta-s:hover{border-color:#342223;background:rgba(52,34,35,.04)}
+  .cta-p:active,.cta-s:active{transform:translateY(1px)}
+  @media(prefers-reduced-motion:reduce){.cta-p,.cta-s{transition:none}}
+</style>
+<style id="dt-nuevas">
+  /* ── selector de perfil ── */
+  .perfiles{display:grid;gap:12px;grid-template-columns:1fr;margin-bottom:44px}
+  @media(min-width:760px){.perfiles{grid-template-columns:repeat(4,1fr)}}
+  .pf{all:unset;cursor:pointer;box-sizing:border-box;padding:20px 22px;
+    border:1px solid rgba(52,34,35,.16);display:flex;flex-direction:column;gap:5px;min-height:44px;
+    transition:border-color .18s cubic-bezier(.22,.61,.36,1),background-color .18s cubic-bezier(.22,.61,.36,1),transform .14s cubic-bezier(.22,.61,.36,1)}
+  .pf b{font-size:19px;font-weight:660;letter-spacing:-.012em}
+  .pf span{font-size:14px;color:#5b484a;line-height:1.4}
+  .pf:hover{border-color:rgba(52,34,35,.42);background:rgba(52,34,35,.03)}
+  .pf:active{transform:translateY(1px)}
+  .pf[aria-selected="true"]{background:#342223;border-color:#342223}
+  .pf[aria-selected="true"] b{color:#fff}
+  .pf[aria-selected="true"] span{color:#c9cfd0}
+  .pf-panel{display:grid;gap:36px;grid-template-columns:1fr;animation:pfIn .34s cubic-bezier(.22,.61,.36,1)}
+  @media(min-width:900px){.pf-panel{grid-template-columns:1.35fr .65fr;gap:56px;align-items:start}}
+  @keyframes pfIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .pf-panel h3{margin:0 0 12px;font-size:clamp(22px,2.4vw,30px);font-weight:640;letter-spacing:-.016em;line-height:1.2}
+  .pf-panel p{margin:0 0 18px;font-size:17px;line-height:1.6;color:#5b484a;max-width:52ch}
+  .pf-panel ul{margin:0 0 26px;padding-left:20px;max-width:52ch}
+  .pf-panel li{margin-bottom:8px;font-size:16px;line-height:1.55;color:#5b484a}
+  .pf-panel li::marker{color:#9c8976}
+  .pf-dato{border-top:2px solid #b7a18a;padding-top:20px}
+  .pf-dato b{display:block;font-size:22px;font-weight:660;letter-spacing:-.014em;margin-bottom:6px}
+  .pf-dato span{display:block;font-size:14px;line-height:1.5;color:#5b484a;margin-bottom:14px}
+  .pf-dato a{font-size:15px;font-weight:640;color:#342223;text-decoration:none;border-bottom:1px solid rgba(52,34,35,.25);padding-bottom:2px}
+  .pf-dato a:hover{border-bottom-color:#342223}
+
+  /* ── inversiones ── */
+  .inv{display:grid;gap:1px;grid-template-columns:1fr;background:rgba(183,161,138,.2);border:1px solid rgba(183,161,138,.2)}
+  @media(min-width:700px){.inv{grid-template-columns:1fr 1fr}}
+  @media(min-width:1080px){.inv{grid-template-columns:repeat(4,1fr)}}
+  .inv-c{background:#342223;padding:30px 26px 34px;display:flex;flex-direction:column;
+    transition:background-color .22s cubic-bezier(.22,.61,.36,1)}
+  .inv-c:hover{background:#3d2729}
+  .inv-t{font-size:13px;font-weight:600;color:#b7a18a;margin-bottom:14px}
+  .inv-c b{font-size:23px;font-weight:660;letter-spacing:-.016em;line-height:1.2;margin-bottom:12px}
+  .inv-c p{margin:0 0 18px;font-size:15px;line-height:1.6;color:#c9cfd0;flex:1}
+  .inv-d{font-size:13px;line-height:1.5;color:#b7a18a;border-top:1px solid rgba(183,161,138,.22);padding-top:14px}
+  .inv-cta{margin-top:52px;display:grid;gap:26px;align-items:center;grid-template-columns:1fr}
+  @media(min-width:860px){.inv-cta{grid-template-columns:1fr auto;gap:48px}}
+  .inv-cta p{margin:0;font-size:17px;line-height:1.62;color:#c9cfd0;max-width:60ch}
+  .cta-arena{display:inline-flex;align-items:center;justify-self:start;background:#b7a18a;color:#342223;
+    font-size:15px;font-weight:660;text-decoration:none;padding:16px 26px;white-space:nowrap;
+    transition:background-color .18s cubic-bezier(.22,.61,.36,1),transform .12s cubic-bezier(.22,.61,.36,1)}
+  .cta-arena:hover{background:#c8b49f}
+  .cta-arena:active{transform:translateY(1px)}
+
+  /* ── desarrollistas ── */
+  .pasos{display:grid;gap:1px;grid-template-columns:1fr;background:rgba(52,34,35,.12);border:1px solid rgba(52,34,35,.12)}
+  @media(min-width:700px){.pasos{grid-template-columns:1fr 1fr}}
+  @media(min-width:1080px){.pasos{grid-template-columns:repeat(4,1fr)}}
+  .paso{background:#fff;padding:28px 24px 32px;transition:background-color .2s cubic-bezier(.22,.61,.36,1)}
+  .paso:hover{background:#faf8f6}
+  .paso b{display:block;font-size:19px;font-weight:660;letter-spacing:-.014em;margin-bottom:10px}
+  .paso p{margin:0;font-size:15px;line-height:1.58;color:#5b484a}
+  .dev-cta{margin-top:48px;display:grid;gap:24px;grid-template-columns:1fr;align-items:center}
+  @media(min-width:860px){.dev-cta{grid-template-columns:1fr auto;gap:48px}}
+  .dev-cta p{margin:0;font-size:17px;line-height:1.6;color:#5b484a;max-width:56ch}
+  .dev-cta .cta-p{justify-self:start;white-space:nowrap}
+
+  /* ── preguntas ── */
+  .faq{border-bottom:1px solid rgba(52,34,35,.13)}
+  .faq summary{list-style:none;cursor:pointer;padding:24px 40px 24px 0;position:relative;
+    font-size:clamp(17px,1.8vw,21px);font-weight:600;letter-spacing:-.012em;line-height:1.35;
+    transition:color .18s cubic-bezier(.22,.61,.36,1)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary:hover{color:#5b484a}
+  .faq summary::after{content:"";position:absolute;right:6px;top:50%;width:11px;height:11px;
+    border-right:1.6px solid #9c8976;border-bottom:1.6px solid #9c8976;
+    transform:translateY(-70%) rotate(45deg);
+    transition:transform .26s cubic-bezier(.22,.61,.36,1)}
+  .faq[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+  .faq > div{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.22,.61,.36,1)}
+  .faq[open] > div{grid-template-rows:1fr}
+  .faq > div > p{overflow:hidden;margin:0;font-size:16px;line-height:1.65;color:#5b484a;max-width:60ch}
+  .faq[open] > div > p{padding-bottom:26px}
+
+  @media(prefers-reduced-motion:reduce){
+    .pf,.inv-c,.paso,.faq summary,.faq summary::after,.faq > div,.cta-arena{transition:none}
+    .pf-panel{animation:none}
+  }
+</style>
 </head>
 <body>
 
 
-<div style="font-family:'Urbanist',sans-serif;background:#342223;color:#ffffff;overflow-x:hidden">
+<div style="font-family:'Urbanist',sans-serif;background:#ffffff;color:#342223;overflow-x:hidden">
 
-<header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(52,34,35,.94);border-bottom:1px solid rgba(183,161,138,.18)">
-  <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-claro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
+<header data-fx="nav" data-fx-desde-y="24" style="position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 5vw;background:rgba(255,255,255,.9);color:#342223;border-bottom:1px solid rgba(52,34,35,.10);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px)">
+  <a href="#inicio" style="display:block"><img src="../assets/marca/logo-horizontal-oscuro.png" fetchpriority="high" decoding="async" alt="Mavenz" style="height:30px;display:block"></a>
   <nav data-fx-nav-hijo style="display:flex;gap:30px;align-items:center;font-size:15px;font-weight:500">
-    <a href="#metodo" style="color:#ffffff" style-hover="color:#b7a18a">El Método</a>
-    <a href="#mapa" style="color:#ffffff" style-hover="color:#b7a18a">Mapa Mavenz</a>
-    <a href="#proyectos" style="color:#ffffff" style-hover="color:#b7a18a">Proyectos</a>
-    <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#b7a18a;color:#342223;padding:10px 22px;border-radius:999px;font-weight:700" style-hover="background:#b7a18a;color:#342223">Espacio Mavenz</a>
+    <a href="#metodo" style="color:#342223" style-hover="color:#b7a18a">El Método</a>
+    <a href="#mapa" style="color:#342223" style-hover="color:#b7a18a">Mapa Mavenz</a>
+    <a href="#proyectos" style="color:#342223" style-hover="color:#b7a18a">Proyectos</a><a href="#inversiones" style="color:#342223">Inversiones</a>
+    <a href="https://espaciomavenz.com.ar" target="_blank" style="background:#342223;color:#ffffff;padding:10px 22px;border-radius:999px;font-weight:700" style-hover="background:#b7a18a;color:#342223">Espacio Mavenz</a>
   </nav>
 </header>
 
 
-<section id="inicio" data-screen-label="Hero cinematográfico" style="position:relative;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
-  <div style="display:flex;flex-direction:column;justify-content:center;padding:56px 5vw 32px;position:relative">
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.32;pointer-events:none"><path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="2.5" style="stroke-dasharray:1;animation:mvDraw 2.8s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
-    <h1 style="margin:0;font-size:clamp(64px,10.5vw,172px);line-height:.94;letter-spacing:-0.035em;font-weight:640;position:relative">Generamos<br><span style="color:#b7a18a">movimiento.</span></h1>
-    <p style="margin:30px 0 0;font-size:clamp(17px,1.4vw,22px);line-height:1.5;color:#a1a7a8;max-width:580px;font-weight:450;position:relative">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
+<section id="inicio" data-screen-label="Hero" style="position:relative;background:#ffffff;color:#342223;min-height:calc(100vh - 63px);display:grid;grid-template-rows:1fr auto auto;overflow:hidden">
+  <div style="display:flex;flex-direction:column;justify-content:center;padding:64px 5vw 40px;position:relative">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.22;pointer-events:none">
+      <path pathLength="1" fill="none" stroke="#b7a18a" stroke-width="2" style="stroke-dasharray:1;animation:mvDraw 2.8s ease-out forwards" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path>
+    </svg>
+    <h1 style="margin:0;font-size:clamp(56px,9.5vw,150px);line-height:.95;letter-spacing:-0.038em;font-weight:600;position:relative;text-wrap:balance">Generamos<br><span style="color:#9c8976">movimiento.</span></h1>
+    <p style="margin:34px 0 0;font-size:clamp(17px,1.4vw,22px);line-height:1.55;color:#5b484a;max-width:540px;font-weight:400;position:relative">El partner estratégico que mueve el Real Estate de Salta. Detectamos oportunidades, diseñamos estrategias y potenciamos la comercialización.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:38px;position:relative">
+      <a href="#mapa" class="cta-p">Ver el Mapa Mavenz</a>
+      <a href="#proyectos" class="cta-s">Conocer los proyectos</a>
+      <a href="#inversiones" class="cta-s">Invertir con Mavenz</a>
+    </div>
   </div>
-  
-    <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#3d2729"></video>
-  
-  
-  <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 20px;font-size:13px;color:#a1a7a8;letter-spacing:.04em"><span>Salta, Argentina</span><a href="#no-somos" style="color:#b7a18a">Seguir bajando ↓</a></div>
+  <video preload="metadata" src="https://davidtaranto96.github.io/mavenz-web/assets/video/banda-aerea-1.mp4" poster="../assets/aereas/aerea-dia.jpg" autoplay muted loop playsinline style="display:block;width:100%;aspect-ratio:1600/360;object-fit:cover;background:#e8e2da"></video>
+  <div style="display:flex;justify-content:space-between;gap:16px;padding:16px 5vw 22px;font-size:13px;color:#5b484a;letter-spacing:.03em">
+    <span>San Lorenzo Chico, Salta &middot; imagen aérea propia</span>
+    <a href="#no-somos" style="color:#5b484a;font-weight:640">Seguir bajando ↓</a>
+  </div>
 </section>
-
-
-
-
-
-
 <section id="no-somos" data-screen-label="Manifiesto" data-fx="reveal" style="background:#ffffff;color:#342223;padding:150px 5vw 130px;max-width:1200px">
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos una inmobiliaria tradicional.</p>
   <p data-reveal style="margin:0 0 20px;font-size:clamp(30px,4.2vw,62px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;color:#5b484a">No somos solamente una comercializadora.</p>
@@ -211,7 +306,7 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   </div>
 </section>
 
-<section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" style="padding:150px 5vw">
+<section id="mapa" data-screen-label="Mapa Mavenz" data-fx="reveal" data-fx-desde="escala" style="background:#342223;color:#ffffff;padding:150px 5vw">
   <div data-reveal style="max-width:900px;margin-bottom:56px">
     <h2 style="margin:0 0 18px;font-size:clamp(40px,5vw,76px);font-weight:660;letter-spacing:-0.025em">El Mapa Mavenz</h2>
     <p style="margin:0;font-size:17px;line-height:1.55;color:#a1a7a8">Seis territorios leídos con las mismas cuatro preguntas: qué está cambiando, quién lo elige, qué oportunidades aparecen y qué ve Mavenz.</p>
@@ -313,6 +408,124 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   </div>
 </section>
 
+
+
+<!-- ══════════ QUÉ QUERÉS HACER ══════════ -->
+<section id="perfil" data-screen-label="Qué querés hacer" data-fx="reveal" style="background:#ffffff;color:#342223;padding:130px 5vw">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 16px;font-size:clamp(36px,4.6vw,68px);font-weight:640;letter-spacing:-0.028em;line-height:1.05;max-width:16ch">Empezá por lo que querés hacer.</h2>
+    <p style="margin:0 0 48px;font-size:18px;line-height:1.6;color:#5b484a;max-width:52ch">Cada camino tiene su propia lectura del territorio y su propio equipo. Elegí el tuyo y te mostramos qué hay.</p>
+
+    <div class="perfiles" role="tablist" aria-label="Qué querés hacer">
+      <button class="pf" role="tab" data-pf="vivir" aria-selected="true"><b>Vivir</b><span>Encontrar dónde, con criterio</span></button>
+      <button class="pf" role="tab" data-pf="invertir" aria-selected="false"><b>Invertir</b><span>Poner capital donde rinde</span></button>
+      <button class="pf" role="tab" data-pf="desarrollar" aria-selected="false"><b>Desarrollar</b><span>Llevar un proyecto al mercado</span></button>
+      <button class="pf" role="tab" data-pf="vender" aria-selected="false"><b>Vender</b><span>Comercializar lo que ya tenés</span></button>
+    </div>
+
+    <div class="pf-panel" id="pf-vivir" role="tabpanel">
+      <div><h3>Dónde vivir en Salta, según cómo querés vivir</h3>
+        <p>No empezamos por la propiedad. Empezamos por el territorio: qué está cambiando en cada zona, quién la elige y por qué. Después aparece la casa.</p>
+        <ul><li>San Lorenzo Chico, para vivir y trabajar en el mismo entorno</li><li>Zona Norte, para quienes buscan naturaleza sin perder la ciudad</li><li>Vaqueros, verde y ciudad en quince minutos</li><li>Microcentro, patrimonio reconvertido y vida urbana</li></ul>
+        <a class="cta-p" href="#contacto">Contarnos qué buscás</a></div>
+      <div class="pf-dato"><b>CARDINAL</b><span>San Lorenzo Chico &middot; 35 hogares &middot; en comercialización</span><a href="#proyectos">Ver el proyecto →</a></div>
+    </div>
+
+    <div class="pf-panel" id="pf-invertir" hidden role="tabpanel">
+      <div><h3>Invertir donde el territorio todavía se está moviendo</h3>
+        <p>La diferencia entre una buena y una mala inversión rara vez es la propiedad. Es el momento de la curva en que entrás.</p>
+        <ul><li>Renta temporaria en Cafayate, con patrimonio y disfrute en la misma decisión</li><li>Storages y cocheras en San Lorenzo Chico, ticket bajo y demanda sostenida</li><li>Vaqueros antes del pico, con valores de compra reales</li><li>Reconversión de casonas patrimoniales en el centro</li></ul>
+        <a class="cta-p" href="#inversiones">Ver las oportunidades</a></div>
+      <div class="pf-dato"><b>Desde USD 35.000</b><span>Storage de 14,09 m² en WA, San Lorenzo Chico &middot; ref. MAV-226174</span><a href="#inversiones">Ver disponibilidad →</a></div>
+    </div>
+
+    <div class="pf-panel" id="pf-desarrollar" hidden role="tabpanel">
+      <div><h3>De la tierra al proyecto, y del proyecto al mercado</h3>
+        <p>Trabajamos con desarrolladores desde antes de que exista el proyecto: lectura de territorio, definición de producto, estrategia comercial y comercialización.</p>
+        <ul><li>Análisis de oportunidad y de producto</li><li>Estrategia comercial y de posicionamiento</li><li>Comercialización con equipo propio</li><li>Reporte de avance para el desarrollista</li></ul>
+        <a class="cta-p" href="#desarrollistas">Cómo acompañamos un proyecto</a></div>
+      <div class="pf-dato"><b>El Método Mavenz</b><span>Descubrir &middot; Diseñar &middot; Conectar &middot; Activar &middot; Generar movimiento</span><a href="#metodo">Ver el método →</a></div>
+    </div>
+
+    <div class="pf-panel" id="pf-vender" hidden role="tabpanel">
+      <div><h3>Comercializar con criterio, no con volumen</h3>
+        <p>Preferimos tres opciones explicadas a treinta sin criterio. Si una propiedad no encaja con quien pregunta, lo decimos y explicamos por qué.</p>
+        <ul><li>Tasación con lectura de zona, no solo de metros</li><li>Publicación en Espacio Mavenz y en los portales</li><li>Seguimiento registrado de cada consulta y cada visita</li><li>Un solo interlocutor durante toda la operación</li></ul>
+        <a class="cta-p" href="#contacto">Consultar por tu propiedad</a></div>
+      <div class="pf-dato"><b>Espacio Mavenz</b><span>El canal donde vive el listado completo</span><a href="https://espaciomavenz.com.ar" target="_blank" rel="noopener">Abrir ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ INVERSIONES ══════════ -->
+<section id="inversiones" data-screen-label="Inversiones" data-fx="reveal" style="background:#342223;color:#ffffff;padding:140px 5vw">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 16px;font-size:clamp(36px,4.6vw,68px);font-weight:640;letter-spacing:-0.028em;line-height:1.05;max-width:17ch">Invertir es elegir el momento de la curva.</h2>
+    <p style="margin:0 0 56px;font-size:18px;line-height:1.6;color:#c9cfd0;max-width:54ch">Las mejores oportunidades no aparecen de un día para el otro. Empiezan mucho antes, cuando un territorio comienza a transformarse. Estas son las que estamos mirando hoy.</p>
+
+    <div class="inv">
+      <article class="inv-c">
+        <span class="inv-t">Renta temporaria</span>
+        <b>Cafayate y Cachi</b>
+        <p>Patrimonio, disfrute y renta dentro de una misma estrategia. El crecimiento sostenido del turismo sostiene la ocupación.</p>
+        <span class="inv-d">Casas de fin de semana &middot; Cabañas &middot; Hoteles boutique</span>
+      </article>
+      <article class="inv-c">
+        <span class="inv-t">Ticket de entrada</span>
+        <b>Storages y cocheras</b>
+        <p>Unidades de guardado y cocheras cubiertas en San Lorenzo Chico. Escala chica, mantenimiento bajo y demanda sostenida.</p>
+        <span class="inv-d">Desde USD 35.000 &middot; 4,86 a 24,84 m²</span>
+      </article>
+      <article class="inv-c">
+        <span class="inv-t">Antes del pico</span>
+        <b>Vaqueros</b>
+        <p>Una curva de crecimiento que todavía no llegó a su máximo, con valores de compra reales y un código de planeamiento nuevo.</p>
+        <span class="inv-d">Condominios de media densidad &middot; Lofts &middot; Eco-housing</span>
+      </article>
+      <article class="inv-c">
+        <span class="inv-t">Reconversión</span>
+        <b>Micro y Macrocentro</b>
+        <p>Casonas patrimoniales fuera del mercado residencial tradicional, que hoy buscan una forma nueva de existir.</p>
+        <span class="inv-d">Oficinas &middot; Hotelería boutique &middot; Gastronomía &middot; Uso mixto</span>
+      </article>
+    </div>
+
+    <div class="inv-cta">
+      <p>Antes de mandarte una opción preferimos entender para qué, para cuándo y con qué margen se decide. Una propuesta que llega antes de esa conversación es una propuesta que hay que rehacer.</p>
+      <a class="cta-arena" href="#contacto">Conversar una inversión</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PARA DESARROLLISTAS ══════════ -->
+<section id="desarrollistas" data-screen-label="Desarrollistas" data-fx="reveal" data-fx-desde="izq" style="background:#ffffff;color:#342223;padding:140px 5vw">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 16px;font-size:clamp(36px,4.6vw,68px);font-weight:640;letter-spacing:-0.028em;line-height:1.05;max-width:18ch">Si estás desarrollando, entramos antes.</h2>
+    <p style="margin:0 0 56px;font-size:18px;line-height:1.6;color:#5b484a;max-width:54ch">No aparecemos cuando el proyecto está terminado y hay que venderlo. Trabajamos desde la lectura del terreno y la definición del producto.</p>
+    <div class="pasos">
+      <div class="paso"><b>Leemos el terreno</b><p>Qué permite el código, quién vive alrededor, hacia dónde se mueve la zona y qué falta.</p></div>
+      <div class="paso"><b>Definimos el producto</b><p>Qué tipologías, qué superficies y qué precio resisten ese mercado, con datos y no con intuición.</p></div>
+      <div class="paso"><b>Armamos la estrategia</b><p>Posicionamiento, canales, materiales de venta y el circuito por el que entra cada consulta.</p></div>
+      <div class="paso"><b>Comercializamos</b><p>Con equipo propio, con cada conversación registrada y con reporte de avance para vos.</p></div>
+    </div>
+    <div class="dev-cta">
+      <p><b>Hoy comercializamos CARDINAL</b>, en San Lorenzo Chico, y acompañamos el desarrollo de CAFAY en los Valles Calchaquíes.</p>
+      <a class="cta-p" href="#contacto">Conversar un desarrollo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PREGUNTAS ══════════ -->
+<section id="preguntas" data-screen-label="Preguntas" data-fx="reveal" style="background:#ffffff;color:#342223;padding:20px 5vw 140px">
+  <div style="max-width:820px;margin:0 auto">
+    <h2 style="margin:0 0 40px;font-size:clamp(30px,3.4vw,48px);font-weight:640;letter-spacing:-0.024em;line-height:1.1">Lo que más nos preguntan</h2>
+    <details class="faq" name="faq"><summary>¿Trabajan solo en la ciudad de Salta?</summary><div><p>No. El Mapa Mavenz cubre seis territorios: Micro y Macrocentro, Zona Norte, San Lorenzo, la zona del Aeropuerto y San Luis, Cafayate y Cachi, y Vaqueros. Cada uno tiene su propia lectura y su propio tipo de oportunidad.</p></div></details>
+    <details class="faq" name="faq"><summary>¿Cuál es el ticket más bajo para empezar a invertir?</summary><div><p>Hoy, los storages en San Lorenzo Chico, desde USD 35.000 por una unidad de 14,09 m². Es la puerta de entrada más accesible que tenemos con demanda sostenida.</p></div></details>
+    <details class="faq" name="faq"><summary>¿Qué diferencia hay entre Mavenz y Espacio Mavenz?</summary><div><p>Mavenz es la marca que lee el territorio, arma la estrategia y acompaña a desarrolladores e inversores. Espacio Mavenz es el canal de comercialización, donde vive el listado de propiedades disponibles.</p></div></details>
+    <details class="faq" name="faq"><summary>Tengo una propiedad para vender. ¿Cómo arranca?</summary><div><p>Con una conversación, no con una tasación automática. Necesitamos entender para cuándo, con qué margen se decide y qué alternativas estás mirando. Recién ahí una propuesta tiene sentido.</p></div></details>
+    <details class="faq" name="faq"><summary>¿Puedo invertir desde afuera de Salta?</summary><div><p>Sí. Buena parte de quienes invierten en Cafayate y en San Lorenzo no viven en la zona. Coordinamos visitas, mandamos material y seguimos la operación por WhatsApp.</p></div></details>
+  </div>
+</section>
 
 <section id="contacto" data-screen-label="Contacto" data-fx="reveal" style="background:#ffffff;color:#342223;padding:130px 5vw">
   <div style="max-width:1200px;margin:0 auto;display:grid;gap:56px;grid-template-columns:minmax(0,1fr)">
@@ -528,6 +741,33 @@ class Component extends DCLogic {
   });
   document.getElementById('lb-x').addEventListener('click',function(){d.close()});
   d.addEventListener('click',function(e){ if(e.target===d) d.close(); });
+})();
+</script>
+<script>
+(function(){
+  var btns = document.querySelectorAll('.pf');
+  if(!btns.length) return;
+  function elegir(id){
+    btns.forEach(function(b){
+      var on = b.dataset.pf === id;
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      var pan = document.getElementById('pf-' + b.dataset.pf);
+      if(pan) pan.hidden = !on;
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ elegir(b.dataset.pf); });
+    b.addEventListener('keydown', function(e){
+      var i = [].indexOf.call(btns, b);
+      if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+        e.preventDefault();
+        var n = btns[(i + (e.key === 'ArrowRight' ? 1 : btns.length - 1)) % btns.length];
+        n.focus(); elegir(n.dataset.pf);
+      }
+    });
+  });
+  // si llegan con #inversiones desde el hero, se abre el perfil correspondiente
+  if(location.hash === '#inversiones') elegir('invertir');
 })();
 </script>
 </body>
