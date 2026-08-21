@@ -442,7 +442,7 @@ html:not(.fx-on) .fx-flu__m{ display:none }
 }
 .fx-malla figure{
   flex:0 0 auto;
-  width:var(--fx-pieza, clamp(190px, 21vw, 320px));
+  width:var(--fx-pieza, clamp(250px, 28vw, 440px));
   margin:0;
   border-radius:12px;
   overflow:hidden;
@@ -488,7 +488,7 @@ html:not(.fx-on) .fx-flu__m{ display:none }
   .fx-malla{ height:var(--fx-malla-alto-m, clamp(340px, 76vw, 460px)) }
   .fx-malla__g{ inset:-42% -52%; gap:10px }
   .fx-malla__r{ gap:10px }
-  .fx-malla figure{ width:var(--fx-pieza-m, 150px) }
+  .fx-malla figure{ width:var(--fx-pieza-m, 190px) }
 }
 @media (prefers-reduced-motion: reduce){
   .fx-malla__r{ transform:none !important }

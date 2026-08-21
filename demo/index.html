@@ -404,7 +404,7 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
     letter-spacing:.02em;
     color:#715d55;
   }
-  .hero-pila img{ display:block; width:100%; height:auto; aspect-ratio:1920/830; object-fit:cover }
+  .hero-pila img{ display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover }
   @media (hover:hover) and (pointer:fine){
     .hero-pila:hover figure{ transform:rotate(calc(var(--g,0deg) * .35)) }
     .hero-pila figure:hover{
@@ -585,6 +585,22 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
     .pf-pastilla{ transition:none }
     .pf-panel.pf-entra{ animation:none }
   }
+
+  /* La pieza de marca es cuadrada y va entera: contain, no cover. Antes entraba
+     una banda de 1920x432 en una caja vertical y se perdia el 70% de los lados. */
+  .contacto-media{ background:#eeecec }
+  .contacto-media video{ object-fit:contain !important; background:#eeecec }
+  /* La pieza es sobre fondo claro: el pie invierte entero, no a medias. Dejar
+     el degradado oscuro debajo de un background-color claro da un barro donde
+     el texto secundario desaparece. */
+  .contacto-media .cm-pie{
+    background-color:rgba(238,236,236,.94) !important;
+    background-image:linear-gradient(to top,rgba(238,236,236,.98),rgba(238,236,236,.72)) !important;
+    color:#3c2527 !important;
+    border-top:1px solid rgba(60,37,39,.1);
+  }
+  .contacto-media .cm-pie b{ color:#3c2527 !important }
+  .contacto-media .cm-pie span{ color:#715d55 !important }
 </style>
 </head>
 <body>
@@ -729,12 +745,12 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
   </span>
   <div style="padding:104px 5vw 44px;max-width:900px">
     <p style="margin:0 0 20px;font-size:12px;font-weight:700;letter-spacing:.19em;color:#b7a28b">SAN LORENZO CHICO</p>
-    <h2 style="margin:0;font-size:clamp(34px,4.4vw,66px);font-weight:640;letter-spacing:-0.028em;line-height:1.04;text-wrap:balance">Todo eso ya estaba ahí.<br><span style="color:#b7a28b">Nosotros leímos el movimiento.</span></h2>
+    <h2 style="margin:0;font-size:clamp(34px,4.4vw,66px);font-weight:640;letter-spacing:-0.028em;line-height:1.04;text-wrap:balance">Leer un territorio<br><span style="color:#b7a28b">es verlo antes.</span></h2>
   </div>
   <video class="film-v" preload="none" poster="../assets/video/cardinal-film.jpg" muted loop playsinline
          data-src="../assets/video/cardinal-film.mp4"></video>
   <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 5vw 96px;font-size:13px;color:#d3cfc8;letter-spacing:.025em">
-    <span>Tomas aéreas propias y renders de CARDINAL &middot; sin sonido</span>
+    <span>Pieza de CARDINAL &middot; tomas aéreas y renders, sin sonido</span>
     <a href="#proyectos" style="color:#b7a28b;font-weight:640">Ver los proyectos ↓</a>
   </div>
 </section>
@@ -1157,8 +1173,8 @@ a{color:#b7a28b;text-decoration:none}a:hover{color:#715d55}
     </form>
     </div>
     <div class="contacto-media">
-      <video preload="none" data-src="../assets/video/banda-aerea-2.mp4" poster="../assets/aereas/aerea-amplia.jpg" muted loop playsinline></video>
-      <div class="cm-pie"><b>San Lorenzo Chico</b><span>Imagen aérea propia &middot; el territorio que leemos todos los días</span></div>
+      <video preload="none" data-src="../assets/video/cardinal-trazo.mp4" poster="../assets/video/cardinal-trazo.jpg" muted loop playsinline></video>
+      <div class="cm-pie"><b>Y esto recién se pone en movimiento</b><span>Pieza de marca de CARDINAL</span></div>
     </div>
   </div>
 </section>

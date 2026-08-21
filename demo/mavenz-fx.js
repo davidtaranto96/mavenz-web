@@ -352,18 +352,29 @@
     if (!('IntersectionObserver' in window)) return;
     var obs = new IntersectionObserver(function(es){
       es.forEach(function(en){
-        en.target.style.animationPlayState = en.isIntersecting ? '' : 'paused';
+        var hijos = mapa.get(en.target) || [en.target];
+        hijos.forEach(function(el){
+          el.style.animationPlayState = en.isIntersecting ? '' : 'paused';
+        });
       });
-    }, { rootMargin: '160px' });
+    }, { rootMargin: '200px' });
 
+    /* Se observa un ancestro con caja estable, no el elemento animado.
+       El punto del Metodo viaja por un offset-path: su propio rectangulo se
+       mueve en cada cuadro, el observador se pierde el reingreso y el punto
+       queda pausado para siempre. */
+    var mapa = new Map();
     var barrer = function(){
       lista('*').forEach(function(el){
         var cs = getComputedStyle(el);
         if (cs.animationName === 'none') return;
         if (cs.animationIterationCount.indexOf('infinite') === -1) return;
         if (el.closest('.fx-flu__i')) return;   // ese ya arranca pausado
-        obs.observe(el);
+        var ancla = el.closest('section, footer, header') || el;
+        if (!mapa.has(ancla)) mapa.set(ancla, []);
+        mapa.get(ancla).push(el);
       });
+      mapa.forEach(function(_, ancla){ obs.observe(ancla); });
     };
     if (window.requestIdleCallback) requestIdleCallback(barrer, { timeout: 1200 });
     else setTimeout(barrer, 400);
@@ -572,6 +583,40 @@
     }, { passive: true });
   }
 
+
+  /* ------------------------------------------------------------------------
+     11. EL TRAZO SE DIBUJA CUANDO LO MIRAS
+     mvDraw arrancaba al cargar. A cuatro pantallas de scroll el dibujo ya
+     estaba terminado: el gesto mas propio de la marca no se veia nunca.
+     ------------------------------------------------------------------------ */
+  function trazos(){
+    var paths = lista('path[style*="mvDraw"]');
+    if (!paths.length) return;
+    if (quieto.matches || !('IntersectionObserver' in window)) return;
+
+    paths.forEach(function(p){ p.style.animationPlayState = 'paused'; });
+
+    var obs = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (!en.isIntersecting) return;
+        lista('path[style*="mvDraw"]', en.target).forEach(function(p){
+          p.style.animationPlayState = 'running';
+        });
+        obs.unobserve(en.target);
+      });
+    }, { threshold: 0.2 });
+
+    paths.forEach(function(p){
+      var s = p.closest('section, footer');
+      if (s) obs.observe(s);
+      else p.style.animationPlayState = 'running';
+    });
+    // red de seguridad: si el observador nunca dispara, el trazo se dibuja igual
+    setTimeout(function(){
+      paths.forEach(function(p){ p.style.animationPlayState = 'running'; });
+    }, 9000);
+  }
+
   /* ------------------------------------------------------------------------
      arranque
      ------------------------------------------------------------------------ */
@@ -585,6 +630,7 @@
     montar('malla',       malla);
     montar('territorios', territorios);
     montar('videos',      videos);
+    montar('trazos',      trazos);
     montar('pausar',      pausar);
   }
 
