@@ -84,19 +84,17 @@ a{color:#b7a18a;text-decoration:none}a:hover{color:#5b484a}
   [style*="tabular"],.cifra,time{ font-variant-numeric:tabular-nums lining-nums }
 </style>
 <style id="dt-tap">
-  /* 44x44 es el minimo tactil. Se agranda el area sin mover el diseño. */
-  header nav a, a[href^="#"], .lb-link,
-  [style*="color:#b7a18a"][href], footer a{ position:relative }
-  header nav a::after, footer a::after,
-  a[href^="#"]::after{
-    content:""; position:absolute; left:50%; top:50%;
-    width:max(100%,44px); height:max(100%,44px);
-    transform:translate(-50%,-50%);
-  }
+  /* 44x44 minimo tactil: se agranda la caja real con padding y se compensa
+     con margen negativo, asi el diseño no se mueve un pixel. */
+  header nav a{ padding:13px 8px; margin:-13px -8px; display:inline-flex; align-items:center }
+  footer a{ padding:12px 6px; margin:-8px -6px; display:inline-block }
+  a[href="#no-somos"]{ padding:15px 8px; margin:-15px -8px; display:inline-block }
+  header nav a[style*="border-radius"],header nav a[style*="background"]{ padding:14px 20px; margin:0 }
+  /* el CTA del header y los controles de Leaflet, tambien a 44 */
+  header nav a:last-child{ padding-block:14px !important }
+  .leaflet-bar a{ width:44px !important; height:44px !important; line-height:44px !important }
   @media (pointer:coarse){
-    header nav a::after, footer a::after, a[href^="#"]::after{
-      width:max(100%,48px); height:max(100%,48px);
-    }
+    header nav a{ padding:15px 10px; margin:-15px -10px }
   }
 </style>
 </head>
