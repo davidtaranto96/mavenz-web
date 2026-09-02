@@ -4,3 +4,4 @@ graphify-out/
 
 # copias de seguridad de parches
 *.bak
+.criterio/

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mavenz — Genera movimiento</title>
+<meta name="description" content="Mavenz es el partner estratégico que mueve el real estate. Estrategia, marca, marketing, comercialización, inversión y alianzas, conectadas en un solo universo. Salta, Argentina.">
+<meta name="theme-color" content="#3c2527">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Mavenz — Genera movimiento">
+<meta property="og:description" content="Somos el partner estratégico que mueve el real estate.">
+<meta property="og:image" content="https://davidtaranto96.github.io/mavenz-web/assets/video/ondas.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Mavenz",
+  "description": "Partner estratégico que mueve el real estate. Estrategia, marca, marketing, comercialización, inversión y alianzas.",
+  "areaServed": { "@type": "State", "name": "Salta, Argentina" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Salta", "addressCountry": "AR" },
+  "url": "https://davidtaranto96.github.io/mavenz-web/v2/",
+  "slogan": "Mavenz genera movimiento"
+}
+</script>
+<!-- Faltan para completar la ficha: teléfono, dirección exacta, logo en URL
+     pública y los perfiles de redes. Nada de eso se inventa. -->
+<link rel="icon" href="../demo/favicon.png">
+<link rel="preload" href="../assets/marca/Urbanist-Variable.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="estilos.css">
+<noscript><style>[data-revelar]{opacity:1!important;translate:none!important;scale:none!important;clip-path:none!important}</style></noscript>
+<script>
+/* El estado oculto del reveal se marca antes del primer pintado, para que no
+   haya parpadeo. El seguro de abajo lo saca si el guion nunca llegó a
+   arrancar: mejor sin animación que con la pagina en blanco. */
+(function(d){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  d.classList.add('fx-on');
+  setTimeout(function(){ if (!d.dataset.fxVivo) d.classList.remove('fx-on') }, 3000);
+})(document.documentElement);
+</script>
+</head>
+<body>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header>
+  <a class="marca" href="#inicio" aria-label="Mavenz, inicio">
+    <img src="../assets/marca/logo-horizontal-claro.png" alt="Mavenz" width="132" height="28">
+  </a>
+
+  <button class="abrir-menu" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+
+  <nav id="menu" aria-label="Principal">
+    <!--cms:menu-->
+    <ul>
+      <li><a href="#inicio">Mavenz</a></li>
+      <li><a href="#universo">Universo Mavenz</a></li>
+      <li><a href="#mapa">Mapa Mavenz</a></li>
+      <li><a href="#metodo">Cómo trabajamos</a></li>
+      <li><a href="#espacio">Espacio Mavenz</a></li>
+      <li><a href="#proyectos">Proyectos y oportunidades</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <!--/cms:menu-->
+  </nav>
+</header>
+
+<main id="contenido">
+
+<!-- 01 ─────────────────────────────────────────────────── Apertura / Hero -->
+<section class="hero" id="inicio">
+  <div class="hero__fondo" aria-hidden="true">
+    <img src="../assets/video/ondas.jpg" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
+    <video data-video-dif data-src="../assets/video/ondas.mp4" muted loop playsinline preload="none" width="1600" height="900"></video>
+  </div>
+
+  <div class="trazo" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <path pathLength="1" fill="none"
+            d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302
+               C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158
+               C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"/>
+    </svg>
+  </div>
+
+  <div class="envase hero__cuerpo">
+    <!--cms:hero-->
+    <h1>Mavenz genera <strong>movimiento</strong>.</h1>
+    <p class="hero__bajada">Somos el partner estratégico que mueve el real estate.</p>
+    <p class="hero__apoyo">Conectamos visión, estrategia, comunicación, negocios y personas para
+      transformar oportunidades en proyectos que avanzan.</p>
+    <div class="hero__acciones">
+      <a class="boton" href="#universo">Conocé el Universo Mavenz</a>
+      <a class="boton boton--linea" href="#contacto">Hablemos</a>
+    </div>
+    <!--/cms:hero-->
+  </div>
+</section>
+
+<!-- 02 ──────────────────────────────────────────────────────── Quiénes somos -->
+<section id="quienes" data-entra="izq">
+  <div class="envase siete-cinco">
+    <div>
+      <!--cms:quienes-->
+      <h2 class="titulo" data-revelar>Somos <strong>Mavenz</strong>.</h2>
+      <p class="entrada" data-revelar>Nacimos en Salta con una forma distinta de mirar el real
+        estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia
+        necesaria para que cada proyecto avance. No operamos desde un catálogo: trabajamos desde
+        el criterio, la red y la capacidad de generar movimiento.</p>
+      <blockquote class="cita" data-revelar>No se trata solamente de vender. Se trata de entender
+        qué mover, cómo hacerlo y con quién.</blockquote>
+      <!--/cms:quienes-->
+    </div>
+    <figure data-revelar>
+      <div class="marco ar-21-9">
+        <img src="../assets/optim/aerea-amplia-1400.jpg"
+             srcset="../assets/optim/aerea-amplia-800.jpg 800w, ../assets/optim/aerea-amplia-1400.jpg 1400w"
+             sizes="(min-width:48rem) 40vw, 90vw"
+             alt="Vista aérea del valle de Salta con las sierras de fondo"
+             loading="lazy" decoding="async" width="1400" height="600">
+      </div>
+      <figcaption class="epigrafe">Valle de Lerma, Salta · toma de dron propia</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 03 ────────────────────────────────────────────────────── Universo Mavenz -->
+<section id="universo" class="universo" data-entra="escala">
+  <div class="envase">
+    <div class="cabecera">
+      <!--cms:universo-->
+      <h2 class="titulo" data-revelar>El <strong>Universo</strong> Mavenz</h2>
+      <p class="entrada" data-revelar>Mavenz funciona como un universo de capacidades conectadas.
+        Cada proyecto activa una combinación diferente.</p>
+      <!--/cms:universo-->
+    </div>
+
+    <div class="anillo-marco">
+      <div class="anillo" data-anillo data-auto="5000" role="tablist" aria-label="Capacidades de Mavenz">
+        <svg class="anillo__pista" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="30"></circle>
+          <circle class="arco" cx="50" cy="50" r="30" pathLength="100" stroke-dasharray="0 100"
+                  transform="rotate(-90 50 50)"></circle>
+        </svg>
+        <div class="anillo__centro" aria-hidden="true">
+          <span class="centro-corto"></span>
+        </div>
+      </div>
+
+      <div data-revelar>
+        <div class="detalle" data-detalle aria-live="polite">
+          <p class="numero" data-cuenta></p>
+          <div class="cuerpo"><h3></h3><p></p></div>
+          <span class="barrido" aria-hidden="true"></span>
+        </div>
+        <!--cms:esferas-->
+        <ul class="circuito" data-fuente-anillo>
+          <li data-corto="Estrategia"><h3>Estrategia y consultoría</h3><p>Leemos el negocio, el mercado y el contexto. Definimos posicionamiento, oportunidades, escenarios y una hoja de ruta.</p></li>
+          <li data-corto="Marca"><h3>Marca y comunicación</h3><p>Construimos el relato, la identidad aplicada, los contenidos y las herramientas que hacen visible y entendible cada proyecto.</p></li>
+          <li data-corto="Marketing"><h3>Marketing y activación</h3><p>Diseñamos campañas, lanzamientos, experiencias y acciones para generar interés, conversación y demanda.</p></li>
+          <li data-corto="Comercial"><h3>Comercial y proyectos</h3><p>Ordenamos el producto, el proceso comercial, los materiales, los canales y el seguimiento hasta la venta.</p></li>
+          <li data-corto="Inversión"><h3>Inversión y oportunidades</h3><p>Seleccionamos y analizamos oportunidades para acompañar decisiones con información, lectura y contexto.</p></li>
+          <li data-corto="Alianzas"><h3>Nuevos negocios y alianzas</h3><p>Conectamos activos, ideas y personas para abrir posibilidades que todavía no estaban estructuradas.</p></li>
+          <li data-corto="Espacio"><h3>Espacio Mavenz</h3><p>El lugar físico donde el universo toma forma: trabajo, reuniones, experiencias, comunidad y movimiento.</p></li>
+        </ul>
+        <!--/cms:esferas-->
+        <p style="margin-top:var(--e5)"><a class="enlace" href="#contacto">Entrá al Universo Mavenz
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03b ────────────────────────────────────────────────────── El Mapa Mavenz -->
+<section id="mapa" class="mapa" data-entra="izq">
+  <div class="envase">
+    <div class="cabecera">
+      <!--cms:mapa-->
+      <h2 class="titulo" data-revelar>El <strong>Mapa</strong> Mavenz</h2>
+      <p class="entrada" data-revelar>Seis territorios de Salta, leídos uno por uno. Es la parte
+        del universo que se apoya en el suelo: dónde está pasando algo y por qué.</p>
+      <!--/cms:mapa-->
+    </div>
+
+    <div class="mapa-marco" data-revelar>
+      <div>
+        <ul class="territorios" data-territorios role="tablist" aria-label="Territorios"></ul>
+        <div class="detalle" data-detalle-mapa aria-live="polite">
+          <p class="numero" data-cuenta></p>
+          <h3></h3>
+          <p class="bajada"></p>
+          <p class="lectura"></p>
+          <p class="oportunidades-rotulo">Oportunidades</p>
+          <p class="oportunidades"></p>
+        </div>
+      </div>
+      <div class="mapa-caja" data-mapa role="img"
+           aria-label="Mapa de Salta con los seis territorios del Mapa Mavenz"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ─────────────────────────────────────────────────────── Cómo trabajamos -->
+<section id="metodo" class="metodo" data-entra="der">
+  <div class="envase">
+    <div class="cabecera">
+      <!--cms:metodo-->
+      <h2 class="titulo" data-revelar>Cada proyecto activa un <strong>movimiento distinto</strong>.</h2>
+      <p class="entrada" data-revelar>Mavenz no aplica una fórmula cerrada. Primero entiende qué
+        necesita moverse y después arma la combinación correcta de estrategia, equipo, red y
+        ejecución.</p>
+      <!--/cms:metodo-->
+    </div>
+
+    <div class="anillo-marco anillo-marco--der">
+      <div data-revelar>
+        <div class="detalle" data-detalle aria-live="polite">
+          <p class="numero" data-cuenta></p>
+          <div class="cuerpo"><h3></h3><p></p></div>
+          <span class="barrido" aria-hidden="true"></span>
+        </div>
+        <!--cms:pasos-->
+        <ul class="circuito" data-fuente-anillo>
+          <li data-corto="Leemos"><h3>Leemos</h3><p>Entendemos el contexto, el negocio, el proyecto y la oportunidad.</p></li>
+          <li data-corto="Definimos"><h3>Definimos</h3><p>Elegimos una dirección y ordenamos prioridades, objetivos y escenarios.</p></li>
+          <li data-corto="Conectamos"><h3>Conectamos</h3><p>Convocamos a las personas y capacidades adecuadas para ese desafío.</p></li>
+          <li data-corto="Activamos"><h3>Activamos</h3><p>Transformamos la estrategia en comunicación, gestión, comercialización y acciones concretas.</p></li>
+          <li data-corto="Acompañamos"><h3>Acompañamos</h3><p>Medimos, ajustamos y sostenemos el movimiento hasta alcanzar el objetivo.</p></li>
+        </ul>
+        <!--/cms:pasos-->
+      </div>
+
+      <div class="anillo" data-anillo role="tablist" aria-label="Cómo trabajamos">
+        <svg class="anillo__pista" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="30"></circle>
+          <circle class="arco" cx="50" cy="50" r="30" pathLength="100" stroke-dasharray="0 100"
+                  transform="rotate(-90 50 50)"></circle>
+        </svg>
+        <div class="anillo__centro" aria-hidden="true">
+          <span class="centro-corto"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 y 06 ─────────────────────── Espacio Mavenz y Proyectos, atados por la cortina.
+     El envase acota el sticky: sin él, Espacio queda pegado hasta el pie. -->
+<div class="cortina">
+
+<section id="espacio" class="cortina-fondo" data-entra="cortina">
+  <div class="envase siete-cinco">
+    <div>
+      <!--cms:espacio-->
+      <h2 class="titulo" data-revelar>Un espacio donde <strong>las cosas pasan</strong>.</h2>
+      <p class="entrada" data-revelar>Espacio Mavenz es el punto de encuentro físico de nuestro
+        universo. Un lugar para trabajar, recibir clientes, presentar proyectos, conectar
+        profesionales, generar experiencias y abrir nuevas conversaciones dentro del real estate.</p>
+      <!--/cms:espacio-->
+      <p style="margin-top:var(--e5)"><a class="enlace" href="#contacto">Conocé Espacio Mavenz
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+    </div>
+    <figure data-revelar>
+      <div class="marco ar-16-10">
+        <img src="../assets/optim/esquina-viva-1400.jpg"
+             srcset="../assets/optim/esquina-viva-800.jpg 800w, ../assets/optim/esquina-viva-1400.jpg 1400w"
+             sizes="(min-width:48rem) 40vw, 90vw"
+             alt="Foto de referencia de un espacio de encuentro en Salta"
+             loading="lazy" decoding="async" width="1400" height="875">
+        <span class="pendiente">Foto de referencia · falta material de Espacio Mavenz</span>
+      </div>
+      <figcaption class="epigrafe">Sustituir por fotos reales del espacio</figcaption>
+    </figure>
+  </div>
+
+  <ul class="usos envase" data-revelar>
+    <!--cms:usos-->
+    <li><h3>Trabajo y reuniones</h3><p>Un espacio pensado para crear, planificar y tomar decisiones.</p></li>
+    <li><h3>Presentaciones y lanzamientos</h3><p>El escenario para mostrar proyectos y activar oportunidades.</p></li>
+    <li><h3>Comunidad y alianzas</h3><p>Encuentros que conectan desarrolladores, inversores, profesionales y nuevas ideas.</p></li>
+    <li><h3>Experiencias</h3><p>Charlas, contenidos, activaciones y momentos que construyen marca y movimiento.</p></li>
+    <!--/cms:usos-->
+  </ul>
+</section>
+
+<!-- 06 ──────────────────────────────────────────── Proyectos y oportunidades -->
+<section id="proyectos" class="cortina-tapa" data-entra="sube">
+  <div class="envase">
+    <div class="cabecera">
+      <!--cms:proyectos-->
+      <h2 class="titulo" data-revelar>El movimiento, <strong>en hechos</strong>.</h2>
+      <p class="entrada" data-revelar>No es un catálogo. Es una selección de proyectos, desarrollos
+        y oportunidades en los que Mavenz participa o cree.</p>
+      <!--/cms:proyectos-->
+    </div>
+  </div>
+
+  <div class="envase">
+    <ul class="estante" data-estante>
+      <li class="proyecto" data-revelar>
+        <div class="marco ar-1-1">
+          <img src="../assets/optim/aerea-terreno-800.jpg"
+               sizes="(min-width:48rem) 22rem, 78vw"
+               alt="Vista cenital del terreno de CARDINAL al amanecer"
+               loading="lazy" decoding="async" width="788" height="800">
+        </div>
+        <h3>CARDINAL</h3>
+        <p class="frase">Un lugar donde la vida cotidiana se vuelve excepcional.</p>
+        <p class="ficha"><span><b>Rol</b> Comercialización y comunicación</span><span><b>Estado</b> En comercialización</span></p>
+        <a class="enlace" href="#contacto">Conocer el proyecto
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      </li>
+      <li class="proyecto" data-revelar>
+        <div class="marco ar-16-9">
+          <img src="../assets/optim/aerea-verde-800.jpg"
+               srcset="../assets/optim/aerea-verde-800.jpg 800w, ../assets/optim/aerea-verde-1400.jpg 1400w"
+               sizes="(min-width:48rem) 22rem, 78vw"
+               alt="Corredor norte de Salta visto desde el aire"
+               loading="lazy" decoding="async" width="800" height="450">
+        </div>
+        <h3>Zona Norte</h3>
+        <p class="frase">La ciudad crece hacia la naturaleza.</p>
+        <p class="ficha"><span><b>Rol</b> Lectura de territorio y articulación</span><span><b>Estado</b> Oportunidad abierta</span></p>
+        <a class="enlace" href="#contacto">Solicitar información
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      </li>
+      <li class="proyecto" data-revelar>
+        <div class="marco ar-3-2">
+          <img src="../assets/optim/calle-casas-800.jpg"
+               srcset="../assets/optim/calle-casas-800.jpg 800w, ../assets/optim/calle-casas-1400.jpg 1400w"
+               sizes="(min-width:48rem) 22rem, 78vw"
+               alt="Calle del casco urbano de Salta con casas bajas"
+               loading="lazy" decoding="async" width="800" height="533">
+        </div>
+        <h3>Micro y Macrocentro</h3>
+        <p class="frase">Donde el patrimonio comienza a transformarse.</p>
+        <p class="ficha"><span><b>Rol</b> Estrategia e inversión</span><span><b>Estado</b> En análisis</span></p>
+        <a class="enlace" href="#contacto">Solicitar información
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      </li>
+    </ul>
+    <p class="epigrafe">Selección de muestra · Vero define qué proyectos van y con qué fotos</p>
+  </div>
+</section>
+
+</div><!-- /cortina -->
+
+<!-- 07 ───────────────────────────────────────────────────────── La red Mavenz -->
+<section id="red" class="red" data-entra="izq">
+  <div class="envase cinco-siete">
+    <!--cms:red-->
+    <h2 class="titulo" data-revelar>El movimiento <strong>nunca se genera solo</strong>.</h2>
+    <div>
+      <p class="entrada" data-revelar style="margin-top:0">La red forma parte del método. Equipo,
+        partners, especialistas, desarrolladores y aliados que se conectan según lo que cada
+        proyecto necesita mover.</p>
+      <blockquote class="cita" data-revelar>No es un directorio de logos. Es quién entra en cada
+        movimiento.</blockquote>
+    </div>
+    <!--/cms:red-->
+  </div>
+</section>
+
+<!-- 08 ──────────────────────────────────────────────────── Contenido y mirada -->
+<section id="mirada" data-entra="sube">
+  <div class="envase">
+    <div class="cabecera">
+      <!--cms:mirada-->
+      <h2 class="titulo" data-revelar>Lo que vemos antes <strong>de que se mueva</strong>.</h2>
+      <p class="entrada" data-revelar>Análisis, ideas, tendencias y lecturas del mercado. Nuestra
+        forma de mirar, escrita.</p>
+      <!--/cms:mirada-->
+    </div>
+
+    <div class="notas">
+      <article data-revelar>
+        <p class="meta">Territorio</p>
+        <h3>El centro dejó de crecer por expansión</h3>
+        <p>Crece reinterpretando su propio patrimonio: casonas, oficinas, hotelería boutique y uso mixto.</p>
+      </article>
+      <article data-revelar>
+        <p class="meta">Mercado</p>
+        <h3>La calidad del entorno pesa tanto como la ubicación</h3>
+        <p>Qué cambió en cómo se elige dónde vivir en el corredor norte de Salta.</p>
+      </article>
+      <article data-revelar>
+        <p class="meta">Inversión</p>
+        <h3>Invertir también es elegir una forma de vivir</h3>
+        <p>Los Valles Calchaquíes combinan patrimonio, disfrute y renta en una misma decisión.</p>
+      </article>
+    </div>
+    <p class="epigrafe">Notas de muestra escritas sobre el Mapa Mavenz · reemplazar por las reales</p>
+  </div>
+</section>
+
+<!-- 09 ──────────────────────────────────────────────────────── Cierre y contacto -->
+<section id="contacto" class="contacto" data-entra="escala">
+  <div class="envase">
+    <!--cms:cierre-->
+    <h2 class="titulo" data-revelar>Hay proyectos, ideas y oportunidades que necesitan el
+      movimiento correcto. <strong>Movamos algo juntos.</strong></h2>
+    <!--/cms:cierre-->
+
+    <form class="formulario" data-formulario novalidate>
+      <div class="campo ancho-total">
+        <label for="motivo">¿Con qué te podemos ayudar?</label>
+        <select id="motivo" name="motivo">
+          <!--cms:motivos-->
+          <option value="Presentar un proyecto">Presentar un proyecto</option>
+          <option value="Buscar una oportunidad">Buscar una oportunidad</option>
+          <option value="Proponer una alianza">Proponer una alianza</option>
+          <option value="Conocer Espacio Mavenz">Conocer Espacio Mavenz</option>
+          <option value="Otro motivo">Otro motivo</option>
+          <!--/cms:motivos-->
+        </select>
+      </div>
+      <div class="campo">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" required>
+      </div>
+      <div class="campo">
+        <label for="contacto-mail">Correo o teléfono</label>
+        <input id="contacto-mail" name="contacto" type="text" autocomplete="email" required>
+      </div>
+      <div class="campo ancho-total">
+        <label for="mensaje">Contanos brevemente</label>
+        <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+      </div>
+      <div class="ancho-total">
+        <button class="boton" type="submit">Enviar por WhatsApp</button>
+        <p class="epigrafe" data-aviso role="status">El destino del formulario y el WhatsApp de
+          Mavenz están pendientes de definición.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="trazo trazo--pie" aria-hidden="true">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <path pathLength="1" fill="none"
+            d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302
+               C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158
+               C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"/>
+    </svg>
+  </div>
+  <p>Mavenz · Salta, Argentina</p>
+  <p>Demo de estructura — DT System</p>
+</footer>
+
+<script src="guion.js" defer></script>
+<script src="mapa.js" defer></script>
+<script src="medicion.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+{
+  "_fuente": "Estructura_Web_Mavenz.docx (Vero, 02/09/2026) + audios de WhatsApp del 02/09 09:39 y 17:13. Todo el copy de acá sale de ese documento, en su redacción. Lo que se agregó está marcado con _dt.",
+  "_editable": "Este archivo es la fuente única. Un dato se cambia acá y en ningún otro lado.",
+
+  "marca": {
+    "nombre": "Mavenz",
+    "mensaje": "Mavenz genera movimiento.",
+    "definicion": "Somos el partner estratégico que mueve el real estate.",
+    "cta_principal": "Conocé el Universo Mavenz",
+    "cta_cierre": "Movamos algo juntos"
+  },
+
+  "menu": [
+    { "id": "inicio",    "rotulo": "Mavenz" },
+    { "id": "universo",  "rotulo": "Universo Mavenz" },
+    { "id": "metodo",    "rotulo": "Cómo trabajamos" },
+    { "id": "espacio",   "rotulo": "Espacio Mavenz" },
+    { "id": "proyectos", "rotulo": "Proyectos y oportunidades" },
+    { "id": "contacto",  "rotulo": "Contacto" }
+  ],
+
+  "hero": {
+    "titulo": "Mavenz genera movimiento.",
+    "bajada": "Somos el partner estratégico que mueve el real estate.",
+    "apoyo": "Conectamos visión, estrategia, comunicación, negocios y personas para transformar oportunidades en proyectos que avanzan.",
+    "cta1": { "rotulo": "Conocé el Universo Mavenz", "href": "#universo" },
+    "cta2": { "rotulo": "Hablemos", "href": "#contacto" }
+  },
+
+  "quienes": {
+    "titulo": "Somos Mavenz.",
+    "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance. No operamos desde un catálogo: trabajamos desde el criterio, la red y la capacidad de generar movimiento.",
+    "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién."
+  },
+
+  "universo": {
+    "titulo": "El Universo Mavenz",
+    "intro": "Mavenz funciona como un universo de capacidades conectadas. Cada proyecto activa una combinación diferente.",
+    "cta": { "rotulo": "Entrá al Universo Mavenz", "href": "#contacto" },
+    "esferas": [
+      { "id": "estrategia",  "nombre": "Estrategia y consultoría",   "copy": "Leemos el negocio, el mercado y el contexto. Definimos posicionamiento, oportunidades, escenarios y una hoja de ruta." },
+      { "id": "marca",       "nombre": "Marca y comunicación",       "copy": "Construimos el relato, la identidad aplicada, los contenidos y las herramientas que hacen visible y entendible cada proyecto." },
+      { "id": "marketing",   "nombre": "Marketing y activación",     "copy": "Diseñamos campañas, lanzamientos, experiencias y acciones para generar interés, conversación y demanda." },
+      { "id": "comercial",   "nombre": "Comercial y proyectos",      "copy": "Ordenamos el producto, el proceso comercial, los materiales, los canales y el seguimiento hasta la venta." },
+      { "id": "inversion",   "nombre": "Inversión y oportunidades",  "copy": "Seleccionamos y analizamos oportunidades para acompañar decisiones con información, lectura y contexto." },
+      { "id": "alianzas",    "nombre": "Nuevos negocios y alianzas", "copy": "Conectamos activos, ideas y personas para abrir posibilidades que todavía no estaban estructuradas." },
+      { "id": "espacio",     "nombre": "Espacio Mavenz",             "copy": "El lugar físico donde el universo toma forma: trabajo, reuniones, experiencias, comunidad y movimiento." }
+    ]
+  },
+
+  "metodo": {
+    "titulo": "Cada proyecto activa un movimiento distinto.",
+    "intro": "Mavenz no aplica una fórmula cerrada. Primero entiende qué necesita moverse y después arma la combinación correcta de estrategia, equipo, red y ejecución.",
+    "pasos": [
+      { "n": "1", "nombre": "Leemos",      "copy": "Entendemos el contexto, el negocio, el proyecto y la oportunidad." },
+      { "n": "2", "nombre": "Definimos",   "copy": "Elegimos una dirección y ordenamos prioridades, objetivos y escenarios." },
+      { "n": "3", "nombre": "Conectamos",  "copy": "Convocamos a las personas y capacidades adecuadas para ese desafío." },
+      { "n": "4", "nombre": "Activamos",   "copy": "Transformamos la estrategia en comunicación, gestión, comercialización y acciones concretas." },
+      { "n": "5", "nombre": "Acompañamos", "copy": "Medimos, ajustamos y sostenemos el movimiento hasta alcanzar el objetivo." }
+    ]
+  },
+
+  "espacio": {
+    "titulo": "Un espacio donde las cosas pasan.",
+    "copy": "Espacio Mavenz es el punto de encuentro físico de nuestro universo. Un lugar para trabajar, recibir clientes, presentar proyectos, conectar profesionales, generar experiencias y abrir nuevas conversaciones dentro del real estate.",
+    "cta": { "rotulo": "Conocé Espacio Mavenz", "href": "#contacto" },
+    "usos": [
+      { "nombre": "Trabajo y reuniones",           "copy": "Un espacio pensado para crear, planificar y tomar decisiones." },
+      { "nombre": "Presentaciones y lanzamientos", "copy": "El escenario para mostrar proyectos y activar oportunidades." },
+      { "nombre": "Comunidad y alianzas",          "copy": "Encuentros que conectan desarrolladores, inversores, profesionales y nuevas ideas." },
+      { "nombre": "Experiencias",                  "copy": "Charlas, contenidos, activaciones y momentos que construyen marca y movimiento." }
+    ]
+  },
+
+  "proyectos": {
+    "titulo": "El movimiento, en hechos.",
+    "intro": "No es un catálogo. Es una selección de proyectos, desarrollos y oportunidades en los que Mavenz participa o cree.",
+    "items": [
+      {
+        "nombre": "CARDINAL",
+        "ubicacion": "San Lorenzo Chico, Salta",
+        "frase": "Un lugar donde la vida cotidiana se vuelve excepcional.",
+        "rol": "Comercialización y comunicación",
+        "estado": "En comercialización",
+        "foto": "../assets/cardinal/aerea-terreno.jpg",
+        "alt": "Vista cenital del terreno de CARDINAL al amanecer",
+        "cta": "Conocer el proyecto",
+        "href": "#contacto"
+      },
+      {
+        "nombre": "Zona Norte",
+        "ubicacion": "Corredor norte, Salta",
+        "frase": "La ciudad crece hacia la naturaleza.",
+        "rol": "Lectura de territorio y articulación",
+        "estado": "Oportunidad abierta",
+        "foto": "../assets/aereas/aerea-verde.jpg",
+        "alt": "Vista aérea del corredor norte de Salta",
+        "cta": "Solicitar información",
+        "href": "#contacto"
+      },
+      {
+        "nombre": "Micro y Macrocentro",
+        "ubicacion": "Casco histórico, Salta",
+        "frase": "Donde el patrimonio comienza a transformarse.",
+        "rol": "Estrategia e inversión",
+        "estado": "En análisis",
+        "foto": "../assets/vida/esquina-viva.jpg",
+        "alt": "Esquina del centro de Salta con movimiento de gente",
+        "cta": "Solicitar información",
+        "href": "#contacto"
+      }
+    ],
+    "_dt": "Los tres ítems son de muestra. CARDINAL sale del brochure de la clienta; los otros dos, del Mapa Mavenz. Vero define cuáles van y con qué fotos."
+  },
+
+  "red": {
+    "titulo": "El movimiento nunca se genera solo.",
+    "copy": "La red forma parte del método. Equipo, partners, especialistas, desarrolladores y aliados que se conectan según lo que cada proyecto necesita mover.",
+    "cierre": "No es un directorio de logos. Es quién entra en cada movimiento."
+  },
+
+  "mirada": {
+    "titulo": "Lo que vemos antes de que se mueva.",
+    "intro": "Análisis, ideas, tendencias y lecturas del mercado. Nuestra forma de mirar, escrita.",
+    "notas": [
+      { "titulo": "El centro dejó de crecer por expansión", "bajada": "Crece reinterpretando su propio patrimonio: casonas, oficinas, hotelería boutique y uso mixto.", "meta": "Territorio" },
+      { "titulo": "La calidad del entorno pesa tanto como la ubicación", "bajada": "Qué cambió en cómo se elige dónde vivir en el corredor norte de Salta.", "meta": "Mercado" },
+      { "titulo": "Invertir también es elegir una forma de vivir", "bajada": "Los Valles Calchaquíes combinan patrimonio, disfrute y renta en una misma decisión.", "meta": "Inversión" }
+    ],
+    "cta": { "rotulo": "Seguinos en LinkedIn", "href": "#contacto" },
+    "_dt": "Las tres notas son de muestra, redactadas sobre el Mapa Mavenz de la clienta. Van reemplazadas por las reales."
+  },
+
+  "contacto": {
+    "cierre": "Hay proyectos, ideas y oportunidades que necesitan el movimiento correcto. Movamos algo juntos.",
+    "opciones": [
+      { "id": "proyecto",   "rotulo": "Presentar un proyecto" },
+      { "id": "oportunidad","rotulo": "Buscar una oportunidad" },
+      { "id": "alianza",    "rotulo": "Proponer una alianza" },
+      { "id": "espacio",    "rotulo": "Conocer Espacio Mavenz" },
+      { "id": "otro",       "rotulo": "Otro motivo" }
+    ],
+    "_dt": "Falta el destino real del formulario, el WhatsApp y el correo corporativo de Mavenz."
+  }
+}
