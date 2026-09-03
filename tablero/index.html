@@ -670,6 +670,7 @@ a{color:var(--marca-texto)}
 .pregunta textarea{min-height:4.5rem}
 .pregunta textarea:focus,.pregunta input:focus{outline:none; border-color:var(--marca-texto); box-shadow:0 0 0 3px var(--marca-tenue)}
 .fichas{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem}
+.ficha.oculta{display:none}
 .ficha{position:relative; cursor:pointer}
 .ficha input{position:absolute; opacity:0; width:0; height:0}
 .ficha span{
@@ -742,7 +743,7 @@ a{color:var(--marca-texto)}
   <h1>Elegí cómo se va a ver</h1>
   <p class="portada__bajada">Armé todas las opciones que tenemos sobre la mesa, cada una dentro del manual que les hizo Fractura: los mismos siete colores, la misma tipografía y el mismo isotipo. Ninguna se sale de la marca, lo que cambia es el carácter. Antes de dibujarlas miré doce inmobiliarias de Salta, para asegurarme de que ninguna se pareciera.</p>
   <div class="portada__como">
-    <b>Cómo se usa.</b> Tocá el nombre de la opción que te gusta y queda marcada. Los recuadros que dicen tocar o arrastrá andan de verdad: probalos, que eso no elige nada. Si vas con poco tiempo, con el primer bloque me alcanza para arrancar. Al final apretás <b>Guardar</b> y me llega todo por WhatsApp de un toque.
+    <b>Cómo se usa.</b> Tocá el nombre de la opción que te gusta y queda marcada. <b>En cada pregunta podés marcar más de una</b>: si te gustan tres cosas, marcá las tres. Los recuadros que dicen tocar o arrastrá andan de verdad: probalos, que eso no elige nada. Si vas con poco tiempo, con el primer bloque me alcanza para arrancar. Al final apretás <b>Guardar</b> y me llega todo por WhatsApp de un toque.
   </div>
 </header>
 
@@ -808,14 +809,14 @@ a{color:var(--marca-texto)}
     <span class="bloque__num">0</span>
     <div>
       <h2 class="bloque__titulo">Nueve direcciones</h2>
-      <p class="bloque__nota">Cada una es un mundo entero y ninguna se parece a la otra. Todas son claras, todas usan sólo tus siete colores y tu tipografía, y ninguna hace lo que hacen las de arriba. Elegí la que más te tire, aunque no sepas explicar por qué.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <p class="bloque__nota">Cada una es un mundo entero y ninguna se parece a la otra. Todas son claras, todas usan sólo tus siete colores y tu tipografía, y ninguna hace lo que hacen las de arriba. Marcá todas las que te gusten, no hace falta que elijas una sola. Si marcás varias te pregunto abajo cuál te tira más.</p>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Indice">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Indice">
       <div class="escena dir">
         <div class="dir__marco dm-indice abs" data-indice style="justify-content:center; gap:0">
           <span class="flotante abs"><img data-img="casas" alt=""></span>
@@ -834,8 +835,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Monumento">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Monumento">
       <div class="escena dir">
         <div class="dir__marco d-mon abs">
           <span>Mavenz · Salta</span>
@@ -849,8 +850,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Escalera de papel">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Escalera de papel">
       <div class="escena dir">
         <div class="d-esc abs">
           <div style="background:#EEECEC; color:#1E1E20">Somos Mavenz</div>
@@ -865,8 +866,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Al margen">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Al margen">
       <div class="escena dir">
         <div class="dir__marco d-mar abs">
           <span class="lab">Criterio</span>
@@ -882,8 +883,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Un solo trazo">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Un solo trazo">
       <div class="escena dir">
         <div class="dir__marco d-trazo abs" data-tocar>
           <svg class="trazo" viewBox="0 0 400 1200" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M 60 40 C 300 150, 40 260, 200 380 C 340 490, 60 560, 150 700 C 230 830, 330 880, 210 1010 C 140 1090, 90 1130, 120 1170"></path></svg>
@@ -897,8 +898,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Dossier">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Dossier">
       <div class="escena dir">
         <div class="d-dos abs">
           <i><img data-img="interior" alt=""></i>
@@ -913,8 +914,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="El pliegue">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="El pliegue">
       <div class="escena dir">
         <div class="d-pli abs">
           <span class="foto"><img data-img="aereaDia" alt=""></span>
@@ -928,8 +929,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Salta, la hora">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Salta, la hora">
       <div class="escena dir">
         <div class="dir__marco d-hora abs">
           <div class="arriba abs">
@@ -945,8 +946,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Ondas">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Ondas">
       <div class="escena dir">
         <div class="dir__marco d-ondas abs">
           <b>Mavenz genera movimiento</b>
@@ -960,8 +961,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="camino" value="Ninguna, las mezclo">
+    <label class="opcion">
+      <input type="checkbox" name="camino" value="Ninguna, las mezclo">
       <div class="escena" style="background:var(--papel-hondo); color:var(--suave); align-items:center; text-align:center">
         <p style="font-size:4.2cqw; line-height:1.45; max-width:82%; margin-inline:auto">Me gustan pedazos de varias. Sigo abajo y las armo de a una.</p>
       </div>
@@ -972,6 +973,22 @@ a{color:var(--marca-texto)}
     </label>
 
   </div>
+
+  <div class="pregunta oculto" id="favBox" style="margin-top:1.2rem">
+    <p class="pregunta__q">Marcaste varias. ¿Cuál es la que más te tira?</p>
+    <p class="pregunta__ay">Con esa arranco. Las otras me sirven igual para saber por dónde va tu gusto y voy a robarles cosas.</p>
+    <div class="fichas" id="favFichas">
+        <label class="ficha oculta" data-fav="Indice"><input type="radio" name="favorita" value="Indice"><span>Índice</span></label>
+        <label class="ficha oculta" data-fav="Monumento"><input type="radio" name="favorita" value="Monumento"><span>Monumento</span></label>
+        <label class="ficha oculta" data-fav="Escalera de papel"><input type="radio" name="favorita" value="Escalera de papel"><span>Escalera de papel</span></label>
+        <label class="ficha oculta" data-fav="Al margen"><input type="radio" name="favorita" value="Al margen"><span>Al margen</span></label>
+        <label class="ficha oculta" data-fav="Un solo trazo"><input type="radio" name="favorita" value="Un solo trazo"><span>Un solo trazo</span></label>
+        <label class="ficha oculta" data-fav="Dossier"><input type="radio" name="favorita" value="Dossier"><span>Dossier</span></label>
+        <label class="ficha oculta" data-fav="El pliegue"><input type="radio" name="favorita" value="El pliegue"><span>El pliegue</span></label>
+        <label class="ficha oculta" data-fav="Salta, la hora"><input type="radio" name="favorita" value="Salta, la hora"><span>Salta, la hora</span></label>
+        <label class="ficha oculta" data-fav="Ondas"><input type="radio" name="favorita" value="Ondas"><span>Ondas</span></label>
+    </div>
+  </div>
 </section>
 
 <!-- ============ 2. PALETA ============ -->
@@ -981,13 +998,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">El papel de la web</h2>
       <p class="bloque__nota">Todas claras, como pediste, y todas armadas con tus siete colores. Un dato que sirve: el blanco puro no existe en tu manual, el más claro es un papel cálido. Todas las inmobiliarias de Salta arrancan en blanco puro, así que cambiar sólo eso ya te corre de lugar.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones opciones--2f">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Papel">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Papel">
       <div class="escena p-claro escena--centro">
         <h3 class="escena__titulo" style="font-size:8.5cqw">Mavenz genera movimiento</h3>
         <div class="escena__boton">Hablemos</div>
@@ -999,8 +1016,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Papel con tinta bordo">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Papel con tinta bordo">
       <div class="escena p-claro escena--centro" style="--esc-acento:#3C2527">
         <h3 class="escena__titulo" style="font-size:8.5cqw; color:#3C2527">Mavenz genera movimiento</h3>
         <div class="escena__boton" style="color:#EEECEC">Hablemos</div>
@@ -1012,8 +1029,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Escalera clara">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Escalera clara">
       <div class="escena" style="padding:0">
         <div class="d-esc abs">
           <div style="background:#EEECEC; color:#1E1E20">Somos Mavenz</div>
@@ -1028,8 +1045,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Tostado">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Tostado">
       <div class="escena escena--centro" style="--esc-fondo:#B7A28B; --esc-texto:#1E1E20; --esc-acento:#1E1E20; --esc-boton-texto:#B7A28B">
         <h3 class="escena__titulo" style="font-size:8.5cqw">Mavenz genera movimiento</h3>
         <div class="escena__boton">Hablemos</div>
@@ -1041,8 +1058,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Gris tibio">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Gris tibio">
       <div class="escena escena--centro" style="--esc-fondo:#D3CFC8; --esc-texto:#1E1E20; --esc-acento:#3C2527; --esc-boton-texto:#D3CFC8">
         <h3 class="escena__titulo" style="font-size:8.5cqw">Mavenz genera movimiento</h3>
         <div class="escena__boton">Hablemos</div>
@@ -1054,8 +1071,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="paleta" value="Claro con cierre negro">
+    <label class="opcion">
+      <input type="checkbox" name="paleta" value="Claro con cierre negro">
       <div class="escena" style="padding:0">
         <div style="position:absolute; inset:0; display:flex; flex-direction:column">
           <div style="flex:3; background:#EEECEC; color:#1E1E20; display:flex; align-items:center; padding:0 6cqw"><span style="font-size:6cqw; font-weight:800; line-height:1.05; letter-spacing:-.03em">Mavenz genera movimiento</span></div>
@@ -1079,13 +1096,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Lo primero que se ve</h2>
       <p class="bloque__nota">Tu documento pide una apertura muy visual y con poco texto. Estas son las siete formas de resolverla.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Solo tipografía">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Solo tipografía">
       <div class="escena">
         <h3 class="escena__titulo" style="font-size:12cqw">Mavenz genera movimiento</h3>
         <div class="escena__boton">Conocé el Universo</div>
@@ -1096,8 +1113,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Foto a pantalla completa">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Foto a pantalla completa">
       <div class="escena">
         <img class="escena__foto trat-velo abs" data-img="aereaDia" alt="">
         <div class="escena__velo abs" style="background:linear-gradient(to top,#1E1E20cc,#1E1E2033 60%)"></div>
@@ -1110,8 +1127,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Video en bucle">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Video en bucle">
       <div class="escena">
         <img class="escena__foto trat-velo abs" data-img="amenities" alt="">
         <div class="escena__velo abs" style="background:linear-gradient(to top,#1E1E20cc,#1E1E2033 60%)"></div>
@@ -1125,8 +1142,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Partido: texto y foto">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Partido: texto y foto">
       <div class="escena escena--split p-claro">
         <div class="split__texto">
           <h3 class="escena__titulo">Mavenz genera movimiento</h3>
@@ -1140,8 +1157,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="El trazo de la marca dibujándose">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="El trazo de la marca dibujándose">
       <div class="escena escena--centro demo-mov" data-trazo>
         <svg class="trazo" viewBox="0 0 1200 400" preserveAspectRatio="none" style="height:19cqw" aria-hidden="true"><path pathLength="1" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
         <h3 class="escena__titulo" style="font-size:8cqw">Mavenz genera movimiento</h3>
@@ -1153,8 +1170,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Las ondas del kit de Fractura">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Las ondas del kit de Fractura">
       <div class="escena p-negro">
         <img class="escena__foto abs" data-img="ondaNegra" alt="">
         <div class="escena__velo abs" style="background:linear-gradient(to top,#1E1E20d9,#1E1E2044 65%)"></div>
@@ -1168,8 +1185,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="Ondas del kit, en claro">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="Ondas del kit, en claro">
       <div class="escena p-claro">
         <img class="escena__foto abs" data-img="ondaClara" alt="" style="filter:invert(1) contrast(.8) brightness(1.2)">
         <div class="escena__velo abs" style="background:linear-gradient(to top,#EEECECdd,#EEECEC55 65%)"></div>
@@ -1183,8 +1200,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="apertura" value="La marca a escala de tapa">
+    <label class="opcion">
+      <input type="checkbox" name="apertura" value="La marca a escala de tapa">
       <div class="escena tapa-marca">
         <span class="arriba abs">Somos el partner estratégico que mueve el real estate</span>
         <img class="sangra" data-img="logoOscuro" alt="">
@@ -1204,13 +1221,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Cómo se escriben los títulos</h2>
       <p class="bloque__nota">Los cuatro están en Urbanist, la tipografía de tu manual. Lo único que cambia es el grosor y el tamaño. Te aviso que el manual pide Bold o ExtraBold para títulos, así que la fina es salirse un poco.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="titulos" value="ExtraBold gigante">
+    <label class="opcion">
+      <input type="checkbox" name="titulos" value="ExtraBold gigante">
       <div class="escena">
         <h3 class="escena__titulo" style="font-weight:800; font-size:11cqw">Mavenz genera movimiento</h3>
       </div>
@@ -1220,8 +1237,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="titulos" value="Light grande y espaciado">
+    <label class="opcion">
+      <input type="checkbox" name="titulos" value="Light grande y espaciado">
       <div class="escena">
         <h3 class="escena__titulo" style="font-weight:200; font-size:11cqw; letter-spacing:-.02em">Mavenz genera movimiento</h3>
       </div>
@@ -1231,8 +1248,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="titulos" value="Mezcla fina y gruesa">
+    <label class="opcion">
+      <input type="checkbox" name="titulos" value="Mezcla fina y gruesa">
       <div class="escena">
         <h3 class="escena__titulo" style="font-weight:200; font-size:11cqw; letter-spacing:-.02em">Mavenz genera <span style="font-weight:800">movimiento</span></h3>
       </div>
@@ -1242,8 +1259,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="titulos" value="Mayúsculas con espacio">
+    <label class="opcion">
+      <input type="checkbox" name="titulos" value="Mayúsculas con espacio">
       <div class="escena">
         <h3 class="escena__titulo" style="font-weight:600; font-size:7cqw; text-transform:uppercase; letter-spacing:.1em; line-height:1.2">Mavenz genera movimiento</h3>
       </div>
@@ -1263,13 +1280,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Los botones</h2>
       <p class="bloque__nota">Son lo que la gente toca. Cambian bastante el carácter, más de lo que parece.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones opciones--2f">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="botones" value="Píldora rellena">
+    <label class="opcion">
+      <input type="checkbox" name="botones" value="Píldora rellena">
       <div class="escena escena--centro">
         <div class="botonera" style="justify-content:center">
           <span class="btn-m btn-m--pill">Conocé el Universo</span>
@@ -1282,8 +1299,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="botones" value="Rectángulo recto">
+    <label class="opcion">
+      <input type="checkbox" name="botones" value="Rectángulo recto">
       <div class="escena escena--centro">
         <div class="botonera" style="justify-content:center">
           <span class="btn-m btn-m--recto">Conocé el Universo</span>
@@ -1296,8 +1313,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="botones" value="Solo contorno">
+    <label class="opcion">
+      <input type="checkbox" name="botones" value="Solo contorno">
       <div class="escena escena--centro">
         <div class="botonera" style="justify-content:center">
           <span class="btn-m btn-m--linea">Conocé el Universo</span>
@@ -1310,8 +1327,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="botones" value="Texto subrayado">
+    <label class="opcion">
+      <input type="checkbox" name="botones" value="Texto subrayado">
       <div class="escena escena--centro">
         <div class="botonera" style="justify-content:center">
           <span class="btn-m btn-m--texto">Conocé el Universo</span>
@@ -1334,13 +1351,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Cómo se ven los proyectos</h2>
       <p class="bloque__nota">Tu documento dice que esta sección no tiene que verse como un catálogo inmobiliario sino como una selección. Estas cuatro formas la resuelven distinto.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="proyectos" value="Grilla de tarjetas">
+    <label class="opcion">
+      <input type="checkbox" name="proyectos" value="Grilla de tarjetas">
       <div class="escena" style="justify-content:center">
         <div class="tarjetas">
           <div><img data-img="casas" alt=""></div>
@@ -1354,8 +1371,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="proyectos" value="Lista editorial">
+    <label class="opcion">
+      <input type="checkbox" name="proyectos" value="Lista editorial">
       <div class="escena" style="justify-content:center">
         <div class="lista-ed">
           <div><span class="f"><img data-img="aerea" alt=""></span><span style="flex:1"><span class="t"></span><span class="t"></span></span></div>
@@ -1369,8 +1386,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="proyectos" value="Estante que se desliza">
+    <label class="opcion">
+      <input type="checkbox" name="proyectos" value="Estante que se desliza">
       <div class="escena" style="justify-content:center; overflow:hidden">
         <div class="estante">
           <div><img data-img="cardinal" alt=""></div>
@@ -1385,8 +1402,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="proyectos" value="Mosaico desparejo">
+    <label class="opcion">
+      <input type="checkbox" name="proyectos" value="Mosaico desparejo">
       <div class="escena" style="justify-content:center">
         <div class="mosaico">
           <div class="a"><img data-img="aereaDia" alt=""></div>
@@ -1402,8 +1419,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="proyectos" value="Indice con la foto que aparece">
+    <label class="opcion">
+      <input type="checkbox" name="proyectos" value="Indice con la foto que aparece">
       <div class="escena dm-indice" data-indice>
         <span class="flotante abs"><img data-img="casas" alt=""></span>
         <ul>
@@ -1453,13 +1470,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Cómo se tratan las fotos</h2>
       <p class="bloque__nota">La misma imagen, cuatro tratamientos. Esto define muchísimo el tono, más que el color de fondo.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones opciones--2f">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="fotos" value="Color natural">
+    <label class="opcion">
+      <input type="checkbox" name="fotos" value="Color natural">
       <div class="escena trat-color" style="padding:0"><img class="escena__foto abs" data-img="casas" alt=""></div>
       <div class="opcion__pie">
         <span class="opcion__caja"><svg><use href="#tic"></use></svg></span>
@@ -1467,8 +1484,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="fotos" value="Blanco y negro">
+    <label class="opcion">
+      <input type="checkbox" name="fotos" value="Blanco y negro">
       <div class="escena trat-bn" style="padding:0"><img class="escena__foto abs" data-img="casas" alt=""></div>
       <div class="opcion__pie">
         <span class="opcion__caja"><svg><use href="#tic"></use></svg></span>
@@ -1476,8 +1493,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="fotos" value="Virado cálido">
+    <label class="opcion">
+      <input type="checkbox" name="fotos" value="Virado cálido">
       <div class="escena trat-calido" style="padding:0"><img class="escena__foto abs" data-img="casas" alt=""></div>
       <div class="opcion__pie">
         <span class="opcion__caja"><svg><use href="#tic"></use></svg></span>
@@ -1485,8 +1502,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="fotos" value="Con velo y texto encima">
+    <label class="opcion">
+      <input type="checkbox" name="fotos" value="Con velo y texto encima">
       <div class="escena" style="padding:0">
         <img class="escena__foto trat-velo abs" data-img="casas" alt="">
         <div style="position:absolute; inset:auto 0 0 0; padding:6cqw"><span style="font-size:6.5cqw; font-weight:800; line-height:1">Cañada Húmeda</span><br><span style="font-size:3.2cqw; opacity:.75">Salta · comercialización integral</span></div>
@@ -1507,13 +1524,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">El Universo Mavenz</h2>
       <p class="bloque__nota">Es la sección central de tu documento. En el audio dijiste que tiene que ser circular y no lineal, porque están todas conectadas. Estas son las cuatro maneras de mostrarlo.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="universo" value="Rueda conectada">
+    <label class="opcion">
+      <input type="checkbox" name="universo" value="Rueda conectada">
       <div class="escena escena--centro">
         <svg viewBox="0 0 200 140" style="width:78%; height:auto" aria-hidden="true">
           <circle cx="100" cy="70" r="48" fill="none" stroke="currentColor" stroke-width="1" opacity=".3"/>
@@ -1531,8 +1548,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="universo" value="Trazo que las conecta">
+    <label class="opcion">
+      <input type="checkbox" name="universo" value="Trazo que las conecta">
       <div class="escena escena--centro demo-mov" data-trazo>
         <svg class="trazo" viewBox="0 0 1200 400" preserveAspectRatio="none" style="height:28cqw" aria-hidden="true"><path pathLength="1" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272"></path></svg>
         <span class="toque abs">tocar</span>
@@ -1543,8 +1560,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="universo" value="Tarjetas parejas">
+    <label class="opcion">
+      <input type="checkbox" name="universo" value="Tarjetas parejas">
       <div class="escena escena--centro">
         <div class="hilera"><div></div><div></div><div></div><div></div></div>
         <div class="hilera" style="margin-top:2.2cqw"><div></div><div></div><div></div><div></div></div>
@@ -1555,8 +1572,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="universo" value="Índice grande">
+    <label class="opcion">
+      <input type="checkbox" name="universo" value="Índice grande">
       <div class="escena" style="justify-content:center">
         <div class="indice">
           <div><b>Estrategia</b><em>01</em></div>
@@ -1571,8 +1588,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="universo" value="Se apilan como cartas">
+    <label class="opcion">
+      <input type="checkbox" name="universo" value="Se apilan como cartas">
       <div class="escena" style="padding:0">
         <div class="mini dm-apila abs">
           <div class="mini__larga" style="padding:4cqw 0 30cqw">
@@ -1650,13 +1667,13 @@ a{color:var(--marca-texto)}
     <div>
       <h2 class="bloque__titulo">Cuánto se mueve</h2>
       <p class="bloque__nota">Tocá cada una para verla andar. Cuanto más se mueve, más tarda en cargar en un celular con poca señal, así que no siempre más es mejor.</p>
-      <span class="bloque__modo">Elegí una</span>
+      <span class="bloque__modo">Marcá las que te gusten</span>
     </div>
   </div>
   <div class="opciones opciones--3">
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="movimiento" value="Quieto">
+    <label class="opcion">
+      <input type="checkbox" name="movimiento" value="Quieto">
       <div class="escena escena--mov">
         <h3 class="escena__titulo escena__titulo--mov">Cada proyecto activa un movimiento distinto</h3>
         <span class="barrita"></span><span class="barrita"></span>
@@ -1668,8 +1685,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="movimiento" value="Suave">
+    <label class="opcion">
+      <input type="checkbox" name="movimiento" value="Suave">
       <div class="escena escena--mov demo-mov mov-suave" data-anim>
         <h3 class="escena__titulo escena__titulo--mov">Cada proyecto activa un movimiento distinto</h3>
         <span class="barrita"></span><span class="barrita"></span>
@@ -1682,8 +1699,8 @@ a{color:var(--marca-texto)}
       </div>
     </label>
 
-    <label class="opcion opcion--una">
-      <input type="radio" name="movimiento" value="Con carácter">
+    <label class="opcion">
+      <input type="checkbox" name="movimiento" value="Con carácter">
       <div class="escena escena--mov demo-mov mov-caracter" data-anim>
         <h3 class="escena__titulo escena__titulo--mov">Cada proyecto activa un movimiento distinto</h3>
         <span class="barrita"></span><span class="barrita"></span>
@@ -2079,7 +2096,8 @@ a{color:var(--marca-texto)}
   var NUMERO_WA = "";
 
   var GRUPOS = [
-    ["camino",         "Camino"],
+    ["camino",         "Direcciones que le gustaron"],
+    ["favorita",       "La que más le tira"],
     ["paleta",         "Fondo"],
     ["apertura",       "Apertura"],
     ["titulos",        "Títulos"],
@@ -2206,6 +2224,7 @@ a{color:var(--marca-texto)}
       refrescarFlechas();
     }
     if (d.__tocado) ordenTocado = true;
+    refrescarFavorita();
   }
 
   /* ---------- el link que vuelve con las respuestas ---------- */
@@ -2253,6 +2272,7 @@ a{color:var(--marca-texto)}
       }
       if (c.n){ var n = $("#nota"); if (n) n.value = c.n }
       if (c.t) ordenTocado = true;
+      refrescarFavorita();
       return true;
     } catch(e){ return null }
   }
@@ -2517,7 +2537,27 @@ a{color:var(--marca-texto)}
     esc.addEventListener("click", function(e){ e.preventDefault() });
   });
 
+
+  // si marca mas de una direccion, se le pregunta cual prefiere
+  function refrescarFavorita(){
+    var caja = $("#favBox");
+    if (!caja) return;
+    var marcadas = $$('input[name="camino"]:checked').map(function(i){ return i.value });
+    var utiles = marcadas.filter(function(v){ return v.indexOf("Ninguna") !== 0 });
+    $$("[data-fav]").forEach(function(f){
+      var vale = utiles.indexOf(f.getAttribute("data-fav")) >= 0;
+      f.classList.toggle("oculta", !vale);
+      var i = f.querySelector("input");
+      if (!vale && i.checked) i.checked = false;
+    });
+    caja.classList.toggle("oculto", utiles.length < 2);
+  }
+  document.addEventListener("change", function(e){
+    if (e.target.name === "camino" || e.target.name === "favorita") refrescarFavorita();
+  });
+
   /* ---------- arranque ---------- */
+  refrescarFavorita();
   var deLink = leerLink();
   if (deLink){
     var b = $("#banda");
