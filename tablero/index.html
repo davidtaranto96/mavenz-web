@@ -376,6 +376,25 @@ a{color:var(--marca-texto)}
 .escena.es-demo{cursor:pointer}
 .opcion:has(.es-demo) .opcion__pie{background:color-mix(in srgb, var(--marca-tenue) 55%, transparent)}
 
+.vuelta{
+  background:var(--marca-tenue); border-bottom:1px solid var(--linea);
+  padding:.7rem 0; font-size:.88rem; color:var(--marca-texto);
+  transition:opacity .6s ease, max-height .6s ease; max-height:6rem; overflow:hidden;
+}
+.vuelta.ida{opacity:0; max-height:0; padding:0; border:none}
+.vuelta b{font-weight:700}
+.empuje{
+  max-width:62rem; margin:0 auto .55rem; display:flex; align-items:center; gap:.7rem;
+  font-size:.83rem; color:var(--marca-texto); line-height:1.35;
+  background:var(--marca-tenue); border-radius:var(--r); padding:.55rem .7rem;
+}
+.empuje span{flex:1}
+.boton--chico{
+  flex:none; margin-left:0; font-size:.83rem; padding:.5rem .9rem; min-height:38px;
+  background:var(--marca-texto); color:var(--papel-alto);
+}
+@media (max-width:34rem){ .empuje{font-size:.8rem} }
+
 /* ---------- las direcciones ---------- */
 .dir{padding:0 !important; gap:0 !important}
 .dir__marco{position:absolute; inset:0; padding:6cqw; display:flex; flex-direction:column}
@@ -732,6 +751,10 @@ a{color:var(--marca-texto)}
     <span class="barra__cuenta" id="cuenta">0 de 23</span>
   </div>
   <div class="barra__riel"><div class="barra__avance" id="avance"></div></div>
+</div>
+
+<div class="vuelta oculto" id="vuelta" role="status">
+  <div class="envase">Seguí donde estabas: tenías <b>0 respuestas</b> guardadas en este teléfono.</div>
 </div>
 
 <div class="banda oculto" id="banda">
@@ -2050,7 +2073,7 @@ a{color:var(--marca-texto)}
 <!-- ============ CIERRE ============ -->
 <section class="cierre" id="cierre">
   <h2 class="bloque__titulo">Listo</h2>
-  <p class="bloque__nota" style="max-width:40rem">Apretá el botón y se arma todo lo que marcaste. No hace falta que contestes todo: con el primer bloque y las cuatro del final ya tengo por dónde arrancar. Lo que vas marcando queda guardado en tu teléfono, así que podés cortar y seguir después.</p>
+  <p class="bloque__nota" style="max-width:40rem">Apretá el botón y se arma todo lo que marcaste. No hace falta que contestes todo: con el primer bloque y las cuatro del final ya tengo por dónde arrancar. Lo que vas marcando se guarda solo en cuanto lo tocás, así que podés cerrar la página y volver cuando quieras: se recupera todo. Lo único que no pasa solo es que me llegue a mí, para eso hace falta este botón.</p>
   <div class="acciones">
     <button class="boton" type="button" id="armar">Guardar y armar el envío</button>
     <button class="boton boton--fantasma" type="button" id="limpiar">Borrar todo y empezar de nuevo</button>
@@ -2071,8 +2094,12 @@ a{color:var(--marca-texto)}
 </main>
 
 <div class="pie-fijo">
+  <div class="empuje oculto" id="empuje">
+    <span>Con lo que marcaste ya me alcanza para arrancar. Mandámelo ahora si querés, y seguís cuando puedas.</span>
+    <button class="boton boton--chico" type="button" id="empujeBoton">Mandarlo así</button>
+  </div>
   <div class="pie-fijo__fila">
-    <span class="pie-fijo__texto" id="pieTexto">Tocá lo que te guste. Nada se envía solo.</span>
+    <span class="pie-fijo__texto" id="pieTexto">Tocá lo que te guste. Se va guardando solo.</span>
     <button class="boton" type="button" id="irCierre">Guardar</button>
   </div>
 </div>
@@ -2122,6 +2149,7 @@ a{color:var(--marca-texto)}
     ["espacio",        "Espacio Mavenz es"]
   ];
   var LLAVE = "mavenz-tablero-v2";
+  var yaMando = false;
 
   var $  = function(s){ return document.querySelector(s) };
   var $$ = function(s, c){ return Array.prototype.slice.call((c || document).querySelectorAll(s)) };
@@ -2189,6 +2217,8 @@ a{color:var(--marca-texto)}
     var total = GRUPOS.length + 1;
     $("#cuenta").textContent = hechas + " de " + total;
     $("#avance").style.width = Math.round(hechas / total * 100) + "%";
+    var empuje = $("#empuje");
+    if (empuje) empuje.classList.toggle("oculto", hechas < 5 || yaMando);
     var pie = $("#pieTexto");
     if (pie) pie.textContent = hechas === 0
       ? "Tocá lo que te guste. Nada se envía solo."
@@ -2203,7 +2233,18 @@ a{color:var(--marca-texto)}
     d.__tocado = ordenTocado;
     return d;
   }
-  function guardar(){ try{ localStorage.setItem(LLAVE, JSON.stringify(estado())) }catch(e){} }
+  var pideHash = null;
+  function guardar(){
+    try{ localStorage.setItem(LLAVE, JSON.stringify(estado())) }catch(e){}
+    // y ademas en la direccion, para que la URL sola alcance para recuperar todo
+    clearTimeout(pideHash);
+    pideHash = setTimeout(function(){
+      try{
+        var cod = codificar();
+        history.replaceState(null, "", location.pathname + (cod ? "#g=" + cod : ""));
+      }catch(e){}
+    }, 400);
+  }
 
   function aplicar(d){
     if (!d) return;
@@ -2236,7 +2277,7 @@ a{color:var(--marca-texto)}
     while (t.length % 4) t += "=";
     return decodeURIComponent(escape(atob(t)));
   }
-  function armarLink(){
+  function codificar(){
     var d = leer(), c = { v: 2, g: {} };
     GRUPOS.forEach(function(g){
       if (!d[g[0]]) return;
@@ -2249,11 +2290,17 @@ a{color:var(--marca-texto)}
     if (lista) c.o = leerOrden().map(function(x){ return ORDEN_BASE.indexOf(x.id) + (x.on ? "" : "x") });
     if (d.nota) c.n = d.nota[0];
     if (ordenTocado) c.t = 1;
-    return location.origin + location.pathname + "#r=" + aB64(JSON.stringify(c));
+    var vacio = !Object.keys(c.g).length && !c.n && !c.t;
+    return vacio ? "" : aB64(JSON.stringify(c));
+  }
+  function armarLink(){
+    var cod = codificar();
+    return location.origin + location.pathname + (cod ? "#r=" + cod : "");
   }
   function leerLink(){
     var h = location.hash || "";
-    if (h.indexOf("#r=") !== 0) return null;
+    var propio = h.indexOf("#g=") === 0;
+    if (h.indexOf("#r=") !== 0 && !propio) return null;
     try{
       var c = JSON.parse(deB64(h.slice(3)));
       if (!c || c.v !== 2) return null;
@@ -2273,7 +2320,7 @@ a{color:var(--marca-texto)}
       if (c.n){ var n = $("#nota"); if (n) n.value = c.n }
       if (c.t) ordenTocado = true;
       refrescarFavorita();
-      return true;
+      return propio ? "propio" : "enviado";
     } catch(e){ return null }
   }
 
@@ -2329,8 +2376,14 @@ a{color:var(--marca-texto)}
     $("#wa").href = "https://wa.me/" + NUMERO_WA + "?text=" + encodeURIComponent(msj);
     $("#texto").scrollIntoView({ behavior: "smooth", block: "center" });
   }
-  $("#armar").addEventListener("click", mostrar);
+  $("#armar").addEventListener("click", function(){ yaMando = true; mostrar(); contar() });
+  $("#empujeBoton").addEventListener("click", function(){
+    yaMando = true; contar();
+    $("#cierre").scrollIntoView({ behavior: "smooth", block: "start" });
+    mostrar();
+  });
   $("#irCierre").addEventListener("click", function(){
+    yaMando = true;
     $("#cierre").scrollIntoView({ behavior: "smooth", block: "start" });
     mostrar();
   });
@@ -2357,7 +2410,10 @@ a{color:var(--marca-texto)}
     if (nota) nota.value = "";
     ordenTocado = false;
     try{ localStorage.removeItem(LLAVE) }catch(e){}
-    if (location.hash) history.replaceState(null, "", location.pathname);
+    clearTimeout(pideHash);
+    history.replaceState(null, "", location.pathname);
+    yaMando = false;
+    var v0 = $("#vuelta"); if (v0) v0.classList.add("oculto");
     var b = $("#banda"); if (b) b.classList.add("oculto");
     $("#salida").classList.add("oculto");
     $("#aviso").textContent = "";
@@ -2559,16 +2615,24 @@ a{color:var(--marca-texto)}
   /* ---------- arranque ---------- */
   refrescarFavorita();
   var deLink = leerLink();
-  if (deLink){
-    var b = $("#banda");
-    if (b) b.classList.remove("oculto");
+  if (deLink === "enviado"){
+    $("#banda").classList.remove("oculto");
     contar();
     setTimeout(mostrar, 300);
   } else {
-    var g = null;
-    try{ g = JSON.parse(localStorage.getItem(LLAVE) || "null") }catch(e){}
-    aplicar(g);
+    if (deLink !== "propio"){
+      var g = null;
+      try{ g = JSON.parse(localStorage.getItem(LLAVE) || "null") }catch(e){}
+      aplicar(g);
+    }
     contar();
+    var hechas = GRUPOS.filter(function(x){ return leer()[x[0]] }).length + (ordenTocado ? 1 : 0);
+    if (hechas > 0){
+      var v = $("#vuelta");
+      v.querySelector("b").textContent = hechas === 1 ? "1 respuesta" : hechas + " respuestas";
+      v.classList.remove("oculto");
+      setTimeout(function(){ v.classList.add("ida") }, 5200);
+    }
   }
 })();
 </script>
