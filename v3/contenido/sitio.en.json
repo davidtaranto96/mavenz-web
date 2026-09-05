@@ -1,0 +1,65 @@
+{
+  "_fuente": "Versión en inglés. Vero marcó en el tablero que quiere las dos versiones completas. Cada clave que esté acá reemplaza a la misma clave de sitio.json; lo que no esté, sale en castellano con el aviso de pendiente.",
+  "_pendiente": true,
+  "_aviso": "English version: the copy is pending from Mavenz. Until it arrives, this page shows the Spanish text.",
+  "marca": {
+    "claim_en": "Moving things forward",
+    "cta_reunion": "Book a meeting"
+  },
+  "menu": [
+    {
+      "id": "universo",
+      "rotulo": "Mavenz Universe"
+    },
+    {
+      "id": "metodo",
+      "rotulo": "How we work"
+    },
+    {
+      "id": "espacio",
+      "rotulo": "Espacio Mavenz"
+    },
+    {
+      "id": "proyectos",
+      "rotulo": "Projects and opportunities"
+    },
+    {
+      "id": "contacto",
+      "rotulo": "Contact"
+    }
+  ],
+  "contacto": {
+    "form": {
+      "motivo": "What do you want to move",
+      "nombre": "Your name",
+      "contacto": "Phone or email",
+      "mensaje": "Tell us in two lines",
+      "enviar": "Book a meeting",
+      "falta": "Name or contact is missing.",
+      "listo": "Done, WhatsApp opens with the message written.",
+      "sin_numero": "The Mavenz WhatsApp number is not loaded yet. The message would be:"
+    }
+  },
+  "proyectos": {
+    "rotulos": {
+      "ubicacion": "Location",
+      "rol": "Mavenz role",
+      "estado": "Status",
+      "fotos": "Project photos"
+    }
+  },
+  "interfaz": {
+    "menu": "Menu",
+    "cerrar": "Close",
+    "saltar": "Skip to content",
+    "ver_onda": "Play the ripple again",
+    "idioma": "Language",
+    "pendiente": "pending",
+    "capacidades_indice": "Seven capabilities",
+    "paso": "Step",
+    "de": "of",
+    "whatsapp": "Write on WhatsApp",
+    "anterior": "Previous",
+    "siguiente": "Next"
+  }
+}

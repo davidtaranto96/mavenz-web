@@ -1,0 +1,711 @@
+/* ==========================================================================
+   Mavenz v3 — hoja única. Sin frameworks, sin build.
+   Regla: cero HEX fuera de :root. Siete tamaños de texto, tres pesos.
+   Mobile-first: lo de abajo es el celular; los @media agregan el resto.
+   Tres carriles: celular (base) · notebook horizontal (ancho y bajo, se
+   mide contra svh) · escritorio grande (anillo completo).
+   ========================================================================== */
+
+:root{
+  /* --- color: la paleta oficial de Fractura, entera y nada más ---------- */
+  --papel:       #eeecec;   /* Anti-flash white: el fondo. #fff no existe acá */
+  --timber:      #d3cfc8;   /* Timberwolf: filetes, fondos de foto */
+  --grullo:      #b7a28b;   /* Grullo: líneas vivas, hover del subrayado */
+  --wenge:       #715d55;   /* Wenge: texto secundario */
+  --bistre:      #492f22;   /* Bistre: hover del bordó */
+  --tinta:       #3c2527;   /* Old Burgundy: la tinta de los títulos y botones */
+  --negro:       #1e1e20;   /* Eerie Black: texto de lectura */
+  --linea:       rgba(113,93,85,.22);
+  --linea-viva:  rgba(113,93,85,.5);
+  --velo:        rgba(30,30,32,.4);
+  --sombra:      rgba(30,30,32,.14);
+  --sombra-suave:rgba(30,30,32,.07);
+
+  /* --- tipografía: siete tamaños, tres pesos ----------------------------- */
+  --t0: .75rem;
+  --t1: .875rem;
+  --t2: 1rem;                                       /* nunca menos en un campo */
+  --t3: clamp(1.0625rem, .95rem + .45vw, 1.3rem);
+  --t4: clamp(1.35rem, 1.1rem + 1.1vw, 1.9rem);
+  --t5: clamp(2.25rem, 1.4rem + 3.6vw, 4.6rem);    /* h2: ExtraBold gigante */
+  --t6: clamp(2.9rem, 1.7rem + 5.2vw, 6.6rem);     /* h1 */
+  --normal: 400;
+  --media:  500;
+  --gruesa: 800;                                    /* Urbanist ExtraBold, lo que pide el manual */
+
+  /* --- espacio ----------------------------------------------------------- */
+  --e1: .5rem;  --e2: .75rem; --e3: 1rem;   --e4: 1.5rem;
+  --e5: 2.25rem; --e6: 3.5rem; --e7: 5rem;
+  --e8: 2.5rem;                                    /* aire entre secciones (celular) */
+  --ancho: 80rem;
+  --margen: clamp(1.25rem, 5vw, 4.5rem);
+  --alto-cabecera: 3.75rem;
+  --radio: 6px;                                     /* fotos: seis, no dieciséis */
+  --radio-carta: 12px;
+
+  /* --- movimiento -------------------------------------------------------- */
+  --curva: cubic-bezier(.2,.7,.2,1);
+  --curva-reveal: cubic-bezier(.22,1,.36,1);
+  --pulsado: 120ms;
+  --rapido: .18s;
+  --medio: .34s;
+  --lento: .9s;
+  --letra: 22ms;
+}
+
+/* Notebook horizontal: sobra ancho y falta alto. El aire vertical se
+   recorta acá, en un solo lugar. */
+@media (max-height:46rem) and (min-width:48rem){
+  :root{ --e8:1.5rem; --e7:3rem; --e6:2.5rem }
+}
+
+@font-face{
+  font-family:'Urbanist';
+  src:url('../assets/marca/Urbanist-Variable.ttf') format('truetype');
+  font-weight:100 900; font-display:swap;
+}
+
+*,*::before,*::after{ box-sizing:border-box }
+
+/* overflow-x SOLO en html y con clip. scrollbar-gutter una vez: sin esto
+   abrir el menú ensancha el documento 15px. */
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--alto-cabecera) + .75rem);
+  overflow-x:clip;
+  scrollbar-gutter:stable;
+  -webkit-text-size-adjust:100%;
+}
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
+
+body{
+  margin:0;
+  background:var(--papel);
+  color:var(--negro);
+  font-family:'Urbanist', ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  font-size:var(--t2);
+  font-weight:var(--normal);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+
+h1,h2,h3,p,figure,ul,ol,dl,dd,blockquote,form{ margin:0 }
+ul,ol{ padding:0; list-style:none }
+img,video,svg{ display:block; max-width:100% }
+img{ height:auto }
+button{ font:inherit; color:inherit }
+
+/* --- kit base: especificidad cero ------------------------------------------
+   :active a 120ms es obligatorio porque se sacó el tap-highlight nativo. */
+:where(a,button,[role=button],summary):active{ scale:.96; transition:scale var(--pulsado) var(--curva); }
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--tinta); outline-offset:3px; border-radius:var(--radio);
+}
+a{ color:var(--tinta); text-decoration:none; transition:color var(--rapido) var(--curva); }
+::selection{ background:var(--tinta); color:var(--papel) }
+
+.saltar{
+  position:absolute; left:var(--margen); top:var(--e3); z-index:70;
+  translate:0 -5rem;
+  background:var(--tinta); color:var(--papel); padding:var(--e2) var(--e4);
+  border-radius:999px; font-weight:var(--media);
+  transition:translate var(--rapido) var(--curva);
+}
+.saltar:focus{ translate:none }
+
+.envase{ width:min(100% - var(--margen)*2, var(--ancho)); margin-inline:auto }
+
+/* --------------------------------------------------------------- tipografía */
+
+.titulo, h1{
+  font-weight:var(--gruesa);
+  text-transform:uppercase;            /* lo pidió Vero en el audio del 04/09 */
+  color:var(--tinta);
+  line-height:.98;
+  letter-spacing:-.015em;
+  text-wrap:balance;
+}
+h1{ font-size:var(--t6); line-height:.94; letter-spacing:-.02em }
+.titulo{ font-size:var(--t5); max-width:18ch }
+h3{ font-size:var(--t4); font-weight:var(--gruesa); color:var(--tinta); line-height:1.12; letter-spacing:-.01em }
+
+.entrada{ font-size:var(--t3); color:var(--wenge); max-width:44ch; text-wrap:pretty }
+.prosa{ font-size:var(--t3); line-height:1.55; max-width:58ch; text-wrap:pretty }
+.cita{
+  font-size:var(--t4); font-weight:var(--normal); color:var(--tinta); line-height:1.25;
+  border-left:2px solid var(--grullo); padding-left:var(--e4); margin-top:var(--e4);
+  text-wrap:pretty; max-width:30ch;
+}
+.margen{
+  display:flex; flex-wrap:wrap; gap:var(--e2) var(--e4); justify-content:space-between;
+  font-size:var(--t0); color:var(--wenge); letter-spacing:.02em;
+  border-top:1px solid var(--linea); padding-top:var(--e2); margin-top:var(--e4);
+}
+
+/* Cabecera de sección: título a la izquierda, bajada a la derecha, base
+   compartida, un filete. */
+.cabecera-seccion{
+  display:grid; gap:var(--e3);
+  padding-bottom:var(--e3); border-bottom:1px solid var(--linea); margin-bottom:var(--e3);
+}
+
+/* --------------------------------------------------------------- botones */
+
+.boton{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--e2);
+  min-height:44px; padding:.7rem 1.5rem;
+  border-radius:999px;                                  /* píldora rellena */
+  font-size:var(--t2); font-weight:var(--media); line-height:1.2;
+  border:1px solid var(--tinta); background:var(--tinta); color:var(--papel);
+  cursor:pointer; text-align:center;
+  transition:background var(--rapido) var(--curva), border-color var(--rapido) var(--curva);
+}
+.enlace{
+  display:inline-flex; align-items:center; gap:.45em;
+  min-height:44px; font-size:var(--t2); font-weight:var(--media); color:var(--tinta);
+  text-decoration:underline; text-underline-offset:.3em; text-decoration-thickness:1.5px;
+  text-decoration-color:var(--tinta);
+  transition:text-decoration-color var(--rapido) var(--curva);
+}
+.enlace svg{ transition:translate var(--medio) var(--curva); }
+@media (hover:hover) and (pointer:fine){
+  .boton:hover{ background:var(--bistre); border-color:var(--bistre) }
+  .enlace:hover{ text-decoration-color:var(--grullo) }
+  .enlace:hover svg{ translate:.3em 0 }
+}
+.acciones{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--e3) var(--e5); margin-top:var(--e4) }
+.acciones--seccion{ margin-top:var(--e5) }
+
+/* El marcador de lo que falta: visible a propósito, para que Vero vea qué
+   debe. No es decoración. */
+.pendiente{
+  display:inline-block; font-size:var(--t0); font-weight:var(--media); line-height:1.2;
+  color:var(--tinta); border:1px dashed var(--tinta); border-radius:999px;
+  padding:.3rem .7rem; letter-spacing:.01em;
+}
+.falta{
+  display:grid; place-items:center; text-align:center; padding:var(--e4);
+  border:1px dashed var(--linea-viva); border-radius:var(--radio);
+  background:var(--sombra-suave); color:var(--wenge);
+}
+.falta--foto{ aspect-ratio:2/1 }
+.falta--lista{ padding:var(--e2) var(--e3); margin-top:var(--e3) }
+.falta--linea{ display:block; padding:var(--e2); margin-top:var(--e4); text-align:center }
+.aviso-idioma{ text-align:center; padding:var(--e2) var(--margen); border-bottom:1px solid var(--linea) }
+
+/* --------------------------------------------------------------- cabecera */
+
+.cabecera{
+  position:sticky; top:0; z-index:50;                  /* siempre a la vista */
+  display:flex; align-items:center; justify-content:space-between; gap:var(--e3);
+  min-height:var(--alto-cabecera); padding:.5rem var(--margen);
+  background:var(--papel);
+  border-bottom:1px solid transparent;
+  transition:border-color var(--medio) var(--curva);
+}
+.cabecera.pegada{ border-bottom-color:var(--linea) }
+.marca{ display:flex; align-items:center; min-height:44px }
+.marca img{ height:1.6rem; width:auto }
+
+.abrir-menu{
+  min-height:44px; padding:.5rem 1rem; border-radius:999px;
+  background:none; border:1px solid var(--linea-viva); color:var(--tinta);
+  font-size:var(--t1); font-weight:var(--media); cursor:pointer;
+}
+
+/* El menú del celular: un panel entero, de la cabecera para abajo. Se
+   anima con opacity y translate, nada de height. */
+.menu{
+  position:fixed; inset:var(--alto-cabecera) 0 0 0; z-index:49;
+  background:var(--papel); padding:var(--e4) var(--margen) var(--e6);
+  display:grid; align-content:start; gap:var(--e5);
+  opacity:0; translate:0 -.5rem; visibility:hidden; pointer-events:none;
+  overflow:auto;
+  transition:opacity var(--medio) var(--curva), translate var(--medio) var(--curva), visibility 0s linear var(--medio);
+}
+.menu[data-abierto="true"]{ opacity:1; translate:none; visibility:visible; pointer-events:auto; transition-delay:0s }
+.menu ul{ display:grid }
+.menu li a{
+  display:flex; align-items:center; min-height:52px;
+  font-size:var(--t4); font-weight:var(--media); color:var(--tinta);
+  border-bottom:1px solid var(--linea);
+}
+.menu li a[aria-current="true"]{ color:var(--bistre); font-weight:var(--gruesa) }
+.menu__pie{ display:grid; gap:var(--e3) }
+.idioma{
+  display:inline-flex; align-items:center; justify-content:center; min-height:44px; min-width:44px;
+  font-size:var(--t1); font-weight:var(--media); color:var(--wenge); letter-spacing:.06em;
+}
+
+/* ------------------------------------------------------------------ hero */
+/* El pliegue: ninguna pantalla se llena. El agua ocupa la parte grande y
+   el resto queda en papel con la frase. */
+
+.hero{ display:grid; grid-template-rows:auto 1fr }
+.hero__medio{
+  position:relative; overflow:hidden; background:var(--papel);
+  height:clamp(11rem, 29svh, 22rem);
+  cursor:pointer;
+}
+.hero__poster, .hero__video{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  mix-blend-mode:multiply;                             /* el blanco del video se imprime en el papel */
+  object-position:50% 62%;
+}
+.hero__video{ opacity:0; transition:opacity 1.1s var(--curva); }
+.hero__video.lista{ opacity:1 }
+.hero__otra{
+  position:absolute; right:var(--margen); bottom:var(--e3); z-index:2;
+  min-height:44px; padding:.4rem .2rem; background:none; border:0; cursor:pointer;
+  font-size:var(--t1); font-weight:var(--media); color:var(--tinta);
+  text-decoration:underline; text-underline-offset:.3em; text-decoration-color:var(--grullo);
+  opacity:0; transition:opacity var(--medio) var(--curva);
+}
+.hero__otra.visible{ opacity:1 }
+
+.hero__papel{
+  padding:var(--e4) var(--margen) var(--e5);
+  container-type:inline-size;
+}
+.hero h1{ font-size:min(var(--t6), 13.2cqw) }
+.hero__bajada{ font-size:var(--t4); font-weight:var(--normal); color:var(--negro); margin-top:var(--e4); max-width:24ch; text-wrap:balance; line-height:1.2 }
+.hero__apoyo{ font-size:var(--t2); color:var(--wenge); margin-top:var(--e3); max-width:46ch; text-wrap:pretty }
+
+/* El trazo de la marca: la M como un solo trazo. Se dibuja una vez y queda. */
+.trazo{ position:absolute; pointer-events:none; color:var(--tinta) }
+.trazo svg{ width:100%; height:100%; overflow:visible }
+.trazo path{
+  stroke:currentColor; stroke-width:2.25; stroke-linecap:round; vector-effect:non-scaling-stroke;
+  stroke-dasharray:1; stroke-dashoffset:1;
+}
+.trazo.dibujado path{ transition:stroke-dashoffset 2.4s var(--curva); stroke-dashoffset:0 }
+.trazo--hero{ left:-2%; right:-2%; bottom:5%; height:36%; z-index:1; opacity:.9 }
+.trazo--hero path{ stroke-width:1.75 }
+.trazo--pie{ inset:auto -4% -22% -4%; height:9rem; color:var(--grullo); opacity:.6 }
+@media (prefers-reduced-motion:reduce){
+  .trazo path{ stroke-dashoffset:0; transition:none; }
+  .hero__video{ display:none }
+}
+
+/* ----------------------------------------------------------- secciones */
+
+/* clip en x por sección: un bloque corrido 30px por el reveal no ensancha el
+   documento (clip no crea contenedor de scroll, así el sticky sigue pegando). */
+section{ padding-block:var(--e8); position:relative; overflow-x:clip }
+main > section + section{ border-top:1px solid var(--linea) }
+
+/* Al margen: se lee como un artículo. Columna de texto, datos sueltos al
+   costado en letra chica, y una foto que se va de largo. */
+.articulo__grilla{ display:grid; gap:var(--e4); grid-template-areas:"titulo" "cuerpo" "foto" "margen" }
+.articulo__grilla > .titulo{ grid-area:titulo }
+.articulo__cuerpo{ grid-area:cuerpo }
+.articulo__margen{ grid-area:margen; font-size:var(--t0); color:var(--wenge); letter-spacing:.02em; line-height:1.6 }
+.articulo__margen p + p{ margin-top:var(--e3) }
+.articulo__margen ol{ display:flex; flex-wrap:wrap; gap:.25rem var(--e3) }
+.articulo__margen a{ color:var(--wenge); display:inline-block; min-height:24px; text-decoration:underline; text-underline-offset:.25em; text-decoration-color:var(--linea) }
+.articulo__foto{ grid-area:foto; margin-top:var(--e3) }
+
+/* Marco de foto: radio 6, fondo timber mientras carga. */
+.foto{ position:relative; overflow:hidden; border-radius:var(--radio); background:var(--timber) }
+.foto__img{ width:100%; height:100%; object-fit:cover }
+.foto--bn .foto__img{ filter:grayscale(1) contrast(1.05) }
+.foto--velo .foto__img{ filter:brightness(.62) contrast(1.05) }
+.articulo__foto .foto__img{ aspect-ratio:3/2 }
+@media (hover:hover) and (pointer:fine){
+  .foto__img{ transition:scale 1.4s var(--curva-reveal); }
+  .foto:hover .foto__img{ scale:1.035 }
+}
+
+/* La banda de agua: se abre una vez y queda quieta. */
+.banda{ height:clamp(5rem, 14svh, 12rem); overflow:hidden; background:var(--papel) }
+.banda img{ width:100%; height:100%; object-fit:cover; mix-blend-mode:multiply }
+
+/* ----------------------------------------------------------- universo */
+
+.rueda-marco{ display:none }
+
+/* En el celular las capacidades se apilan como cartas: cada una se pega y
+   la siguiente la va tapando. Es sticky puro, sin JS. */
+.cartas{ display:grid; gap:var(--e1); margin-top:var(--e3) }
+.carta{
+  position:sticky; top:calc(var(--alto-cabecera) + var(--e3) + var(--i) * .7rem);
+  background:var(--papel); border:1px solid var(--timber); border-radius:var(--radio-carta);
+  padding:var(--e3) var(--e4); box-shadow:0 -6px 22px var(--sombra-suave), 0 1px 0 var(--linea);
+  display:grid; gap:.3rem; align-content:start;
+}
+.carta__n{ display:none; font-size:var(--t0); color:var(--wenge); font-variant-numeric:tabular-nums; letter-spacing:.04em }
+.carta h3{ font-size:var(--t3) }
+.carta p{ color:var(--wenge); max-width:40ch; font-size:var(--t1) }
+.carta--destacada{ border-color:var(--grullo) }
+.carta--destacada h3::after{ content:''; display:block; width:2rem; height:2px; background:var(--tinta); margin-top:var(--e2) }
+.carta:not(.carta--destacada) h3{ color:var(--wenge) }
+
+/* La rueda conectada (escritorio): las capacidades alrededor de la M.
+   Queda quieta y sólo se mueve cuando la tocás. */
+.rueda{
+  --lado: min(30rem, 62svh, 40vw);
+  --r: .46;
+  position:relative; width:var(--lado); height:var(--lado); margin-inline:auto;
+}
+.rueda__pista{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; color:var(--tinta) }
+.rueda__pista circle{ fill:none; stroke:var(--timber); stroke-width:.6 }
+.rueda__pista .rueda__arco{ stroke:var(--tinta); stroke-width:1.3; stroke-linecap:round; transition:stroke-dasharray var(--lento) var(--curva-reveal); }
+.rueda__centro{
+  position:absolute; left:50%; top:50%; translate:-50% -50%; width:44%;
+  display:grid; justify-items:center; gap:var(--e2); text-align:center; pointer-events:none;
+}
+.rueda__centro .rueda__iso{ width:46%; height:auto; color:var(--tinta) }
+.rueda__corto{ font-size:var(--t4); font-weight:var(--gruesa); color:var(--tinta); line-height:1; transition:opacity var(--medio) var(--curva); }
+.rueda__corto.cambiando{ opacity:0 }
+
+/* El nodo: blanco táctil de 44px centrado EN la línea. El punto en el
+   centro; el rótulo sale radialmente hacia afuera. */
+.rueda__nodo{
+  position:absolute; left:50%; top:50%;
+  translate:calc(-50% + var(--lado) * var(--r) * var(--cx)) calc(-50% + var(--lado) * var(--r) * var(--cy));
+  display:grid; place-items:center; width:44px; height:44px; padding:0;
+  background:none; border:0; cursor:pointer; color:var(--wenge);
+  transition:color var(--medio) var(--curva);
+}
+.rueda__nodo::before{
+  content:''; width:11px; height:11px; border-radius:50%;
+  background:var(--papel); border:1.5px solid var(--tinta);
+  transition:background var(--medio) var(--curva), scale var(--medio) var(--curva);
+}
+.rueda__nodo--destacada::before{ background:var(--tinta) }
+.rueda__nodo--destacada{ color:var(--tinta) }
+.rueda__rotulo{
+  position:absolute; left:50%; top:50%;
+  translate:calc(-50% + var(--cx) * 50% + var(--cx) * 14px) calc(-50% + var(--cy) * 50% + var(--cy) * 14px);
+  width:max-content; font-size:var(--t1); font-weight:var(--media); line-height:1.1; white-space:nowrap;
+}
+.rueda__nodo:not(.rueda__nodo--destacada) .rueda__rotulo{ font-weight:var(--normal) }
+.rueda__nodo[aria-selected="true"]{ color:var(--tinta) }
+.rueda__nodo[aria-selected="true"]::before{ background:var(--tinta); scale:1.7 }
+.rueda__nodo[aria-selected="true"] .rueda__rotulo{ font-weight:var(--gruesa) }
+@media (hover:hover) and (pointer:fine){ .rueda__nodo:hover{ color:var(--tinta) } }
+
+.rueda__detalle{ display:grid; gap:var(--e3); align-content:center; min-height:14rem }
+.rueda__cuenta{ font-size:var(--t0); color:var(--wenge); font-variant-numeric:tabular-nums; letter-spacing:.06em }
+.rueda__cuerpo{ transition:opacity var(--medio) var(--curva); }
+.rueda__cuerpo.cambiando{ opacity:0 }
+.rueda__cuerpo p{ font-size:var(--t3); color:var(--wenge); margin-top:var(--e3); max-width:40ch; text-wrap:pretty }
+.rueda__mandos{ display:flex; gap:var(--e2); margin-top:var(--e2) }
+.mando{
+  display:grid; place-items:center; width:44px; height:44px; border-radius:50%;
+  background:none; border:1px solid var(--linea-viva); color:var(--tinta); cursor:pointer;
+  transition:border-color var(--rapido) var(--curva), background var(--rapido) var(--curva);
+}
+.mando[data-anterior] svg{ rotate:180deg }
+@media (hover:hover) and (pointer:fine){ .mando:hover{ border-color:var(--tinta); background:var(--sombra-suave) } }
+
+/* ------------------------------------------------------------- método */
+/* Un solo trazo: la línea sale del logo y baja uniendo los cinco pasos,
+   dibujándose a medida que bajás. El camino lo calcula el guion pasando
+   por los nodos reales, así funciona en cualquier alto. */
+
+.hilo{ position:relative; margin-top:var(--e3) }
+.hilo__trazo{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none }
+.hilo__trazo path{
+  stroke:var(--tinta); stroke-width:1.75; stroke-linecap:round; vector-effect:non-scaling-stroke;
+  stroke-dasharray:1; stroke-dashoffset:var(--hilo, 1);
+}
+.sin-js .hilo::before{ content:''; position:absolute; left:1.25rem; top:0; bottom:0; width:1px; background:var(--linea-viva) }
+.pasos{ display:grid; gap:var(--e4); padding-left:3.5rem; position:relative }
+.paso{ position:relative; max-width:40ch }
+.paso__n{
+  position:absolute; left:-3.5rem; top:-.15rem;
+  display:grid; place-items:center; width:2.5rem; height:2.5rem; border-radius:50%;
+  background:var(--papel); border:1.5px solid var(--tinta); color:var(--tinta);
+  font-size:var(--t1); font-weight:var(--gruesa); font-variant-numeric:tabular-nums;
+  transition:background var(--medio) var(--curva), color var(--medio) var(--curva);
+}
+.paso.visible .paso__n{ background:var(--tinta); color:var(--papel) }
+.paso h3{ font-size:var(--t4) }
+.paso p{ color:var(--wenge); margin-top:var(--e2) }
+@media (prefers-reduced-motion:reduce){ .hilo__trazo path{ stroke-dashoffset:0 } }
+
+/* ------------------------------------------------------------ espacio */
+
+.espacio__grilla{ display:grid; gap:var(--e5) }
+.uso{ border-top:1px solid var(--linea); padding-top:var(--e4); margin-top:var(--e5) }
+.uso h3{ font-size:var(--t3) }
+.uso p{ color:var(--wenge); margin-top:var(--e1) }
+
+/* ---------------------------------------------------------- proyectos */
+/* Dossier: las fotos no van en grilla pareja, van sueltas a distintos
+   tamaños. En el celular la mesa se vuelve un estante que se desliza. */
+
+.proyectos{ overflow-x:clip }
+.dossier{ display:grid; gap:var(--e4) }
+.dossier__portada .foto__img{ aspect-ratio:16/10 }
+.dossier__nombre{
+  position:absolute; left:var(--e4); right:var(--e4); bottom:var(--e4); z-index:1;
+  display:grid; gap:.2rem; color:var(--papel);
+}
+.dossier__nombre span:first-child{ font-size:var(--t5); font-weight:var(--gruesa); line-height:.95; letter-spacing:-.015em }
+.dossier__nombre span + span{ font-size:var(--t1) }
+.dossier__ficha .cita{ margin-top:0 }
+.ficha{ display:grid; gap:var(--e3); margin-top:var(--e4) }
+.ficha div{ display:grid; gap:.15rem; border-top:1px solid var(--linea); padding-top:var(--e2) }
+.ficha dt{ font-size:var(--t0); color:var(--wenge); letter-spacing:.02em }
+.ficha dd{ font-size:var(--t2); font-weight:var(--media); color:var(--negro) }
+.dossier__ficha .enlace{ margin-top:var(--e4) }
+
+.estante{
+  display:flex; gap:var(--e3);
+  margin-inline:calc(var(--margen) * -1); padding:var(--e2) var(--margen) var(--e3);
+  overflow-x:auto; overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory; scroll-padding-inline:var(--margen);
+  -webkit-overflow-scrolling:touch; scrollbar-width:none;
+}
+.estante::-webkit-scrollbar{ display:none }
+.suelta{ flex:0 0 72vw; scroll-snap-align:center; aspect-ratio:3/2 }
+.suelta--1{ flex-basis:58vw; aspect-ratio:4/5 }
+.suelta--5{ flex-basis:80vw; aspect-ratio:21/10 }
+
+/* -------------------------------------------------------------- mirada */
+
+.notas{ display:grid }
+.nota{ display:grid; gap:var(--e1); border-top:1px solid var(--linea); padding-block:var(--e3) }
+.nota:last-child{ border-bottom:1px solid var(--linea) }
+.nota__meta{ font-size:var(--t0); color:var(--wenge); letter-spacing:.02em }
+.nota h3{ font-size:var(--t3); max-width:26ch }
+.nota p{ color:var(--wenge); max-width:52ch; text-wrap:pretty }
+
+/* ------------------------------------------------------------ contacto */
+
+.contacto__grilla{ display:grid; gap:var(--e5) }
+.formulario{ display:grid; gap:var(--e2) var(--e3) }
+.formulario label{ display:grid; gap:.35rem }
+.formulario label span{ font-size:var(--t1); font-weight:var(--media); color:var(--wenge) }
+.formulario input, .formulario select, .formulario textarea{
+  font:inherit; font-size:var(--t2);                    /* 16px: iOS no hace zoom */
+  min-height:48px; padding:.75rem 1rem; width:100%;
+  color:var(--negro); background:var(--papel);
+  border:1px solid var(--linea-viva); border-radius:var(--radio);
+  transition:border-color var(--rapido) var(--curva);
+}
+.formulario textarea{ resize:vertical; min-height:4.5rem }
+.formulario :is(input,select,textarea):focus{ border-color:var(--tinta); outline:none }
+.formulario :is(input,select,textarea):focus-visible{ outline:2px solid var(--tinta); outline-offset:2px }
+.formulario .boton{ justify-self:start; margin-top:var(--e2) }
+.aviso{ font-size:var(--t1); color:var(--wenge); min-height:1.4em; text-wrap:pretty }
+.aviso:empty{ display:none }
+
+/* ------------------------------------------------------------------ pie */
+
+.pie{ position:relative; overflow:hidden; border-top:1px solid var(--linea); padding-block:var(--e6) var(--e7) }
+.pie__grilla{ position:relative; z-index:1; display:grid; gap:var(--e3) var(--e4); align-items:center;
+  grid-template-columns:1fr auto; grid-template-areas:"iso idiomas" "claim claim" "redes redes" "lugar lugar" }
+.pie__iso{ grid-area:iso } .pie__claim{ grid-area:claim } .pie__redes{ grid-area:redes } .pie__lugar{ grid-area:lugar } .pie__idiomas{ grid-area:idiomas }
+.pie__iso{ width:3.25rem }
+.pie__claim{ font-size:var(--t3); font-weight:var(--gruesa); color:var(--tinta) }
+.pie__redes{ display:flex; flex-wrap:wrap; gap:var(--e2) var(--e4); font-size:var(--t1) }
+.pie__redes li{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; color:var(--wenge) }
+.pie__redes a{ color:var(--tinta); text-decoration:underline; text-underline-offset:.25em; text-decoration-color:var(--linea) }
+.pie__lugar{ font-size:var(--t0); color:var(--wenge); letter-spacing:.02em }
+.pie__idiomas{ display:flex; gap:var(--e1) }
+.pie__idiomas a{ display:inline-grid; place-items:center; min-width:44px; min-height:44px; font-size:var(--t1); color:var(--wenge); letter-spacing:.06em }
+.pie__idiomas a[aria-current="true"]{ color:var(--tinta); font-weight:var(--gruesa) }
+
+/* WhatsApp siempre disponible (audio de Vero). Mientras no haya número,
+   lleva al formulario. */
+.wa{
+  position:fixed; right:var(--e3); bottom:var(--e3); z-index:40;
+  display:grid; place-items:center; width:54px; height:54px; border-radius:50%;
+  background:var(--tinta); color:var(--papel); box-shadow:0 8px 24px var(--sombra);
+  transition:background var(--rapido) var(--curva), translate var(--medio) var(--curva);
+}
+@media (hover:hover) and (pointer:fine){ .wa:hover{ background:var(--bistre); translate:0 -2px } }
+
+/* ================================================================ reveal */
+/* El ocultado depende de html.fx-on, que lo escribe el JS antes de pintar.
+   Sin JS no hay clase, y la página se ve entera. Duración y curva viven acá;
+   el retardo escalonado lo pone el guion en --fx-d. */
+
+.fx-on .reveal{
+  transition:opacity var(--lento) var(--curva-reveal) var(--fx-d, 0ms),
+             translate var(--lento) var(--curva-reveal) var(--fx-d, 0ms),
+             scale var(--lento) var(--curva-reveal) var(--fx-d, 0ms),
+             clip-path 1.1s var(--curva-reveal) var(--fx-d, 0ms);
+}
+.fx-on .reveal:not(.visible){ opacity:0; translate:0 26px }
+.fx-on [data-entra="izq"] .reveal:not(.visible){ translate:-30px 0 }
+.fx-on [data-entra="der"] .reveal:not(.visible){ translate:30px 0 }
+.fx-on [data-entra="escala"] .reveal:not(.visible){ translate:none; scale:.955 }
+/* La cortina: el envase no se mueve; se recorta la imagen hija. Si el
+   clip-path fuera en el elemento observado, el observer lo vería con cero
+   de ancho y nunca dispararía. */
+.fx-on .reveal[data-entra="cortina"]:not(.visible){ opacity:1; translate:none }
+.fx-on .reveal[data-entra="cortina"] > img{ clip-path:inset(0 0 0 0); transition:clip-path 1.1s var(--curva-reveal) }
+.fx-on .reveal[data-entra="cortina"]:not(.visible) > img{ clip-path:inset(0 50% 0 50%) }
+/* Un título con letras no se mueve entero además: sólo las letras. */
+.fx-on [data-fx~="letras"].reveal:not(.visible){ opacity:1; translate:none; scale:none }
+
+/* Los títulos entran letra por letra: cada letra sube una atrás de la otra
+   hasta acomodarse. Pasa una sola vez por sección. */
+.fx-on [data-fx~="letras"] .palabra{ display:inline-block; white-space:nowrap }
+.fx-on [data-fx~="letras"] .letra{
+  display:inline-block; opacity:0; translate:0 .5em;
+  transition:opacity .45s var(--curva-reveal) calc(var(--i) * var(--letra)),
+             translate .7s var(--curva-reveal) calc(var(--i) * var(--letra));
+}
+.fx-on [data-fx~="letras"].visible .letra{ opacity:1; translate:none }
+
+@media (prefers-reduced-motion:reduce){
+  .fx-on .reveal, .fx-on [data-fx~="letras"] .letra{ transition:none; }
+  .fx-on .reveal:not(.visible), .fx-on [data-fx~="letras"] .letra{ opacity:1; translate:none; scale:none; clip-path:none }
+  .foto__img, .rueda__arco, .paso__n{ transition:none; }
+}
+
+/* ============================================================ tablet (48rem) */
+
+@media (min-width:48rem){
+  :root{ --e8: clamp(4rem, 10svh, 7rem) }
+  .falta--foto{ aspect-ratio:4/3 }
+  .carta__n{ display:block }
+  .nota h3{ font-size:var(--t4) }
+  .cabecera-seccion{ padding-bottom:var(--e4); margin-bottom:var(--e4) }
+  .cabecera-seccion{ grid-template-columns:minmax(0,7fr) minmax(0,5fr); align-items:end; gap:var(--e5) }
+  .cabecera-seccion .entrada{ justify-self:end }
+  .articulo__grilla{
+    grid-template-columns:minmax(0,7fr) minmax(0,5fr);
+    grid-template-areas:"titulo titulo" "cuerpo foto" "margen foto";
+    column-gap:var(--e6);
+  }
+  .articulo__foto{ margin-top:0 }
+  .espacio__grilla{ grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--e6); align-items:start }
+  .contacto__grilla{ grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--e7); align-items:start }
+  .nota{ grid-template-columns:8rem 1fr; column-gap:var(--e4) }
+  .nota__meta{ padding-top:.35rem }
+  .nota p{ grid-column:2 }
+  .pie__grilla{ grid-template-columns:auto 1fr auto; grid-template-areas:"iso claim idiomas" "iso redes lugar" }
+  .pie__iso{ grid-area:iso; width:4rem; margin-right:var(--e4) }
+  .pie__claim{ grid-area:claim }
+  .pie__redes{ grid-area:redes }
+  .pie__lugar{ grid-area:lugar; justify-self:end }
+  .pie__idiomas{ grid-area:idiomas; justify-self:end }
+  .cartas{ grid-template-columns:1fr; max-width:44rem }
+}
+
+/* =================================================== escritorio (64rem y alto) */
+/* La consulta de alto es la que le faltaba a la v1: el celular acostado
+   (812×375) cae acá por ancho y hay que dejarlo afuera por alto. */
+
+@media (min-width:64rem) and (min-height:30rem){
+  .abrir-menu{ display:none }
+  .menu{
+    position:static; inset:auto; padding:0; background:none;
+    display:flex; align-items:center; gap:var(--e5);
+    opacity:1; translate:none; visibility:visible; pointer-events:auto; overflow:visible; transition:none;
+  }
+  .menu ul{ display:flex; gap:var(--e4) }
+  .menu li a{
+    position:relative; min-height:44px; border:0;
+    font-size:var(--t1); font-weight:var(--media); color:var(--wenge);
+  }
+  .menu li a::after{
+    content:''; position:absolute; left:0; right:0; bottom:.55rem; height:1.5px;
+    background:var(--tinta); transform:scaleX(0); transform-origin:left;
+    transition:transform var(--medio) var(--curva);
+  }
+  .menu li a[aria-current="true"]{ color:var(--tinta); font-weight:var(--media) }
+  .menu li a[aria-current="true"]::after{ transform:scaleX(1) }
+  .menu li a:hover{ color:var(--tinta) }
+  .menu li a:hover::after{ transform:scaleX(1) }
+  .menu__pie{ display:flex; align-items:center; gap:var(--e3) }
+  .menu__pie .boton{ min-height:40px; padding:.5rem 1.15rem; font-size:var(--t1) }
+
+  /* El pliegue en escritorio: dos tercios de agua, un tercio de papel, y la
+     altura se mide contra la pantalla, nunca contra rem. */
+  .hero{
+    grid-template-rows:none; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+    height:calc(100svh - var(--alto-cabecera)); min-height:32rem; max-height:60rem;
+  }
+  .hero__medio{ height:auto; min-height:0 }
+  .hero__poster, .hero__video{ object-position:34% 58% }
+  .trazo--hero{ bottom:10%; height:44%; left:-1%; right:22% }
+  .trazo--hero path{ stroke-width:2.25 }
+  .hero__papel{ position:relative; z-index:2; display:grid; align-content:end; padding:var(--e6) var(--margen) var(--e5) var(--e6) }
+  /* El pliegue: el título arranca sobre el agua y termina en el papel. */
+  .hero h1{ font-size:min(var(--t6), 17.5cqw); margin-left:-40%; width:140% }
+  .hero__papel .margen{ margin-top:var(--e6) }
+
+  .articulo__grilla{
+    grid-template-columns:8rem minmax(0,7fr) minmax(0,5fr);
+    grid-template-areas:"titulo titulo titulo" "margen cuerpo foto";
+    column-gap:var(--e6); row-gap:var(--e5);
+  }
+  .articulo__margen{ padding-top:.4rem }
+  .articulo__margen ol{ display:grid; gap:.1rem }
+  /* La foto se va de largo y la corta el borde de la pantalla. */
+  .articulo__foto{ margin-right:calc(var(--margen) * -1); margin-top:var(--e5) }
+  .articulo__foto .foto__img{ aspect-ratio:3/2 }
+  .red .articulo__foto{ margin-top:0 }
+
+  .rueda-marco{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:var(--e7); margin-top:var(--e4) }
+  .universo .acciones--seccion{ margin-top:var(--e3) }
+  .js .cartas{ display:none }
+
+  /* Dos columnas, tres filas: el hilo va de un paso al otro en diagonal,
+     como la ese de la marca, y la sección no se estira. */
+  .pasos{ grid-template-columns:1fr 1fr; column-gap:var(--e8); row-gap:var(--e5); padding-left:0; max-width:64rem; margin-inline:auto }
+  .paso{ grid-row:calc(var(--fila) + 1); grid-column:var(--col); padding-left:3.5rem; max-width:36ch }
+  .paso:nth-child(even){ margin-top:6.5rem }   /* el hilo pasa por debajo del texto del paso de la izquierda */
+  .paso__n{ left:0 }
+
+  .dossier{ grid-template-columns:repeat(12, minmax(0,1fr)); column-gap:var(--e4); row-gap:var(--e6); align-items:end }
+  .dossier__portada{ grid-column:1 / 8 }
+  .dossier__nombre{ left:var(--e5); bottom:var(--e5) }
+  .dossier__ficha{ grid-column:8 / 13; padding-bottom:var(--e3) }
+  .estante{
+    grid-column:1 / 13; display:grid; grid-template-columns:repeat(12, minmax(0,1fr));
+    gap:var(--e4); margin-inline:0; padding:0; overflow:visible; scroll-snap-type:none; align-items:start;
+  }
+  .suelta{ flex:none; scroll-snap-align:none }
+  .suelta--1{ grid-column:1 / 3; aspect-ratio:4/5; margin-top:var(--e4) }
+  .suelta--2{ grid-column:3 / 6; aspect-ratio:3/2 }
+  .suelta--3{ grid-column:6 / 8; aspect-ratio:4/3; margin-top:var(--e6) }
+  .suelta--4{ grid-column:8 / 10; aspect-ratio:16/10; margin-top:var(--e3) }
+  .suelta--5{ grid-column:10 / 13; aspect-ratio:3/2; margin-top:var(--e5); margin-right:calc(var(--margen) * -1.5) }
+
+  .notas{ grid-template-columns:repeat(3, minmax(0,1fr)); column-gap:var(--e5) }
+  .nota{ grid-template-columns:1fr; align-content:start; padding-block:var(--e4) }
+  .nota p{ grid-column:auto }
+  .nota:last-child{ border-bottom:0 }
+  .falta--foto{ aspect-ratio:2/1 }
+  .contacto__grilla{ gap:var(--e8) }
+  .formulario{ grid-template-columns:1fr 1fr; column-gap:var(--e4) }
+  .formulario label:nth-child(1), .formulario label:nth-child(4), .formulario .boton, .aviso{ grid-column:1 / -1 }
+}
+
+/* Notebook horizontal: el hero y la rueda se achican contra el alto. */
+@media (min-width:64rem) and (min-height:30rem) and (max-height:46rem){
+  .hero{ min-height:0 }
+  .hero__papel{ padding-block:var(--e4) var(--e3) }
+  .hero__papel .margen{ margin-top:var(--e5) }
+  .hero__apoyo{ display:none }
+  .hero h1{ font-size:min(var(--t6), 16cqw, 13svh) }
+  .rueda{ --lado: min(26rem, 68svh, 36vw) }
+  .rueda-marco{ gap:var(--e6) }
+  .carta{ min-height:0 }
+  .dossier__portada .foto__img{ aspect-ratio:16/9 }
+  .banda{ height:5rem }
+  .cabecera-seccion{ padding-bottom:var(--e3); margin-bottom:var(--e3) }
+  .paso:nth-child(even){ margin-top:5.5rem }
+  .pasos{ row-gap:var(--e3) }
+  .rueda{ --lado: min(22rem, 66svh, 32vw) }
+  .suelta--3{ margin-top:var(--e4) }
+  .suelta--5{ margin-top:var(--e3) }
+  .suelta--1{ margin-top:var(--e3) }
+  .articulo__foto{ margin-top:var(--e3) }
+}
+
+/* Escritorio grande: el anillo completo, con más aire. */
+@media (min-width:100rem) and (min-height:56rem){
+  .rueda{ --lado: min(36rem, 64svh, 40vw) }
+  .rueda-marco{ gap:var(--e8) }
+  .hero{ max-height:64rem }
+}

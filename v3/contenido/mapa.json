@@ -1,0 +1,53 @@
+{
+  "_fuente": "Seguimiento/Mapa Mavenz.docx — el documento de la clienta, seis territorios. Redactado a partir de ese texto, en su voz.",
+  "_excluido": "Quedaron afuera a propósito: las notas internas de trabajo, los valores en dólares del mercado de Vaqueros y los nombres de proyectos de terceros que aparecen en el documento.",
+
+  "micro": {
+    "nombre": "Micro y Macrocentro",
+    "bajada": "Donde el patrimonio comienza a transformarse",
+    "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
+    "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada.",
+    "oportunidades": "Reconversión de casonas patrimoniales, oficinas, hoteles boutique, gastronomía, espacios culturales, uso mixto y alquiler temporario.",
+    "mavenz": "No vemos un centro corporativo. Vemos un territorio que crece reinterpretando su propio patrimonio."
+  },
+  "norte": {
+    "nombre": "Zona Norte",
+    "bajada": "La ciudad crece hacia la naturaleza",
+    "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
+    "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad.",
+    "oportunidades": "Urbanizaciones, loteos, desarrollos residenciales, barrios abiertos y privados, inversión patrimonial.",
+    "mavenz": "No vemos barrios nuevos. Vemos un cambio en cómo se elige dónde vivir: la calidad del entorno pesa tanto como la ubicación."
+  },
+  "sanlorenzo": {
+    "nombre": "San Lorenzo",
+    "bajada": "Dos territorios, dos formas distintas de vivir",
+    "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
+    "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida.",
+    "oportunidades": "Vivienda permanente, casas consolidadas, departamentos más chicos para este entorno, patrimonio familiar e inversión de largo plazo.",
+    "mavenz": "Uno de los ecosistemas urbanos más consolidados de Salta. Acá el valor ya no depende de la vivienda sola, sino de todo lo que la rodea."
+  },
+  "aeropuerto": {
+    "nombre": "Zona Aeropuerto y San Luis",
+    "bajada": "Conectividad que impulsa crecimiento",
+    "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
+    "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad.",
+    "oportunidades": "Vivienda permanente, loteos, desarrollo residencial, comercios de cercanía, servicios e inversión patrimonial.",
+    "mavenz": "Un territorio donde la infraestructura empuja lo residencial. Y un lugar para desembarcar con un negocio: parque industrial nuevo, acceso fácil y frente a la circunvalación, que funciona como pantalla."
+  },
+  "cafayate": {
+    "nombre": "Cafayate y Cachi",
+    "bajada": "Invertir también es elegir una forma de vivir",
+    "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
+    "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza.",
+    "oportunidades": "Casas de fin de semana, cabañas, hoteles boutique, alquiler temporario, desarrollo turístico e inversión patrimonial.",
+    "mavenz": "No vemos destinos turísticos. Vemos territorios donde calidad de vida, patrimonio y renta temporaria conviven en una misma estrategia."
+  },
+  "vaqueros": {
+    "nombre": "Vaqueros",
+    "bajada": "Una respuesta eco-cultural",
+    "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
+    "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria.",
+    "oportunidades": "Condominios cerrados de media densidad, lofts y departamentos boutique, cabañas y casas de fin de semana.",
+    "mavenz": "Compra con valores reales, sobre la curva de crecimiento y no en su pico. Verde y ciudad a quince minutos."
+  }
+}
