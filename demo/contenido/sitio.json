@@ -1,99 +1,188 @@
 {
   "_fuente": "Copy del diseño aprobado en Claude Design (proyecto \"Universo interactivo: Mavenz Home\", 06/09/2026), que a su vez sale del documento Estructura_Web_Mavenz.docx de Vero y de sus respuestas al tablero del 04/09. Lo que agregó DT System (rótulos de interfaz, datos de contacto, marcadores de material que falta) está en claves que empiezan con _dt o marcado como pendiente.",
   "_editable": "Este archivo es la fuente única. Un dato se cambia acá, se corre `python3 armar.py` y se publica. No se escribe dos veces en ningún lado.",
-
   "marca": {
     "nombre": "Mavenz",
     "mensaje": "Mavenz genera movimiento",
     "definicion": "Somos el partner estratégico que mueve el real estate.",
     "lugar": "Salta, Argentina"
   },
-
   "contacto_datos": {
     "whatsapp": "5493875918813",
     "correo": "hola@mavenz.com.ar",
     "sitio_espacio": "https://espaciomavenz.com.ar",
     "_dt": "PENDIENTE de confirmar con Vero: el WhatsApp viene de la demo vieja y el correo salió del diseño. Los dos hay que confirmarlos antes de publicar afuera."
   },
-
   "redes": [
-    { "nombre": "Instagram", "href": "" },
-    { "nombre": "LinkedIn", "href": "" },
-    { "nombre": "Facebook", "href": "" }
+    {
+      "nombre": "Instagram",
+      "href": ""
+    },
+    {
+      "nombre": "LinkedIn",
+      "href": ""
+    },
+    {
+      "nombre": "Facebook",
+      "href": ""
+    }
   ],
-
   "menu": [
-    { "id": "universo",  "rotulo": "Universo" },
-    { "id": "metodo",    "rotulo": "Cómo trabajamos" },
-    { "id": "espacio",   "rotulo": "Espacio Mavenz" },
-    { "id": "proyectos", "rotulo": "Proyectos" },
-    { "id": "red",       "rotulo": "Red" },
-    { "id": "mirada",    "rotulo": "Contenido" }
+    {
+      "id": "universo",
+      "rotulo": "Universo"
+    },
+    {
+      "id": "metodo",
+      "rotulo": "Cómo trabajamos"
+    },
+    {
+      "id": "espacio",
+      "rotulo": "Espacio Mavenz"
+    },
+    {
+      "id": "proyectos",
+      "rotulo": "Proyectos"
+    },
+    {
+      "id": "red",
+      "rotulo": "Red"
+    },
+    {
+      "id": "mirada",
+      "rotulo": "Contenido"
+    }
   ],
-
   "hero": {
     "titulo": "Mavenz genera movimiento",
     "bajada": "Somos el partner estratégico que mueve el real estate.",
     "apoyo": "Conectamos visión, estrategia, comunicación, negocios y personas para transformar oportunidades en proyectos que avanzan.",
-    "cta1": { "rotulo": "Conocé el Universo Mavenz", "href": "#universo" },
-    "cta2": { "rotulo": "Hablemos", "href": "#contacto" },
+    "cta1": {
+      "rotulo": "Conocé el Universo Mavenz",
+      "href": "#universo"
+    },
+    "cta2": {
+      "rotulo": "Hablemos",
+      "href": "#contacto"
+    },
     "foto": {
       "src": "../img/aerea-dia",
-      "anchos": [800, 1600],
+      "anchos": [
+        800,
+        1600
+      ],
       "alt": "Vista aérea de San Lorenzo, Salta",
       "ancho": 1920,
       "alto": 886
     }
   },
-
   "quienes": {
     "margen": "Salta, Argentina",
     "titulo": "Somos Mavenz",
     "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance.",
     "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién."
   },
-
   "universo": {
     "titulo": "El universo Mavenz",
     "intro": "Mavenz funciona como un universo de capacidades conectadas. Cada proyecto activa una combinación diferente.",
     "ayuda": "Tocá cada capacidad para verla.",
     "_dt": "destacada: true en las cinco que Vero marcó en el tablero. Las otras dos se muestran igual, en segundo plano: el diseño las deja más finas y más claras, no las esconde.",
     "esferas": [
-      { "id": "estrategia", "nombre": "Estrategia y consultoría",   "destacada": true,  "copy": "Leemos el negocio antes de mover una pieza." },
-      { "id": "marca",      "nombre": "Marca y comunicación",       "destacada": true,  "copy": "Construimos el relato con el que el proyecto se presenta." },
-      { "id": "marketing",  "nombre": "Marketing y activación",     "destacada": true,  "copy": "Ponemos el proyecto en movimiento donde tiene que verse." },
-      { "id": "comercial",  "nombre": "Comercial y proyectos",      "destacada": false, "copy": "Comercialización con criterio, del primer contacto al cierre." },
-      { "id": "inversion",  "nombre": "Inversión y oportunidades",  "destacada": false, "copy": "Detectamos dónde conviene entrar y con quién." },
-      { "id": "alianzas",   "nombre": "Nuevos negocios y alianzas", "destacada": true,  "copy": "Abrimos conversaciones que todavía no existen." },
-      { "id": "espacio",    "nombre": "Espacio Mavenz",             "destacada": true,  "copy": "El lugar donde los proyectos viven y se presentan." }
+      {
+        "id": "estrategia",
+        "nombre": "Estrategia y consultoría",
+        "destacada": true,
+        "copy": "Leemos el negocio antes de mover una pieza."
+      },
+      {
+        "id": "marca",
+        "nombre": "Marca y comunicación",
+        "destacada": true,
+        "copy": "Construimos el relato con el que el proyecto se presenta."
+      },
+      {
+        "id": "marketing",
+        "nombre": "Marketing y activación",
+        "destacada": true,
+        "copy": "Ponemos el proyecto en movimiento donde tiene que verse."
+      },
+      {
+        "id": "comercial",
+        "nombre": "Comercial y proyectos",
+        "destacada": false,
+        "copy": "Comercialización con criterio, del primer contacto al cierre."
+      },
+      {
+        "id": "inversion",
+        "nombre": "Inversión y oportunidades",
+        "destacada": false,
+        "copy": "Detectamos dónde conviene entrar y con quién."
+      },
+      {
+        "id": "alianzas",
+        "nombre": "Nuevos negocios y alianzas",
+        "destacada": true,
+        "copy": "Abrimos conversaciones que todavía no existen."
+      },
+      {
+        "id": "espacio",
+        "nombre": "Espacio Mavenz",
+        "destacada": true,
+        "copy": "El lugar donde los proyectos viven y se presentan."
+      }
     ]
   },
-
   "metodo": {
     "titulo": "Cada proyecto activa un movimiento distinto",
     "intro": "Mavenz no aplica una fórmula cerrada. Primero entiende qué necesita moverse y después arma la combinación correcta de estrategia, equipo, red y ejecución.",
     "_dt": "x e y son la posición del nodo sobre el trazo, en porcentaje del alto y el ancho del dibujo. arriba: la etiqueta va encima del nodo en vez de abajo.",
     "pasos": [
-      { "nombre": "Leemos",      "x": 12.5, "y": 34.5, "arriba": true },
-      { "nombre": "Definimos",   "x": 27.5, "y": 76.0, "arriba": false },
-      { "nombre": "Conectamos",  "x": 50.0, "y": 68.0, "arriba": false },
-      { "nombre": "Activamos",   "x": 69.3, "y": 39.5, "arriba": true },
-      { "nombre": "Acompañamos", "x": 91.0, "y": 76.0, "arriba": false }
+      {
+        "nombre": "Leemos",
+        "x": 12.5,
+        "y": 34.5,
+        "arriba": true
+      },
+      {
+        "nombre": "Definimos",
+        "x": 27.5,
+        "y": 76.0,
+        "arriba": false
+      },
+      {
+        "nombre": "Conectamos",
+        "x": 50.0,
+        "y": 68.0,
+        "arriba": false
+      },
+      {
+        "nombre": "Activamos",
+        "x": 69.3,
+        "y": 39.5,
+        "arriba": true
+      },
+      {
+        "nombre": "Acompañamos",
+        "x": 91.0,
+        "y": 76.0,
+        "arriba": false
+      }
     ]
   },
-
   "espacio": {
     "margen": "Presentaciones y lanzamientos",
     "titulo": "Un espacio donde las cosas pasan",
     "copy": "Espacio Mavenz no es una oficina: es donde viven los proyectos. El lugar de la web donde se muestran, se presentan y se lanzan los desarrollos que Mavenz comercializa.",
     "nota": "Presentaciones y lanzamientos.",
-    "cta": { "rotulo": "Entrar al Espacio Mavenz", "href": "https://espaciomavenz.com.ar" },
+    "cta": {
+      "rotulo": "Entrar al Espacio Mavenz",
+      "href": "https://espaciomavenz.com.ar"
+    },
     "hueco": {
       "rotulo": "Imagen del espacio",
       "texto": "Reservado para una foto del lugar. Todavía no hay material."
     }
   },
-
   "proyectos": {
     "margen": "Imágenes de render",
     "titulo": "El movimiento, en hechos",
@@ -107,7 +196,10 @@
       "rotulo_foto": "Imagen de render",
       "foto": {
         "src": "../img/casas",
-        "anchos": [800, 1600],
+        "anchos": [
+          800,
+          1600
+        ],
         "alt": "Calle arbolada de Cardinal con familias caminando",
         "ancho": 1920,
         "alto": 886
@@ -116,17 +208,44 @@
     "estante": [
       {
         "epigrafe": "Amenities — pileta y quincho",
-        "foto": { "src": "../img/amenities", "anchos": [800, 1600], "alt": "Pileta y quincho de Cardinal", "ancho": 1920, "alto": 886 }
+        "foto": {
+          "src": "../img/amenities",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Pileta y quincho de Cardinal",
+          "ancho": 1920,
+          "alto": 886
+        }
       },
       {
         "epigrafe": "Calle interna",
         "bn": true,
-        "foto": { "src": "../img/calle-casas", "anchos": [800, 1600], "alt": "Calle interna de Cardinal", "ancho": 1920, "alto": 830 }
+        "foto": {
+          "src": "../img/calle-casas",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Calle interna de Cardinal",
+          "ancho": 1920,
+          "alto": 830
+        }
       },
       {
         "epigrafe": "Casas — galería",
         "velo": "La galería, el fuego y el fondo",
-        "foto": { "src": "../img/galeria", "anchos": [800, 1600], "alt": "Galería de una casa de Cardinal", "ancho": 1748, "alto": 984 }
+        "foto": {
+          "src": "../img/galeria",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Galería de una casa de Cardinal",
+          "ancho": 1748,
+          "alto": 984
+        }
       }
     ],
     "hueco": {
@@ -134,50 +253,107 @@
       "texto": "Acá entran los próximos proyectos y oportunidades"
     }
   },
-
   "red": {
     "titulo": "El movimiento nunca se genera solo",
     "copy": "Equipo, partners, especialistas, desarrolladores y aliados que se conectan según lo que cada proyecto necesita mover.",
     "cierre": "No es un directorio de logos. Es quién entra en cada movimiento.",
     "_dt": "peso: 1 fuerte y en mayúscula, 2 medio, 3 fino. x e y son la posición en la nube de escritorio, en porcentaje. sangria es la del listado de celular, en píxeles.",
     "nodos": [
-      { "nombre": "Equipo",          "peso": 1, "x": 0.0,  "y": 14.7, "sangria": 0 },
-      { "nombre": "Partners",        "peso": 3, "x": 27.2, "y": 0.0,  "sangria": 56 },
-      { "nombre": "Especialistas",   "peso": 2, "x": 21.4, "y": 37.3, "sangria": 24 },
-      { "nombre": "Desarrolladores", "peso": 1, "x": 54.0, "y": 22.0, "sangria": 0 },
-      { "nombre": "Aliados",         "peso": 3, "x": 47.1, "y": 62.0, "sangria": 80 }
+      {
+        "nombre": "Equipo",
+        "peso": 1,
+        "x": 0.0,
+        "y": 14.7,
+        "sangria": 0
+      },
+      {
+        "nombre": "Partners",
+        "peso": 3,
+        "x": 27.2,
+        "y": 0.0,
+        "sangria": 56
+      },
+      {
+        "nombre": "Especialistas",
+        "peso": 2,
+        "x": 21.4,
+        "y": 37.3,
+        "sangria": 24
+      },
+      {
+        "nombre": "Desarrolladores",
+        "peso": 1,
+        "x": 54.0,
+        "y": 22.0,
+        "sangria": 0
+      },
+      {
+        "nombre": "Aliados",
+        "peso": 3,
+        "x": 47.1,
+        "y": 62.0,
+        "sangria": 80
+      }
     ]
   },
-
   "mirada": {
     "titulo": "Lo que vemos antes de que se mueva",
     "intro": "Análisis, ideas, tendencias y lecturas del mercado. Nuestra forma de mirar, escrita.",
     "hueco": "Los primeros textos se publican con el lanzamiento."
   },
-
   "contacto": {
     "apertura": "Hay proyectos, ideas y oportunidades que necesitan el movimiento correcto.",
     "titulo": "Movamos algo juntos",
     "cta_reunion": "Pedir una reunión",
     "cta_wa": "Escribir por WhatsApp",
-    "_dt": "El diseño no lleva formulario: la entrada es pedir una reunión, que es lo que Vero marcó en el tablero. Sin servidor, el botón abre WhatsApp con el mensaje ya escrito. Si más adelante quiere formulario, hace falta un destino (correo o servicio) y se cotiza aparte.",
+    "_dt": "El diseño no lleva formulario: la entrada es pedir una reunión, que es lo que Vero marcó en el tablero. Sin servidor, cada motivo abre WhatsApp con su propio mensaje escrito. Los cuatro motivos son los tres públicos que nombró en el audio del 04/09 —desarrollador, consumidor final e inversor— más los partners: sin esto, los tres caen en el mismo mensaje y no se sabe quién escribe.",
     "wa_reunion": "Hola Mavenz, quiero coordinar una reunión.",
-    "wa_general": "Hola Mavenz, vi la web y quiero consultar."
+    "wa_general": "Hola Mavenz, vi la web y quiero consultar.",
+    "rotulo_motivos": "Qué querés mover",
+    "motivos": [
+      {
+        "id": "proyecto",
+        "rotulo": "Presentar un proyecto",
+        "wa": "Hola Mavenz, quiero presentarles un proyecto."
+      },
+      {
+        "id": "oportunidad",
+        "rotulo": "Buscar una oportunidad",
+        "wa": "Hola Mavenz, estoy buscando una oportunidad de inversión."
+      },
+      {
+        "id": "alianza",
+        "rotulo": "Proponer una alianza",
+        "wa": "Hola Mavenz, quiero proponerles una alianza."
+      },
+      {
+        "id": "espacio",
+        "rotulo": "Conocer Espacio Mavenz",
+        "wa": "Hola Mavenz, quiero conocer Espacio Mavenz."
+      }
+    ]
   },
-
   "idiomas": {
-    "_dt": "Vero pidió las dos versiones completas. La estructura queda bilingüe y el selector queda en su lugar, pero el copy en inglés lo tiene que mandar Mavenz. Hasta que llegue, EN no es un enlace: es un rótulo apagado.",
-    "es": { "rotulo": "ES", "href": "index.html" },
-    "en": { "rotulo": "EN", "href": "en.html" }
+    "_dt": "Las dos versiones están completas. El copy en inglés lo escribió DT System traduciendo el de Vero: Mavenz tiene que revisarlo, sobre todo el claim del hero.",
+    "es": {
+      "rotulo": "ES",
+      "href": "index.html",
+      "lang": "es-AR",
+      "og": "es_AR"
+    },
+    "en": {
+      "rotulo": "EN",
+      "href": "en.html",
+      "lang": "en",
+      "og": "en"
+    }
   },
-
   "interfaz": {
     "menu": "Menú",
     "cerrar": "Cerrar",
     "saltar": "Saltar al contenido",
     "whatsapp": "WhatsApp",
     "idioma": "Idioma",
-    "en_pendiente": "La versión en inglés está pendiente",
     "_dt": "Rótulos de interfaz, no copy de marca."
   }
 }
