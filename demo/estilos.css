@@ -1,0 +1,992 @@
+/* ==========================================================================
+   Mavenz — hoja de estilos
+   Un dossier de papel donde lo único que se mueve es el trazo de la marca.
+
+   Celular primero. Todo lo que ocupa alto se mide contra el viewport (svh),
+   nunca contra la tipografía: la notebook horizontal es ancha y baja.
+   Cero hex fuera de :root.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../fuente/urbanist.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---- papel ---- */
+  --linea-acento:   #B7A28B;  /* Grullo */
+  --linea:          #D3CFC8;  /* Timberwolf */
+
+  --papel:          #EEECEC;  /* Anti-flash white, el fondo */
+  /* Los cuatro tonos de papel NO son colores nuevos: salen de mezclar los dos
+     del manual (Anti-flash white y Timberwolf). La paleta sigue siendo de siete. */
+  --papel-pie:      color-mix(in srgb, var(--papel) 82%, var(--linea));
+  --papel-hueco:    color-mix(in srgb, var(--papel) 74%, var(--linea));  /* lo que espera material */
+  --papel-capa-1:   color-mix(in srgb, var(--papel) 93%, var(--linea));
+  --papel-capa-2:   color-mix(in srgb, var(--papel) 85%, var(--linea));
+
+  /* ---- tinta ---- */
+  --tinta:          #1E1E20;  /* Eerie Black */
+  --tinta-bordo:    #3C2527;  /* Old Burgundy: la tinta de la marca */
+  --tinta-parrafo:  #492F22;  /* Bistre */
+  --tinta-apoyo:    #715D55;  /* Wenge */
+
+  /* ---- sobre foto ---- */
+  --sobre-foto:     var(--papel);
+  --sobre-foto-2:   var(--linea);
+  --velo-1:         rgba(30, 30, 32, .50);
+  --velo-2:         rgba(30, 30, 32, .34);
+  --velo-3:         rgba(30, 30, 32, .88);
+  --velo-apenas:    rgba(30, 30, 32, .10);
+  --velo-nada:      rgba(30, 30, 32, .06);
+  --velo-bordo:     rgba(60, 37, 39, .72);
+  --sombra:         rgba(30, 30, 32, .28);
+  --papel-vidrio:   rgba(238, 236, 236, .88);
+
+  /* ---- tipografía: siete escalones ---- */
+  --t-hero:   clamp(2.625rem, 1.371rem + 5.143vw, 6rem);       /*  42 → 96 */
+  --t-titulo: clamp(2.375rem, 1.679rem + 2.857vw, 4.25rem);    /*  38 → 68 */
+  --t-cita:   clamp(1.375rem, 1.061rem + 1.286vw, 2.125rem);   /*  22 → 34 */
+  --t-lead:   clamp(1.0625rem, .913rem + .667vw, 1.5rem);      /*  17 → 24 */
+  --t-cuerpo: clamp(1rem, .931rem + .286vw, 1.1875rem);        /*  16 → 19 */
+  --t-chico:  clamp(.9375rem, .892rem + .19vw, 1.0625rem);     /*  15 → 17 */
+  --t-nota:   clamp(.8125rem, .789rem + .095vw, .875rem);      /*  13 → 14 */
+  --t-sub:    clamp(1.125rem, .967rem + .649vw, 1.6875rem);    /*  18 → 27 */
+  --t-micro:  .75rem;                                          /*  12, fijo */
+
+  /* ---- pesos ---- */
+  --fino: 300;
+  --ui:   400;
+  --medio: 600;
+  --grueso: 800;
+
+  /* ---- el molde del dossier ---- */
+  --margen-ext: clamp(1.5rem, 6.857vw - .171rem, 6rem);        /*  24 → 96  */
+  --margen-int: clamp(1.25rem, 8vw - .7rem, 6.5rem);           /*  20 → 104 */
+  --margen-der: clamp(1.5rem, 10.667vw - 1.1rem, 8.5rem);      /*  24 → 136 */
+  --ritmo:      clamp(4rem, 2.7rem + 5.333vw, 7.5rem);         /*  64 → 120 */
+  --alto-nav:   clamp(3.75rem, 3.193rem + 2.286vw, 5.25rem);   /*  60 → 84  */
+
+  /* ---- movimiento: suave, que es lo que pidió la clienta ---- */
+  --curva: cubic-bezier(.22, .61, .36, 1);
+  --pulsado: 120ms;
+  --hover: 180ms;
+  --cambio: 340ms;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  /* clip y sólo en html: con overflow en los dos, el sticky deja de pegar */
+  overflow-x: clip;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: 'Urbanist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: var(--t-cuerpo);
+  font-weight: var(--fino);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+/* Kit base con especificidad cero: no le gana a nada de lo de abajo. */
+:where(a, button) {
+  color: inherit;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+:where(a) { text-decoration: none; }
+:where(button) { background: none; border: 0; padding: 0; cursor: pointer; }
+:where(a, button):active { scale: .96; }
+:where(a, button) { transition: scale var(--pulsado) var(--curva); }
+:where(a, button):focus-visible {
+  outline: 2px solid var(--tinta-bordo);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+[id] { scroll-margin-top: calc(var(--alto-nav) + 1.5rem); }
+
+.saltar {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 50;
+  padding: .75rem 1.25rem;
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+}
+.saltar:focus { left: 0; }
+
+/* ==========================================================================
+   Títulos: en mayúscula, gruesos y gigantes. Los subtítulos, finitos.
+   (Pedido textual de la clienta en el audio del 04/09.)
+   ========================================================================== */
+
+.titulo {
+  font-size: var(--t-titulo);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.032em;
+  line-height: .94;
+  color: var(--tinta);
+}
+.titulo--bordo { color: var(--tinta-bordo); }
+
+.bajada {
+  font-size: var(--t-cuerpo);
+  font-weight: var(--fino);
+  line-height: 1.65;
+  color: var(--tinta-parrafo);
+}
+
+.cita {
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  line-height: 1.35;
+  color: var(--tinta-bordo);
+}
+
+/* Rótulo al margen: la marginalia del dossier. Único uso de mayúscula chica. */
+.margen {
+  font-size: var(--t-micro);
+  font-weight: var(--ui);
+  letter-spacing: .14em;
+  color: var(--tinta-apoyo);
+}
+
+/* ==========================================================================
+   Cabecera — siempre a la vista
+   ========================================================================== */
+
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--alto-nav);
+  padding-inline: var(--margen-ext);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--papel-vidrio);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--hover) var(--curva);
+}
+.cabecera[data-scroll] { border-bottom-color: var(--linea); }
+
+.cabecera__marca { display: inline-flex; align-items: center; min-height: 44px; }
+.cabecera__logo { height: clamp(1.125rem, .98rem + .38vw, 1.4375rem); width: auto; }
+
+.cabecera__derecha { display: flex; align-items: center; gap: 1.125rem; }
+
+.cabecera__enlaces { display: none; }
+
+.idioma { display: flex; align-items: center; gap: .4375rem; font-size: var(--t-nota); }
+.idioma__on  { font-weight: var(--medio); color: var(--tinta); }
+.idioma__sep { color: var(--linea-acento); }
+.idioma__off { font-weight: var(--ui); color: var(--tinta-apoyo); cursor: help; }
+
+.hamburguesa {
+  width: 44px; height: 44px;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
+  gap: 5px;
+  margin-right: -10px;
+}
+.hamburguesa span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--tinta);
+  transition: transform var(--hover) var(--curva), opacity var(--hover) var(--curva);
+}
+.cabecera[data-menu] .hamburguesa span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.cabecera[data-menu] .hamburguesa span:nth-child(2) { opacity: 0; }
+.cabecera[data-menu] .hamburguesa span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Panel de menú en celular */
+.panel {
+  position: fixed;
+  inset: var(--alto-nav) 0 auto 0;
+  z-index: 19;
+  background: var(--papel);
+  border-bottom: 1px solid var(--linea);
+  padding: 1.5rem var(--margen-ext) 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  transform: translateY(-8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--cambio) var(--curva), opacity var(--cambio) var(--curva), visibility var(--cambio);
+}
+.panel[data-abierto] { transform: none; opacity: 1; visibility: visible; }
+.panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--t-lead);
+  font-weight: var(--ui);
+  color: var(--tinta);
+  border-bottom: 1px solid var(--linea);
+}
+.panel a:last-of-type { border-bottom: 0; }
+
+/* ==========================================================================
+   Botones
+   ========================================================================== */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  height: clamp(3.25rem, 3rem + 1.02vw, 3.5rem);
+  padding-inline: clamp(1.5rem, 1rem + 2.05vw, 2.25rem);
+  border-radius: 999px;
+  font-size: var(--t-chico);
+  font-weight: var(--medio);
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+  transition: background var(--hover) var(--curva), scale var(--pulsado) var(--curva);
+}
+.boton--claro { background: var(--sobre-foto); color: var(--tinta-bordo); }
+
+/* Texto subrayado: la otra forma de botón que eligió la clienta. */
+.subrayado {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--t-chico);
+  font-weight: var(--medio);
+  color: var(--tinta);
+  border-bottom: 1px solid var(--linea-acento);
+  transition: border-color var(--hover) var(--curva), color var(--hover) var(--curva);
+}
+.subrayado--claro { color: var(--sobre-foto); }
+.subrayado--bordo { color: var(--tinta-bordo); }
+.subrayado--tenue { font-weight: var(--fino); color: var(--tinta-apoyo); border-bottom-color: var(--linea); }
+
+.cabecera .boton { display: none; }
+
+.panel .boton { width: 100%; margin-top: 1.25rem; }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  margin-top: calc(var(--alto-nav) * -1);
+  height: min(88svh, 55rem);
+  min-height: 30rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__foto {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.hero__velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--velo-1) 0%, var(--velo-2) 38%, var(--velo-3) 100%);
+}
+.hero__trazos {
+  position: absolute;
+  left: 0; right: 0;
+  /* Anclado al pie como el bloque de texto: así cruza siempre por detrás del
+     título, sea cual sea el alto del hero. */
+  bottom: 19.75rem;
+  height: 11.875rem;
+  pointer-events: none;
+}
+.hero__trazos svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__trazos .eco { opacity: .5; }
+
+.hero__texto {
+  position: absolute;
+  left: var(--margen-ext);
+  right: var(--margen-ext);
+  bottom: clamp(2.25rem, 1rem + 3.5vw, 6rem);
+  z-index: 2;
+}
+.hero__titulo {
+  max-width: 15ch;
+  font-size: var(--t-hero);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.035em;
+  line-height: .93;
+  color: var(--sobre-foto);
+}
+.hero__bajada {
+  margin-top: clamp(1.25rem, .8rem + 1.14vw, 1.875rem);
+  max-width: 26ch;
+  font-size: var(--t-lead);
+  font-weight: var(--fino);
+  line-height: 1.45;
+  color: var(--sobre-foto);
+}
+.hero__apoyo {
+  margin-top: .75rem;
+  max-width: 42ch;
+  font-size: var(--t-cuerpo);
+  font-weight: var(--fino);
+  line-height: 1.6;
+  color: var(--sobre-foto-2);
+}
+.hero__acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .25rem;
+  margin-top: clamp(1.625rem, 1rem + 1.6vw, 2.75rem);
+}
+.hero__acciones .boton { width: 100%; }
+.hero__acciones .subrayado { align-self: center; }
+
+/* Botón flotante de WhatsApp: siempre disponible, que fue el pedido. */
+.wa {
+  position: fixed;
+  right: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  bottom: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  z-index: 15;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  height: 44px;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  background: var(--papel-vidrio);
+  color: var(--tinta-bordo);
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  box-shadow: 0 8px 24px var(--sombra);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.wa__punto {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: var(--tinta-bordo);
+}
+
+/* ==========================================================================
+   El dossier: margen ancho y una sola línea vertical que lo cose todo
+   ========================================================================== */
+
+.dossier { padding-left: var(--margen-ext); }
+.dossier__interior {
+  border-left: 1px solid var(--linea);
+  padding-left: var(--margen-int);
+  padding-right: var(--margen-der);
+}
+
+.seccion {
+  position: relative;
+  padding-block: var(--ritmo);
+  border-top: 1px solid var(--linea);
+}
+.seccion:first-child { border-top: 0; }
+
+.seccion__margen {
+  display: none;
+  position: absolute;
+  left: calc(var(--margen-int) * -1 + 2rem);
+  top: calc(var(--ritmo) + .375rem);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.seccion__cabeza { display: flex; flex-direction: column; gap: 1.25rem; }
+.seccion__cabeza .titulo { flex: 0 0 auto; }
+.seccion__cabeza .bajada { flex: 1; }
+
+/* ==========================================================================
+   Quiénes somos
+   ========================================================================== */
+
+.quienes__cierre {
+  margin-top: clamp(2rem, 1.3rem + 2.9vw, 4.5rem);
+  max-width: 42ch;
+  border-top: 1px solid var(--linea-acento);
+  padding-top: clamp(1.25rem, .9rem + .9vw, 1.75rem);
+}
+
+/* ==========================================================================
+   El universo: la rueda de las siete capacidades
+   ========================================================================== */
+
+.rueda {
+  position: relative;
+  width: min(100%, 20rem);
+  aspect-ratio: 1;
+  margin: clamp(1.875rem, 1rem + 2.24vw, 3.25rem) auto 0;
+}
+.rueda__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.rueda__ficha {
+  position: absolute;
+  left: 50%; top: 50%;
+  translate: -50% -50%;
+  width: 62%;
+  z-index: 1;
+}
+.rueda__capa {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--linea);
+}
+.rueda__capa--1 { translate: 5px 5px; background: var(--papel-capa-1); }
+.rueda__capa--2 { translate: 10px 10px; background: var(--papel-capa-2); }
+.rueda__cara {
+  position: relative;
+  display: grid;
+  border: 1px solid var(--linea-acento);
+  background: var(--papel);
+  padding: clamp(1.125rem, .8rem + .9vw, 2rem) clamp(1.125rem, .85rem + .8vw, 1.875rem);
+}
+.rueda__panel {
+  grid-area: 1 / 1;
+  transition: opacity var(--cambio) var(--curva), transform var(--cambio) var(--curva);
+}
+.rueda__panel[aria-hidden="true"] {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+.rueda__panel h3 {
+  font-size: var(--t-sub);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  line-height: 1.05;
+  color: var(--tinta);
+}
+.rueda__panel p {
+  margin-top: clamp(.625rem, .43rem + .48vw, 1.125rem);
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  line-height: 1.5;
+  color: var(--tinta-parrafo);
+}
+
+.rueda__nodo {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  translate: -50% -50%;
+  z-index: 2;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rueda__punto {
+  /* La caja es siempre de 15 px y lo que cambia es la escala: animar width y
+     height provoca reflow en cada cuadro. */
+  width: 15px; height: 15px;
+  scale: .867;
+  border-radius: 999px;
+  background: var(--papel);
+  border: 1px solid var(--linea-acento);
+  transition: scale var(--cambio) var(--curva),
+              background var(--cambio) var(--curva), border-color var(--cambio) var(--curva);
+}
+.rueda__nodo[data-tenue] .rueda__punto {
+  scale: .6;
+  background: var(--linea);
+  border-color: var(--linea);
+}
+.rueda__nodo[aria-pressed="true"] .rueda__punto {
+  scale: 1;
+  background: var(--tinta-bordo);
+  border-color: var(--tinta-bordo);
+}
+.rueda__nombre { display: none; }
+
+.rueda__ayuda {
+  margin-top: .875rem;
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--tinta-apoyo);
+}
+
+/* ==========================================================================
+   Cómo trabajamos: el trazo con sus cinco nodos
+   ========================================================================== */
+
+.metodo__trazo { position: relative; margin-top: clamp(2rem, 1.4rem + 2.4vw, 4rem); }
+.metodo__trazo svg { width: 100%; height: clamp(6.875rem, 3rem + 9.9vw, 17.5rem); }
+
+.metodo__nodo { display: none; }
+
+.metodo__lista {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .625rem .875rem;
+  margin-top: 1.5rem;
+}
+.metodo__paso {
+  font-size: clamp(1.3125rem, 1.1rem + .87vw, 1.625rem);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  color: var(--tinta);
+}
+.metodo__punto {
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--tinta-bordo);
+}
+
+/* ==========================================================================
+   Huecos: lo que espera material de la clienta, a la vista
+   ========================================================================== */
+
+.hueco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .625rem;
+  text-align: center;
+  padding: 1.5rem;
+  border: 1px solid var(--linea-acento);
+  background: var(--papel-hueco);
+  color: var(--tinta-apoyo);
+}
+.hueco__rotulo {
+  font-size: var(--t-micro);
+  font-weight: var(--medio);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.hueco__texto { font-size: var(--t-nota); font-weight: var(--fino); line-height: 1.5; }
+
+.espacio__hueco {
+  margin-top: clamp(1.625rem, 1.1rem + 1.9vw, 3.5rem);
+  height: clamp(12.5rem, 6rem + 14.3vw, 25rem);
+}
+.espacio__nota { margin-top: .75rem; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
+.espacio__cta { margin-top: 1.375rem; }
+
+/* ==========================================================================
+   Proyectos: el destacado y el estante
+   ========================================================================== */
+
+.proyecto {
+  position: relative;
+  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3.5rem);
+  height: clamp(26.25rem, 15rem + 25vw, 35rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+.proyecto__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.proyecto__velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--velo-apenas) 0%, var(--velo-2) 50%, var(--velo-3) 100%);
+}
+.proyecto__pie {
+  position: absolute;
+  left: clamp(1.375rem, .9rem + 1.24vw, 3rem);
+  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
+  bottom: clamp(1.5rem, 1rem + 1.3vw, 2.75rem);
+  z-index: 2;
+}
+.proyecto__nombre {
+  font-size: clamp(2.5rem, 1.76rem + 3.05vw, 3.75rem);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: var(--sobre-foto);
+}
+.proyecto__meta {
+  margin-top: .625rem;
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--sobre-foto-2);
+}
+.proyecto__rotulo {
+  position: absolute;
+  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
+  top: clamp(1.25rem, 1rem + .76vw, 2.25rem);
+  z-index: 2;
+  font-size: var(--t-micro);
+  font-weight: var(--ui);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sobre-foto-2);
+}
+
+.estante {
+  display: flex;
+  gap: clamp(.875rem, .5rem + .95vw, 1.5rem);
+  margin-top: 1rem;
+  padding-bottom: .5rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+}
+.ficha { flex: 0 0 clamp(14.75rem, 8rem + 17vw, 21.5rem); scroll-snap-align: start; }
+.ficha__marco { position: relative; height: clamp(10rem, 5rem + 12.8vw, 14.75rem); overflow: hidden; }
+.ficha__marco img { width: 100%; height: 100%; object-fit: cover; }
+.ficha--bn img { filter: grayscale(1) contrast(1.04); }
+.ficha__velo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--velo-nada) 0%, var(--velo-bordo) 100%);
+}
+.ficha__sobretexto {
+  position: absolute;
+  left: 1rem; right: 1rem; bottom: .875rem;
+  font-size: var(--t-sub);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  color: var(--sobre-foto);
+}
+.ficha__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+.ficha__hueco { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); }
+
+/* ==========================================================================
+   La red
+   ========================================================================== */
+
+.red__nube {
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
+  margin-top: clamp(1.875rem, 1.3rem + 2.1vw, 2.25rem);
+}
+.red__nodo { margin-left: var(--sangria, 0); }
+.red__nodo[data-peso="1"] {
+  font-size: clamp(1.875rem, 1.35rem + 2.16vw, 2.75rem);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  color: var(--tinta);
+}
+.red__nodo[data-peso="2"] {
+  font-size: clamp(1.625rem, 1.35rem + 1.14vw, 2.375rem);
+  font-weight: var(--medio);
+  letter-spacing: -.02em;
+  color: var(--tinta-bordo);
+}
+.red__nodo[data-peso="3"] {
+  font-size: clamp(1.375rem, 1.14rem + .95vw, 2rem);
+  font-weight: var(--fino);
+  color: var(--tinta-apoyo);
+}
+.red__cierre { margin-top: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem); max-width: 30ch; }
+
+/* ==========================================================================
+   Contenido y mirada
+   ========================================================================== */
+
+.mirada__hueco {
+  display: flex;
+  align-items: center;
+  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+  height: clamp(7.5rem, 3rem + 11vw, 12.5rem);
+  border-top: 1px solid var(--linea-acento);
+  border-bottom: 1px solid var(--linea-acento);
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--tinta-apoyo);
+}
+
+/* ==========================================================================
+   Cierre
+   ========================================================================== */
+
+.contacto__apertura { max-width: 48ch; font-size: var(--t-lead); font-weight: var(--fino); line-height: 1.5; color: var(--tinta-parrafo); }
+.contacto__titulo {
+  margin-top: clamp(1.25rem, 1rem + .76vw, 1.625rem);
+  font-size: var(--t-hero);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.035em;
+  line-height: .94;
+  color: var(--tinta-bordo);
+}
+.contacto__acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  margin-top: clamp(2.125rem, 1.5rem + 1.6vw, 3.25rem);
+}
+.contacto__acciones .boton { width: 100%; }
+.contacto__acciones .subrayado { align-self: flex-start; }
+
+/* ==========================================================================
+   Pie
+   ========================================================================== */
+
+.pie {
+  display: flex;
+  flex-direction: column;
+  /* sin esto el flex estira el isotipo a todo el ancho y lo deforma */
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: clamp(1.75rem, 1.3rem + 1.7vw, 2.25rem) var(--margen-ext) clamp(2.125rem, 1.7rem + 1.6vw, 2.75rem);
+  border-top: 1px solid var(--linea);
+  background: var(--papel-pie);
+}
+.pie__iso { height: clamp(1.375rem, 1.2rem + .38vw, 1.625rem); width: auto; }
+.pie__redes { display: flex; align-items: center; gap: 1.25rem; font-size: var(--t-nota); font-weight: var(--ui); }
+.pie__redes a { color: var(--tinta-parrafo); min-height: 44px; display: inline-flex; align-items: center; }
+.pie__abajo { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.pie__lugar { font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
+
+/* ==========================================================================
+   Movimiento — el único que pidió la clienta: los títulos entran letra a letra
+   ========================================================================== */
+
+@keyframes mvLetra { from { opacity: 0; transform: translateY(.28em); } to { opacity: 1; transform: none; } }
+@keyframes mvTrazo { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+[data-letras] span { display: inline-block; }
+
+.trazo-vivo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: mvTrazo 2.6s var(--curva) .35s forwards;
+}
+
+/* ==========================================================================
+   Carril 2 — tableta y notebook (≥ 64rem / 1024 px)
+   Los selectores llevan la etiqueta: un @media no agrega especificidad.
+   ========================================================================== */
+
+@media (min-width: 64rem) {
+
+  header.cabecera .cabecera__enlaces {
+    display: flex;
+    align-items: center;
+    /* el gap descuenta el padding de cada enlace: la separación a la vista
+       queda igual, pero el área que se puede tocar llega a 44 px */
+    gap: clamp(.5rem, -1rem + 2.1vw, 1.375rem);
+  }
+  header.cabecera .cabecera__enlaces a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: .25rem;
+    font-size: var(--t-nota);
+    font-weight: var(--ui);
+    color: var(--tinta);
+    transition: color var(--hover) var(--curva);
+  }
+  header.cabecera .hamburguesa { display: none; }
+  header.cabecera .boton { display: inline-flex; height: 42px; padding-inline: 1.5rem; font-size: var(--t-nota); }
+  header.cabecera .cabecera__derecha { gap: clamp(1rem, -.5rem + 2.1vw, 1.625rem); }
+  div.panel { display: none; }
+
+  section.seccion .seccion__margen { display: block; }
+
+  section.seccion .seccion__cabeza { flex-direction: row; gap: clamp(2.5rem, -1rem + 5.5vw, 5rem); align-items: flex-start; }
+  section.seccion .seccion__cabeza .titulo { flex: 0 0 clamp(24rem, 4rem + 38vw, 40rem); }
+  section.seccion .seccion__cabeza--pie { align-items: flex-end; }
+
+  .hero .hero__texto { left: calc(var(--margen-ext) + var(--margen-int)); right: var(--margen-der); }
+  .hero .hero__trazos { bottom: 7.375rem; height: 26.875rem; }
+  .hero .hero__acciones { flex-direction: row; align-items: center; gap: clamp(1.25rem, -1rem + 3.4vw, 2.125rem); }
+  .hero .hero__acciones .boton { width: auto; }
+  .hero .hero__acciones .subrayado { align-self: auto; }
+
+  .quienes__cierre { margin-left: clamp(12rem, -12rem + 37.5vw, 23.75rem); }
+
+  /* La rueda pasa de puntos a píldoras con nombre. */
+  div.rueda { width: min(100%, 44rem); }
+  div.rueda .rueda__ficha { width: 48%; }
+  div.rueda .rueda__capa--1 { translate: 8px 8px; }
+  div.rueda .rueda__capa--2 { translate: 16px 16px; }
+  div.rueda .rueda__nodo {
+    width: auto; height: auto;
+    padding: .6875rem 1.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--linea-acento);
+    background: transparent;
+    white-space: nowrap;
+    transition: background var(--cambio) var(--curva), color var(--cambio) var(--curva),
+                border-color var(--cambio) var(--curva), scale var(--pulsado) var(--curva);
+  }
+  div.rueda .rueda__punto { display: none; }
+  div.rueda .rueda__nombre {
+    display: block;
+    font-size: var(--t-chico);
+    font-weight: var(--medio);
+    letter-spacing: -.005em;
+    color: var(--tinta);
+  }
+  div.rueda .rueda__nodo[data-tenue] { border-color: var(--linea); padding: .5625rem 1.0625rem; }
+  div.rueda .rueda__nodo[data-tenue] .rueda__nombre { font-weight: var(--fino); color: var(--tinta-apoyo); }
+  div.rueda .rueda__nodo[aria-pressed="true"] { background: var(--tinta-bordo); border-color: var(--tinta-bordo); }
+  div.rueda .rueda__nodo[aria-pressed="true"] .rueda__nombre { color: var(--sobre-foto); font-weight: var(--medio); }
+  div.rueda + .rueda__ayuda { display: none; }
+
+  /* El método: los nodos se paran sobre el trazo. */
+  div.metodo__trazo { aspect-ratio: 1104 / 280; height: auto; }
+  div.metodo__trazo svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  div.metodo__trazo .metodo__nodo {
+    display: block;
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+  }
+  div.metodo__trazo .metodo__nodo::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    translate: -50% -50%;
+    width: 9px; height: 9px;
+    border-radius: 999px;
+    background: var(--tinta-bordo);
+  }
+  div.metodo__trazo .metodo__nodo span {
+    position: absolute;
+    left: 0; top: 0;
+    translate: -50% 90%;
+    font-size: clamp(1.375rem, .8rem + .9vw, 1.625rem);
+    font-weight: var(--medio);
+    letter-spacing: -.01em;
+    white-space: nowrap;
+    color: var(--tinta);
+  }
+  div.metodo__trazo .metodo__nodo[data-arriba] span { translate: -50% -190%; }
+  div.metodo__trazo + .metodo__lista { display: none; }
+
+  /* La red: de listado a nube. */
+  div.red__nube {
+    display: block;
+    position: relative;
+    aspect-ratio: 1104 / 300;
+    margin-top: clamp(1.5rem, 0rem + 2.5vw, 2.25rem);
+  }
+  div.red__nube .red__nodo { position: absolute; left: var(--x); top: var(--y); margin-left: 0; }
+  .red .red__cierre { max-width: 26rem; margin-left: auto; text-align: right; }
+
+  .contacto .contacto__acciones { flex-direction: row; align-items: center; gap: clamp(1.5rem, -1rem + 3.9vw, 2.25rem); }
+  .contacto .contacto__acciones .boton { width: auto; }
+
+  footer.pie { flex-direction: row; align-items: center; justify-content: space-between; }
+  footer.pie .pie__redes { gap: 1.75rem; }
+  footer.pie .pie__abajo { gap: 1.5rem; }
+}
+
+/* ==========================================================================
+   Carril 2 bis — la notebook horizontal: ancha y BAJA
+   La regla del carril: lo que ocupa alto se mide contra el viewport, no
+   contra la tipografía. Con min() estas reglas no hacen nada en una pantalla
+   alta; sólo muerden cuando el alto es el que escasea.
+   ========================================================================== */
+
+@media (min-width: 64rem) {
+  body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 13svh); }
+
+  div.rueda { width: min(100%, 44rem, 76svh); }
+  article.proyecto { height: min(clamp(26.25rem, 15rem + 25vw, 35rem), 76svh); }
+  div.metodo__trazo { max-height: 40svh; }
+  div.red__nube { max-height: 42svh; }
+  div.espacio__hueco { height: min(clamp(12.5rem, 6rem + 14.3vw, 25rem), 38svh); }
+  div.mirada__hueco { height: min(clamp(7.5rem, 3rem + 11vw, 12.5rem), 26svh); }
+}
+
+/* El hero es lo primero que se rompe: con 657 px de alto el título gigante se
+   mete abajo del nav. Acá el cuerpo del hero se mide contra svh. */
+@media (min-width: 64rem) and (max-height: 50rem) {
+  .hero .hero__titulo  { font-size: min(var(--t-hero), 12svh); }
+  .hero .hero__bajada  { margin-top: 1rem; }
+  .hero .hero__apoyo   { margin-top: .5rem; }
+  .hero .hero__acciones { margin-top: 1.5rem; }
+  .hero .hero__texto   { bottom: 2.5rem; }
+  .hero .hero__trazos  { bottom: 4rem; height: 20rem; }
+}
+
+/* ==========================================================================
+   Carril 3 — escritorio grande (≥ 100rem / 1600 px)
+   ========================================================================== */
+
+@media (min-width: 100rem) {
+  body { --margen-ext: 6rem; --margen-int: 6.5rem; --margen-der: 8.5rem; }
+  main.contenido { max-width: 120rem; margin-inline: auto; }
+}
+
+/* ==========================================================================
+   Puntero fino: el hover sólo existe donde hay puntero
+   ========================================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .cabecera__enlaces a:hover { color: var(--tinta-bordo); }
+  .boton:hover { background: var(--tinta); }
+  .boton--claro:hover { background: var(--sobre-foto-2); }
+  .subrayado:hover { border-bottom-color: var(--tinta-bordo); }
+  .subrayado--claro:hover { border-bottom-color: var(--sobre-foto); }
+  .rueda__nodo:hover:not([aria-pressed="true"]) { border-color: var(--tinta-apoyo); }
+  .pie__redes a:hover { color: var(--tinta); }
+}
+
+/* ==========================================================================
+   Celular acostado — cae acá por ALTO, no por ancho. El tope de ancho está
+   sólo para que no se lleve puesta a la notebook horizontal, que también es
+   apaisada y baja (1366 x 657) pero es otro carril.
+   ========================================================================== */
+
+@media (max-height: 46rem) and (orientation: landscape) and (max-width: 63.99rem) {
+  /* El hero deja de meterse abajo del nav: con 375 px de alto no sobra nada. */
+  .hero { height: auto; min-height: 0; margin-top: 0; padding-block: 2rem 2.5rem; }
+  /* relative y no static: en estático el z-index no aplica y la foto lo tapa.
+     inset:auto porque en relative un `bottom` no ancla, corre el bloque. */
+  .hero__texto { position: relative; inset: auto; padding-inline: var(--margen-ext); }
+  .hero__trazos { top: 1rem; bottom: auto; height: 9rem; }
+  .hero__titulo { font-size: clamp(2.25rem, 1rem + 5vw, 3.5rem); }
+  .rueda { width: min(60%, 20rem); }
+}
+
+/* ==========================================================================
+   Menos movimiento: cada bloque pegado al efecto que apaga
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trazo-vivo { animation: none; stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-letras] span { animation: none !important; opacity: 1 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(a, button):active { scale: none; }
+}
