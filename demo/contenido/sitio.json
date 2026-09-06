@@ -130,42 +130,97 @@
         "destacada": true,
         "copy": "El lugar donde los proyectos viven y se presentan."
       }
-    ]
+    ],
+    "mapa": {
+      "titulo": "El mapa Mavenz",
+      "intro": "Seis territorios de Salta, y qué está cambiando en cada uno.",
+      "rotulo_quien": "Quién compra ahí",
+      "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
+      "territorios": [
+        {
+          "id": "micro",
+          "nombre": "Micro y Macrocentro",
+          "bajada": "Donde el patrimonio comienza a transformarse",
+          "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
+          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
+        },
+        {
+          "id": "norte",
+          "nombre": "Zona Norte",
+          "bajada": "La ciudad crece hacia la naturaleza",
+          "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
+          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
+        },
+        {
+          "id": "sanlorenzo",
+          "nombre": "San Lorenzo",
+          "bajada": "Dos territorios, dos formas distintas de vivir",
+          "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
+          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
+        },
+        {
+          "id": "aeropuerto",
+          "nombre": "Zona Aeropuerto y San Luis",
+          "bajada": "Conectividad que impulsa crecimiento",
+          "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
+          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
+        },
+        {
+          "id": "cafayate",
+          "nombre": "Cafayate y Cachi",
+          "bajada": "Invertir también es elegir una forma de vivir",
+          "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
+          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
+        },
+        {
+          "id": "vaqueros",
+          "nombre": "Vaqueros",
+          "bajada": "Una respuesta eco-cultural",
+          "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
+          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
+        }
+      ]
+    }
   },
   "metodo": {
     "titulo": "Cada proyecto activa un movimiento distinto",
     "intro": "Mavenz no aplica una fórmula cerrada. Primero entiende qué necesita moverse y después arma la combinación correcta de estrategia, equipo, red y ejecución.",
-    "_dt": "x e y son la posición del nodo sobre el trazo, en porcentaje del alto y el ancho del dibujo. arriba: la etiqueta va encima del nodo en vez de abajo.",
+    "_dt": "x e y son la posición del nodo sobre el trazo, en porcentaje del alto y el ancho del dibujo. arriba: la etiqueta va encima del nodo en vez de abajo. copy de cada paso: texto de Estructura_Web_Mavenz.docx, el mismo que estaba en v2 y v3.",
     "pasos": [
       {
         "nombre": "Leemos",
         "x": 12.5,
         "y": 34.5,
-        "arriba": true
+        "arriba": true,
+        "copy": "Entendemos el contexto, el negocio, el proyecto y la oportunidad."
       },
       {
         "nombre": "Definimos",
         "x": 27.5,
         "y": 76.0,
-        "arriba": false
+        "arriba": false,
+        "copy": "Elegimos una dirección y ordenamos prioridades, objetivos y escenarios."
       },
       {
         "nombre": "Conectamos",
         "x": 50.0,
         "y": 68.0,
-        "arriba": false
+        "arriba": false,
+        "copy": "Convocamos a las personas y capacidades adecuadas para ese desafío."
       },
       {
         "nombre": "Activamos",
         "x": 69.3,
         "y": 39.5,
-        "arriba": true
+        "arriba": true,
+        "copy": "Transformamos la estrategia en comunicación, gestión, comercialización y acciones concretas."
       },
       {
         "nombre": "Acompañamos",
         "x": 91.0,
         "y": 76.0,
-        "arriba": false
+        "arriba": false,
+        "copy": "Medimos, ajustamos y sostenemos el movimiento hasta alcanzar el objetivo."
       }
     ]
   },
@@ -187,7 +242,7 @@
     "margen": "Imágenes de render",
     "titulo": "El movimiento, en hechos",
     "intro": "No es un catálogo. Es una selección de proyectos, desarrollos y oportunidades en los que Mavenz participa o cree.",
-    "_dt": "Vero marcó en el tablero que entra sólo CARDINAL. Qué otros proyectos van y con qué fotos queda pendiente de ella: por eso la última ficha del estante está vacía y se ve que está vacía.",
+    "_dt": "Vero marcó en el tablero que entra sólo CARDINAL. Qué otros proyectos van y con qué fotos queda pendiente de ella: por eso la última ficha del estante está vacía y se ve que está vacía. columnas y proporcion arman la grilla asimétrica de escritorio (7/5 y 5/7 invertido, proporciones que no se repiten): la grilla de tarjetas iguales es el tell número uno de web hecha con IA.",
     "destacado": {
       "nombre": "Cardinal",
       "meta": "San Lorenzo Chico, Salta — en comercialización",
@@ -217,7 +272,9 @@
           "alt": "Pileta y quincho de Cardinal",
           "ancho": 1920,
           "alto": 886
-        }
+        },
+        "columnas": 7,
+        "proporcion": "3 / 2"
       },
       {
         "epigrafe": "Calle interna",
@@ -231,7 +288,9 @@
           "alt": "Calle interna de Cardinal",
           "ancho": 1920,
           "alto": 830
-        }
+        },
+        "columnas": 5,
+        "proporcion": "4 / 5"
       },
       {
         "epigrafe": "Casas — galería",
@@ -245,12 +304,16 @@
           "alt": "Galería de una casa de Cardinal",
           "ancho": 1748,
           "alto": 984
-        }
+        },
+        "columnas": 5,
+        "proporcion": "1 / 1"
       }
     ],
     "hueco": {
       "epigrafe": "Lugar disponible",
-      "texto": "Acá entran los próximos proyectos y oportunidades"
+      "texto": "Acá entran los próximos proyectos y oportunidades",
+      "columnas": 7,
+      "proporcion": "16 / 9"
     }
   },
   "red": {
@@ -354,6 +417,10 @@
     "saltar": "Saltar al contenido",
     "whatsapp": "WhatsApp",
     "idioma": "Idioma",
-    "_dt": "Rótulos de interfaz, no copy de marca."
+    "_dt": "Rótulos de interfaz, no copy de marca.",
+    "abrir_foto": "Ver la foto",
+    "anterior": "Anterior",
+    "siguiente": "Siguiente",
+    "indice": "Secciones"
   }
 }

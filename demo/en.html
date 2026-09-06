@@ -18,13 +18,14 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.png">
 <link rel="preload" href="../fuente/urbanist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="estilos.css">
+<link rel="preload" href="../img/logo-horizontal-claro.webp" as="image" type="image/webp">
+<link rel="stylesheet" href="estilos.css?v=08c59e90">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Mavenz", "url": "https://davidtaranto96.github.io/mavenz-web/demo/", "description": "We are the strategic partner that moves real estate.", "logo": "https://davidtaranto96.github.io/mavenz-web/img/logo-horizontal.webp", "address": {"@type": "PostalAddress", "addressLocality": "Salta", "addressRegion": "Salta", "addressCountry": "AR"}, "areaServed": {"@type": "AdministrativeArea", "name": "Salta, Argentina"}}</script>
 </head>
 <body>
 <a class="saltar" href="#contenido">Skip to content</a>
 <!--cms:cabecera--><header class="cabecera" data-cabecera>
-  <a class="cabecera__marca" href="#contenido" aria-label="Mavenz"><img class="cabecera__logo" src="../img/logo-horizontal.webp" alt="Mavenz" width="800" height="216"></a>
+  <a class="cabecera__marca" href="#contenido" aria-label="Mavenz"><img class="cabecera__logo cabecera__logo--tinta" src="../img/logo-horizontal.webp" alt="Mavenz" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="../img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="Menu"><a href="#universo">Universe</a><a href="#metodo">How we work</a><a href="#espacio">Espacio Mavenz</a><a href="#proyectos">Projects</a><a href="#red">Network</a><a href="#mirada">Insights</a></nav>
   <div class="cabecera__derecha">
     <span class="idioma"><span class="idioma__on">EN</span><span class="idioma__sep" aria-hidden="true">/</span><a class="idioma__off" href="index.html" hreflang="es-AR" lang="es-AR">ES</a></span>
@@ -36,7 +37,7 @@
 </header>
 <div class="panel" id="menu-celular" data-menu-panel><a href="#universo">Universe</a><a href="#metodo">How we work</a><a href="#espacio">Espacio Mavenz</a><a href="#proyectos">Projects</a><a href="#red">Network</a><a href="#mirada">Insights</a><a class="boton" href="https://wa.me/5493875918813?text=Hi%20Mavenz%2C%20I%20would%20like%20to%20arrange%20a%20meeting." target="_blank" rel="noopener">Request a meeting</a></div><!--/cms:cabecera-->
 <main class="contenido" id="contenido">
-<!--cms:hero--><section class="hero">
+<!--cms:hero--><section class="hero cortina-fondo" data-tema="oscuro">
   <img class="hero__foto" src="../img/aerea-dia-1600.webp" srcset="../img/aerea-dia-800.webp 800w, ../img/aerea-dia-1600.webp 1600w" sizes="100vw" alt="Aerial view of San Lorenzo, Salta" width="1920" height="886" fetchpriority="high" decoding="async">
   <div class="hero__velo"></div>
   <div class="hero__trazos" aria-hidden="true">
@@ -44,6 +45,10 @@
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
       <path class="trazo-vivo" pathLength="1" d="M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272" fill="none" stroke="var(--sobre-foto)" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
     </svg>
+  </div>
+  <div class="hero__pie">
+    <p class="hero__leyenda">Aerial view of San Lorenzo, Salta</p>
+    <ul class="muestras" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
   </div>
   <div class="hero__texto">
     <h1 class="hero__titulo" data-letras>Mavenz creates momentum</h1>
@@ -55,8 +60,8 @@
     </div>
   </div>
 </section><!--/cms:hero-->
-<div class="dossier"><div class="dossier__interior">
-<!--cms:quienes--><section class="seccion" id="quienes">
+<div class="dossier cortina-tapa" data-tema="claro"><div class="dossier__interior">
+<!--cms:quienes--><section class="seccion" id="quienes" data-fx="reveal" data-fx-desde="izq">
   <p class="margen seccion__margen">Salta, Argentina</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>We are Mavenz</h2>
@@ -64,7 +69,7 @@
   </div>
   <div class="quienes__cierre"><p class="cita">It is not only about selling. It is about understanding what to move, how to move it and with whom.</p></div>
 </section><!--/cms:quienes-->
-<!--cms:universo--><section class="seccion" id="universo">
+<!--cms:universo--><section class="seccion" id="universo" data-fx="reveal" data-fx-desde="escala">
   <h2 class="titulo titulo--bordo" data-letras>The Mavenz universe</h2>
   <p class="bajada bajada--angosta">Mavenz works as a universe of connected capabilities. Each project activates a different combination.</p>
   <div class="rueda" data-rueda>
@@ -81,8 +86,13 @@
     <button class="rueda__nodo" type="button" data-cap="estrategia" style="--x:50.0%;--y:8.0%" aria-label="Strategy and consulting" aria-pressed="true"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Strategy and consulting</span></button><button class="rueda__nodo" type="button" data-cap="marca" style="--x:82.84%;--y:23.81%" aria-label="Brand and communication" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Brand and communication</span></button><button class="rueda__nodo" type="button" data-cap="marketing" style="--x:90.95%;--y:59.35%" aria-label="Marketing and activation" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Marketing and activation</span></button><button class="rueda__nodo" type="button" data-cap="comercial" data-tenue style="--x:68.22%;--y:87.84%" aria-label="Sales and projects" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Sales and projects</span></button><button class="rueda__nodo" type="button" data-cap="inversion" data-tenue style="--x:31.78%;--y:87.84%" aria-label="Investment and opportunity" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Investment and opportunity</span></button><button class="rueda__nodo" type="button" data-cap="alianzas" style="--x:9.05%;--y:59.35%" aria-label="New business and alliances" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">New business and alliances</span></button><button class="rueda__nodo" type="button" data-cap="espacio" style="--x:17.16%;--y:23.81%" aria-label="Espacio Mavenz" aria-pressed="false"><span class="rueda__punto" aria-hidden="true"></span><span class="rueda__nombre">Espacio Mavenz</span></button>
   </div>
   <p class="rueda__ayuda">Tap each capability to see it.</p>
+  <div class="mapa">
+    <h3 class="mapa__titulo">The Mavenz map</h3>
+    <p class="mapa__intro">Six territories in Salta, and what is changing in each one.</p>
+    <div class="mapa__lista"><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">Downtown and city centre</span><span class="territorio__bajada">Where heritage begins to change hands</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>The centre stopped growing outwards and grew by transformation. Companies, studios and offices now sit next to cafés and shops, and the colonial houses have left the traditional residential market.</p><p class="territorio__quien"><span class="margen">Who buys there</span> Companies, professional practices, entrepreneurs, tourism and people who want urban, connected living.</p></div></details><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">North side</span><span class="territorio__bajada">The city grows towards nature</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>One of the main expansion corridors in Salta. Every new development consolidates a residential ecosystem that keeps growing.</p><p class="territorio__quien"><span class="margen">Who buys there</span> Young families, professionals and anyone planning a long-term home without giving up the city.</p></div></details><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">San Lorenzo</span><span class="territorio__bajada">Two territories, two ways of living</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>San Lorenzo Viejo is a consolidated market with a stable setting. San Lorenzo Chico is no longer only residential: schools, offices, gyms and restaurants let people live and work in the same place.</p><p class="territorio__quien"><span class="margen">Who buys there</span> Established families in Viejo. In Chico, young families, professionals and entrepreneurs who blend home, work and quality of life.</p></div></details><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">Airport area and San Luis</span><span class="territorio__bajada">Connectivity that drives growth</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>The expansion southwards finds its engine here. Being close to the airport and the main access roads sustains steady demand, alongside new neighbourhoods, services and shops.</p><p class="territorio__quien"><span class="margen">Who buys there</span> Working families, professionals and people tied to commerce and logistics who value access.</p></div></details><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">Cafayate and Cachi</span><span class="territorio__bajada">Investing is also choosing a way to live</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>The Calchaquí Valleys are a different market: the purchase decision mixes heritage, enjoyment and yield. Demand for second homes and tourism-linked investment keeps growing.</p><p class="territorio__quien"><span class="margen">Who buys there</span> People looking for a second home, heritage investors, tourism entrepreneurs and families who put experience and nature first.</p></div></details><details class="territorio" name="territorio"><summary class="territorio__cabeza"><span class="territorio__nombre">Vaqueros</span><span class="territorio__bajada">An eco-cultural answer</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>Vaqueros is emerging as an eco-cultural answer, more bohemian and open, with a strong sense of community. The new urban and environmental planning code and the widened access road reinforce the area.</p><p class="territorio__quien"><span class="margen">Who buys there</span> Couples aged 30 to 45 who work downtown or remotely and want their children to grow up close to nature. Artists, architects and designers. Short-stay rental investors.</p></div></details></div>
+  </div>
 </section><!--/cms:universo-->
-<!--cms:metodo--><section class="seccion" id="metodo">
+<!--cms:metodo--><section class="seccion" id="metodo" data-fx="reveal" data-fx-desde="der">
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>Every project activates a different movement</h2>
     <p class="bajada">Mavenz does not apply a closed formula. First it understands what needs to move, then it builds the right combination of strategy, team, network and execution.</p>
@@ -93,9 +103,9 @@
     </svg>
     <div class="metodo__nodo" style="--x:12.5%;--y:34.5%" data-arriba><span>We read</span></div><div class="metodo__nodo" style="--x:27.5%;--y:76.0%"><span>We define</span></div><div class="metodo__nodo" style="--x:50.0%;--y:68.0%"><span>We connect</span></div><div class="metodo__nodo" style="--x:69.3%;--y:39.5%" data-arriba><span>We activate</span></div><div class="metodo__nodo" style="--x:91.0%;--y:76.0%"><span>We stay</span></div>
   </div>
-  <div class="metodo__lista"><span class="metodo__paso">We read</span><span class="metodo__punto" aria-hidden="true"></span><span class="metodo__paso">We define</span><span class="metodo__punto" aria-hidden="true"></span><span class="metodo__paso">We connect</span><span class="metodo__punto" aria-hidden="true"></span><span class="metodo__paso">We activate</span><span class="metodo__punto" aria-hidden="true"></span><span class="metodo__paso">We stay</span></div>
+  <div class="metodo__pasos"><details class="paso" name="paso" open><summary class="paso__cabeza"><span class="paso__n">1</span><span class="paso__nombre">We read</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>We understand the context, the business, the project and the opportunity.</p></div></details><details class="paso" name="paso"><summary class="paso__cabeza"><span class="paso__n">2</span><span class="paso__nombre">We define</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>We choose a direction and put priorities, goals and scenarios in order.</p></div></details><details class="paso" name="paso"><summary class="paso__cabeza"><span class="paso__n">3</span><span class="paso__nombre">We connect</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>We bring in the people and capabilities that challenge needs.</p></div></details><details class="paso" name="paso"><summary class="paso__cabeza"><span class="paso__n">4</span><span class="paso__nombre">We activate</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>We turn strategy into communication, management, sales and concrete action.</p></div></details><details class="paso" name="paso"><summary class="paso__cabeza"><span class="paso__n">5</span><span class="paso__nombre">We stay</span><span class="paso__signo" aria-hidden="true"></span></summary><div class="paso__cuerpo"><p>We measure, adjust and sustain the movement until the goal is reached.</p></div></details></div>
 </section><!--/cms:metodo-->
-<!--cms:espacio--><section class="seccion" id="espacio">
+<!--cms:espacio--><section class="seccion" id="espacio" data-fx="reveal" data-fx-desde="arriba">
   <p class="margen seccion__margen">Presentations and launches</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>A space where things happen</h2>
@@ -110,14 +120,16 @@
     <p class="hueco__texto">Reserved for a photo of the place. No material yet.</p>
   </div>
 </section><!--/cms:espacio-->
-<!--cms:proyectos--><section class="seccion" id="proyectos">
+<!--cms:proyectos--><section class="seccion" id="proyectos" data-fx="reveal" data-fx-desde="izq">
   <p class="margen seccion__margen">Render images</p>
   <div class="seccion__cabeza seccion__cabeza--pie">
     <h2 class="titulo" data-letras>Momentum, in practice</h2>
     <p class="bajada">This is not a catalogue. It is a selection of projects, developments and opportunities Mavenz takes part in or believes in.</p>
   </div>
   <article class="proyecto">
-    <img class="proyecto__foto" src="../img/casas-1600.webp" srcset="../img/casas-800.webp 800w, ../img/casas-1600.webp 1600w" sizes="(min-width:64rem) 76vw, 100vw" alt="Tree-lined street in Cardinal with families walking" width="1920" height="886" loading="lazy" decoding="async">
+    <button class="proyecto__abrir" type="button" data-foto="0" aria-label="View photo: Cardinal">
+      <img class="proyecto__foto" src="../img/casas-1600.webp" srcset="../img/casas-800.webp 800w, ../img/casas-1600.webp 1600w" sizes="(min-width:64rem) 76vw, 100vw" alt="Tree-lined street in Cardinal with families walking" width="1920" height="886" loading="lazy" decoding="async">
+    </button>
     <div class="proyecto__velo"></div>
     <p class="proyecto__rotulo">Render image</p>
     <div class="proyecto__pie">
@@ -126,22 +138,28 @@
       <a class="subrayado subrayado--claro" href="#contacto">See the project</a>
     </div>
   </article>
-  <div class="estante"><figure class="ficha"><div class="ficha__marco"><img src="../img/amenities-1600.webp" srcset="../img/amenities-800.webp 800w, ../img/amenities-1600.webp 1600w" sizes="(min-width:64rem) 20rem, 15rem" alt="Pool and clubhouse at Cardinal" width="1920" height="886" loading="lazy" decoding="async"></div><figcaption class="ficha__epigrafe">Amenities — pool and clubhouse</figcaption></figure><figure class="ficha ficha--bn"><div class="ficha__marco"><img src="../img/calle-casas-1600.webp" srcset="../img/calle-casas-800.webp 800w, ../img/calle-casas-1600.webp 1600w" sizes="(min-width:64rem) 20rem, 15rem" alt="Inner street at Cardinal" width="1920" height="830" loading="lazy" decoding="async"></div><figcaption class="ficha__epigrafe">Inner street</figcaption></figure><figure class="ficha"><div class="ficha__marco"><img src="../img/galeria-1600.webp" srcset="../img/galeria-800.webp 800w, ../img/galeria-1600.webp 1600w" sizes="(min-width:64rem) 20rem, 15rem" alt="Gallery of a house at Cardinal" width="1748" height="984" loading="lazy" decoding="async"><div class="ficha__velo"></div><p class="ficha__sobretexto">The gallery, the fire and the garden</p></div><figcaption class="ficha__epigrafe">Houses — the gallery</figcaption></figure><figure class="ficha"><div class="hueco ficha__hueco"><p class="hueco__texto">The next projects and opportunities go here</p></div><figcaption class="ficha__epigrafe">Available slot</figcaption></figure></div>
+  <div class="estante"><figure class="ficha" style="--cols:7;--prop:3 / 2"><button class="ficha__abrir" type="button" data-foto="1" aria-label="View photo: Amenities — pool and clubhouse"><img src="../img/amenities-1600.webp" srcset="../img/amenities-800.webp 800w, ../img/amenities-1600.webp 1600w" sizes="(min-width:64rem) 34rem, 15rem" alt="Pool and clubhouse at Cardinal" width="1920" height="886" loading="lazy" decoding="async"></button><figcaption class="ficha__epigrafe">Amenities — pool and clubhouse</figcaption></figure><figure class="ficha ficha--bn" style="--cols:5;--prop:4 / 5"><button class="ficha__abrir" type="button" data-foto="2" aria-label="View photo: Inner street"><img src="../img/calle-casas-1600.webp" srcset="../img/calle-casas-800.webp 800w, ../img/calle-casas-1600.webp 1600w" sizes="(min-width:64rem) 34rem, 15rem" alt="Inner street at Cardinal" width="1920" height="830" loading="lazy" decoding="async"></button><figcaption class="ficha__epigrafe">Inner street</figcaption></figure><figure class="ficha" style="--cols:5;--prop:1 / 1"><button class="ficha__abrir" type="button" data-foto="3" aria-label="View photo: Houses — the gallery"><img src="../img/galeria-1600.webp" srcset="../img/galeria-800.webp 800w, ../img/galeria-1600.webp 1600w" sizes="(min-width:64rem) 34rem, 15rem" alt="Gallery of a house at Cardinal" width="1748" height="984" loading="lazy" decoding="async"><span class="ficha__velo"></span><span class="ficha__sobretexto">The gallery, the fire and the garden</span></button><figcaption class="ficha__epigrafe">Houses — the gallery</figcaption></figure><figure class="ficha" style="--cols:7;--prop:16 / 9"><div class="hueco ficha__hueco"><p class="hueco__texto">The next projects and opportunities go here</p></div><figcaption class="ficha__epigrafe">Available slot</figcaption></figure></div>
+  <dialog class="visor" data-visor aria-label="Cardinal">
+    <button class="visor__cerrar" type="button" data-visor-cerrar aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="visor__pista" data-visor-pista><figure class="visor__lamina" data-lamina="0"><img src="../img/casas-1600.webp" srcset="../img/casas-800.webp 800w, ../img/casas-1600.webp 1600w" sizes="100vw" alt="Tree-lined street in Cardinal with families walking" width="1920" height="886" loading="lazy" decoding="async"><figcaption>Cardinal</figcaption></figure><figure class="visor__lamina" data-lamina="1"><img src="../img/amenities-1600.webp" srcset="../img/amenities-800.webp 800w, ../img/amenities-1600.webp 1600w" sizes="100vw" alt="Pool and clubhouse at Cardinal" width="1920" height="886" loading="lazy" decoding="async"><figcaption>Amenities — pool and clubhouse</figcaption></figure><figure class="visor__lamina" data-lamina="2"><img src="../img/calle-casas-1600.webp" srcset="../img/calle-casas-800.webp 800w, ../img/calle-casas-1600.webp 1600w" sizes="100vw" alt="Inner street at Cardinal" width="1920" height="830" loading="lazy" decoding="async"><figcaption>Inner street</figcaption></figure><figure class="visor__lamina" data-lamina="3"><img src="../img/galeria-1600.webp" srcset="../img/galeria-800.webp 800w, ../img/galeria-1600.webp 1600w" sizes="100vw" alt="Gallery of a house at Cardinal" width="1748" height="984" loading="lazy" decoding="async"><figcaption>Houses — the gallery</figcaption></figure></div>
+  </dialog>
 </section><!--/cms:proyectos-->
-<!--cms:red--><section class="seccion red" id="red">
+<!--cms:red--><section class="seccion red" id="red" data-fx="reveal" data-fx-desde="escala">
   <h2 class="titulo" data-letras>Movement never happens alone</h2>
   <p class="bajada bajada--angosta">Team, partners, specialists, developers and allies who connect according to what each project needs to move.</p>
   <div class="red__nube"><p class="red__nodo" data-peso="1" style="--x:0.0%;--y:14.7%;--sangria:0px">Team</p><p class="red__nodo" data-peso="3" style="--x:27.2%;--y:0.0%;--sangria:56px">Partners</p><p class="red__nodo" data-peso="2" style="--x:21.4%;--y:37.3%;--sangria:24px">Specialists</p><p class="red__nodo" data-peso="1" style="--x:54.0%;--y:22.0%;--sangria:0px">Developers</p><p class="red__nodo" data-peso="3" style="--x:47.1%;--y:62.0%;--sangria:80px">Allies</p></div>
   <p class="cita red__cierre">This is not a directory of logos. It is who steps into each movement.</p>
 </section><!--/cms:red-->
-<!--cms:mirada--><section class="seccion" id="mirada">
+<!--cms:mirada--><section class="seccion" id="mirada" data-fx="reveal" data-fx-desde="der">
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>What we see before it moves</h2>
     <p class="bajada">Analysis, ideas, trends and readings of the market. Our way of looking, written down.</p>
   </div>
   <div class="mirada__hueco"><p>The first pieces will be published at launch.</p></div>
 </section><!--/cms:mirada-->
-<!--cms:contacto--><section class="seccion contacto" id="contacto">
+<!--cms:contacto--><section class="seccion contacto" id="contacto" data-fx="reveal" data-fx-desde="arriba">
   <p class="contacto__apertura">There are projects, ideas and opportunities that need the right movement.</p>
   <h2 class="contacto__titulo" data-letras>Let us move something together</h2>
   <div class="motivos">
@@ -156,7 +174,7 @@
 </section><!--/cms:contacto-->
 </div></div>
 </main>
-<!--cms:pie--><footer class="pie">
+<!--cms:pie--><footer class="pie" data-tema="claro">
   <img class="pie__iso" src="../img/isotipo.webp" alt="Mavenz" width="600" height="381" loading="lazy" decoding="async">
   <nav class="pie__redes" aria-label="Mavenz"><span>Instagram</span><span>LinkedIn</span><span>Facebook</span></nav>
   <div class="pie__abajo">
@@ -164,9 +182,10 @@
     <span class="idioma"><span class="idioma__on">EN</span><span class="idioma__sep" aria-hidden="true">/</span><a class="idioma__off" href="index.html" hreflang="es-AR" lang="es-AR">ES</a></span>
   </div>
 </footer><!--/cms:pie-->
-<a class="wa" href="https://wa.me/5493875918813?text=Hi%20Mavenz%2C%20I%20saw%20your%20site%20and%20I%20have%20a%20question." target="_blank" rel="noopener" aria-label="WhatsApp">
+<nav class="indice" data-indice aria-label="Sections"><a href="#quienes" aria-label="We are Mavenz"></a><a href="#universo" aria-label="Universe"></a><a href="#metodo" aria-label="How we work"></a><a href="#espacio" aria-label="Espacio Mavenz"></a><a href="#proyectos" aria-label="Projects"></a><a href="#red" aria-label="Network"></a><a href="#mirada" aria-label="Insights"></a><a href="#contacto" aria-label="Let us move something together"></a></nav>
+<a class="wa" data-wa href="https://wa.me/5493875918813?text=Hi%20Mavenz%2C%20I%20saw%20your%20site%20and%20I%20have%20a%20question." target="_blank" rel="noopener" aria-label="WhatsApp">
   <span class="wa__punto" aria-hidden="true"></span>WhatsApp
 </a>
-<script src="guion.js" defer></script>
+<script src="guion.js?v=8a440eb4" defer></script>
 </body>
 </html>

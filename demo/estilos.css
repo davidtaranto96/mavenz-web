@@ -70,6 +70,9 @@
   --ritmo:      clamp(4rem, 2.7rem + 5.333vw, 7.5rem);         /*  64 → 120 */
   --alto-nav:   clamp(3.75rem, 3.193rem + 2.286vw, 5.25rem);   /*  60 → 84  */
 
+  /* ---- el solape de la cortina: un solo token para el margen y el padding ---- */
+  --solape: clamp(80px, 12vh, 140px);
+
   /* ---- movimiento: suave, que es lo que pidió la clienta ---- */
   --curva: cubic-bezier(.22, .61, .36, 1);
   --pulsado: 120ms;
@@ -240,14 +243,16 @@ p { text-wrap: pretty; }
 /* Panel de menú en celular */
 .panel {
   position: fixed;
-  inset: var(--alto-nav) 0 auto 0;
+  /* ocupa la pantalla entera debajo de la barra, no es un desplegable */
+  inset: var(--alto-nav) 0 0 0;
   z-index: 19;
   background: var(--papel);
-  border-bottom: 1px solid var(--linea);
-  padding: 1.5rem var(--margen-ext) 2rem;
+  padding: 2rem var(--margen-ext) 2.5rem;
   display: flex;
   flex-direction: column;
   gap: .25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   transform: translateY(-8px);
   opacity: 0;
   visibility: hidden;
@@ -257,13 +262,18 @@ p { text-wrap: pretty; }
 .panel a {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  font-size: var(--t-lead);
+  min-height: 56px;
+  font-size: var(--t-cita);
   font-weight: var(--ui);
+  letter-spacing: -.01em;
   color: var(--tinta);
   border-bottom: 1px solid var(--linea);
 }
 .panel a:last-of-type { border-bottom: 0; }
+.panel .boton { margin-top: auto; }
+
+/* mientras el menú está abierto el fondo no scrollea */
+body[data-menu-abierto] { overflow: hidden; }
 
 /* ==========================================================================
    Botones
@@ -405,6 +415,19 @@ p { text-wrap: pretty; }
   width: 7px; height: 7px;
   border-radius: 999px;
   background: var(--tinta-bordo);
+}
+
+/* Un globo permanente es ruido: se esconde donde el visitante ya tiene el
+   WhatsApp a la vista (el hero y el cierre). Lo pone y lo saca el guion; si
+   el guion no corre, queda visible, que es el lado seguro. */
+.wa {
+  transition: opacity var(--cambio) var(--curva), transform var(--cambio) var(--curva),
+              scale var(--pulsado) var(--curva);
+}
+.wa[data-oculto] {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
 }
 
 /* ==========================================================================
@@ -668,8 +691,9 @@ p { text-wrap: pretty; }
   overscroll-behavior-x: contain;
 }
 .ficha { flex: 0 0 clamp(14.75rem, 8rem + 17vw, 21.5rem); scroll-snap-align: start; }
-.ficha__marco { position: relative; height: clamp(10rem, 5rem + 12.8vw, 14.75rem); overflow: hidden; }
-.ficha__marco img { width: 100%; height: 100%; object-fit: cover; }
+.ficha__abrir { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); border-radius: 6px; }
+.ficha__abrir img { width: 100%; height: 100%; object-fit: cover; }
+.ficha__epigrafe { border-top: 1px solid var(--linea); padding-top: .5rem; }
 .ficha--bn img { filter: grayscale(1) contrast(1.04); }
 .ficha__velo {
   position: absolute;
@@ -800,14 +824,19 @@ p { text-wrap: pretty; }
    ========================================================================== */
 
 @keyframes mvLetra { from { opacity: 0; transform: translateY(.28em); } to { opacity: 1; transform: none; } }
-@keyframes mvTrazo { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 [data-letras] span { display: inline-block; }
 
+/* El trazo de la marca se dibuja con el scroll: el gesto de la marca atado al
+   gesto del visitante. --trazo se declara con @property para que se pueda
+   animar; arranca en 1 (dibujado) para que sin JS y sin animación se vea. */
+@property --trazo { syntax: "<number>"; inherits: true; initial-value: 1; }
+@keyframes mvTrazo { from { --trazo: 0; } to { --trazo: .38; } }
+
 .trazo-vivo {
   stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: mvTrazo 2.6s var(--curva) .35s forwards;
+  stroke-dashoffset: calc(1 - var(--trazo));
+  animation: mvTrazo 1.4s var(--curva) .3s forwards;
 }
 
 /* ==========================================================================
@@ -923,13 +952,21 @@ p { text-wrap: pretty; }
   div.red__nube .red__nodo { position: absolute; left: var(--x); top: var(--y); margin-left: 0; }
   .red .red__cierre { max-width: 26rem; margin-left: auto; text-align: right; }
 
+  /* Grilla asimétrica: 12 columnas con reparto 7/5 y 5/7 invertido, y
+     proporciones que no se repiten. Cuatro tarjetas idénticas es el tell
+     número uno de una web hecha con IA. */
   div.estante {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: clamp(1rem, -.5rem + 2.1vw, 1.5rem);
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.25rem, -.5rem + 2.6vw, 2rem) clamp(1rem, -.5rem + 2.1vw, 1.5rem);
+    /* start y no stretch: si no, la fila iguala los altos y las proporciones
+       distintas dejan de verse, que es justo lo que se buscaba */
+    align-items: start;
     overflow: visible;
   }
-  div.estante .ficha { flex: initial; }
+  div.estante .ficha { flex: initial; grid-column: span var(--cols, 6); min-width: 0; }
+  div.estante .ficha__abrir,
+  div.estante .ficha__hueco { height: auto; aspect-ratio: var(--prop, 3 / 2); }
 
   .motivos .motivos__lista { flex-direction: row; flex-wrap: wrap; gap: .25rem clamp(1.25rem, -1rem + 3.4vw, 2.25rem); }
 
@@ -949,7 +986,7 @@ p { text-wrap: pretty; }
    ========================================================================== */
 
 @media (min-width: 64rem) {
-  body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 13svh); }
+  body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 10.5svh); }
 
   div.rueda { width: min(100%, 44rem, 76svh); }
   article.proyecto { height: min(clamp(26.25rem, 15rem + 25vw, 35rem), 76svh); }
@@ -1019,11 +1056,368 @@ p { text-wrap: pretty; }
   html { scroll-behavior: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .trazo-vivo { animation: none; stroke-dashoffset: 0; }
+  .trazo-vivo { animation: none; --trazo: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   [data-letras] span { animation: none !important; opacity: 1 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   :where(a, button):active { scale: none; }
+}
+
+
+/* ==========================================================================
+   La cortina — el gesto grande, una sola vez en toda la página
+   El hero queda fijo y el dossier de papel sube por encima. La sombra
+   invertida es lo único que vende la profundidad: sin ella la tapa se lee
+   como un rectángulo pegado.
+   ========================================================================== */
+
+.cortina-fondo { position: sticky; top: 0; z-index: 0; }
+.cortina-tapa {
+  position: relative;
+  z-index: 1;
+  background: var(--papel);          /* opaco propio, o se transparenta */
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -24px 60px rgba(30, 30, 32, .28);
+}
+@media (min-width: 56.25rem) { div.cortina-tapa { border-radius: 28px 28px 0 0; } }
+
+/* El solape: la grilla de proyectos baja y su pie ya vive adentro de la
+   sección siguiente, así el corte entre bloques deja de ser una línea recta.
+   El margen negativo y el padding salen del mismo token: nunca se descalibran.
+   Va en la grilla porque es lo último de su sección; en un bloque del medio el
+   solape se come a lo que viene abajo en vez de cruzar el corte. */
+.estante { margin-bottom: calc(-1 * var(--solape)); position: relative; z-index: 2; }
+#red { padding-top: calc(var(--ritmo) + var(--solape) + 1rem); }
+
+/* ==========================================================================
+   Entrada por sección, con dirección heredada
+   ========================================================================== */
+
+@keyframes mvEntra { to { opacity: 1; translate: none; scale: 1; } }
+
+[data-fx="reveal"] > [data-entra] {
+  opacity: 0;
+  animation: mvEntra .62s var(--curva) forwards;
+  animation-play-state: paused;
+}
+[data-fx="reveal"][data-visible] > [data-entra] { animation-play-state: running; }
+
+/* En el celular todo entra desde abajo: un desplazamiento lateral, aunque sea
+   de 28 px y dure medio segundo, abre scroll horizontal en un teléfono. */
+[data-fx-desde] > [data-entra] { translate: 0 22px; }
+[data-fx-desde="escala"] > [data-entra] { scale: .975; translate: 0 14px; }
+
+@media (min-width: 64rem) {
+  [data-fx-desde="arriba"] > [data-entra] { translate: 0 26px; }
+  [data-fx-desde="izq"]    > [data-entra] { translate: -28px 0; }
+  [data-fx-desde="der"]    > [data-entra] { translate: 28px 0; }
+  [data-fx-desde="escala"] > [data-entra] { scale: .965; translate: 0 14px; }
+}
+
+/* ==========================================================================
+   El nav se invierte según el bloque que tiene debajo
+   ========================================================================== */
+
+.cabecera__logo--papel { display: none; }
+.cabecera[data-tema="oscuro"] { background: rgba(30, 30, 32, .42); }
+.cabecera[data-tema="oscuro"] .cabecera__logo--tinta { display: none; }
+.cabecera[data-tema="oscuro"] .cabecera__logo--papel { display: block; }
+.cabecera[data-tema="oscuro"] .cabecera__enlaces a,
+.cabecera[data-tema="oscuro"] .idioma__on { color: var(--sobre-foto); }
+.cabecera[data-tema="oscuro"] .idioma__off { color: var(--sobre-foto-2); }
+.cabecera[data-tema="oscuro"] .hamburguesa span { background: var(--sobre-foto); }
+.cabecera[data-tema="oscuro"] .boton { background: var(--sobre-foto); color: var(--tinta-bordo); }
+.cabecera[data-tema="oscuro"][data-scroll] { border-bottom-color: rgba(238, 236, 236, .22); }
+
+/* ==========================================================================
+   El pie de foto del hero: lámina catalogada, no banner de stock
+   ========================================================================== */
+
+.hero__pie {
+  position: absolute;
+  left: var(--margen-ext);
+  right: var(--margen-ext);
+  top: calc(var(--alto-nav) + 1rem);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.hero__leyenda {
+  font-size: var(--t-micro);
+  font-weight: var(--ui);
+  letter-spacing: .12em;
+  color: var(--sobre-foto-2);
+  max-width: 22ch;
+}
+.muestras { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.muestras li { width: 12px; height: 12px; border: 1px solid rgba(238, 236, 236, .35); }
+.muestras li:nth-child(1) { background: var(--tinta); }
+.muestras li:nth-child(2) { background: var(--tinta-bordo); }
+.muestras li:nth-child(3) { background: var(--tinta-parrafo); }
+.muestras li:nth-child(4) { background: var(--tinta-apoyo); }
+.muestras li:nth-child(5) { background: var(--linea-acento); }
+.muestras li:nth-child(6) { background: var(--linea); }
+.muestras li:nth-child(7) { background: var(--papel); }
+
+/* ==========================================================================
+   El método: cinco verbos que se abren y cuentan qué pasa
+   ========================================================================== */
+
+.metodo__pasos { margin-top: clamp(1.5rem, 1rem + 1.3vw, 2.25rem); }
+
+.paso, .territorio { border-top: 1px solid var(--linea); }
+.paso:last-of-type, .territorio:last-of-type { border-bottom: 1px solid var(--linea); }
+
+.paso__cabeza, .territorio__cabeza {
+  display: flex;
+  align-items: baseline;
+  gap: .875rem;
+  min-height: 56px;
+  padding-block: .875rem;
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--hover) var(--curva);
+}
+.paso__cabeza::-webkit-details-marker,
+.territorio__cabeza::-webkit-details-marker { display: none; }
+
+.paso__n {
+  font-size: var(--t-micro);
+  font-weight: var(--ui);
+  color: var(--tinta-apoyo);
+  font-variant-numeric: tabular-nums;
+}
+.paso__nombre {
+  flex: 1;
+  font-size: clamp(1.3125rem, 1.1rem + .87vw, 1.75rem);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  color: var(--tinta);
+}
+.territorio__nombre {
+  flex: 0 0 auto;
+  font-size: clamp(1.1875rem, 1.05rem + .57vw, 1.5rem);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  color: var(--tinta);
+}
+.territorio__bajada {
+  flex: 1;
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--tinta-apoyo);
+}
+
+/* El signo: dos rayas que se vuelven una. Sin SVG ni fuente de iconos. */
+.paso__signo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 14px; height: 14px;
+  align-self: center;
+}
+.paso__signo::before, .paso__signo::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  background: var(--tinta-bordo);
+  transition: transform var(--cambio) var(--curva);
+}
+.paso__signo::after { transform: rotate(90deg); }
+[open] > .paso__cabeza .paso__signo::after,
+[open] > .territorio__cabeza .paso__signo::after { transform: rotate(0deg); }
+
+.paso__cuerpo {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .28s var(--curva);
+}
+[open] > .paso__cuerpo { grid-template-rows: 1fr; }
+.paso__cuerpo > * { overflow: hidden; }
+.paso__cuerpo p {
+  padding-bottom: 1.25rem;
+  max-width: 62ch;
+  font-size: var(--t-cuerpo);
+  font-weight: var(--fino);
+  line-height: 1.65;
+  color: var(--tinta-parrafo);
+  /* el cuerpo entra 60 ms después de que la fila terminó de abrirse */
+  opacity: 0;
+  transition: opacity .22s var(--curva) 60ms;
+}
+[open] > .paso__cuerpo p { opacity: 1; }
+.territorio__quien { padding-top: .25rem; }
+.territorio__quien .margen { display: block; margin-bottom: .25rem; }
+
+/* ==========================================================================
+   El mapa Mavenz, adentro del Universo
+   ========================================================================== */
+
+.mapa {
+  margin-top: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  border-top: 1px solid var(--linea-acento);
+  padding-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+.mapa__titulo {
+  font-size: var(--t-sub);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  color: var(--tinta);
+}
+.mapa__intro {
+  margin-top: .5rem;
+  max-width: 44ch;
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--tinta-apoyo);
+}
+.mapa__lista { margin-top: 1.5rem; }
+
+/* ==========================================================================
+   El visor de fotos: swipe nativo dentro de un <dialog>
+   ========================================================================== */
+
+.ficha__abrir, .proyecto__abrir {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.proyecto__abrir { position: absolute; inset: 0; height: 100%; }
+
+.visor {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--tinta);
+}
+.visor::backdrop { background: rgba(30, 30, 32, .92); }
+.visor__pista {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.visor__pista::-webkit-scrollbar { display: none; }
+.visor__lamina {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(1rem, .5rem + 2vw, 3rem);
+}
+.visor__lamina img {
+  max-width: 100%;
+  max-height: 76dvh;
+  width: auto;
+  object-fit: contain;
+}
+.visor__lamina figcaption {
+  font-size: var(--t-nota);
+  font-weight: var(--fino);
+  color: var(--sobre-foto-2);
+}
+.visor__cerrar {
+  position: absolute;
+  right: 1rem; top: 1rem;
+  z-index: 2;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: rgba(238, 236, 236, .12);
+  color: var(--sobre-foto);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   El barrido de luz de la rueda — el fundido solo deja dudando si el clic hizo algo
+   ========================================================================== */
+
+@keyframes mvBarrido { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+
+.rueda__cara { position: relative; overflow: hidden; }
+.rueda__cara::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(238, 236, 236, .85), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.rueda[data-cambio] .rueda__cara::after { animation: mvBarrido .55s var(--curva); }
+
+/* ==========================================================================
+   Índice lateral de rayas — sólo desde 1180 px
+   ========================================================================== */
+
+.indice { display: none; }
+
+@media (min-width: 73.75rem) {
+  nav.indice {
+    position: fixed;
+    left: clamp(1.25rem, -1rem + 2.4vw, 2rem);
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 14;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  nav.indice a {
+    position: relative;
+    display: block;
+    width: 34px; height: 2px;
+    background: var(--tinta-apoyo);
+    opacity: .28;
+    transform: scaleX(.65);
+    transform-origin: left;
+    transition: opacity var(--hover) var(--curva), transform var(--hover) var(--curva);
+  }
+  /* el área táctil crece sin tapar la raya: el ::before no lleva fondo */
+  nav.indice a::before { content: ""; position: absolute; inset: -10px 0; }
+  nav.indice a[aria-current="true"] { opacity: 1; transform: scaleX(1); }
+  nav.indice a::after {
+    content: attr(aria-label);
+    position: absolute;
+    left: 44px; top: 50%;
+    translate: 0 -50%;
+    white-space: nowrap;
+    font-size: var(--t-micro);
+    color: var(--tinta-apoyo);
+    opacity: 0;
+    transition: opacity var(--hover) var(--curva);
+    pointer-events: none;
+  }
+  nav.indice a:hover::after, nav.indice a:focus-visible::after { opacity: 1; }
+}
+
+/* ==========================================================================
+   Menos movimiento — cada bloque pegado al efecto que apaga
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-fx="reveal"] > [data-entra] { animation: none; opacity: 1; translate: none; scale: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rueda[data-cambio] .rueda__cara::after { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cortina-fondo { position: static; }
 }

@@ -43,11 +43,13 @@
     var cerrar = function () {
       cabecera.removeAttribute('data-menu');
       panel.removeAttribute('data-abierto');
+      document.body.removeAttribute('data-menu-abierto');
       boton.setAttribute('aria-expanded', 'false');
     };
     var abrir = function () {
       cabecera.setAttribute('data-menu', '');
       panel.setAttribute('data-abierto', '');
+      document.body.setAttribute('data-menu-abierto', '');
       boton.setAttribute('aria-expanded', 'true');
     };
 
@@ -74,6 +76,33 @@
   }
 
   /* ---------------------------------------------------------------------- */
+  /* El globo de WhatsApp, por contexto                                      */
+  /*                                                                         */
+  /* Se esconde donde el visitante ya tiene el WhatsApp delante: el hero y   */
+  /* el cierre. En el medio es el único camino a la conversión, y ahí está.  */
+  /* ---------------------------------------------------------------------- */
+
+  var globo = document.querySelector('[data-wa]');
+  var tapan = document.querySelectorAll('.hero, #contacto');
+
+  if (globo && tapan.length && 'IntersectionObserver' in window) {
+    /* Un conjunto y no un contador: en la primera llamada llegan todas las
+       secciones juntas, y con un contador la que no se ve le resta a la que
+       sí, con lo que el globo nunca se escondía. */
+    var tapando = [];
+    var ojo = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        var i = tapando.indexOf(en.target);
+        if (en.isIntersecting && i < 0) tapando.push(en.target);
+        if (!en.isIntersecting && i >= 0) tapando.splice(i, 1);
+      });
+      if (tapando.length) globo.setAttribute('data-oculto', '');
+      else globo.removeAttribute('data-oculto');
+    }, { threshold: .05 });
+    Array.prototype.forEach.call(tapan, function (s) { ojo.observe(s); });
+  }
+
+  /* ---------------------------------------------------------------------- */
   /* La rueda del universo                                                   */
   /* ---------------------------------------------------------------------- */
 
@@ -89,6 +118,11 @@
       paneles.forEach(function (p) {
         p.setAttribute('aria-hidden', String(p.dataset.panel !== id));
       });
+      if (!menosMovimiento) {
+        rueda.removeAttribute('data-cambio');
+        void rueda.offsetWidth;               /* reinicia la animación */
+        rueda.setAttribute('data-cambio', '');
+      }
     };
 
     rueda.addEventListener('click', function (e) {
@@ -108,6 +142,179 @@
       siguiente.focus();
     });
   });
+
+
+  /* ---------------------------------------------------------------------- */
+  /* El trazo de la marca se dibuja con el scroll                            */
+  /* ---------------------------------------------------------------------- */
+
+  var trazo = document.querySelector('.trazo-vivo');
+  var heroCaja = document.querySelector('.hero');
+
+  if (trazo && heroCaja && !menosMovimiento) {
+    var pendienteTrazo = false;
+    var dibujar = function () {
+      pendienteTrazo = false;
+      var y = window.scrollY;
+      if (y <= 4) { trazo.style.removeProperty('--trazo'); return; }
+      var largo = heroCaja.offsetHeight * .8 || 1;
+      var p = .38 + .62 * Math.min(1, y / largo);
+      trazo.style.setProperty('--trazo', p.toFixed(3));
+    };
+    window.addEventListener('scroll', function () {
+      if (pendienteTrazo) return;
+      pendienteTrazo = true;
+      requestAnimationFrame(dibujar);
+    }, { passive: true });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Cada sección entra con su propio gesto                                  */
+  /*                                                                         */
+  /* La dirección la hereda de la sección, no la elige cada bloque: todo     */
+  /* entrando igual desde abajo se lee como plugin y no como diseño.         */
+  /* ---------------------------------------------------------------------- */
+
+  var secciones = Array.prototype.slice.call(document.querySelectorAll('[data-fx="reveal"]'));
+
+  if (secciones.length && !menosMovimiento) {
+    secciones.forEach(function (sec) {
+      Array.prototype.forEach.call(sec.children, function (hijo, i) {
+        hijo.setAttribute('data-entra', '');
+        hijo.style.animationDelay = (Math.min(i, 5) * 0.07).toFixed(2) + 's';
+      });
+    });
+
+    var abrir = function (sec) {
+      if (sec.hasAttribute('data-visible')) return;
+      sec.setAttribute('data-visible', '');
+    };
+
+    var ojoSec = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        abrir(en.target);
+        ojoSec.unobserve(en.target);
+      });
+    }, { threshold: .12 });
+    secciones.forEach(function (sec) { ojoSec.observe(sec); });
+
+    /* Red de seguridad en cuatro capas: una sección que se queda invisible no
+       es una animación fea, es contenido perdido. */
+    var barrerSec = function () {
+      secciones.forEach(function (sec) {
+        var r = sec.getBoundingClientRect();
+        if (r.top < (window.innerHeight || 0) && r.bottom > -200) abrir(sec);
+      });
+    };
+
+    requestAnimationFrame(barrerSec);                          /* 1. primer cuadro */
+    window.addEventListener('load', barrerSec, { once: true }); /* 2. con todo cargado */
+
+    var pendienteBarrido = false;                              /* 3. al scrollear */
+    window.addEventListener('scroll', function () {
+      if (pendienteBarrido) return;
+      pendienteBarrido = true;
+      requestAnimationFrame(function () { pendienteBarrido = false; barrerSec(); });
+    }, { passive: true });
+
+    var vueltas = 0;                                           /* 4. cierre duro */
+    var reloj = setInterval(function () {
+      barrerSec();
+      if (++vueltas > 150 || !document.querySelector('[data-fx="reveal"]:not([data-visible])')) {
+        clearInterval(reloj);
+      }
+    }, 400);
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* El nav se invierte según el bloque que tiene debajo                     */
+  /*                                                                         */
+  /* Se sondea qué hay debajo de la barra, no una lista de ids: agregar o    */
+  /* reordenar secciones no rompe nada. Con la cortina el rect miente, así   */
+  /* que se lee offsetTop.                                                   */
+  /* ---------------------------------------------------------------------- */
+
+  var conTema = Array.prototype.slice.call(document.querySelectorAll('[data-tema]'));
+
+  if (cabecera && conTema.length) {
+    var temaActual = '';
+    var alturaNav = function () { return cabecera.offsetHeight / 2; };
+    var mirarTema = function () {
+      var y = window.scrollY + alturaNav();
+      var tema = 'claro';
+      for (var i = 0; i < conTema.length; i++) {
+        var el = conTema[i];
+        var top = el.offsetTop, alto = el.offsetHeight;
+        if (y >= top && y < top + alto) tema = el.dataset.tema;
+      }
+      if (tema === temaActual) return;
+      temaActual = tema;
+      if (tema === 'oscuro') cabecera.setAttribute('data-tema', 'oscuro');
+      else cabecera.removeAttribute('data-tema');
+    };
+    var pendienteTema = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteTema) return;
+      pendienteTema = true;
+      requestAnimationFrame(function () { pendienteTema = false; mirarTema(); });
+    }, { passive: true });
+    window.addEventListener('resize', mirarTema);
+    mirarTema();
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Índice lateral de rayas                                                 */
+  /* ---------------------------------------------------------------------- */
+
+  var indice = document.querySelector('[data-indice]');
+
+  if (indice) {
+    var rayas = Array.prototype.slice.call(indice.querySelectorAll('a'));
+    var destinos = rayas.map(function (a) {
+      return document.querySelector(a.getAttribute('href'));
+    });
+    var mirarIndice = function () {
+      var y = window.scrollY + (window.innerHeight || 0) * .35;
+      var activo = 0;
+      destinos.forEach(function (el, i) { if (el && y >= el.offsetTop) activo = i; });
+      rayas.forEach(function (a, i) {
+        if (i === activo) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    var pendienteIndice = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteIndice) return;
+      pendienteIndice = true;
+      requestAnimationFrame(function () { pendienteIndice = false; mirarIndice(); });
+    }, { passive: true });
+    mirarIndice();
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* El visor de fotos                                                       */
+  /* ---------------------------------------------------------------------- */
+
+  var visor = document.querySelector('[data-visor]');
+
+  if (visor && typeof visor.showModal === 'function') {
+    var pista = visor.querySelector('[data-visor-pista]');
+
+    document.addEventListener('click', function (ev) {
+      var disparo = ev.target.closest('[data-foto]');
+      if (!disparo) return;
+      ev.preventDefault();
+      visor.showModal();
+      var lamina = pista.querySelector('[data-lamina="' + disparo.dataset.foto + '"]');
+      if (lamina) pista.scrollTo({ left: lamina.offsetLeft, behavior: 'auto' });
+    });
+
+    visor.addEventListener('click', function (ev) {
+      /* el clic sobre el fondo del dialog cierra; sobre una lámina, no */
+      if (ev.target === visor || ev.target.closest('[data-visor-cerrar]')) visor.close();
+    });
+  }
 
   /* ---------------------------------------------------------------------- */
   /* Los títulos entran letra por letra                                      */

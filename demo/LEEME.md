@@ -32,7 +32,7 @@ pueda regenerar sola más adelante.
 | `contenido/sitio.en.json` | la capa en inglés: sólo lo que cambia. Las listas van enteras |
 | `armar.py` | genera `index.html` y `en.html` |
 | `estilos.css` | tokens y los tres carriles |
-| `guion.js` | cabecera, menú, rueda del universo, entrada de los títulos |
+| `guion.js` | cabecera, menú, rueda, entrada de los títulos y de las secciones, trazo con el scroll, visor de fotos, índice lateral |
 | `../img/` | fotos en WebP, dos anchos cada una |
 | `../fuente/urbanist.woff2` | Urbanist variable, 100–900, 24 KB |
 
@@ -60,16 +60,46 @@ pueda regenerar sola más adelante.
 
 ---
 
+## Lo que se agregó el 06/09 (pasada de subir-nivel)
+
+De las catorce opciones del menú, David tildó doce. Todas salen de la receta editorial de
+SAURIUM, que es la única web que elogió espontáneamente, del auditor de efectos o del detector
+de genérico.
+
+| Qué | De dónde sale |
+|---|---|
+| **La cortina**: el hero queda fijo y el dossier sube encima con radio y sombra invertida | SAURIUM. Es el gesto grande, una sola vez en toda la página |
+| **El solape**: la grilla de proyectos cruza el corte y su pie vive en la sección siguiente | SAURIUM. El margen negativo y el padding salen del mismo token |
+| **Cada sección entra con su gesto** (izquierda, derecha, escala) | Auditor 8/10 + anti-slop. En celular todo entra desde abajo: un desplazamiento lateral abre scroll horizontal en un teléfono |
+| **El nav se invierte** según el bloque de abajo, con los dos logos | SAURIUM. Sondea `offsetTop`, no una lista de ids |
+| **Grilla asimétrica** de proyectos: 7/5 y 5/7, cuatro proporciones distintas | Anti-slop: la grilla de tarjetas iguales es el tell número uno de web hecha con IA |
+| **Visor de fotos** con swipe nativo dentro de un `<dialog>` | SAURIUM. La inercia la pone el sistema |
+| **Barrido de luz** al cambiar de capacidad en la rueda | SAURIUM: sin el barrido el visitante duda de si el clic hizo algo |
+| **El método cuenta qué pasa**: los cinco verbos se abren | SAURIUM. Copy del documento de Vero |
+| **Vuelve el Mapa Mavenz**, adentro del Universo | Del vault: está construido y pago dentro de los USD 300 |
+| **Índice lateral de rayas** desde 1180 px | SAURIUM. `scaleX` desde la izquierda, que se lee como progreso |
+| **El trazo se dibuja con el scroll** en vez de solo al cargar | El gesto de la marca atado al del visitante |
+| **Pie de foto catalogada**: leyenda y las siete muestras del manual | SAURIUM. La aérea deja de ser un banner de stock |
+
+Quedaron sin tildar el wordmark gigante de fondo y el corte duro de entrada de la foto.
+
+Y tres arreglos de celular que no eran gusto sino QA: **el menú ocupa la pantalla y bloquea el
+scroll de atrás**, **el globo de WhatsApp se esconde donde ya hay WhatsApp a la vista** (el hero
+y el cierre), y **el CSS y el JS llevan `?v=` con el hash del archivo**, sin lo cual el
+navegador sirve la versión vieja y una corrección no se ve.
+
+---
+
 ## Medido, no estimado
 
 | | Demo vieja (`v1/`) | Esta |
 |---|---|---|
-| Pantallas en celular (390×844) | 23,6 | **7,5** |
-| Pantallas en notebook (1366×657) | 26,2 | **10,5** |
+| Pantallas en celular (390×844) | 23,6 | **8,7** |
+| Pantallas en notebook (1366×657) | 26,2 | **13,0** |
 | Animaciones en bucle en el celular | 17 | **0** |
 | Peso de la primera carga | 10 MB | **260 KB** |
 | Peso de la página entera | — | **1,0 MB** |
-| `@keyframes` | 22 | **2** |
+| `@keyframes` | 22 | **4** |
 | Colores fuera de `:root` | 109 | **0** |
 | Hex en toda la hoja | — | **7** (los del manual de Fractura, ni uno más) |
 | Tamaños de texto renderizados | 26 | **13** |
@@ -145,6 +175,19 @@ rueda cambia de capacidad, el menú de celular abre y cierra, el selector ES/EN 
 entre las dos versiones, ninguna palabra en castellano se coló en `en.html`,
 `prefers-reduced-motion` deja la página completa y legible, consola sin errores en las dos.
 
+**Sobre el largo**: la notebook pasó de 10,5 a 13,0 pantallas al sumar el mapa, el método con
+contenido y las fotos más grandes. Sigue siendo la mitad de la demo vieja (26,2), pero es lo
+contrario de lo que pidió Vero cuando dijo que la anterior era muy larga. La palanca está a una
+variable: `--ritmo` en el bloque de la notebook. Bajarla de `10.5svh` a `7svh` corta cerca de
+una pantalla y media sin sacar nada.
+
 **No verificado:** el toque real en un teléfono. El panel del navegador corre oculto en esta
 máquina y no completa los clicks; las áreas táctiles están medidas (44 px, ninguna por debajo)
 pero el gesto hay que probarlo en el teléfono.
+
+**Una trampa del método, anotada porque costó caro:** `--window-size` de Chrome headless **no
+baja de 500 px**. Si le pedís 390 maqueta a 500 y recorta la imagen a 390, así que la captura
+muestra textos cortados y botones fuera de pantalla en una web que no desborda. Las capturas de
+celular de este LEEME salen del capturador por DevTools
+(`~/.claude/skills/visual-verify/scripts/capturar-celular.py`), que usa
+`Emulation.setDeviceMetricsOverride` y lo reaplica después de navegar.
