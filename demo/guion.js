@@ -157,8 +157,10 @@
       pendienteTrazo = false;
       var y = window.scrollY;
       if (y <= 4) { trazo.style.removeProperty('--trazo'); return; }
-      var largo = heroCaja.offsetHeight * .8 || 1;
-      var p = .38 + .62 * Math.min(1, y / largo);
+      /* al cargar ya está casi entero (.72): un trazo a medio dibujar en el
+         hero se lee cortado, no en progreso. El scroll lo termina. */
+      var largo = heroCaja.offsetHeight * .55 || 1;
+      var p = .72 + .28 * Math.min(1, y / largo);
       trazo.style.setProperty('--trazo', p.toFixed(3));
     };
     window.addEventListener('scroll', function () {

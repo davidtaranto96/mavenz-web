@@ -831,12 +831,12 @@ body[data-menu-abierto] { overflow: hidden; }
    gesto del visitante. --trazo se declara con @property para que se pueda
    animar; arranca en 1 (dibujado) para que sin JS y sin animación se vea. */
 @property --trazo { syntax: "<number>"; inherits: true; initial-value: 1; }
-@keyframes mvTrazo { from { --trazo: 0; } to { --trazo: .38; } }
+@keyframes mvTrazo { from { --trazo: 0; } to { --trazo: .72; } }
 
 .trazo-vivo {
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--trazo));
-  animation: mvTrazo 1.4s var(--curva) .3s forwards;
+  animation: mvTrazo 1.9s var(--curva) .3s forwards;
 }
 
 /* ==========================================================================
