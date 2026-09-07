@@ -90,16 +90,50 @@ navegador sirve la versión vieja y una corrección no se ve.
 
 ---
 
+## Segunda pasada de subir-nivel (06/09, noche)
+
+De catorce opciones entraron doce, y quedaron afuera las dos del hero que sumaban una capa
+decorativa. Lo que cambió:
+
+| Qué | De dónde sale |
+|---|---|
+| **Dos secciones a sangre**: Espacio Mavenz sobre la aérea con velo bordó, y La red en tinta bordó maciza | El pedido de que los bloques no fueran todos iguales |
+| **Banda de video** panorámica entre el método y Espacio | `banda-aerea-1.mp4`, de 1,4 MB a 119 KB |
+| **El método en horizontal**: la sección se clava y las cinco cartas pasan de costado | El scroll lateral que pidió David |
+| **El cardenal que se dibuja** | `assets/video/cardinal-trazo.mp4`, pieza de Fractura, 65 KB. El ave se dibuja, se posa sobre la M del isotipo y cierra con *"Y esto recién se pone en movimiento"* |
+| **El film de CARDINAL** de fondo en la ficha del proyecto | `cardinal-film.mp4`, de 17 MB a 3 MB |
+| **Palabras que se forman con el scroll** en la cita de Somos Mavenz | Pedido de David |
+| **El mapa en grilla** de seis territorios numerados, la ficha abierta ocupa el ancho | Antes eran seis renglones idénticos |
+| **Las piezas de marca** de Fractura (agenda y carpeta) en Somos Mavenz | Estaban en el repo sin usar |
+| **Tres proyectos**: CARDINAL en profundidad, más Porto y WA | Pendiente de confirmar con Vero |
+| **Sección de ellas**, con los huecos de los retratos a la vista | Pedido de David |
+| **Las capas de la rueda y las píldoras tenues** dejan de verse apagadas | Lo que marcó David en la captura |
+
+**Videos, todos diferidos**: `preload="none"` no alcanza, con `autoplay` el navegador se baja el
+archivo igual. Ninguno tiene `src` hasta que entra en pantalla.
+
+**Tres bugs de esta pasada, anotados porque son de los que se repiten:**
+
+1. El `position: fixed` del fondo de Espacio **no queda contenido por el `overflow` de su
+   sección** y terminaba pintando la foto sobre toda la página. Va con `translate` desde el guion.
+2. El hero queda `sticky` toda la página: **todo bloque que venga después tiene que ser opaco y
+   estar posicionado**, o se ve la foto por atrás.
+3. El signo `+` del acordeón se salía 28 px del ancho cuando el nombre del territorio era largo.
+   La fila necesita `flex-wrap` y `min-width: 0`.
+
+---
+
 ## Medido, no estimado
 
 | | Demo vieja (`v1/`) | Esta |
 |---|---|---|
-| Pantallas en celular (390×844) | 23,6 | **8,7** |
-| Pantallas en notebook (1366×657) | 26,2 | **13,0** |
+| Pantallas en celular (390×844) | 23,6 | **11,7** |
+| Pantallas en notebook (1366×657) | 26,2 | **16,3** |
 | Animaciones en bucle en el celular | 17 | **0** |
 | Peso de la primera carga | 10 MB | **260 KB** |
 | Peso de la página entera | — | **1,0 MB** |
 | `@keyframes` | 22 | **4** |
+| Videos, con su póster y diferidos | 1 sin diferir, 10 MB | **3**, 3,2 MB |
 | Colores fuera de `:root` | 109 | **0** |
 | Hex en toda la hoja | — | **7** (los del manual de Fractura, ni uno más) |
 | Tamaños de texto renderizados | 26 | **13** |
@@ -175,11 +209,18 @@ rueda cambia de capacidad, el menú de celular abre y cierra, el selector ES/EN 
 entre las dos versiones, ninguna palabra en castellano se coló en `en.html`,
 `prefers-reduced-motion` deja la página completa y legible, consola sin errores en las dos.
 
-**Sobre el largo**: la notebook pasó de 10,5 a 13,0 pantallas al sumar el mapa, el método con
-contenido y las fotos más grandes. Sigue siendo la mitad de la demo vieja (26,2), pero es lo
-contrario de lo que pidió Vero cuando dijo que la anterior era muy larga. La palanca está a una
-variable: `--ritmo` en el bloque de la notebook. Bajarla de `10.5svh` a `7svh` corta cerca de
-una pantalla y media sin sacar nada.
+**Sobre el largo, que es lo que hay que mirar**: la notebook pasó de 10,5 a 16,3 pantallas en las
+dos pasadas. Sigue por debajo de la demo vieja (26,2) y con muchísimo más adentro —tres
+proyectos, seis territorios, el método con contenido, la sección de ellas, tres videos—, pero es
+lo contrario de lo que pidió Vero cuando dijo que la anterior era muy larga.
+
+Lo que ya se hizo para contenerlo: tres de las nueve fotos de CARDINAL viven **sólo en el visor**
+(el contenido está, el scroll no crece), las fichas de la grilla no pasan de `46svh` de alto, y
+el pin del método mide lo que miden las cartas y no la pantalla entera.
+
+Lo que queda como palanca, a una variable: `--ritmo` en el bloque de la notebook, hoy en
+`8.5svh`. Y la decisión más grande, si Vero insiste con el largo: **el pin del método cuesta
+cerca de una pantalla y media**; sin él los cinco pasos siguen siendo un estante que se desliza.
 
 **No verificado:** el toque real en un teléfono. El panel del navegador corre oculto en esta
 máquina y no completa los clicks; las áreas táctiles están medidas (44 px, ninguna por debajo)

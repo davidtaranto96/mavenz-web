@@ -5,3 +5,6 @@ graphify-out/
 # copias de seguridad de parches
 *.bak
 .criterio/
+
+# páginas temporales de captura
+demo/_cap-*.html

@@ -72,15 +72,45 @@
         1600
       ],
       "alt": "Vista aérea de San Lorenzo, Salta",
-      "ancho": 1920,
-      "alto": 886
+      "ancho": 1600,
+      "alto": 739
     }
   },
   "quienes": {
     "margen": "Salta, Argentina",
     "titulo": "Somos Mavenz",
     "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance.",
-    "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién."
+    "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién.",
+    "piezas_rotulo": "La identidad, aplicada",
+    "piezas": [
+      {
+        "epigrafe": "Agenda",
+        "foto": {
+          "src": "../img/agenda",
+          "anchos": [
+            800,
+            1400
+          ],
+          "alt": "Agenda de Mavenz con el isotipo en seco",
+          "ancho": 1400,
+          "alto": 933
+        }
+      },
+      {
+        "epigrafe": "Carpeta",
+        "foto": {
+          "src": "../img/carpeta",
+          "anchos": [
+            800,
+            1400
+          ],
+          "alt": "Carpeta institucional de Mavenz",
+          "ancho": 1400,
+          "alto": 1135
+        }
+      }
+    ],
+    "_dt": "Las dos piezas son de Fractura y estaban en el repo sin usar. Van acá porque es la sección más vacía de la página y porque son lo único que muestra que Mavenz hace marca, además de decirlo."
   },
   "universo": {
     "titulo": "El universo Mavenz",
@@ -236,13 +266,23 @@
     "hueco": {
       "rotulo": "Imagen del espacio",
       "texto": "Reservado para una foto del lugar. Todavía no hay material."
+    },
+    "fondo": {
+      "src": "../img/aerea-amplia",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Vista aérea del valle de Lerma",
+      "ancho": 1600,
+      "alto": 739
     }
   },
   "proyectos": {
     "margen": "Imágenes de render",
     "titulo": "El movimiento, en hechos",
     "intro": "No es un catálogo. Es una selección de proyectos, desarrollos y oportunidades en los que Mavenz participa o cree.",
-    "_dt": "Vero marcó en el tablero que entra sólo CARDINAL. Qué otros proyectos van y con qué fotos queda pendiente de ella: por eso la última ficha del estante está vacía y se ve que está vacía. columnas y proporcion arman la grilla asimétrica de escritorio (7/5 y 5/7 invertido, proporciones que no se repiten): la grilla de tarjetas iguales es el tell número uno de web hecha con IA.",
+    "_dt": "Vero marcó en el tablero que entra SÓLO CARDINAL. Porto y WA los sumó David el 06/09 para que la sección tenga cuerpo, pero son de Grupo MDay: hay que confirmarlos con ella antes de mostrar la web.",
     "destacado": {
       "nombre": "Cardinal",
       "meta": "San Lorenzo Chico, Salta — en comercialización",
@@ -256,13 +296,28 @@
           1600
         ],
         "alt": "Calle arbolada de Cardinal con familias caminando",
-        "ancho": 1920,
-        "alto": 886
+        "ancho": 1600,
+        "alto": 739
+      },
+      "video": {
+        "src": "../video/cardenal.mp4",
+        "poster": "../video/cardenal-poster.webp",
+        "rotulo": "El cardenal de CARDINAL",
+        "copy": "¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia, movimiento e identidad.",
+        "cierre": "Y esto recién se pone en movimiento.",
+        "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
+      },
+      "fondo": {
+        "src": "../video/cardinal.mp4",
+        "poster": "../video/cardinal-poster.webp",
+        "_dt": "cardinal-film.mp4 recomprimido de 17 MB a 3 MB. Va de fondo con el póster primero y el video diferido."
       }
     },
     "estante": [
       {
         "epigrafe": "Amenities — pileta y quincho",
+        "columnas": 7,
+        "proporcion": "3 / 2",
         "foto": {
           "src": "../img/amenities",
           "anchos": [
@@ -270,15 +325,16 @@
             1600
           ],
           "alt": "Pileta y quincho de Cardinal",
-          "ancho": 1920,
-          "alto": 886
+          "ancho": 1600,
+          "alto": 739
         },
-        "columnas": 7,
-        "proporcion": "3 / 2"
+        "solo_visor": false
       },
       {
         "epigrafe": "Calle interna",
         "bn": true,
+        "columnas": 5,
+        "proporcion": "4 / 5",
         "foto": {
           "src": "../img/calle-casas",
           "anchos": [
@@ -286,15 +342,16 @@
             1600
           ],
           "alt": "Calle interna de Cardinal",
-          "ancho": 1920,
-          "alto": 830
+          "ancho": 1600,
+          "alto": 692
         },
-        "columnas": 5,
-        "proporcion": "4 / 5"
+        "solo_visor": false
       },
       {
         "epigrafe": "Casas — galería",
         "velo": "La galería, el fuego y el fondo",
+        "columnas": 5,
+        "proporcion": "1 / 1",
         "foto": {
           "src": "../img/galeria",
           "anchos": [
@@ -302,19 +359,131 @@
             1600
           ],
           "alt": "Galería de una casa de Cardinal",
-          "ancho": 1748,
-          "alto": 984
+          "ancho": 1600,
+          "alto": 901
         },
+        "solo_visor": false
+      },
+      {
+        "epigrafe": "La esquina comercial",
+        "columnas": 4,
+        "proporcion": "4 / 5",
+        "foto": {
+          "src": "../img/render-comercial",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Esquina comercial de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        },
+        "solo_visor": false
+      },
+      {
+        "epigrafe": "Interior",
+        "columnas": 4,
+        "proporcion": "1 / 1",
+        "foto": {
+          "src": "../img/render-interior",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Interior de una casa de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        },
+        "solo_visor": false
+      },
+      {
+        "epigrafe": "Atardecer sobre el barrio",
+        "bn": true,
+        "columnas": 4,
+        "proporcion": "3 / 2",
+        "foto": {
+          "src": "../img/atardecer",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Atardecer sobre Cardinal",
+          "ancho": 1600,
+          "alto": 692
+        },
+        "solo_visor": true
+      },
+      {
+        "epigrafe": "San Lorenzo desde arriba",
+        "columnas": 7,
+        "proporcion": "16 / 9",
+        "foto": {
+          "src": "../img/sanlorenzo",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Vista aérea de San Lorenzo",
+          "ancho": 1600,
+          "alto": 692
+        },
+        "solo_visor": true
+      },
+      {
+        "epigrafe": "La pileta, un domingo",
         "columnas": 5,
-        "proporcion": "1 / 1"
+        "proporcion": "4 / 5",
+        "foto": {
+          "src": "../img/pileta-gente",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Pileta de Cardinal con gente",
+          "ancho": 1600,
+          "alto": 692
+        },
+        "solo_visor": true
       }
     ],
     "hueco": {
       "epigrafe": "Lugar disponible",
       "texto": "Acá entran los próximos proyectos y oportunidades",
-      "columnas": 7,
-      "proporcion": "16 / 9"
-    }
+      "columnas": 4,
+      "proporcion": "1 / 1"
+    },
+    "otros_rotulo": "También en movimiento",
+    "otros": [
+      {
+        "nombre": "Porto",
+        "meta": "Salta — en comercialización",
+        "copy": "Departamentos y unidades en el corredor norte.",
+        "foto": {
+          "src": "../img/porto-01",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Render de Porto",
+          "ancho": 1400,
+          "alto": 787
+        }
+      },
+      {
+        "nombre": "WA",
+        "meta": "Salta — cocheras y storages",
+        "copy": "Inventario de cocheras y storages, con plano de disponibilidad.",
+        "foto": {
+          "src": "../img/wa-storages",
+          "anchos": [
+            697
+          ],
+          "alt": "Storages de WA",
+          "ancho": 697,
+          "alto": 733
+        }
+      }
+    ]
   },
   "red": {
     "titulo": "El movimiento nunca se genera solo",
@@ -421,6 +590,34 @@
     "abrir_foto": "Ver la foto",
     "anterior": "Anterior",
     "siguiente": "Siguiente",
-    "indice": "Secciones"
+    "indice": "Secciones",
+    "ver_video": "Ver el video",
+    "silenciar": "Silenciar"
+  },
+  "equipo": {
+    "margen": "Quiénes están detrás",
+    "titulo": "Las que mueven Mavenz",
+    "intro": "Mavenz no es una marca sin cara. Detrás hay dos personas que deciden juntas qué se mueve y cómo.",
+    "_dt": "PENDIENTE de ellas: los retratos, el rol exacto y una línea de cada una. Los huecos quedan a la vista a propósito, igual que en Espacio Mavenz, para que se vea qué falta.",
+    "personas": [
+      {
+        "nombre": "Verónica Burs",
+        "rol": "Dirección",
+        "linea": "",
+        "hueco": "Retrato de Vero"
+      },
+      {
+        "nombre": "Luchi",
+        "rol": "Dirección",
+        "linea": "",
+        "hueco": "Retrato de Luchi"
+      }
+    ]
+  },
+  "banda": {
+    "src": "../video/banda.mp4",
+    "poster": "../video/banda-poster.webp",
+    "alt": "Banda aérea del valle",
+    "_dt": "banda-aerea-1.mp4 recomprimido de 1,4 MB a 119 KB. Corta el ritmo entre el método y Espacio Mavenz sin agregar una sección."
   }
 }

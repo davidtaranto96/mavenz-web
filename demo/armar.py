@@ -87,7 +87,8 @@ VERTICES = [(50.00, 8.00), (82.84, 23.81), (90.95, 59.35), (68.22, 87.84),
 # La dirección con la que entra cada sección. Que no se repita seguida es
 # justamente lo que separa un diseño de un plugin.
 DIRECCION = {"quienes": "izq", "universo": "escala", "metodo": "der", "espacio": "arriba",
-             "proyectos": "izq", "red": "escala", "mirada": "der", "contacto": "arriba"}
+             "proyectos": "izq", "red": "escala", "equipo": "izq", "mirada": "der",
+             "contacto": "arriba"}
 
 
 def fx(seccion):
@@ -121,7 +122,7 @@ def indice(d):
     versión visual y la accesible son el mismo dato."""
     puntos = ([("quienes", d["quienes"]["titulo"])]
               + [(x["id"], x["rotulo"]) for x in d["menu"]]
-              + [("contacto", d["contacto"]["titulo"])])
+              + [("equipo", d["equipo"]["titulo"]), ("contacto", d["contacto"]["titulo"])])
     rayas = "".join(f'<a href="#{i}" aria-label="{e(t)}"></a>' for i, t in puntos)
     return f'<nav class="indice" data-indice aria-label="{e(d["interfaz"]["indice"])}">{rayas}</nav>'
 
@@ -176,13 +177,21 @@ def hero(d):
 
 def quienes(d):
     q = d["quienes"]
+    piezas = "".join(
+        f'<figure class="pieza">{img(x["foto"], "(min-width:64rem) 26rem, 45vw")}'
+        f'<figcaption class="ficha__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
+        for x in q["piezas"])
     return f'''<section class="seccion" id="quienes"{fx("quienes")}>
   <p class="margen seccion__margen">{e(q["margen"])}</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["copy"])}</p>
   </div>
-  <div class="quienes__cierre"><p class="cita">{e(q["cierre"])}</p></div>
+  <div class="quienes__cierre"><p class="cita" data-formar>{e(q["cierre"])}</p></div>
+  <div class="piezas">
+    <p class="margen piezas__rotulo">{e(q["piezas_rotulo"])}</p>
+    <div class="piezas__par">{piezas}</div>
+  </div>
 </section>'''
 
 
@@ -228,15 +237,16 @@ def mapa(d):
     construido desde agosto: vuelve adentro del Universo, no como sección aparte."""
     mp = d["universo"]["mapa"]
     fichas = "".join(
-        f'<details class="territorio" name="territorio">'
+        f'<details class="territorio" name="territorio" style="--n:{i}">'
         f'<summary class="territorio__cabeza">'
+        f'<span class="territorio__n">{i + 1:02d}</span>'
         f'<span class="territorio__nombre">{e(t["nombre"])}</span>'
         f'<span class="territorio__bajada">{e(t["bajada"])}</span>'
         f'<span class="paso__signo" aria-hidden="true"></span></summary>'
-        f'<div class="paso__cuerpo"><p>{e(t["cambia"])}</p>'
+        f'<div class="paso__cuerpo"><div><p>{e(t["cambia"])}</p>'
         f'<p class="territorio__quien"><span class="margen">{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p>'
-        f'</div></details>'
-        for t in mp["territorios"])
+        f'</div></div></details>'
+        for i, t in enumerate(mp["territorios"]))
     return f'''<div class="mapa">
     <h3 class="mapa__titulo">{e(mp["titulo"])}</h3>
     <p class="mapa__intro">{e(mp["intro"])}</p>
@@ -250,13 +260,13 @@ def metodo(d):
         f'<div class="metodo__nodo" style="--x:{p["x"]}%;--y:{p["y"]}%"'
         f'{" data-arriba" if p["arriba"] else ""}><span>{e(p["nombre"])}</span></div>'
         for p in m["pasos"])
-    lista = "".join(
-        f'<details class="paso" name="paso"{" open" if i == 0 else ""}>'
-        f'<summary class="paso__cabeza"><span class="paso__n">{i + 1}</span>'
-        f'<span class="paso__nombre">{e(p["nombre"])}</span>'
-        f'<span class="paso__signo" aria-hidden="true"></span></summary>'
-        f'<div class="paso__cuerpo"><p>{e(p["copy"])}</p></div></details>'
+    cartas = "".join(
+        f'<article class="carta"><span class="carta__n">{i + 1:02d}</span>'
+        f'<h3 class="carta__nombre">{e(p["nombre"])}</h3>'
+        f'<p class="carta__copy">{e(p["copy"])}</p></article>'
         for i, p in enumerate(m["pasos"]))
+    lista = (f'<div class="lateral" data-lateral style="--pasos:{len(m["pasos"])}">'
+             f'<div class="lateral__pin"><div class="lateral__carril" data-carril>{cartas}</div></div></div>')
     return f'''<section class="seccion" id="metodo"{fx("metodo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
@@ -268,25 +278,31 @@ def metodo(d):
     </svg>
     {nodos}
   </div>
-  <div class="metodo__pasos">{lista}</div>
+  {lista}
 </section>'''
 
 
 def espacio(d):
-    s = d["espacio"]
-    return f'''<section class="seccion" id="espacio"{fx("espacio")}>
-  <p class="margen seccion__margen">{e(s["margen"])}</p>
-  <div class="seccion__cabeza">
-    <h2 class="titulo" data-letras>{e(s["titulo"])}</h2>
-    <div>
-      <p class="bajada">{e(s["copy"])}</p>
-      <p class="espacio__nota">{e(s["nota"])}</p>
-      <a class="subrayado subrayado--bordo espacio__cta" href="{e(s["cta"]["href"])}" target="_blank" rel="noopener">{e(s["cta"]["rotulo"])}</a>
+    """A sangre y sobre una aérea quieta: es la sección que rompe la seguidilla
+    de papel, y de paso existe visualmente aunque falte la foto del lugar."""
+    x = d["espacio"]
+    return f'''<section class="sangre" id="espacio" data-tema="oscuro"{fx("espacio")}>
+  {img(x["fondo"], "100vw", "sangre__fondo")}
+  <div class="sangre__velo"></div>
+  <div class="sangre__interior">
+    <p class="margen margen--claro">{e(x["margen"])}</p>
+    <div class="seccion__cabeza">
+      <h2 class="titulo titulo--claro" data-letras>{e(x["titulo"])}</h2>
+      <div>
+        <p class="bajada bajada--clara">{e(x["copy"])}</p>
+        <p class="espacio__nota">{e(x["nota"])}</p>
+        <a class="subrayado subrayado--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}</a>
+      </div>
     </div>
-  </div>
-  <div class="hueco espacio__hueco">
-    <p class="hueco__rotulo">{e(s["hueco"]["rotulo"])}</p>
-    <p class="hueco__texto">{e(s["hueco"]["texto"])}</p>
+    <div class="hueco hueco--claro espacio__hueco">
+      <p class="hueco__rotulo">{e(x["hueco"]["rotulo"])}</p>
+      <p class="hueco__texto">{e(x["hueco"]["texto"])}</p>
+    </div>
   </div>
 </section>'''
 
@@ -296,6 +312,8 @@ def proyectos(d):
     dest = p["destacado"]
     fichas = []
     for i, f in enumerate(p["estante"]):
+        if f.get("solo_visor"):       # está en el visor, no en la grilla
+            continue
         velo = ""
         if f.get("velo"):
             velo = ('<span class="ficha__velo"></span>'
@@ -320,6 +338,7 @@ def proyectos(d):
     <p class="bajada">{e(p["intro"])}</p>
   </div>
   <article class="proyecto">
+    <video class="proyecto__fondo" data-diferido data-src="{e(dest["fondo"]["src"])}" poster="{e(dest["fondo"]["poster"])}" muted loop playsinline preload="none" aria-hidden="true"></video>
     <button class="proyecto__abrir" type="button" data-foto="0" aria-label="{e(ui["abrir_foto"])}: {e(dest["nombre"])}">
       {img(dest["foto"], "(min-width:64rem) 76vw, 100vw", "proyecto__foto")}
     </button>
@@ -332,8 +351,42 @@ def proyectos(d):
     </div>
   </article>
   <div class="estante">{"".join(fichas)}</div>
+  {cardenal(d)}
+  {otros(d)}
   {visor(d)}
 </section>'''
+
+
+def cardenal(d):
+    """La pieza animada de Fractura: el ave se dibuja, se posa sobre la M del
+    isotipo y cierra con la frase de ellos. Arranca al entrar en vista, una vez."""
+    v = d["proyectos"]["destacado"]["video"]
+    return f'''<figure class="cardenal" data-cardenal>
+    <video class="cardenal__video" data-diferido data-src="{e(v["src"])}" poster="{e(v["poster"])}"
+           muted playsinline preload="none" aria-label="{e(v["rotulo"])}"></video>
+    <figcaption class="cardenal__texto">
+      <p class="margen">{e(v["rotulo"])}</p>
+      <p class="cardenal__copy">{e(v["copy"])}</p>
+      <p class="cardenal__cierre">{e(v["cierre"])}</p>
+    </figcaption>
+  </figure>'''
+
+
+def otros(d):
+    """Porto y WA. Pendientes de confirmar con Vero: en el tablero marcó que
+    entra sólo CARDINAL, y estos son de Grupo MDay."""
+    p = d["proyectos"]
+    fichas = "".join(
+        f'<article class="otro">'
+        f'<div class="otro__marco">{img(x["foto"], "(min-width:64rem) 34rem, 90vw")}</div>'
+        f'<h3 class="otro__nombre">{e(x["nombre"])}</h3>'
+        f'<p class="otro__meta">{e(x["meta"])}</p>'
+        f'<p class="otro__copy">{e(x["copy"])}</p></article>'
+        for x in p["otros"])
+    return f'''<div class="otros">
+    <p class="margen otros__rotulo">{e(p["otros_rotulo"])}</p>
+    <div class="otros__par">{fichas}</div>
+  </div>'''
 
 
 def visor(d):
@@ -356,16 +409,20 @@ def visor(d):
 
 
 def red(d):
+    """A sangre en tinta bordó. Es la otra que sale del papel: la que habla de
+    gente, no de lugar, así las dos oscuras no se leen igual."""
     r = d["red"]
     nodos = "".join(
         f'<p class="red__nodo" data-peso="{n["peso"]}" '
         f'style="--x:{n["x"]}%;--y:{n["y"]}%;--sangria:{n["sangria"]}px">{e(n["nombre"])}</p>'
         for n in r["nodos"])
-    return f'''<section class="seccion red" id="red"{fx("red")}>
-  <h2 class="titulo" data-letras>{e(r["titulo"])}</h2>
-  <p class="bajada bajada--angosta">{e(r["copy"])}</p>
-  <div class="red__nube">{nodos}</div>
-  <p class="cita red__cierre">{e(r["cierre"])}</p>
+    return f'''<section class="sangre sangre--bordo red" id="red" data-tema="oscuro"{fx("red")}>
+  <div class="sangre__interior">
+    <h2 class="titulo titulo--claro" data-letras>{e(r["titulo"])}</h2>
+    <p class="bajada bajada--clara bajada--angosta">{e(r["copy"])}</p>
+    <div class="red__nube">{nodos}</div>
+    <p class="cita cita--clara red__cierre">{e(r["cierre"])}</p>
+  </div>
 </section>'''
 
 
@@ -378,6 +435,37 @@ def mirada(d):
   </div>
   <div class="mirada__hueco"><p>{e(m["hueco"])}</p></div>
 </section>'''
+
+
+def equipo(d):
+    """Las dos que están detrás. Los retratos no existen todavía: el hueco queda
+    a la vista, igual que en Espacio Mavenz, para que se vea qué falta."""
+    q = d["equipo"]
+    personas = "".join(
+        f'<article class="persona">'
+        f'<div class="hueco persona__hueco"><p class="hueco__rotulo">{e(x["hueco"])}</p></div>'
+        f'<h3 class="persona__nombre">{e(x["nombre"])}</h3>'
+        f'<p class="persona__rol">{e(x["rol"])}</p>'
+        + (f'<p class="persona__linea">{e(x["linea"])}</p>' if x["linea"] else '')
+        + '</article>'
+        for x in q["personas"])
+    return f'''<section class="seccion" id="equipo"{fx("equipo")}>
+  <p class="margen seccion__margen">{e(q["margen"])}</p>
+  <div class="seccion__cabeza">
+    <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
+    <p class="bajada">{e(q["intro"])}</p>
+  </div>
+  <div class="personas">{personas}</div>
+</section>'''
+
+
+def banda(d):
+    """Corte panorámico a sangre entre dos bloques. El póster va primero y el
+    video entra diferido: sin esto se baja 119 KB que nadie pidió todavía."""
+    b = d["banda"]
+    return (f'<div class="banda" aria-hidden="true">'
+            f'<video class="banda__video" data-diferido data-src="{b["src"]}" '
+            f'poster="{b["poster"]}" muted loop playsinline preload="none"></video></div>')
 
 
 def contacto(d):
@@ -475,9 +563,15 @@ def pagina(d, lang):
 {cms("quienes", quienes(d))}
 {cms("universo", universo(d))}
 {cms("metodo", metodo(d))}
+</div></div>
+{cms("banda", banda(d))}
 {cms("espacio", espacio(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("proyectos", proyectos(d))}
+</div></div>
 {cms("red", red(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("equipo", equipo(d))}
 {cms("mirada", mirada(d))}
 {cms("contacto", contacto(d))}
 </div></div>

@@ -237,7 +237,7 @@
   /* que se lee offsetTop.                                                   */
   /* ---------------------------------------------------------------------- */
 
-  var conTema = Array.prototype.slice.call(document.querySelectorAll('[data-tema]'));
+  var conTema = Array.prototype.slice.call(document.querySelectorAll('main [data-tema], footer[data-tema]'));
 
   if (cabecera && conTema.length) {
     var temaActual = '';
@@ -316,6 +316,174 @@
       /* el clic sobre el fondo del dialog cierra; sobre una lámina, no */
       if (ev.target === visor || ev.target.closest('[data-visor-cerrar]')) visor.close();
     });
+  }
+
+
+  /* ---------------------------------------------------------------------- */
+  /* Videos diferidos                                                        */
+  /*                                                                         */
+  /* preload="none" no alcanza: con autoplay el navegador se baja el archivo  */
+  /* igual. La única forma es no tener src hasta que el video se vea.        */
+  /* ---------------------------------------------------------------------- */
+
+  var videos = Array.prototype.slice.call(document.querySelectorAll('[data-diferido]'));
+
+  if (videos.length && 'IntersectionObserver' in window) {
+    var encender = function (v) {
+      if (v.dataset.encendido === '1') return;
+      v.dataset.encendido = '1';
+      v.src = v.dataset.src;
+      v.muted = true;                       /* iOS no reproduce sin esto */
+      var intento = v.play();
+      if (intento && intento.catch) intento.catch(function () {});
+    };
+    var ojoVideo = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (!en.isIntersecting) {
+          if (en.target.dataset.encendido === '1' && !en.target.paused) en.target.pause();
+          return;
+        }
+        if (menosMovimiento && !en.target.hasAttribute('loop')) return;  /* el póster alcanza */
+        encender(en.target);
+        if (en.target.dataset.encendido === '1' && en.target.paused) {
+          var i = en.target.play();
+          if (i && i.catch) i.catch(function () {});
+        }
+      });
+    }, { rootMargin: '300px 0px', threshold: .05 });
+    videos.forEach(function (v) { ojoVideo.observe(v); });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* El método en horizontal: la sección se clava y el carril avanza         */
+  /*                                                                         */
+  /* El carril mueve scrollLeft y no un transform: si el guion no corre,     */
+  /* sigue siendo un estante que se desliza con el dedo.                     */
+  /* ---------------------------------------------------------------------- */
+
+  var anchoGrande = window.matchMedia('(min-width: 64rem)');
+
+  document.querySelectorAll('[data-lateral]').forEach(function (caja) {
+    var carril = caja.querySelector('[data-carril]');
+    var pin = caja.querySelector('.lateral__pin');
+    if (!carril || !pin) return;
+
+    var sobra = function () { return carril.scrollWidth - carril.clientWidth; };
+
+    var acomodar = function () {
+      var corresponde = anchoGrande.matches && !menosMovimiento && sobra() > 4;
+      if (!corresponde) {
+        caja.removeAttribute('data-pin');
+        caja.style.removeProperty('--alto-pin');
+        return;
+      }
+      caja.setAttribute('data-pin', '');
+      caja.style.removeProperty('--alto-pin');
+      /* el alto de la caja es el del pin más lo que hay que recorrer de costado:
+         ni un píxel de más, o la sección se llena de vacío */
+      caja.style.setProperty('--alto-pin', (pin.offsetHeight + Math.round(sobra())) + 'px');
+    };
+
+    var mover = function () {
+      if (!caja.hasAttribute('data-pin')) return;
+      var recorrido = caja.offsetHeight - pin.offsetHeight;
+      if (recorrido <= 0) return;
+      var avance = Math.min(1, Math.max(0, -caja.getBoundingClientRect().top / recorrido));
+      carril.scrollLeft = avance * sobra();
+    };
+
+    var pendienteLat = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteLat) return;
+      pendienteLat = true;
+      requestAnimationFrame(function () { pendienteLat = false; mover(); });
+    }, { passive: true });
+    window.addEventListener('resize', function () { acomodar(); mover(); });
+    acomodar();
+    /* las fuentes y las fotos cambian el ancho después del primer layout */
+    window.addEventListener('load', function () { acomodar(); mover(); }, { once: true });
+    setTimeout(function () { acomodar(); mover(); }, 800);
+  });
+
+  /* ---------------------------------------------------------------------- */
+  /* La foto de las secciones a sangre se queda quieta                       */
+  /*                                                                         */
+  /* Recorrido corto y escrito acá, no position:fixed: un fixed adentro de   */
+  /* la sección no queda contenido por el overflow y pinta sobre toda la     */
+  /* página. Sólo translate, que no provoca reflujo.                         */
+  /* ---------------------------------------------------------------------- */
+
+  var fondos = Array.prototype.slice.call(document.querySelectorAll('.sangre__fondo'));
+
+  if (fondos.length && !menosMovimiento && window.matchMedia('(min-width: 64rem)').matches) {
+    var correr = function () {
+      var alto = window.innerHeight || 1;
+      fondos.forEach(function (f) {
+        var s = f.parentElement.getBoundingClientRect();
+        if (s.bottom < 0 || s.top > alto) return;
+        var avance = (alto - s.top) / (alto + s.height);   /* 0 a 1 al cruzar */
+        f.style.translate = '0 ' + ((avance - .5) * 9).toFixed(2) + '%';
+      });
+    };
+    var pendienteFondo = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteFondo) return;
+      pendienteFondo = true;
+      requestAnimationFrame(function () { pendienteFondo = false; correr(); });
+    }, { passive: true });
+    correr();
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Palabras que se forman con el scroll                                    */
+  /* ---------------------------------------------------------------------- */
+
+  var frases = Array.prototype.slice.call(document.querySelectorAll('[data-formar]'));
+
+  if (frases.length && !menosMovimiento) {
+    frases.forEach(function (el) {
+      var texto = el.textContent;
+      el.setAttribute('aria-label', texto);
+      el.textContent = '';
+      texto.split(/(\s+)/).forEach(function (trozo) {
+        if (/^\s+$/.test(trozo)) { el.appendChild(document.createTextNode(' ')); return; }
+        var w = document.createElement('span');
+        w.textContent = trozo;
+        w.setAttribute('aria-hidden', 'true');
+        w.style.opacity = '.14';
+        el.appendChild(w);
+      });
+    });
+
+    var formar = function () {
+      frases.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var alto = window.innerHeight || 1;
+        /* de 0 a 1 mientras la frase cruza el tercio central de la pantalla */
+        var avance = (alto * .78 - r.top) / (alto * .42);
+        avance = Math.min(1, Math.max(0, avance));
+        var palabras = el.querySelectorAll('span');
+        var hasta = avance * palabras.length;
+        palabras.forEach(function (w, i) {
+          w.style.opacity = i < hasta ? '1' : '.14';
+        });
+      });
+    };
+
+    var pendienteFrase = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteFrase) return;
+      pendienteFrase = true;
+      requestAnimationFrame(function () { pendienteFrase = false; formar(); });
+    }, { passive: true });
+    formar();
+    /* seguro: a los 2 s, lo que ya pasó de largo queda entero */
+    setTimeout(function () {
+      frases.forEach(function (el) {
+        if (el.getBoundingClientRect().top < 0)
+          el.querySelectorAll('span').forEach(function (w) { w.style.opacity = '1'; });
+      });
+    }, 2000);
   }
 
   /* ---------------------------------------------------------------------- */
