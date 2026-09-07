@@ -31,6 +31,15 @@ def version(archivo):
     return hashlib.sha1((AQUI / archivo).read_bytes()).hexdigest()[:8]
 
 
+def medio(ruta):
+    """Lo mismo para los videos y sus posters: si se recorta un video y la URL
+    no cambia, el navegador sigue mostrando el de antes."""
+    try:
+        return f"{ruta}?v={version(ruta)}"
+    except OSError:
+        return ruta
+
+
 URL = "https://davidtaranto96.github.io/mavenz-web/demo/"
 RAIZ = "https://davidtaranto96.github.io/mavenz-web/"
 
@@ -338,7 +347,7 @@ def proyectos(d):
     <p class="bajada">{e(p["intro"])}</p>
   </div>
   <article class="proyecto">
-    <video class="proyecto__fondo" data-diferido data-src="{e(dest["fondo"]["src"])}" poster="{e(dest["fondo"]["poster"])}" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <video class="proyecto__fondo" data-diferido data-src="{e(medio(dest["fondo"]["src"]))}" poster="{e(medio(dest["fondo"]["poster"]))}" muted loop playsinline preload="none" aria-hidden="true"></video>
     <button class="proyecto__abrir" type="button" data-foto="0" aria-label="{e(ui["abrir_foto"])}: {e(dest["nombre"])}">
       {img(dest["foto"], "(min-width:64rem) 76vw, 100vw", "proyecto__foto")}
     </button>
@@ -362,7 +371,7 @@ def cardenal(d):
     isotipo y cierra con la frase de ellos. Arranca al entrar en vista, una vez."""
     v = d["proyectos"]["destacado"]["video"]
     return f'''<figure class="cardenal" data-cardenal>
-    <video class="cardenal__video" data-diferido data-src="{e(v["src"])}" poster="{e(v["poster"])}"
+    <video class="cardenal__video" data-diferido data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
            muted playsinline preload="none" aria-label="{e(v["rotulo"])}"></video>
     <figcaption class="cardenal__texto">
       <p class="margen">{e(v["rotulo"])}</p>
@@ -464,8 +473,8 @@ def banda(d):
     video entra diferido: sin esto se baja 119 KB que nadie pidió todavía."""
     b = d["banda"]
     return (f'<div class="banda" aria-hidden="true">'
-            f'<video class="banda__video" data-diferido data-src="{b["src"]}" '
-            f'poster="{b["poster"]}" muted loop playsinline preload="none"></video></div>')
+            f'<video class="banda__video" data-diferido data-src="{medio(b["src"])}" '
+            f'poster="{medio(b["poster"])}" muted loop playsinline preload="none"></video></div>')
 
 
 def contacto(d):

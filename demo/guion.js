@@ -328,30 +328,57 @@
 
   var videos = Array.prototype.slice.call(document.querySelectorAll('[data-diferido]'));
 
-  if (videos.length && 'IntersectionObserver' in window) {
-    var encender = function (v) {
-      if (v.dataset.encendido === '1') return;
-      v.dataset.encendido = '1';
-      v.src = v.dataset.src;
-      v.muted = true;                       /* iOS no reproduce sin esto */
-      var intento = v.play();
-      if (intento && intento.catch) intento.catch(function () {});
+  if (videos.length) {
+    var arrancar = function (v) {
+      var i = v.play();
+      if (i && i.catch) i.catch(function () {});
     };
-    var ojoVideo = new IntersectionObserver(function (entradas) {
-      entradas.forEach(function (en) {
-        if (!en.isIntersecting) {
-          if (en.target.dataset.encendido === '1' && !en.target.paused) en.target.pause();
-          return;
-        }
-        if (menosMovimiento && !en.target.hasAttribute('loop')) return;  /* el póster alcanza */
-        encender(en.target);
-        if (en.target.dataset.encendido === '1' && en.target.paused) {
-          var i = en.target.play();
-          if (i && i.catch) i.catch(function () {});
-        }
+    var encender = function (v) {
+      if (menosMovimiento) return;          /* con el póster alcanza */
+      if (v.dataset.encendido !== '1') {
+        v.dataset.encendido = '1';
+        v.src = v.dataset.src;
+        v.muted = true;                     /* iOS no reproduce sin esto */
+      }
+      if (v.paused) arrancar(v);
+    };
+
+    /* Red de seguridad, igual que con el reveal: si el observador no dispara
+       —pestaña en segundo plano, por ejemplo— el video se queda en el póster
+       para siempre, y el cardenal es justo lo que hay que ver moverse. */
+    var barrerVideos = function () {
+      var alto = window.innerHeight || 0;
+      videos.forEach(function (v) {
+        var r = v.getBoundingClientRect();
+        var aLaVista = r.bottom > -300 && r.top < alto + 300;
+        if (aLaVista) encender(v);
+        else if (v.dataset.encendido === '1' && !v.paused) v.pause();
       });
-    }, { rootMargin: '300px 0px', threshold: .05 });
-    videos.forEach(function (v) { ojoVideo.observe(v); });
+    };
+
+    if ('IntersectionObserver' in window) {
+      var ojoVideo = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (en) {
+          if (en.isIntersecting) encender(en.target);
+          else if (en.target.dataset.encendido === '1' && !en.target.paused) en.target.pause();
+        });
+      }, { rootMargin: '300px 0px', threshold: .05 });
+      videos.forEach(function (v) { ojoVideo.observe(v); });
+    }
+
+    var pendienteVid = false;
+    window.addEventListener('scroll', function () {
+      if (pendienteVid) return;
+      pendienteVid = true;
+      requestAnimationFrame(function () { pendienteVid = false; barrerVideos(); });
+    }, { passive: true });
+    requestAnimationFrame(barrerVideos);
+    window.addEventListener('load', barrerVideos, { once: true });
+    var vueltasVid = 0;
+    var relojVid = setInterval(function () {
+      barrerVideos();
+      if (++vueltasVid > 150) clearInterval(relojVid);
+    }, 400);
   }
 
   /* ---------------------------------------------------------------------- */
