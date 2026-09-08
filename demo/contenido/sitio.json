@@ -113,52 +113,34 @@
     "_dt": "Las dos piezas son de Fractura y estaban en el repo sin usar. Van acá porque es la sección más vacía de la página y porque son lo único que muestra que Mavenz hace marca, además de decirlo."
   },
   "universo": {
-    "titulo": "El universo Mavenz",
-    "intro": "Mavenz funciona como un universo de capacidades conectadas. Cada proyecto activa una combinación diferente.",
-    "ayuda": "Tocá cada capacidad para verla.",
-    "_dt": "destacada: true en las cinco que Vero marcó en el tablero. Las otras dos se muestran igual, en segundo plano: el diseño las deja más finas y más claras, no las esconde.",
+    "titulo": "El Universo Mavenz",
+    "intro": "Mavenz funciona como un universo de capacidades conectadas. No son servicios sueltos: cada una empuja a la siguiente.",
+    "ayuda": "Cada esfera se activa al pasar.",
+    "_dt": "Las cuatro esferas son textuales del WhatsApp de Vero del 07/09/26. Marca y comunicacion NO es esfera: es el anillo que las rodea, decision de David del 08/09. El componente tolera de 4 a 6 esferas sin tocar CSS.",
     "esferas": [
       {
         "id": "estrategia",
-        "nombre": "Estrategia y consultoría",
-        "destacada": true,
-        "copy": "Leemos el negocio antes de mover una pieza."
+        "numero": "01",
+        "nombre": "Estrategia y Consultoría",
+        "copy": "Definimos el rumbo y diseñamos el mejor camino para potenciar cada oportunidad."
       },
       {
-        "id": "marca",
-        "nombre": "Marca y comunicación",
-        "destacada": true,
-        "copy": "Construimos el relato con el que el proyecto se presenta."
+        "id": "desarrollo",
+        "numero": "02",
+        "nombre": "Desarrollo de Negocios",
+        "copy": "Generamos alianzas, conectamos actores e impulsamos nuevas oportunidades."
       },
       {
-        "id": "marketing",
-        "nombre": "Marketing y activación",
-        "destacada": true,
-        "copy": "Ponemos el proyecto en movimiento donde tiene que verse."
+        "id": "comercializacion",
+        "numero": "03",
+        "nombre": "Comercialización",
+        "copy": "Llevamos cada oportunidad al mercado mediante una estrategia comercial y de posicionamiento."
       },
       {
-        "id": "comercial",
-        "nombre": "Comercial y proyectos",
-        "destacada": false,
-        "copy": "Comercialización con criterio, del primer contacto al cierre."
-      },
-      {
-        "id": "inversion",
-        "nombre": "Inversión y oportunidades",
-        "destacada": false,
-        "copy": "Detectamos dónde conviene entrar y con quién."
-      },
-      {
-        "id": "alianzas",
-        "nombre": "Nuevos negocios y alianzas",
-        "destacada": true,
-        "copy": "Abrimos conversaciones que todavía no existen."
-      },
-      {
-        "id": "espacio",
-        "nombre": "Espacio Mavenz",
-        "destacada": true,
-        "copy": "El lugar donde los proyectos viven y se presentan."
+        "id": "gestion",
+        "numero": "04",
+        "nombre": "Gestión & Evolución",
+        "copy": "Acompañamos el crecimiento, la administración y la evolución de cada oportunidad para seguir generando valor."
       }
     ],
     "mapa": {
@@ -210,49 +192,44 @@
           "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
         }
       ]
+    },
+    "anillo": {
+      "nombre": "Marca y comunicación",
+      "copy": "Atraviesa las cuatro. No es una etapa: es la manera en que todo lo que hacemos se ve, se dice y se sostiene."
     }
   },
   "metodo": {
-    "titulo": "Cada proyecto activa un movimiento distinto",
-    "intro": "Mavenz no aplica una fórmula cerrada. Primero entiende qué necesita moverse y después arma la combinación correcta de estrategia, equipo, red y ejecución.",
-    "_dt": "x e y son la posición del nodo sobre el trazo, en porcentaje del alto y el ancho del dibujo. arriba: la etiqueta va encima del nodo en vez de abajo. copy de cada paso: texto de Estructura_Web_Mavenz.docx, el mismo que estaba en v2 y v3.",
+    "titulo": "Método Mavenz",
+    "intro": "El Universo Mavenz cobra vida a través de una metodología propia. No es un proceso lineal, sino un ciclo continuo donde cada resultado impulsa una nueva oportunidad.",
+    "_dt": "Copy textual del WhatsApp de Vero del 07/09/26. El quinto paso vuelve al primero: el ciclo es el mensaje.",
     "pasos": [
       {
-        "nombre": "Leemos",
-        "x": 12.5,
-        "y": 34.5,
-        "arriba": true,
-        "copy": "Entendemos el contexto, el negocio, el proyecto y la oportunidad."
+        "numero": "01",
+        "nombre": "Descubrir",
+        "copy": "Identificamos oportunidades con potencial."
       },
       {
-        "nombre": "Definimos",
-        "x": 27.5,
-        "y": 76.0,
-        "arriba": false,
-        "copy": "Elegimos una dirección y ordenamos prioridades, objetivos y escenarios."
+        "numero": "02",
+        "nombre": "Analizar y diseñar",
+        "copy": "Construimos la estrategia para desarrollarlas."
       },
       {
-        "nombre": "Conectamos",
-        "x": 50.0,
-        "y": 68.0,
-        "arriba": false,
-        "copy": "Convocamos a las personas y capacidades adecuadas para ese desafío."
+        "numero": "03",
+        "nombre": "Conectar",
+        "copy": "Vinculamos personas, alianzas, recursos y oportunidades."
       },
       {
-        "nombre": "Activamos",
-        "x": 69.3,
-        "y": 39.5,
-        "arriba": true,
-        "copy": "Transformamos la estrategia en comunicación, gestión, comercialización y acciones concretas."
+        "numero": "04",
+        "nombre": "Activar",
+        "copy": "Ponemos en acción todas las capacidades del Universo Mavenz para maximizar su valor."
       },
       {
-        "nombre": "Acompañamos",
-        "x": 91.0,
-        "y": 76.0,
-        "arriba": false,
-        "copy": "Medimos, ajustamos y sostenemos el movimiento hasta alcanzar el objetivo."
+        "numero": "05",
+        "nombre": "Generar Movimiento",
+        "copy": "La oportunidad se convierte en una realidad que impulsa nuevos negocios, nuevas conexiones y nuevas oportunidades. El ciclo vuelve a comenzar."
       }
-    ]
+    ],
+    "cierre": "Porque cada movimiento genera el siguiente."
   },
   "espacio": {
     "margen": "Presentaciones y lanzamientos",
@@ -563,7 +540,21 @@
         "rotulo": "Conocer Espacio Mavenz",
         "wa": "Hola Mavenz, quiero conocer Espacio Mavenz."
       }
-    ]
+    ],
+    "palabra": "Contacto",
+    "solapas": [
+      {
+        "id": "invertir",
+        "rotulo": "Quiero invertir",
+        "copy": "Contanos qué estás buscando y con qué horizonte. Te acercamos lo que se mueve."
+      },
+      {
+        "id": "proyecto",
+        "rotulo": "Tengo un proyecto",
+        "copy": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo."
+      }
+    ],
+    "bloque_datos": "Dónde encontrarnos"
   },
   "idiomas": {
     "_dt": "Las dos versiones están completas. El copy en inglés lo escribió DT System traduciendo el de Vero: Mavenz tiene que revisarlo, sobre todo el claim del hero.",
@@ -619,5 +610,63 @@
     "poster": "../video/banda-poster.webp",
     "alt": "Banda aérea del valle",
     "_dt": "banda-aerea-1.mp4 recomprimido de 1,4 MB a 119 KB. Corta el ritmo entre el método y Espacio Mavenz sin agregar una sección."
+  },
+  "paginas": {
+    "inicio": {
+      "archivo": "index.html",
+      "rotulo": "Inicio",
+      "titulo": "Mavenz genera movimiento"
+    },
+    "about": {
+      "archivo": "about.html",
+      "rotulo": "Nosotras",
+      "titulo": "Quiénes somos",
+      "cinta": "Nosotras"
+    },
+    "proyectos": {
+      "archivo": "proyectos.html",
+      "rotulo": "Proyectos",
+      "titulo": "Proyectos y oportunidades",
+      "cinta": "Proyectos"
+    }
+  },
+  "mundos": {
+    "rotulo": "La selección",
+    "ayuda": "Cada mundo, su color.",
+    "_dt": "tinta = token de estilos.css, no un hex suelto. El orden es el orden del riel y del loop.",
+    "lista": [
+      {
+        "id": "cardinal",
+        "nombre": "Cardinal",
+        "tinta": "bordo",
+        "bajada": "San Lorenzo Chico — en comercialización",
+        "cierre": "Empezá por Cardinal",
+        "href": "proyectos.html#cardinal"
+      },
+      {
+        "id": "desarrollos",
+        "nombre": "Desarrollos",
+        "tinta": "bistre",
+        "bajada": "Proyectos en marcha y oportunidades de inversión",
+        "cierre": "Ver los desarrollos",
+        "href": "proyectos.html#desarrollos"
+      },
+      {
+        "id": "espacio",
+        "nombre": "Espacio Mavenz",
+        "tinta": "wenge",
+        "bajada": "Donde los proyectos se presentan y se muestran",
+        "cierre": "Entrar al Espacio",
+        "href": "proyectos.html#espacio"
+      },
+      {
+        "id": "territorio",
+        "nombre": "Territorio",
+        "tinta": "tinta",
+        "bajada": "Seis zonas de Salta, y qué está cambiando en cada una",
+        "cierre": "Recorrer el mapa",
+        "href": "proyectos.html#territorio"
+      }
+    ]
   }
 }

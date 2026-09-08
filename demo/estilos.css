@@ -1743,3 +1743,629 @@ body[data-menu-abierto] { overflow: hidden; }
   div.lateral[data-pin] .lateral__pin { position: static; height: auto; }
   div.lateral[data-pin] .lateral__carril { scroll-snap-type: x mandatory; }
 }
+
+
+/* ==========================================================================
+   REDISEÑO 08/09 — el trazo de la M como hilo de las tres páginas
+   Piezas nuevas: cinta, órbita, ciclo, mundos, ventana de contacto.
+   Todo lo vertical se mide contra svh, nunca contra rem: el notebook de
+   1366×657 es ancho y BAJO, y es el carril donde esto se rompe.
+   ========================================================================== */
+
+/* --- La cinta: el nombre de la sección corriendo -------------------------- */
+/* Se mueve POR SCROLL (el JS escribe --corrida). Sin JS queda quieta y
+   perfectamente legible, que es el estado correcto de reposo. */
+.cinta {
+  --corrida: 0;
+  overflow: hidden;
+  padding-block: clamp(1.5rem, 4svh, 3rem);
+  border-block: 1px solid var(--linea);
+  background: var(--papel);
+}
+.cinta__riel {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: max-content;
+  translate: calc(var(--corrida) * -1px) 0;
+  will-change: translate;
+}
+.cinta__pieza {
+  font-size: clamp(3rem, 13vw, 9rem);
+  font-weight: var(--grueso);
+  line-height: .86;
+  letter-spacing: -.03em;
+  color: var(--tinta-bordo);
+  white-space: nowrap;
+  text-transform: none;
+}
+.cinta--papel { background: transparent; border-block-color: var(--velo-apenas) }
+.cinta--papel .cinta__pieza { color: var(--sobre-foto) }
+
+/* --- La órbita: cuatro esferas, y Comunicación como el anillo ------------- */
+.orbita {
+  position: relative;
+  width: min(100%, 34rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  margin-block: clamp(2rem, 6svh, 4rem);
+}
+.orbita__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
+/* El anillo se dibuja PRIMERO, antes que entren las esferas: así se lee que
+   las contiene y no que compite con ellas. */
+.orbita__anillo {
+  stroke-dasharray: var(--vuelta, 290);
+  stroke-dashoffset: calc(var(--vuelta, 290) * (1 - var(--dibujo, 1)));
+}
+.orbita__rotulo-anillo {
+  position: absolute;
+  inset-block-start: -.35rem;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  padding-inline: .6rem;
+  background: var(--papel);
+  font-size: var(--t-micro);
+  font-weight: var(--medio);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tinta-bordo);
+}
+.orbita__nodo {
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  gap: .3rem;
+  /* 44 px de área táctil aunque el punto mida 12. */
+  min-width: 44px;
+  min-height: 44px;
+  padding: .4rem;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--tinta-apoyo);
+  transition: color var(--hover) var(--curva), opacity var(--hover) var(--curva);
+}
+.orbita__punto {
+  width: 12px; height: 12px;
+  border: 1.4px solid currentColor;
+  border-radius: 50%;
+  background: var(--papel);
+  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
+}
+.orbita__n {
+  font-size: var(--t-micro);
+  font-variant-numeric: tabular-nums;
+  opacity: .6;
+}
+.orbita__nombre {
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  line-height: 1.15;
+  max-width: 7.5rem;
+  text-align: center;
+  text-wrap: balance;
+}
+/* La activa se enciende y las otras bajan a un tercio: el ojo va sola. */
+.orbita__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
+.orbita__nodo[aria-pressed="true"] .orbita__punto {
+  scale: 1.5;
+  background: var(--tinta-bordo);
+}
+.orbita[data-lista] .orbita__nodo[aria-pressed="false"] { opacity: .34 }
+
+.orbita__cara {
+  position: absolute;
+  inset: 22%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.orbita__panel {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: .5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--cambio) var(--curva);
+}
+.orbita__panel[aria-hidden="false"] { opacity: 1; visibility: visible }
+.orbita__panel-n {
+  font-size: var(--t-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--tinta-bordo);
+}
+.orbita__panel h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
+.orbita__panel p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
+
+.orbita__anillo-copy {
+  max-width: 46ch;
+  margin-inline: auto;
+  text-align: center;
+  font-size: var(--t-chico);
+  color: var(--tinta-parrafo);
+  text-wrap: pretty;
+}
+.orbita__anillo-copy strong { color: var(--tinta-bordo); font-weight: var(--medio) }
+.orbita__ayuda {
+  margin-block-start: .75rem;
+  text-align: center;
+  font-size: var(--t-nota);
+  color: var(--tinta-apoyo);
+}
+
+/* --- El ciclo: cinco pasos en círculo, y del quinto se vuelve al primero -- */
+.ciclo {
+  position: relative;
+  width: min(100%, 34rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  margin-block: clamp(2rem, 6svh, 4rem);
+}
+.ciclo__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
+.ciclo__avance {
+  stroke-dasharray: var(--vuelta, 226);
+  stroke-dashoffset: calc(var(--vuelta, 226) * (1 - var(--avance, 0)));
+}
+.ciclo__nodo {
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  gap: .3rem;
+  min-width: 44px; min-height: 44px;
+  padding: .4rem;
+  border: 0; background: none; cursor: pointer;
+  color: var(--tinta-apoyo);
+  transition: color var(--hover) var(--curva);
+}
+.ciclo__punto {
+  width: 10px; height: 10px;
+  border: 1.4px solid currentColor;
+  border-radius: 50%;
+  background: var(--papel);
+  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
+}
+.ciclo__rotulo {
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  max-width: 7rem;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 1.15;
+}
+.ciclo__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
+.ciclo__nodo[aria-pressed="true"] .ciclo__punto { scale: 1.5; background: var(--tinta-bordo) }
+
+.ciclo__centro {
+  position: absolute;
+  inset: 24%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.ciclo__carta {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: .4rem;
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--cambio) var(--curva);
+}
+.ciclo__carta[aria-hidden="false"] { opacity: 1; visibility: visible }
+.ciclo__n {
+  font-size: var(--t-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--tinta-bordo);
+}
+.ciclo__carta h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
+.ciclo__carta p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
+.ciclo__cierre {
+  text-align: center;
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  color: var(--tinta-bordo);
+  text-wrap: balance;
+}
+
+/* --- Los mundos: cuatro paneles verticales, cada uno con su tinta --------- */
+/* En celular se apilan y el título va horizontal; recién desde 64rem rota a
+   vertical, que es donde la pieza tiene alto para lucirse. */
+.mundos {
+  display: grid;
+  gap: 2px;
+  margin-block: clamp(1.5rem, 5svh, 3rem);
+  background: var(--linea);
+  border: 1px solid var(--linea);
+}
+.mundo {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 1rem;
+  min-height: clamp(11rem, 26svh, 16rem);
+  padding: clamp(1.1rem, 3vw, 1.75rem);
+  text-decoration: none;
+  color: var(--sobre-foto);
+  overflow: hidden;
+  transition: filter var(--cambio) var(--curva);
+}
+/* Las cuatro tintas son las del manual de Fractura. No hay un hex nuevo acá. */
+.mundo[data-tinta="bordo"]  { background: var(--tinta-bordo) }
+.mundo[data-tinta="bistre"] { background: var(--tinta-parrafo) }
+.mundo[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
+.mundo[data-tinta="tinta"]  { background: var(--tinta) }
+
+.mundo__marca {
+  font-size: var(--t-sub);
+  font-weight: var(--grueso);
+  line-height: 1;
+  opacity: .55;
+}
+.mundo__nombre {
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  font-weight: var(--medio);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.mundo__bajada {
+  font-size: var(--t-nota);
+  opacity: .8;
+  max-width: 26ch;
+  text-wrap: pretty;
+}
+.mundo__cierre {
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  padding-block-start: .6rem;
+  border-block-start: 1px solid currentColor;
+}
+.mundos__ayuda {
+  font-size: var(--t-nota);
+  color: var(--tinta-apoyo);
+}
+
+/* --- Un mundo pleno: la tinta se apodera de la pantalla entera ------------ */
+.mundo-pleno {
+  position: relative;
+  padding-block: clamp(3rem, 9svh, 6rem);
+  color: var(--sobre-foto);
+  scroll-margin-block-start: var(--alto-nav);
+}
+.mundo-pleno[data-tinta="bordo"]  { background: var(--tinta-bordo) }
+.mundo-pleno[data-tinta="bistre"] { background: var(--tinta-parrafo) }
+.mundo-pleno[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
+.mundo-pleno[data-tinta="tinta"]  { background: var(--tinta) }
+
+.mundo-pleno__interior {
+  padding-inline: var(--margen-ext);
+  display: grid;
+  gap: clamp(1.5rem, 4svh, 2.5rem);
+}
+.mundo-pleno__bajada {
+  font-size: var(--t-lead);
+  font-weight: var(--fino);
+  max-width: 44ch;
+  opacity: .85;
+  text-wrap: pretty;
+}
+/* El salto al siguiente. Del último se vuelve al primero: es el loop que pidió
+   Vero, y por eso no hay "anterior". */
+.mundo-pleno__next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  margin-block-start: clamp(2rem, 6svh, 3.5rem);
+  margin-inline: var(--margen-ext);
+  padding-block: .9rem;
+  border-block-start: 1px solid currentColor;
+  color: inherit;
+  text-decoration: none;
+  font-size: var(--t-nota);
+}
+.mundo-pleno__next-r { font-variant-numeric: tabular-nums; opacity: .7 }
+.mundo-pleno__next-t { font-weight: var(--medio) }
+
+/* Las secciones que viven adentro de un mundo no ponen su propio fondo: el
+   color lo pone el mundo. Si no, se pisan y se pierde el efecto. */
+.adentro { background: transparent; padding-inline: 0; color: inherit }
+.adentro .titulo, .adentro h2, .adentro h3 { color: inherit }
+.adentro .bajada, .adentro p { color: inherit }
+
+/* --- La ventana de contacto ---------------------------------------------- */
+.contacto {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(3rem, 9svh, 6rem);
+}
+/* La palabra gigante sangra por el borde izquierdo. Es decorativa: el texto
+   real está en el h2, y por eso va aria-hidden. */
+.contacto__palabra {
+  --deriva: 0;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0;
+  translate: calc(-14% + var(--deriva) * 1%) -50%;
+  font-size: clamp(6rem, 30vw, 22rem);
+  font-weight: var(--grueso);
+  line-height: .8;
+  letter-spacing: -.04em;
+  color: var(--tinta-bordo);
+  opacity: .07;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.contacto__caja {
+  position: relative;
+  display: grid;
+  gap: clamp(2rem, 6svh, 3rem);
+  padding-inline: var(--margen-ext);
+}
+.contacto__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem }
+.solapas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  margin-block-end: 1.25rem;
+  border-block-end: 1px solid var(--linea);
+}
+.solapa {
+  min-height: 44px;
+  padding: .6rem 1rem;
+  border: 0;
+  border-block-end: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--t-chico);
+  color: var(--tinta-apoyo);
+  transition: color var(--hover) var(--curva), border-color var(--hover) var(--curva);
+}
+.solapa[aria-pressed="true"] {
+  color: var(--tinta-bordo);
+  border-block-end-color: var(--tinta-bordo);
+  font-weight: var(--medio);
+}
+.solapa__cuerpo { display: grid; gap: 1rem; justify-items: start }
+.solapa__cuerpo[aria-hidden="true"] { display: none }
+.solapa__cuerpo p { max-width: 44ch; text-wrap: pretty }
+
+/* --- Los cuatro carriles -------------------------------------------------- */
+
+/* Notebook 1366×657: ancho de sobra, alto que no alcanza. La órbita y el ciclo
+   se miden contra svh o no entran con la barra puesta. */
+@media (min-width: 64rem) {
+  .orbita, .ciclo { width: min(34rem, 62svh) }
+  .mundos { grid-template-columns: repeat(4, 1fr) }
+  .mundo { min-height: min(30rem, 64svh) }
+  /* Recién acá el título rota: es donde hay alto para que se lea. */
+  .mundo__nombre {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    justify-self: start;
+    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  }
+  .contacto__caja { grid-template-columns: 4fr 6fr; gap: clamp(2rem, 5vw, 5rem) }
+  .contacto__datos { align-self: start }
+  .mundo-pleno__interior { padding-inline: var(--margen-int) }
+}
+
+/* Escritorio grande: la órbita a tamaño completo. */
+@media (min-width: 94.5rem) {
+  .orbita, .ciclo { width: min(38rem, 66svh) }
+}
+
+/* Celular acostado (812×375). Cae acá por consulta de ALTO con tope de ancho,
+   para no atrapar el notebook, que también es bajo pero mide 1366. */
+@media (max-height: 46rem) and (max-width: 63.99rem) {
+  .orbita, .ciclo { width: min(100%, 74svh) }
+  .cinta__pieza { font-size: clamp(2.25rem, 9vw, 4rem) }
+}
+
+/* En táctil no hay hover. Todo lo que dependa del puntero vive acá adentro. */
+@media (hover: hover) and (pointer: fine) {
+  .mundo:hover { filter: brightness(1.14) }
+  .mundo-pleno__next:hover .mundo-pleno__next-t { text-decoration: underline }
+}
+
+/* Se suaviza, no se apaga. Un bloque por efecto, pegado al efecto que apaga. */
+@media (prefers-reduced-motion: reduce) {
+  .cinta__riel { translate: none }
+  .orbita__anillo { stroke-dashoffset: 0 }
+  .ciclo__avance { stroke-dashoffset: 0 }
+  .contacto__palabra { translate: -14% -50% }
+  .orbita__punto, .ciclo__punto { transition: none }
+}
+
+/* --- Correcciones de la primera medición --------------------------------- */
+
+/* Un item de grilla es `minmax(auto, 1fr)`: NO encoge por debajo de su
+   contenido, así que un video o un título largo empujan la página entera.
+   Medido acá: #proyectos-bloque daba 1675 px dentro de un viewport de 812. */
+.mundo-pleno__interior,
+.mundo-pleno__interior > *,
+.contacto__caja > *,
+.adentro { min-width: 0 }
+.adentro img, .adentro video { max-width: 100%; height: auto }
+
+/* Los enlaces de la cabecera medían 20 px de alto. El área táctil se agranda
+   sin mover el diseño: el texto queda donde estaba. */
+.cabecera__enlaces a,
+.pie__paginas a,
+.panel > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.pie__paginas { display: flex; flex-wrap: wrap; gap: 0 1rem }
+/* 38 px de ancho no llega a 44: se agranda con padding, sin mover el texto. */
+.cabecera__enlaces a, .pie__paginas a { padding-inline: .5rem }
+
+/* --- El estante de Cardinal, fijado en horizontal (sólo escritorio) ------- */
+/* Recorre el ancho mientras la pantalla queda quieta: dos pantallas de alto se
+   vuelven una. En celular no se fija — pelear con las barras del navegador es
+   una pelea perdida — y queda el estante nativo con el dedo. */
+@media (min-width: 64rem) {
+  .fijado { position: relative }
+  .fijado .estante {
+    display: flex;
+    grid-template-columns: none;
+    gap: clamp(1rem, 2vw, 2rem);
+    overflow: visible;
+    align-items: end;
+    width: max-content;
+    padding-inline-end: var(--margen-int);
+  }
+  .fijado .estante .ficha {
+    flex: 0 0 clamp(18rem, 24vw, 26rem);
+    grid-column: auto;
+  }
+  /* Las proporciones siguen sin repetirse: es lo que separa esto de una fila
+     de tarjetas iguales. */
+  .fijado .estante .ficha__abrir,
+  .fijado .estante .ficha__hueco {
+    height: auto;
+    aspect-ratio: var(--prop, 3 / 2);
+    max-block-size: 54svh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fijado .estante { overflow-x: auto }
+}
+/* El riel mide `max-content`: sin recorte ensancha el documento entero y abre
+   scroll lateral. `clip` y no `hidden` — hidden crea un contexto de scroll que
+   no hace falta. El pin de GSAP usa `fixed`, así que esto no lo rompe. */
+@media (min-width: 64rem) { .fijado { overflow: clip } }
+
+/* --- Celular: el círculo se despliega en vertical -------------------------- */
+/* Cuatro rótulos a radio 38 % más un panel al centro no entran en 390 px:
+   medido, "Gestión & Evolución" se cruzaba con el texto del panel y el anillo
+   pasaba por encima del rótulo activo. Acá el arco se desenrolla y queda una
+   lista: se ve todo junto, sin tocar nada. */
+@media (max-width: 63.99rem) {
+  .orbita, .ciclo {
+    width: auto;
+    aspect-ratio: auto;
+    display: grid;
+    gap: 0;
+    padding-inline-start: 1.35rem;
+    /* La línea de la izquierda ES el arco desplegado. */
+    border-inline-start: 1.4px solid var(--tinta-bordo);
+  }
+  .orbita__dibujo, .ciclo__dibujo,
+  .orbita__nodo, .ciclo__nodo,
+  .orbita__rotulo-anillo { display: none }
+
+  .orbita__cara, .ciclo__centro {
+    position: static;
+    inset: auto;
+    display: grid;
+    gap: 0;
+    text-align: start;
+  }
+  /* Todos los paneles visibles y apilados: en el teléfono no se esconde
+     contenido detrás de un toque que nadie sabe que hay. */
+  .orbita__panel, .ciclo__carta {
+    grid-area: auto;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    gap: .35rem;
+    padding-block: 1.1rem;
+    border-block-start: 1px solid var(--linea);
+  }
+  .orbita__panel:first-child, .ciclo__carta:first-child { border-block-start: 0 }
+  .orbita__panel[aria-hidden="true"], .ciclo__carta[aria-hidden="true"] {
+    opacity: 1;
+    visibility: visible;
+  }
+  /* El punto sobre la línea marca cada paso. */
+  .orbita__panel::before, .ciclo__carta::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 1.45rem;
+    inset-inline-start: -1.35rem;
+    translate: -50% 0;
+    width: 9px; height: 9px;
+    border: 1.4px solid var(--tinta-bordo);
+    border-radius: 50%;
+    background: var(--papel);
+  }
+  .orbita__panel h3, .ciclo__carta h3 { font-size: var(--t-cuerpo) }
+  .orbita__panel p, .ciclo__carta p { font-size: var(--t-chico) }
+  .orbita__anillo-copy, .ciclo__cierre, .orbita__ayuda { text-align: start }
+  /* En vertical el anillo no se dibuja, así que la ayuda de "se activa al
+     pasar" no aplica: no hay nada que pasar. */
+  .orbita__ayuda { display: none }
+}
+
+/* --- La palabra gigante de contacto: color con alfa, no opacity ----------- */
+/* El motor de reveal le escribe `opacity` a los hijos de la sección, así que
+   un `opacity: .07` propio se lo come al revelar y la palabra queda opaca
+   encima del texto. Con el color tintado el reveal puede hacer lo suyo sin
+   pisar nada. Un elemento, una sola cosa que lo controle. */
+.contacto__palabra {
+  opacity: 1;
+  color: color-mix(in srgb, var(--tinta-bordo) 9%, var(--papel));
+}
+/* En 390 px no hay columna libre donde sangrar: la palabra taparía el texto.
+   Recién desde 64rem, donde la caja es 4fr/6fr, tiene dónde vivir. */
+@media (max-width: 63.99rem) { .contacto__palabra { display: none } }
+
+/* --- Legibilidad adentro de un mundo -------------------------------------- */
+/* Las secciones vienen de la página clara y traen sus propios colores de tinta
+   sobre papel. Adentro de un mundo el fondo es la tinta, así que bordó sobre
+   bordó desaparece — medido en el bloque del cardenal. Acá se reasignan todos
+   los tonos de texto de una vez, en lugar de parchear sección por sección. */
+.mundo-pleno .titulo,
+.mundo-pleno h2, .mundo-pleno h3, .mundo-pleno h4,
+.mundo-pleno .cardenal__cierre,
+.mundo-pleno .otros__nombre,
+.mundo-pleno .proyecto__nombre { color: var(--sobre-foto) }
+
+.mundo-pleno .bajada,
+.mundo-pleno p,
+.mundo-pleno li,
+.mundo-pleno .cardenal__copy,
+.mundo-pleno .ficha__epigrafe,
+.mundo-pleno figcaption,
+.mundo-pleno .otros__copy { color: color-mix(in srgb, var(--sobre-foto) 90%, transparent) }
+
+.mundo-pleno .margen,
+.mundo-pleno .seccion__margen,
+.mundo-pleno .otros__rotulo { color: color-mix(in srgb, var(--sobre-foto) 74%, transparent) }
+
+/* Los filetes también: una línea pensada para papel no se ve sobre tinta. */
+.mundo-pleno .cardenal,
+.mundo-pleno .otros,
+.mundo-pleno .ficha__epigrafe,
+.mundo-pleno .seccion__cabeza--pie {
+  border-color: color-mix(in srgb, var(--sobre-foto) 26%, transparent);
+}
+/* Los enlaces heredan y se distinguen por el subrayado, no por el color. */
+.mundo-pleno a { color: inherit }
+/* La cinta es el encabezado de la sección: un h2 que además es la pieza
+   gráfica más grande. Sin resetear el margen del h2 la cinta se descuadra. */
+h2.cinta__pieza { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit }
+/* El scroll suave necesita que el ancla frene abajo del nav, no debajo de él. */
+html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
+/* Al fijar, GSAP envuelve el riel en un `pin-spacer` que hereda el ancho del
+   contenido, no el de la caja: 28 px de desborde medidos en 1512. El recorte
+   tiene que estar también en el envoltorio, no sólo adentro. */
+@media (min-width: 64rem) {
+  .pin-spacer { overflow: clip; max-width: 100% }
+}
+/* El acordeón del mapa trae sus tonos de papel: sobre la tinta casi negra del
+   mundo Territorio quedaban al límite de contraste. */
+.mundo-pleno .territorio__bajada,
+.mundo-pleno .territorio summary,
+.mundo-pleno details p,
+.mundo-pleno summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
+.mundo-pleno details, .mundo-pleno summary {
+  border-color: color-mix(in srgb, var(--sobre-foto) 26%, transparent);
+}

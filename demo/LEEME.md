@@ -1,18 +1,33 @@
-# Mavenz — demo
+# Mavenz — tres páginas
 
 `https://davidtaranto96.github.io/mavenz-web/demo/`
 
-Implementación del diseño aprobado en Claude Design (proyecto *Universo interactivo: Mavenz
-Home*, 06/09/2026), que se armó sobre el documento `Estructura_Web_Mavenz.docx` de Vero y sus
-respuestas al tablero del 04/09.
+Rediseño del 08/09/2026, después de la reunión con Vero del 07/09. Reemplaza la página única
+anterior. Las referencias que ella eligió: `edificiolatorre.com` (nuestra), `realevate.agency`
+y `akaru.fr`.
 
-**La idea, en una línea:** un dossier de papel donde lo único que se mueve es el trazo de la
-marca.
+**La idea, en una línea:** el trazo de la M es el hilo. Se dibuja en el hero, se cierra en la
+órbita de las esferas, se aprieta en el círculo del método, se estira como riel de los
+proyectos y se apaga en el pie. Un gesto en todo el sitio, no un efecto por sección.
 
-HTML/CSS/JS estático, sin framework, en **castellano e inglés completos**. La demo anterior
-quedó intacta en `../v1/`.
+**Tres páginas**, castellano. El inglés lo debe la clienta; `fundir()` y `sitio.en.json`
+siguen en pie para cuando llegue.
+
+| Página | Qué cuenta |
+|---|---|
+| `index.html` | el relato: hero, quiénes, las 4 esferas en órbita, el método en ciclo, los 4 mundos, contacto |
+| `about.html` | quiénes son, el equipo, la mirada, la red |
+| `proyectos.html` | cada proyecto es un mundo de color entero, con su cinta y su "Siguiente". Del último se vuelve al primero |
+
+**Las cuatro esferas** son textuales del WhatsApp de Vero del 07/09. **"Marca y comunicación"
+no es una esfera: es el anillo que las rodea** — decisión de David del 08/09. El componente
+tolera de 4 a 6 esferas sin tocar CSS.
+
+**Las cuatro tintas de los mundos** salen del manual de Fractura. No hay un hex nuevo en toda
+la hoja de estilos.
 
 ---
+
 
 ## Cómo se edita
 
@@ -22,7 +37,7 @@ Un dato vive en un solo lugar: `contenido/sitio.json`.
 python3 armar.py
 ```
 
-Eso reescribe `index.html` **y** `en.html`. **El HTML no se toca a mano.** Cada región que sale del JSON queda
+Eso reescribe `index.html`, `about.html` y `proyectos.html`. **El HTML no se toca a mano.** Cada región que sale del JSON queda
 envuelta en `<!--cms:nombre--> … <!--/cms:nombre-->` para que el panel de `web-editable` la
 pueda regenerar sola más adelante.
 
@@ -30,9 +45,9 @@ pueda regenerar sola más adelante.
 |---|---|
 | `contenido/sitio.json` | todo el texto, las fotos, los datos de contacto |
 | `contenido/sitio.en.json` | la capa en inglés: sólo lo que cambia. Las listas van enteras |
-| `armar.py` | genera `index.html` y `en.html` |
-| `estilos.css` | tokens y los tres carriles |
-| `guion.js` | cabecera, menú, rueda, entrada de los títulos y de las secciones, trazo con el scroll, visor de fotos, índice lateral |
+| `armar.py` | genera las tres páginas desde una cáscara compartida |
+| `estilos.css` | tokens y los cuatro carriles |
+| `guion.js` | Lenis+GSAP, órbita, ciclo, cintas por scroll, riel fijado, solapas, cabecera, menú, entrada de los títulos y de las secciones, trazo con el scroll, visor de fotos, índice lateral |
 | `../img/` | fotos en WebP, dos anchos cada una |
 | `../fuente/urbanist.woff2` | Urbanist variable, 100–900, 24 KB |
 
@@ -232,3 +247,49 @@ muestra textos cortados y botones fuera de pantalla en una web que no desborda. 
 celular de este LEEME salen del capturador por DevTools
 (`~/.claude/skills/visual-verify/scripts/capturar-celular.py`), que usa
 `Emulation.setDeviceMetricsOverride` y lo reaplica después de navegar.
+
+---
+
+## Medido el 08/09, contra el sitio publicado
+
+| | Inicio | Nosotras | Proyectos |
+|---|---|---|---|
+| Pantallas en celular (390×844) | 7,3 | 5,3 | 8,2 |
+| Pantallas en notebook (1366×657) | 7,4 | 6,2 | 11,0 |
+| Primera carga, celular | 348 KB | 242 KB | 663 KB |
+
+**Cero scroll lateral** en los cinco carriles (390×844, 390×660, 1366×657, 1512×982 y 812×375
+acostado), probado moviendo la página de costado de verdad y no leyendo `scrollWidth` — el
+`pin-spacer` de GSAP infla ese número 28 px sin que se vea ni se pueda scrollear.
+
+**Cero** `@keyframes` infinitos, **cero** hex fuera de `:root`, **cero** errores de consola,
+**cero** toques por debajo de 44 px en los carriles de celular.
+
+Con `prefers-reduced-motion` y con salto directo al fondo, **ningún bloque queda invisible** en
+las tres páginas.
+
+### Dos cosas que el auditor marca y quedan así a propósito
+
+- **`transition: grid-template-rows`** en el acordeón. Es una propiedad de layout, sí, pero es
+  la receta `0fr↔1fr` del vault, que existe justamente para no inventar un `max-height: 1000px`
+  ni medir con JS. Se anima una fila de un elemento chico.
+- **El puntaje del auditor de efectos es 73/100.** Este sitio tiene motor propio de reveal;
+  encimarle un segundo motor sobre los mismos elementos es el error ya documentado (dos
+  animaciones de opacidad sobre el mismo nodo lo dejan invisible) y ningún puntaje lo compensa.
+  Lo que el auditor marcaba **y era real** ya se arregló: los cuatro mundos no tenían encabezado
+  ni entrada propia, y faltaba `scroll-padding-top`.
+
+## Trampas que costaron una vuelta cada una
+
+- **Un item de grilla es `minmax(auto, 1fr)`: no encoge.** `#proyectos-bloque` empujaba 1675 px
+  dentro de un viewport de 812. Va `min-width: 0`.
+- **El motor de reveal escribe `opacity` a los hijos de la sección**, así que el `opacity: .07`
+  de la palabra gigante de contacto se lo comía y la palabra tapaba el texto. Se resolvió con
+  color tintado en vez de opacidad: un elemento, una sola cosa que lo controle.
+- **La órbita no entra en 390 px.** Cuatro rótulos a radio 38 % más un panel al centro se
+  cruzan entre sí y con el anillo. En celular el arco se desenrolla y queda una lista vertical.
+- **Las secciones traen sus colores de papel.** Adentro de un mundo el fondo es la tinta y el
+  bordó sobre bordó desaparece. Hay un bloque de legibilidad que reasigna todos los tonos de
+  una vez, en lugar de parchear sección por sección.
+- **El video de fondo de Cardinal son 3 MB.** En celular no se baja: el póster ya cuenta la
+  escena. La página pasó de 3679 KB a 663 KB.

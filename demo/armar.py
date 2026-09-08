@@ -87,11 +87,6 @@ ONDA = ("M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 "
         "C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 "
         "C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272")
 
-# Los siete vértices del heptagrama, en porcentaje de la caja de la rueda.
-# Radio 42 % desde el centro; el primero arriba y de ahí cada 360/7 grados.
-VERTICES = [(50.00, 8.00), (82.84, 23.81), (90.95, 59.35), (68.22, 87.84),
-            (31.78, 87.84), (9.05, 59.35), (17.16, 23.81)]
-
 
 # La dirección con la que entra cada sección. Que no se repita seguida es
 # justamente lo que separa un diseño de un plugin.
@@ -104,46 +99,24 @@ def fx(seccion):
     return f' data-fx="reveal" data-fx-desde="{DIRECCION[seccion]}"'
 
 
-def poligono(orden, opacidad):
-    pts = " ".join(f"{VERTICES[i][0]},{VERTICES[i][1]}" for i in orden)
-    return (f'<polygon points="{pts}" fill="none" stroke="var(--linea-acento)" '
-            f'stroke-width="1" vector-effect="non-scaling-stroke" opacity="{opacidad}"/>')
-
-
-# --------------------------------------------------------------------------- #
-# Secciones
-# --------------------------------------------------------------------------- #
-
-def selector_idioma(d, lang):
-    """El idioma en el que estás es texto; el otro es un enlace de verdad."""
-    idi = d["idiomas"]
-    otro = "en" if lang == "es" else "es"
-    return (f'<span class="idioma">'
-            f'<span class="idioma__on">{e(idi[lang]["rotulo"])}</span>'
-            f'<span class="idioma__sep" aria-hidden="true">/</span>'
-            f'<a class="idioma__off" href="{e(idi[otro]["href"])}" '
-            f'hreflang="{e(idi[otro]["lang"])}" lang="{e(idi[otro]["lang"])}">'
-            f'{e(idi[otro]["rotulo"])}</a></span>')
-
-
-def indice(d):
-    """Una raya por sección al costado. El rótulo sale de aria-label, así la
-    versión visual y la accesible son el mismo dato."""
-    puntos = ([("quienes", d["quienes"]["titulo"])]
-              + [(x["id"], x["rotulo"]) for x in d["menu"]]
-              + [("equipo", d["equipo"]["titulo"]), ("contacto", d["contacto"]["titulo"])])
+def indice(d, puntos):
+    """Una raya por seccion de ESTA pagina. El rotulo sale de aria-label, asi la
+    version visual y la accesible son el mismo dato."""
     rayas = "".join(f'<a href="#{i}" aria-label="{e(t)}"></a>' for i, t in puntos)
-    return f'<nav class="indice" data-indice aria-label="{e(d["interfaz"]["indice"])}">{rayas}</nav>'
+    return (f'<nav class="indice" data-indice aria-label="{e(d["interfaz"]["indice"])}">'
+            f'{rayas}</nav>')
 
 
-def cabecera(d, lang):
+def cabecera(d, lang, aqui):
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
-    enlaces = "".join(f'<a href="#{s["id"]}">{e(s["rotulo"])}</a>' for s in d["menu"])
+    enlaces = "".join(
+        f'<a href="{e(p["archivo"])}"{" aria-current=\"page\"" if k == aqui else ""}>'
+        f'{e(p["rotulo"])}</a>'
+        for k, p in d["paginas"].items())
     return f'''<header class="cabecera" data-cabecera>
-  <a class="cabecera__marca" href="#contenido" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="../img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="../img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
+  <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="../img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="../img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
-    {selector_idioma(d, lang)}
     <a class="boton cabecera__reunion" href="{e(wa(d, c["wa_reunion"]))}" target="_blank" rel="noopener">{e(c["cta_reunion"])}</a>
     <button class="hamburguesa" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-celular" aria-label="{e(ui["menu"])}">
       <span></span><span></span><span></span>
@@ -204,40 +177,47 @@ def quienes(d):
 </section>'''
 
 
-def universo(d):
+def orbita(d):
     u = d["universo"]
+    n = len(u["esferas"])
     nodos, paneles = [], []
-    for i, s in enumerate(u["esferas"]):
-        x, y = VERTICES[i]
-        tenue = "" if s["destacada"] else " data-tenue"
-        primero = i == 0
+    for i, sf in enumerate(u["esferas"]):
+        # Repartidas sobre la circunferencia, arrancando arriba. El radio es 38 %
+        # para que el rotulo no se coma el borde de la caja.
+        import math
+        ang = -math.pi / 2 + i * 2 * math.pi / n
+        x, y = 50 + 38 * math.cos(ang), 50 + 38 * math.sin(ang)
         nodos.append(
-            f'<button class="rueda__nodo" type="button" data-cap="{s["id"]}"{tenue} '
-            f'style="--x:{x}%;--y:{y}%" aria-label="{e(s["nombre"])}" '
-            f'aria-pressed="{"true" if primero else "false"}">'
-            f'<span class="rueda__punto" aria-hidden="true"></span>'
-            f'<span class="rueda__nombre">{e(s["nombre"])}</span></button>')
+            f'<button class="orbita__nodo" type="button" data-esfera="{sf["id"]}" '
+            f'style="--x:{x:.2f}%;--y:{y:.2f}%" '
+            f'aria-pressed="{"true" if i == 0 else "false"}">'
+            f'<span class="orbita__punto" aria-hidden="true"></span>'
+            f'<span class="orbita__n" aria-hidden="true">{e(sf["numero"])}</span>'
+            f'<span class="orbita__nombre">{e(sf["nombre"])}</span></button>')
         paneles.append(
-            f'<div class="rueda__panel" data-panel="{s["id"]}" aria-hidden="{"false" if primero else "true"}">'
-            f'<h3>{e(s["nombre"])}</h3><p>{e(s["copy"])}</p></div>')
-    return f'''<section class="seccion" id="universo"{fx("universo")}>
-  <h2 class="titulo titulo--bordo" data-letras>{e(u["titulo"])}</h2>
-  <p class="bajada bajada--angosta">{e(u["intro"])}</p>
-  <div class="rueda" data-rueda>
-    <svg class="rueda__dibujo" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="42" fill="none" stroke="var(--linea)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      {poligono([0, 2, 4, 6, 1, 3, 5], ".55")}
-      {poligono([0, 3, 6, 2, 5, 1, 4], ".34")}
+            f'<div class="orbita__panel" data-panel="{sf["id"]}" '
+            f'aria-hidden="{"false" if i == 0 else "true"}">'
+            f'<span class="orbita__panel-n" aria-hidden="true">({e(sf["numero"])})</span>'
+            f'<h3>{e(sf["nombre"])}</h3><p>{e(sf["copy"])}</p></div>')
+    a = u["anillo"]
+    return f'''<section class="seccion universo" id="universo"{fx("universo")}>
+  <div class="seccion__cabeza">
+    <h2 class="titulo titulo--bordo" data-letras>{e(u["titulo"])}</h2>
+    <p class="bajada">{e(u["intro"])}</p>
+  </div>
+  <div class="orbita" data-orbita style="--esferas:{n}">
+    <svg class="orbita__dibujo" viewBox="0 0 100 100" aria-hidden="true">
+      <circle class="orbita__anillo" data-anillo cx="50" cy="50" r="46" fill="none"
+              stroke="var(--tinta-bordo)" stroke-width="1.4" vector-effect="non-scaling-stroke"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="var(--linea)"
+              stroke-width="1" vector-effect="non-scaling-stroke"/>
     </svg>
-    <div class="rueda__ficha">
-      <div class="rueda__capa rueda__capa--2" aria-hidden="true"></div>
-      <div class="rueda__capa rueda__capa--1" aria-hidden="true"></div>
-      <div class="rueda__cara">{"".join(paneles)}</div>
-    </div>
+    <p class="orbita__rotulo-anillo" aria-hidden="true">{e(a["nombre"])}</p>
+    <div class="orbita__cara">{"".join(paneles)}</div>
     {"".join(nodos)}
   </div>
-  <p class="rueda__ayuda">{e(u["ayuda"])}</p>
-  {mapa(d)}
+  <p class="orbita__anillo-copy"><strong>{e(a["nombre"])}.</strong> {e(a["copy"])}</p>
+  <p class="orbita__ayuda">{e(u["ayuda"])}</p>
 </section>'''
 
 
@@ -263,31 +243,42 @@ def mapa(d):
   </div>'''
 
 
-def metodo(d):
+def ciclo(d):
+    import math
     m = d["metodo"]
-    nodos = "".join(
-        f'<div class="metodo__nodo" style="--x:{p["x"]}%;--y:{p["y"]}%"'
-        f'{" data-arriba" if p["arriba"] else ""}><span>{e(p["nombre"])}</span></div>'
-        for p in m["pasos"])
-    cartas = "".join(
-        f'<article class="carta"><span class="carta__n">{i + 1:02d}</span>'
-        f'<h3 class="carta__nombre">{e(p["nombre"])}</h3>'
-        f'<p class="carta__copy">{e(p["copy"])}</p></article>'
-        for i, p in enumerate(m["pasos"]))
-    lista = (f'<div class="lateral" data-lateral style="--pasos:{len(m["pasos"])}">'
-             f'<div class="lateral__pin"><div class="lateral__carril" data-carril>{cartas}</div></div></div>')
-    return f'''<section class="seccion" id="metodo"{fx("metodo")}>
+    n = len(m["pasos"])
+    nodos, cartas = [], []
+    for i, p in enumerate(m["pasos"]):
+        ang = -math.pi / 2 + i * 2 * math.pi / n
+        x, y = 50 + 36 * math.cos(ang), 50 + 36 * math.sin(ang)
+        nodos.append(
+            f'<button class="ciclo__nodo" type="button" data-paso="{i}" '
+            f'style="--x:{x:.2f}%;--y:{y:.2f}%" '
+            f'aria-pressed="{"true" if i == 0 else "false"}">'
+            f'<span class="ciclo__punto" aria-hidden="true"></span>'
+            f'<span class="ciclo__rotulo">{e(p["nombre"])}</span></button>')
+        cartas.append(
+            f'<article class="ciclo__carta" data-carta="{i}" '
+            f'aria-hidden="{"false" if i == 0 else "true"}">'
+            f'<span class="ciclo__n">{e(p["numero"])}</span>'
+            f'<h3>{e(p["nombre"])}</h3><p>{e(p["copy"])}</p></article>')
+    return f'''<section class="seccion ciclo-seccion" id="metodo"{fx("metodo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
     <p class="bajada">{e(m["intro"])}</p>
   </div>
-  <div class="metodo__trazo">
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
-      <path d="{ONDA}" fill="none" stroke="var(--tinta-bordo)" stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+  <div class="ciclo" data-ciclo style="--pasos:{n}">
+    <svg class="ciclo__dibujo" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="36" fill="none" stroke="var(--linea)"
+              stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle class="ciclo__avance" data-avance cx="50" cy="50" r="36" fill="none"
+              stroke="var(--tinta-bordo)" stroke-width="1.6" stroke-linecap="round"
+              vector-effect="non-scaling-stroke" transform="rotate(-90 50 50)"/>
     </svg>
-    {nodos}
+    <div class="ciclo__centro">{"".join(cartas)}</div>
+    {"".join(nodos)}
   </div>
-  {lista}
+  <p class="ciclo__cierre">{e(m["cierre"])}</p>
 </section>'''
 
 
@@ -295,7 +286,7 @@ def espacio(d):
     """A sangre y sobre una aérea quieta: es la sección que rompe la seguidilla
     de papel, y de paso existe visualmente aunque falte la foto del lugar."""
     x = d["espacio"]
-    return f'''<section class="sangre" id="espacio" data-tema="oscuro"{fx("espacio")}>
+    return f'''<section class="seccion adentro" id="espacio-bloque"{fx("espacio")}>
   {img(x["fondo"], "100vw", "sangre__fondo")}
   <div class="sangre__velo"></div>
   <div class="sangre__interior">
@@ -340,14 +331,14 @@ def proyectos(d):
         f'<figure class="ficha" style="--cols:{h["columnas"]};--prop:{h["proporcion"]}">'
         f'<div class="hueco ficha__hueco"><p class="hueco__texto">{e(h["texto"])}</p></div>'
         f'<figcaption class="ficha__epigrafe">{e(h["epigrafe"])}</figcaption></figure>')
-    return f'''<section class="seccion" id="proyectos"{fx("proyectos")}>
+    return f'''<section class="seccion adentro" id="proyectos-bloque"{fx("proyectos")}>
   <p class="margen seccion__margen">{e(p["margen"])}</p>
   <div class="seccion__cabeza seccion__cabeza--pie">
     <h2 class="titulo" data-letras>{e(p["titulo"])}</h2>
     <p class="bajada">{e(p["intro"])}</p>
   </div>
   <article class="proyecto">
-    <video class="proyecto__fondo" data-diferido data-src="{e(medio(dest["fondo"]["src"]))}" poster="{e(medio(dest["fondo"]["poster"]))}" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <video class="proyecto__fondo" data-diferido data-pesado="1" data-src="{e(medio(dest["fondo"]["src"]))}" poster="{e(medio(dest["fondo"]["poster"]))}" muted loop playsinline preload="none" aria-hidden="true"></video>
     <button class="proyecto__abrir" type="button" data-foto="0" aria-label="{e(ui["abrir_foto"])}: {e(dest["nombre"])}">
       {img(dest["foto"], "(min-width:64rem) 76vw, 100vw", "proyecto__foto")}
     </button>
@@ -359,10 +350,7 @@ def proyectos(d):
       <a class="subrayado subrayado--claro" href="{e(dest["href"])}">{e(dest["cta"])}</a>
     </div>
   </article>
-  <div class="estante">{"".join(fichas)}</div>
-  {cardenal(d)}
-  {otros(d)}
-  {visor(d)}
+  <div class="fijado" data-fijado><div class="estante">{"".join(fichas)}</div></div>
 </section>'''
 
 
@@ -479,29 +467,51 @@ def banda(d):
 
 def contacto(d):
     c, cd = d["contacto"], d["contacto_datos"]
-    correo = (f'<a class="subrayado subrayado--tenue" href="mailto:{e(cd["correo"])}">{e(cd["correo"])}</a>'
-              if cd["correo"] else "")
+    correo = (f'<a class="subrayado subrayado--tenue" href="mailto:{e(cd["correo"])}">'
+              f'{e(cd["correo"])}</a>' if cd["correo"] else "")
+    solapas = "".join(
+        f'<button class="solapa" type="button" data-solapa="{s_["id"]}" '
+        f'aria-pressed="{"true" if i == 0 else "false"}">{e(s_["rotulo"])}</button>'
+        for i, s_ in enumerate(c["solapas"]))
+    cuerpos = "".join(
+        f'<div class="solapa__cuerpo" data-cuerpo="{s_["id"]}" '
+        f'aria-hidden="{"false" if i == 0 else "true"}">'
+        f'<p>{e(s_["copy"])}</p>'
+        f'<a class="boton" href="{e(wa(d, s_["rotulo"] + ". "))}" target="_blank" '
+        f'rel="noopener">{e(c["cta_wa"])}</a></div>'
+        for i, s_ in enumerate(c["solapas"]))
     motivos = "".join(
         f'<li><a class="subrayado subrayado--bordo" href="{e(wa(d, m["wa"]))}" '
         f'target="_blank" rel="noopener">{e(m["rotulo"])}</a></li>'
         for m in c["motivos"])
-    return f'''<section class="seccion contacto" id="contacto"{fx("contacto")}>
-  <p class="contacto__apertura">{e(c["apertura"])}</p>
-  <h2 class="contacto__titulo" data-letras>{e(c["titulo"])}</h2>
-  <div class="motivos">
-    <p class="margen motivos__rotulo">{e(c["rotulo_motivos"])}</p>
-    <ul class="motivos__lista">{motivos}</ul>
-  </div>
-  <div class="contacto__acciones">
-    <a class="boton" href="{e(wa(d, c["wa_reunion"]))}" target="_blank" rel="noopener">{e(c["cta_reunion"])}</a>
-    <a class="subrayado" href="{e(wa(d, c["wa_general"]))}" target="_blank" rel="noopener">{e(c["cta_wa"])}</a>
-    {correo}
+    return f'''<section class="seccion--ancha contacto" id="contacto"{fx("contacto")}>
+  <p class="contacto__palabra" aria-hidden="true" data-palabra>{e(c["palabra"])}</p>
+  <div class="contacto__caja">
+    <div class="contacto__datos">
+      <p class="contacto__apertura">{e(c["apertura"])}</p>
+      <h2 class="contacto__titulo" data-letras>{e(c["titulo"])}</h2>
+      <p class="margen">{e(c["bloque_datos"])}</p>
+      <ul class="contacto__lista">
+        <li><a class="subrayado" href="{e(wa(d, c["wa_general"]))}" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li>{correo}</li>
+      </ul>
+    </div>
+    <div class="contacto__panel">
+      <div class="solapas" role="group">{solapas}</div>
+      {cuerpos}
+      <div class="motivos">
+        <p class="margen motivos__rotulo">{e(c["rotulo_motivos"])}</p>
+        <ul class="motivos__lista">{motivos}</ul>
+      </div>
+    </div>
   </div>
 </section>'''
 
 
 def pie(d, lang):
     m = d["marca"]
+    paginas = "".join(f'<a href="{e(p["archivo"])}">{e(p["rotulo"])}</a>'
+                      for p in d["paginas"].values())
     redes = "".join(
         (f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["nombre"])}</a>'
          if r["href"] else f'<span>{e(r["nombre"])}</span>')
@@ -511,7 +521,7 @@ def pie(d, lang):
   <nav class="pie__redes" aria-label="{e(m["nombre"])}">{redes}</nav>
   <div class="pie__abajo">
     <p class="pie__lugar">{e(m["lugar"])}</p>
-    {selector_idioma(d, lang)}
+    <nav class="pie__paginas" aria-label="{e(d["interfaz"]["menu"])}">{paginas}</nav>
   </div>
 </footer>'''
 
@@ -535,12 +545,14 @@ def datos_estructurados(d):
 
 # --------------------------------------------------------------------------- #
 
-def pagina(d, lang):
-    m, ui, idi = d["marca"], d["interfaz"], d["idiomas"]
-    titulo = f'{m["nombre"]} — {m["mensaje"]}'
-    canonica = URL if lang == "es" else URL + idi["en"]["href"]
+def cascara(d, lang, slug, cuerpo, puntos):
+    """El head, la cabecera y el pie son los mismos en las tres paginas. Se
+    escriben una sola vez o se desincronizan: es el bug que mas caro sale."""
+    m, ui, pg = d["marca"], d["interfaz"], d["paginas"][slug]
+    titulo = f'{pg["titulo"]} — {m["nombre"]}' if slug != "inicio" else f'{m["nombre"]} — {m["mensaje"]}'
+    canonica = URL + ("" if slug == "inicio" else pg["archivo"])
     return f'''<!DOCTYPE html>
-<html lang="{e(idi[lang]["lang"])}">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -548,11 +560,8 @@ def pagina(d, lang):
 <meta name="description" content="{e(m["definicion"])} {e(d["hero"]["apoyo"])}">
 <meta name="theme-color" content="#eeecec">
 <link rel="canonical" href="{canonica}">
-<link rel="alternate" hreflang="es-AR" href="{URL}">
-<link rel="alternate" hreflang="en" href="{URL}{idi["en"]["href"]}">
-<link rel="alternate" hreflang="x-default" href="{URL}">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="{e(idi[lang]["og"])}">
+<meta property="og:locale" content="es_AR">
 <meta property="og:title" content="{e(titulo)}">
 <meta property="og:description" content="{e(m["definicion"])}">
 <meta property="og:image" content="{RAIZ}img/aerea-dia-1600.webp">
@@ -563,45 +572,154 @@ def pagina(d, lang):
 <link rel="stylesheet" href="estilos.css?v={version("estilos.css")}">
 <script type="application/ld+json">{json.dumps(datos_estructurados(d), ensure_ascii=False)}</script>
 </head>
-<body>
+<body data-pagina="{slug}">
 <a class="saltar" href="#contenido">{e(ui["saltar"])}</a>
-{cms("cabecera", cabecera(d, lang))}
+{cms("cabecera", cabecera(d, lang, slug))}
 <main class="contenido" id="contenido">
-{cms("hero", hero(d))}
-<div class="dossier cortina-tapa" data-tema="claro"><div class="dossier__interior">
-{cms("quienes", quienes(d))}
-{cms("universo", universo(d))}
-{cms("metodo", metodo(d))}
-</div></div>
-{cms("banda", banda(d))}
-{cms("espacio", espacio(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("proyectos", proyectos(d))}
-</div></div>
-{cms("red", red(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("equipo", equipo(d))}
-{cms("mirada", mirada(d))}
-{cms("contacto", contacto(d))}
-</div></div>
+{cuerpo}
 </main>
 {cms("pie", pie(d, lang))}
-{indice(d)}
+{indice(d, puntos)}
 <a class="wa" data-wa href="{e(wa(d, d["contacto"]["wa_general"]))}" target="_blank" rel="noopener" aria-label="{e(ui["whatsapp"])}">
   <span class="wa__punto" aria-hidden="true"></span>{e(ui["whatsapp"])}
 </a>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
 <script src="guion.js?v={version("guion.js")}" defer></script>
 </body>
 </html>
 '''
 
 
+def pagina_inicio(d):
+    """El relato. El trazo se dibuja, se cierra en orbita, se aprieta en ciclo
+    y se abre en los cuatro mundos."""
+    cuerpo = f'''{cms("hero", hero(d))}
+<div class="dossier cortina-tapa" data-tema="claro"><div class="dossier__interior">
+{cms("quienes", quienes(d))}
+{cms("universo", orbita(d))}
+{cms("metodo", ciclo(d))}
+</div></div>
+{cms("banda", banda(d))}
+{cms("mundos", mundos(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("contacto", contacto(d))}
+</div></div>'''
+    puntos = [("quienes", d["quienes"]["titulo"]), ("universo", d["universo"]["titulo"]),
+              ("metodo", d["metodo"]["titulo"]), ("mundos", d["mundos"]["rotulo"]),
+              ("contacto", d["contacto"]["titulo"])]
+    return cascara(d, "es", "inicio", cuerpo, puntos)
+
+
+def pagina_about(d):
+    """Quienes son. Lo que falta se muestra como hueco, no se disimula."""
+    pg = d["paginas"]["about"]
+    cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("quienes", quienes(d))}
+{cms("equipo", equipo(d))}
+{cms("mirada", mirada(d))}
+</div></div>
+{cms("red", red(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("contacto", contacto(d))}
+</div></div>'''
+    puntos = [("quienes", d["quienes"]["titulo"]), ("equipo", d["equipo"]["titulo"]),
+              ("mirada", d["mirada"]["titulo"]), ("red", d["red"]["titulo"]),
+              ("contacto", d["contacto"]["titulo"])]
+    return cascara(d, "es", "about", cuerpo, puntos)
+
+
+def pagina_proyectos(d):
+    """Cada proyecto es un mundo de color entero, y del ultimo se vuelve al
+    primero. Es literal lo que pidio Vero: que sea un loop."""
+    pg, lista = d["paginas"]["proyectos"], d["mundos"]["lista"]
+    # Lo que va adentro de cada mundo. Son las secciones que ya existian: no se
+    # reescribe contenido, se lo mete en su color.
+    dentro = {"cardinal":    proyectos(d) + cardenal(d),
+              "desarrollos": otros(d),
+              "espacio":     espacio(d),
+              "territorio":  mapa(d)}
+    n = len(lista)
+    bloques = "".join(
+        mundo_pleno(w, i, n, dentro[w["id"]], lista[(i + 1) % n]["id"])
+        for i, w in enumerate(lista))
+    cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
+<div class="riel" data-riel>{bloques}</div>
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("contacto", contacto(d))}
+</div></div>
+{visor(d)}'''
+    puntos = [(w["id"], w["nombre"]) for w in lista] + [("contacto", d["contacto"]["titulo"])]
+    return cascara(d, "es", "proyectos", cuerpo, puntos)
+
+
+def cinta(texto, tono="tinta", titulo=False):
+    """El nombre de la seccion en cinta gigante. La repeticion es decorativa:
+    la primera copia es el texto de verdad, el resto va aria-hidden.
+
+    Con titulo=True la cinta ES el encabezado de la seccion. Sin esto un mundo
+    entero queda sin h2: se rompe el indice del documento y el lector de
+    pantalla no tiene por donde entrar."""
+    et = "h2" if titulo else "span"
+    copias = f'<{et} class="cinta__pieza">{e(texto)}</{et}>' + "".join(
+        f'<span class="cinta__pieza" aria-hidden="true">{e(texto)}</span>'
+        for _ in range(3))
+    return (f'<div class="cinta cinta--{tono}" data-cinta>'
+            f'<div class="cinta__riel" data-cinta-riel>{copias}</div></div>')
+
+
+def mundos(d):
+    w = d["mundos"]
+    paneles = "".join(
+        f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" '
+        f'style="--i:{i}">'
+        f'<span class="mundo__marca" aria-hidden="true">M</span>'
+        f'<span class="mundo__nombre">{e(x["nombre"])}</span>'
+        f'<span class="mundo__bajada">{e(x["bajada"])}</span>'
+        f'<span class="mundo__cierre">{e(x["cierre"])}<span aria-hidden="true"> &#8594;</span></span>'
+        f'</a>'
+        for i, x in enumerate(w["lista"]))
+    return f'''<section class="seccion seccion--ancha mundos-seccion" id="mundos"{fx("proyectos")}>
+  <p class="margen">{e(w["rotulo"])}</p>
+  <div class="mundos">{paneles}</div>
+  <p class="mundos__ayuda">{e(w["ayuda"])}</p>
+</section>'''
+
+
+DESDE_MUNDO = ("escala", "izq", "der", "arriba")
+
+
+def mundo_pleno(w, i, total, cuerpo, siguiente):
+    paso = f'{i + 1:02d} / {total:02d}'
+    salto = (f'<a class="mundo-pleno__next" href="#{siguiente}">'
+             f'<span class="mundo-pleno__next-r">{e(paso)}</span>'
+             f'<span class="mundo-pleno__next-t">Siguiente'
+             f'<span aria-hidden="true"> &#8595;</span></span></a>')
+    return f'''<section class="mundo-pleno" id="{w["id"]}" data-tinta="{e(w["tinta"])}"
+         data-tema="oscuro" data-mundo="{i}"
+         data-fx="reveal" data-fx-desde="{DESDE_MUNDO[i % len(DESDE_MUNDO)]}">
+  {cinta(w["nombre"], "papel", titulo=True)}
+  <div class="mundo-pleno__interior">
+    <p class="mundo-pleno__bajada">{e(w["bajada"])}</p>
+    {cuerpo}
+  </div>
+  {salto}
+</section>'''
+
+
 def main():
-    for lang, datos, archivo in (("es", ES, "index.html"),
-                                 ("en", fundir(ES, EN_CAPA), "en.html")):
-        (AQUI / archivo).write_text(pagina(datos, lang), encoding="utf-8")
-        print(f"{archivo} armado ({lang})")
+    # Solo castellano por ahora: el copy en ingles lo debe la clienta.
+    # fundir() y sitio.en.json siguen en pie para cuando llegue.
+    for slug, armar in (("inicio", pagina_inicio), ("about", pagina_about),
+                        ("proyectos", pagina_proyectos)):
+        archivo = ES["paginas"][slug]["archivo"]
+        (AQUI / archivo).write_text(armar(ES), encoding="utf-8")
+        print(f"{archivo} armado")
 
 
 if __name__ == "__main__":
     main()
+
+

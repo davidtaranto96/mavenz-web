@@ -333,8 +333,13 @@
       var i = v.play();
       if (i && i.catch) i.catch(function () {});
     };
+    /* Un video de fondo pesado no se baja en el teléfono: 3 MB de decorado
+       sobre datos móviles no los paga nadie. El póster ya cuenta la escena, y
+       la regla es cambiar de técnica, no apagar el bloque. */
+    var pesado = window.matchMedia('(max-width: 63.99rem)').matches;
     var encender = function (v) {
       if (menosMovimiento) return;          /* con el póster alcanza */
+      if (pesado && v.dataset.pesado === '1') return;
       if (v.dataset.encendido !== '1') {
         v.dataset.encendido = '1';
         v.src = v.dataset.src;
@@ -590,5 +595,244 @@
         if (r.bottom > -400 && r.top < (window.innerHeight || 0) + 400) mostrar(el);
       });
     }, 1500);
+  }
+})();
+
+
+/* ==========================================================================
+   REDISEÑO 08/09 — órbita, ciclo, cintas, solapas y el riel de mundos.
+   Va aparte del motor de reveal de arriba a propósito: un elemento entra en
+   UNA sola lista de animación. Dos animaciones de opacidad sobre el mismo
+   nodo lo dejan invisible, y eso ya nos pasó.
+   ========================================================================== */
+(function () {
+  'use strict';
+  var menos = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* --- Scroll suave con Lenis, enganchado a ScrollTrigger ---------------- */
+  /* ?sinlenis en la URL lo apaga: es la única forma cómoda de depurar el pin. */
+  var lenis = null;
+  function arrancarScroll() {
+    var sin = /[?&]sinlenis/.test(location.search);
+    if (menos || sin || !window.Lenis || !window.gsap) return;
+    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true });
+    if (window.ScrollTrigger) {
+      window.gsap.registerPlugin(window.ScrollTrigger);
+      lenis.on('scroll', window.ScrollTrigger.update);
+    }
+    window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    window.gsap.ticker.lagSmoothing(0);
+    $$('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        var el = document.getElementById(a.getAttribute('href').slice(1));
+        if (!el) return;
+        ev.preventDefault();
+        lenis.scrollTo(el, { offset: -92 });
+      });
+    });
+  }
+
+  /* --- Las cintas se mueven por scroll, no por keyframe infinito --------- */
+  /* Un @keyframes infinite corre para siempre aunque nadie lo mire; esto sólo
+     gasta mientras la cinta está en pantalla. */
+  function cintas() {
+    var lista = $$('[data-cinta]');
+    if (!lista.length || menos) return;
+    var vivas = [];
+    var obs = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        var i = vivas.indexOf(x.target);
+        if (x.isIntersecting && i < 0) vivas.push(x.target);
+        else if (!x.isIntersecting && i >= 0) vivas.splice(i, 1);
+      });
+    }, { rootMargin: '200px 0px' });
+    lista.forEach(function (c) { obs.observe(c); });
+
+    var pedido = false;
+    function pintar() {
+      pedido = false;
+      vivas.forEach(function (c) {
+        var riel = $('[data-cinta-riel]', c);
+        if (!riel) return;
+        var r = c.getBoundingClientRect();
+        var vh = window.innerHeight || 1;
+        /* 0 cuando la cinta entra por abajo, 1 cuando termina de salir arriba. */
+        var p = (vh - r.top) / (vh + r.height);
+        p = p < 0 ? 0 : p > 1 ? 1 : p;
+        /* Una sola copia de recorrido: nunca se ve el hueco del final. */
+        c.style.setProperty('--corrida', (p * riel.scrollWidth / 4).toFixed(1));
+      });
+    }
+    function pedir() { if (!pedido) { pedido = true; requestAnimationFrame(pintar); } }
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir);
+    pedir();
+  }
+
+  /* --- Un diagrama circular: la órbita y el ciclo son el mismo mecanismo -- */
+  function circular(caja, selNodo, selPanel, attrNodo, attrPanel, selTrazo, varTrazo) {
+    if (!caja) return;
+    var nodos = $$(selNodo, caja);
+    var paneles = $$(selPanel, caja);
+    if (!nodos.length) return;
+    caja.setAttribute('data-lista', '1');
+
+    function activar(i) {
+      nodos.forEach(function (n, j) { n.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+      paneles.forEach(function (p, j) { p.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
+      var trazo = selTrazo ? $(selTrazo, caja) : null;
+      if (trazo && !menos) {
+        /* El avance del trazo cuenta cuánto del ciclo llevás recorrido. */
+        caja.style.setProperty(varTrazo, ((i + 1) / nodos.length).toFixed(3));
+      }
+    }
+    nodos.forEach(function (n, i) {
+      n.addEventListener('click', function () { activar(i); });
+      n.addEventListener('focus', function () { activar(i); });
+    });
+    activar(0);
+
+    /* Sin puntero, la activa avanza sola con el scroll: el visitante las ve
+       todas sin tener que tocar nada. Se detiene apenas toca una. */
+    if (menos) return;
+    var tocado = false;
+    caja.addEventListener('pointerdown', function () { tocado = true; });
+    var obs = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (!x.isIntersecting || tocado) return;
+        /* La posición dentro de la sección elige la esfera. */
+        var r = caja.getBoundingClientRect();
+        var vh = window.innerHeight || 1;
+        var p = (vh * 0.8 - r.top) / (r.height + vh * 0.3);
+        p = p < 0 ? 0 : p > 0.999 ? 0.999 : p;
+        activar(Math.floor(p * nodos.length));
+      });
+    }, { threshold: [0, .2, .4, .6, .8, 1] });
+    obs.observe(caja);
+
+    var pedido = false;
+    window.addEventListener('scroll', function () {
+      if (tocado || pedido) return;
+      pedido = true;
+      requestAnimationFrame(function () {
+        pedido = false;
+        var r = caja.getBoundingClientRect();
+        var vh = window.innerHeight || 1;
+        if (r.bottom < 0 || r.top > vh) return;
+        var p = (vh * 0.8 - r.top) / (r.height + vh * 0.3);
+        p = p < 0 ? 0 : p > 0.999 ? 0.999 : p;
+        activar(Math.floor(p * nodos.length));
+      });
+    }, { passive: true });
+  }
+
+  /* --- El anillo de Comunicación se dibuja antes que entren las esferas --- */
+  function anillo() {
+    var c = $('[data-anillo]');
+    if (!c || menos) return;
+    var orb = c.closest('[data-orbita]');
+    if (!orb) return;
+    orb.style.setProperty('--dibujo', '0');
+    var obs = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        obs.disconnect();
+        var t0 = null;
+        (function paso(t) {
+          if (t0 === null) t0 = t;
+          var p = Math.min((t - t0) / 900, 1);
+          orb.style.setProperty('--dibujo', (1 - Math.pow(1 - p, 3)).toFixed(3));
+          if (p < 1) requestAnimationFrame(paso);
+        })(performance.now());
+      });
+    }, { threshold: .3 });
+    obs.observe(orb);
+  }
+
+  /* --- Las solapas de la ventana de contacto ----------------------------- */
+  function solapas() {
+    $$('.solapas').forEach(function (grupo) {
+      var caja = grupo.parentNode;
+      var botones = $$('[data-solapa]', grupo);
+      botones.forEach(function (b) {
+        b.addEventListener('click', function () {
+          botones.forEach(function (o) {
+            o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+          });
+          $$('[data-cuerpo]', caja).forEach(function (c) {
+            c.setAttribute('aria-hidden',
+              c.getAttribute('data-cuerpo') === b.getAttribute('data-solapa') ? 'false' : 'true');
+          });
+        });
+      });
+    });
+  }
+
+  /* --- La palabra gigante de contacto deriva apenas con el scroll -------- */
+  function palabra() {
+    var p = $('[data-palabra]');
+    if (!p || menos) return;
+    var pedido = false;
+    function pintar() {
+      pedido = false;
+      var r = p.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var t = (vh - r.top) / (vh + r.height);
+      p.style.setProperty('--deriva', ((t - .5) * 8).toFixed(2));
+    }
+    window.addEventListener('scroll', function () {
+      if (!pedido) { pedido = true; requestAnimationFrame(pintar); }
+    }, { passive: true });
+    pintar();
+  }
+
+  /* --- El estante recorre en horizontal con la pantalla fijada ----------- */
+  /* Sólo escritorio y sólo si GSAP llegó. Si no, el CSS deja el estante como
+     carril nativo y se sigue pudiendo recorrer con el dedo o la rueda. */
+  function fijarEstante() {
+    var caja = $('[data-fijado]');
+    if (!caja || menos || !window.gsap || !window.ScrollTrigger) return;
+    if (!window.matchMedia('(min-width: 64rem)').matches) return;
+    var riel = $('.estante', caja);
+    if (!riel) return;
+    var recorrido = function () { return Math.max(0, riel.scrollWidth - window.innerWidth * 0.86); };
+    if (recorrido() <= 0) return;
+    window.gsap.to(riel, {
+      x: function () { return -recorrido(); },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: caja,
+        start: 'center center',
+        end: function () { return '+=' + recorrido(); },
+        pin: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+        invalidateOnRefresh: true
+      }
+    });
+  }
+
+  function arrancar() {
+    arrancarScroll();
+    fijarEstante();
+    cintas();
+    circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
+             'data-esfera', 'data-panel', null, null);
+    circular($('[data-ciclo]'), '.ciclo__nodo', '.ciclo__carta',
+             'data-paso', 'data-carta', '[data-avance]', '--avance');
+    anillo();
+    solapas();
+    palabra();
+  }
+
+  /* Los scripts van con defer, así que el DOM ya está: pero si esto llegara a
+     correr antes, se espera. Barato y evita un fallo silencioso. */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', arrancar, { once: true });
+  } else {
+    arrancar();
   }
 })();
