@@ -81,36 +81,23 @@
     "titulo": "Somos Mavenz",
     "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance.",
     "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién.",
-    "piezas_rotulo": "La identidad, aplicada",
+    "piezas_rotulo": "Dónde trabajamos",
     "piezas": [
       {
-        "epigrafe": "Agenda",
+        "epigrafe": "San Lorenzo, Salta",
         "foto": {
-          "src": "../img/agenda",
+          "src": "../img/sanlorenzo",
           "anchos": [
             800,
-            1400
+            1600
           ],
-          "alt": "Agenda de Mavenz con el isotipo en seco",
-          "ancho": 1400,
-          "alto": 933
-        }
-      },
-      {
-        "epigrafe": "Carpeta",
-        "foto": {
-          "src": "../img/carpeta",
-          "anchos": [
-            800,
-            1400
-          ],
-          "alt": "Carpeta institucional de Mavenz",
-          "ancho": 1400,
-          "alto": 1135
+          "alt": "Vista aérea de San Lorenzo al atardecer",
+          "ancho": 1600,
+          "alto": 739
         }
       }
     ],
-    "_dt": "Las dos piezas son de Fractura y estaban en el repo sin usar. Van acá porque es la sección más vacía de la página y porque son lo único que muestra que Mavenz hace marca, además de decirlo."
+    "_dt": "Los mockups de agenda y carpeta salieron por pedido de David del 08/09. PENDIENTE: no hay ninguna foto propia de Mavenz en el material; esta es la mejor disponible. Pedirsela a Vero."
   },
   "universo": {
     "titulo": "El Universo Mavenz",
@@ -508,7 +495,24 @@
   "mirada": {
     "titulo": "Lo que vemos antes de que se mueva",
     "intro": "Análisis, ideas, tendencias y lecturas del mercado. Nuestra forma de mirar, escrita.",
-    "hueco": "Los primeros textos se publican con el lanzamiento."
+    "hueco": "Los primeros textos se publican con el lanzamiento.",
+    "margen": "Contenido y mirada",
+    "cita": "Antes de que un proyecto se mueva, alguien lo vio venir.",
+    "_dt": "PENDIENTE de Vero: las notas reales. Hasta que lleguen, la seccion sostiene con la cita.",
+    "temas": [
+      {
+        "n": "01",
+        "rotulo": "Lecturas de mercado"
+      },
+      {
+        "n": "02",
+        "rotulo": "Territorio y desarrollo"
+      },
+      {
+        "n": "03",
+        "rotulo": "Marca y comunicación"
+      }
+    ]
   },
   "contacto": {
     "apertura": "Hay proyectos, ideas y oportunidades que necesitan el movimiento correcto.",
@@ -587,21 +591,27 @@
   },
   "equipo": {
     "margen": "Quiénes están detrás",
-    "titulo": "Las que mueven Mavenz",
-    "intro": "Mavenz no es una marca sin cara. Detrás hay dos personas que deciden juntas qué se mueve y cómo.",
-    "_dt": "PENDIENTE de ellas: los retratos, el rol exacto y una línea de cada una. Los huecos quedan a la vista a propósito, igual que en Espacio Mavenz, para que se vea qué falta.",
+    "titulo": "Quiénes mueven Mavenz",
+    "intro": "Mavenz no es una marca sin cara. Detrás hay personas que deciden qué se mueve, cómo y con quién.",
+    "_dt": "Vero salio de los retratos por pedido de David del 08/09 (ella ya se habia excluido en la reunion). PENDIENTE de ella: las fotos, los nombres y el rol de los dos bloques nuevos. Los huecos quedan a la vista a proposito.",
     "personas": [
-      {
-        "nombre": "Verónica Burs",
-        "rol": "Dirección",
-        "linea": "",
-        "hueco": "Retrato de Vero"
-      },
       {
         "nombre": "Luchi",
         "rol": "Dirección",
+        "linea": "Decide qué se mueve y con quién.",
+        "hueco": "Retrato"
+      },
+      {
+        "nombre": "Pendiente",
+        "rol": "Comercialización",
         "linea": "",
-        "hueco": "Retrato de Luchi"
+        "hueco": "Retrato"
+      },
+      {
+        "nombre": "Pendiente",
+        "rol": "Desarrollo de negocios",
+        "linea": "",
+        "hueco": "Retrato"
       }
     ]
   },
@@ -619,9 +629,9 @@
     },
     "about": {
       "archivo": "about.html",
-      "rotulo": "Nosotras",
-      "titulo": "Quiénes somos",
-      "cinta": "Nosotras"
+      "rotulo": "El equipo",
+      "titulo": "El equipo",
+      "cinta": "El equipo"
     },
     "proyectos": {
       "archivo": "proyectos.html",

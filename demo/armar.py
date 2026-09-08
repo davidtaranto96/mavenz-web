@@ -160,7 +160,8 @@ def hero(d):
 def quienes(d):
     q = d["quienes"]
     piezas = "".join(
-        f'<figure class="pieza">{img(x["foto"], "(min-width:64rem) 26rem, 45vw")}'
+        f'<figure class="pieza pieza--grande">'
+        f'{img(x["foto"], "(min-width:64rem) 88vw, 100vw")}'
         f'<figcaption class="ficha__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
         for x in q["piezas"])
     return f'''<section class="seccion" id="quienes"{fx("quienes")}>
@@ -172,7 +173,7 @@ def quienes(d):
   <div class="quienes__cierre"><p class="cita" data-formar>{e(q["cierre"])}</p></div>
   <div class="piezas">
     <p class="margen piezas__rotulo">{e(q["piezas_rotulo"])}</p>
-    <div class="piezas__par">{piezas}</div>
+    <div class="piezas__par{" piezas__par--sola" if len(q["piezas"]) == 1 else ""}">{piezas}</div>
   </div>
 </section>'''
 
@@ -411,8 +412,9 @@ def red(d):
     r = d["red"]
     nodos = "".join(
         f'<p class="red__nodo" data-peso="{n["peso"]}" '
-        f'style="--x:{n["x"]}%;--y:{n["y"]}%;--sangria:{n["sangria"]}px">{e(n["nombre"])}</p>'
-        for n in r["nodos"])
+        f'style="--x:{n["x"]}%;--y:{n["y"]}%;--sangria:{n["sangria"]}px;--i:{i}">'
+        f'{e(n["nombre"])}</p>'
+        for i, n in enumerate(r["nodos"]))
     return f'''<section class="sangre sangre--bordo red" id="red" data-tema="oscuro"{fx("red")}>
   <div class="sangre__interior">
     <h2 class="titulo titulo--claro" data-letras>{e(r["titulo"])}</h2>
@@ -425,34 +427,50 @@ def red(d):
 
 def mirada(d):
     m = d["mirada"]
-    return f'''<section class="seccion" id="mirada"{fx("mirada")}>
+    temas = "".join(
+        f'<li class="tema" style="--i:{i}">'
+        f'<span class="tema__n" aria-hidden="true">{e(t["n"])}</span>'
+        f'<span class="tema__rotulo">{e(t["rotulo"])}</span></li>'
+        for i, t in enumerate(m["temas"]))
+    return f'''<section class="seccion mirada-seccion" id="mirada"{fx("mirada")}>
+  <p class="margen seccion__margen">{e(m["margen"])}</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
     <p class="bajada">{e(m["intro"])}</p>
   </div>
-  <div class="mirada__hueco"><p>{e(m["hueco"])}</p></div>
+  <p class="cita mirada__cita" data-formar>{e(m["cita"])}</p>
+  <ul class="temas">{temas}</ul>
+  <p class="mirada__nota">{e(m["hueco"])}</p>
 </section>'''
 
 
 def equipo(d):
-    """Las dos que están detrás. Los retratos no existen todavía: el hueco queda
-    a la vista, igual que en Espacio Mavenz, para que se vea qué falta."""
+    """Retratos grandes en grilla asimetrica: el primero manda y los otros dos
+    lo acompanan. Los que faltan quedan a la vista como hueco, no disimulados."""
     q = d["equipo"]
-    personas = "".join(
-        f'<article class="persona">'
-        f'<div class="hueco persona__hueco"><p class="hueco__rotulo">{e(x["hueco"])}</p></div>'
-        f'<h3 class="persona__nombre">{e(x["nombre"])}</h3>'
-        f'<p class="persona__rol">{e(x["rol"])}</p>'
-        + (f'<p class="persona__linea">{e(x["linea"])}</p>' if x["linea"] else '')
-        + '</article>'
-        for x in q["personas"])
-    return f'''<section class="seccion" id="equipo"{fx("equipo")}>
+    personas = []
+    for i, x in enumerate(q["personas"]):
+        pendiente = x["nombre"] == "Pendiente"
+        nombre = x["rol"] if pendiente else x["nombre"]
+        personas.append(
+            f'<article class="persona{" persona--principal" if i == 0 else ""}'
+            f'{" persona--pendiente" if pendiente else ""}" style="--i:{i}">'
+            f'<div class="persona__marco">'
+            f'<div class="hueco persona__hueco"><p class="hueco__rotulo">{e(x["hueco"])}</p></div>'
+            f'</div>'
+            f'<div class="persona__pie">'
+            f'<span class="persona__n" aria-hidden="true">{i + 1:02d}</span>'
+            f'<h3 class="persona__nombre">{e(nombre)}</h3>'
+            f'<p class="persona__rol">{e("Se suma" if pendiente else x["rol"])}</p>'
+            + (f'<p class="persona__linea">{e(x["linea"])}</p>' if x["linea"] else '')
+            + '</div></article>')
+    return f'''<section class="seccion seccion--ancha equipo-seccion" id="equipo"{fx("equipo")}>
   <p class="margen seccion__margen">{e(q["margen"])}</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["intro"])}</p>
   </div>
-  <div class="personas">{personas}</div>
+  <div class="personas">{"".join(personas)}</div>
 </section>'''
 
 

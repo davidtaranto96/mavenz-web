@@ -815,8 +815,66 @@
     });
   }
 
+  /* --- 2. La nube de la red: entra escalonada y después deriva ----------- */
+  /* El estado oculto lo escribe ACÁ, nunca el CSS: si el JS no corre, la nube
+     se ve entera. El precio es un parpadeo posible y es el canje correcto. */
+  function nubeRed() {
+    var nube = $('.red__nube');
+    if (!nube) return;
+    if (menos) { nube.setAttribute('data-vivo', '1'); return; }
+    nube.setAttribute('data-vivo', '0');
+
+    var abierto = false;
+    var abrir = function () {
+      if (abierto) return;
+      abierto = true;
+      nube.setAttribute('data-vivo', '1');
+    };
+    /* Umbral bajo a propósito: la nube mide 276 px y en un notebook de 657 de
+       alto nunca llega a 0,18 apenas entra. Medido acá: daba 0,105. */
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (ent) {
+        ent.forEach(function (x) { if (x.isIntersecting) { abrir(); obs.disconnect(); } });
+      }, { threshold: .05 });
+      obs.observe(nube);
+    }
+    /* Barrido por scroll: el umbral es más permisivo que el del observer a
+       propósito, y sólo abre lo que de verdad está a la vista. Nada de un
+       temporizador ciego que la abra sin que nadie la haya visto. */
+    var barrer = function () {
+      if (abierto) return;
+      var r = nube.getBoundingClientRect();
+      var vh = window.innerHeight || 0;
+      if (r.top < vh * 0.95 && r.bottom > 0) abrir();
+    };
+    requestAnimationFrame(barrer);
+    window.addEventListener('load', barrer, { once: true });
+    window.addEventListener('scroll', barrer, { passive: true });
+    /* Cierre duro: si el visitante ya la dejó atrás, se muestra de una. */
+    var vueltas = 0;
+    var reloj = setInterval(function () {
+      if (abierto || ++vueltas > 150) { clearInterval(reloj); return; }
+      if (nube.getBoundingClientRect().bottom < 0) abrir();
+    }, 400);
+
+    var pedido = false;
+    function derivar() {
+      pedido = false;
+      var r = nube.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -100 || r.top > vh + 100) return;
+      var t = (vh - r.top) / (vh + r.height);
+      nube.style.setProperty('--deriva', ((t - .5) * 2).toFixed(3));
+    }
+    window.addEventListener('scroll', function () {
+      if (!pedido) { pedido = true; requestAnimationFrame(derivar); }
+    }, { passive: true });
+    derivar();
+  }
+
   function arrancar() {
     arrancarScroll();
+    nubeRed();
     fijarEstante();
     cintas();
     circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
