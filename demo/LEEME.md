@@ -293,3 +293,61 @@ las tres páginas.
   una vez, en lugar de parchear sección por sección.
 - **El video de fondo de Cardinal son 3 MB.** En celular no se baja: el póster ya cuenta la
   escena. La página pasó de 3679 KB a 663 KB.
+
+## Ronda 08/09 — los once del video de proyectos
+
+David grabó 34 segundos de `proyectos.html` y salieron once cosas. Las seis
+primeras eran errores duros, medidos y reproducidos antes de tocar nada.
+
+| # | Qué pasaba | Causa |
+|---|---|---|
+| 1 | 1,6 pantallas vacías en el mundo Cardinal | el pin de GSAP no agarraba |
+| 2 | los seis nombres del mapa, invisibles | tinta sobre tinta, contraste 1,00 |
+| 3 | el texto de la ficha vacía, invisible | papel sobre papel, 1,06 |
+| 4 | el índice lateral eran cinco rayas de 22×2 | sin área de toque y con tono de papel |
+| 5 | el video del cardenal leía como imagen rota | cuadrado claro dentro del mundo bordó |
+| 6 | el pie del mundo encima de la foto del Espacio | sin contexto de apilamiento propio |
+| 7-8 | copy repetido en Territorio y en Espacio | dos frases dichas dos veces |
+| 9 | Cardinal pesaba 4,3 pantallas contra 1,2 de los otros | riel a 1:1 con el scroll |
+| 10-11 | aire del mosaico y legibilidad de Territorio | se resolvieron con 1 y 2 |
+
+### La trampa que las explica a casi todas
+
+**Una animación CSS que toca `translate` deja el valor en `0px`, no en `none`.**
+`@keyframes mvEntra { to { translate: none } }` interpola a `0px`, y un
+`translate` distinto de `none` convierte al elemento en **bloque contenedor de
+todo `position: fixed` que tenga adentro**. El pin de GSAP se declaraba `fixed`
+pero se posicionaba contra `.mundo-pleno__interior`: medido, su borde superior
+pasaba de −746 a −1446 mientras la página bajaba 700. El riel se iba de la
+pantalla y quedaba el hueco que el `pin-spacer` había reservado.
+
+La solución es sacar el transform cuando la entrada termina (`data-entrado` por
+`animationend`), no dejarlo en cero. Eso destapó de paso el error 6: el bloque
+del Espacio venía andando **de rebote**, porque ese mismo `translate: 0px` le
+creaba sin querer el contexto de apilamiento que sus hijos `z-index: -2`
+necesitaban. Al sacarlo, la foto se fue detrás del fondo del mundo. Ahora el
+contexto es explícito (`#espacio-bloque { isolation: isolate; overflow: hidden }`).
+
+### La otra lección, la de los tonos
+
+El bloque que reasigna los colores adentro de un mundo oscuro se rompe de dos
+maneras, y las dos aparecieron el mismo día:
+
+1. Un descendiente con **`color` propio** no hereda: pintar el `summary` no
+   alcanzaba para el `<span>` del nombre.
+2. Un descendiente con **fondo propio claro** no puede recibir el tono claro
+   del mundo: la ficha vacía quedó blanco sobre papel.
+
+### Verificación
+
+`~/.claude/skills/visual-verify/scripts/auditar.py` pregunta lo que una captura
+no contesta: pantallas sin tinta (scrolleando de verdad, porque un pin reserva
+altura y da falso positivo si se mide el documento quieto), contraste real
+compuesto contra el primer fondo opaco, toques de 44 px **también en
+escritorio**, y contenido recortado por un ancestro con `overflow: clip`.
+Siete carriles, incluido el 1705×900 que usa David.
+
+Sabe dos cosas que no puede medir y las saltea en vez de mentir: lo que está
+adentro de algo `fixed`/`sticky` flota sobre lo que hay debajo, que no está en
+su cadena de ancestros; y lo marcado con `data-sangra` (la cinta) se pasa del
+recorte a propósito.

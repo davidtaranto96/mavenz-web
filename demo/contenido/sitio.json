@@ -132,7 +132,7 @@
     ],
     "mapa": {
       "titulo": "El mapa Mavenz",
-      "intro": "Seis territorios de Salta, y qué está cambiando en cada uno.",
+      "intro": "Seis territorios, y quién está comprando en cada uno.",
       "rotulo_quien": "Quién compra ahí",
       "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
       "territorios": [
@@ -222,7 +222,7 @@
     "margen": "Presentaciones y lanzamientos",
     "titulo": "Un espacio donde las cosas pasan",
     "copy": "Espacio Mavenz no es una oficina: es donde viven los proyectos. El lugar de la web donde se muestran, se presentan y se lanzan los desarrollos que Mavenz comercializa.",
-    "nota": "Presentaciones y lanzamientos.",
+    "nota": "",
     "cta": {
       "rotulo": "Entrar al Espacio Mavenz",
       "href": "https://espaciomavenz.com.ar"
@@ -673,7 +673,7 @@
         "id": "territorio",
         "nombre": "Territorio",
         "tinta": "tinta",
-        "bajada": "Seis zonas de Salta, y qué está cambiando en cada una",
+        "bajada": "Dónde está creciendo Salta, y por qué",
         "cierre": "Recorrer el mapa",
         "href": "proyectos.html#territorio"
       }

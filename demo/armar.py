@@ -296,7 +296,7 @@ def espacio(d):
       <h2 class="titulo titulo--claro" data-letras>{e(x["titulo"])}</h2>
       <div>
         <p class="bajada bajada--clara">{e(x["copy"])}</p>
-        <p class="espacio__nota">{e(x["nota"])}</p>
+        {f'<p class="espacio__nota">{e(x["nota"])}</p>' if x.get("nota") else ""}
         <a class="subrayado subrayado--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}</a>
       </div>
     </div>
@@ -360,7 +360,7 @@ def cardenal(d):
     isotipo y cierra con la frase de ellos. Arranca al entrar en vista, una vez."""
     v = d["proyectos"]["destacado"]["video"]
     return f'''<figure class="cardenal" data-cardenal>
-    <video class="cardenal__video" data-diferido data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
+    <video class="cardenal__video" data-diferido data-reinicia data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
            muted playsinline preload="none" aria-label="{e(v["rotulo"])}"></video>
     <figcaption class="cardenal__texto">
       <p class="margen">{e(v["rotulo"])}</p>
@@ -684,7 +684,7 @@ def cinta(texto, tono="tinta", titulo=False):
     copias = f'<{et} class="cinta__pieza">{e(texto)}</{et}>' + "".join(
         f'<span class="cinta__pieza" aria-hidden="true">{e(texto)}</span>'
         for _ in range(3))
-    return (f'<div class="cinta cinta--{tono}" data-cinta>'
+    return (f'<div class="cinta cinta--{tono}" data-cinta data-sangra>'
             f'<div class="cinta__riel" data-cinta-riel>{copias}</div></div>')
 
 

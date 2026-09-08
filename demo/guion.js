@@ -192,6 +192,23 @@
       sec.setAttribute('data-visible', '');
     };
 
+    /* Cuando la entrada termina se le saca el transform al bloque. Sin esto
+       queda `translate: 0px` -- que NO es `none` -- y ese bloque pasa a ser el
+       bloque contenedor de todo `position: fixed` que tenga adentro. Es lo que
+       rompia el clavado del riel horizontal. Va con captura porque
+       `animationend` no burbujea desde todos los navegadores por igual. */
+    var relojEntrada;
+    document.addEventListener('animationend', function (ev) {
+      if (ev.animationName !== 'mvEntra') return;
+      ev.target.setAttribute('data-entrado', '');
+      /* Un solo refresh para toda la tanda: ScrollTrigger recalcula el bloque
+         contenedor del pin recien cuando se lo pide, y refrescar por cada
+         bloque que entra cuesta un reflow por bloque. */
+      if (!window.ScrollTrigger) return;
+      clearTimeout(relojEntrada);
+      relojEntrada = setTimeout(function () { window.ScrollTrigger.refresh(); }, 220);
+    }, true);
+
     var ojoSec = new IntersectionObserver(function (entradas) {
       entradas.forEach(function (en) {
         if (!en.isIntersecting) return;
@@ -240,20 +257,34 @@
   var conTema = Array.prototype.slice.call(document.querySelectorAll('main [data-tema], footer[data-tema]'));
 
   if (cabecera && conTema.length) {
-    var temaActual = '';
+    var temaActual = '', temaIndice = '';
     var alturaNav = function () { return cabecera.offsetHeight / 2; };
-    var mirarTema = function () {
-      var y = window.scrollY + alturaNav();
+    /* Dos sondas, no una: la barra vive arriba y el indice lateral en el medio
+       de la pantalla. Con una sola sonda el indice se pintaba con el tema del
+       encabezado y quedaba tinta sobre tinta adentro de los mundos oscuros. */
+    var temaEn = function (y) {
       var tema = 'claro';
       for (var i = 0; i < conTema.length; i++) {
         var el = conTema[i];
         var top = el.offsetTop, alto = el.offsetHeight;
         if (y >= top && y < top + alto) tema = el.dataset.tema;
       }
-      if (tema === temaActual) return;
-      temaActual = tema;
-      if (tema === 'oscuro') cabecera.setAttribute('data-tema', 'oscuro');
-      else cabecera.removeAttribute('data-tema');
+      return tema;
+    };
+    var mirarTema = function () {
+      var tema = temaEn(window.scrollY + alturaNav());
+      if (tema !== temaActual) {
+        temaActual = tema;
+        if (tema === 'oscuro') cabecera.setAttribute('data-tema', 'oscuro');
+        else cabecera.removeAttribute('data-tema');
+      }
+      var ind = document.querySelector('[data-indice]');
+      if (!ind) return;
+      var t2 = temaEn(window.scrollY + (window.innerHeight || 0) / 2);
+      if (t2 === temaIndice) return;
+      temaIndice = t2;
+      if (t2 === 'oscuro') ind.setAttribute('data-tema', 'oscuro');
+      else ind.removeAttribute('data-tema');
     };
     var pendienteTema = false;
     window.addEventListener('scroll', function () {
@@ -357,7 +388,13 @@
         var r = v.getBoundingClientRect();
         var aLaVista = r.bottom > -300 && r.top < alto + 300;
         if (aLaVista) encender(v);
-        else if (v.dataset.encendido === '1' && !v.paused) v.pause();
+        else if (v.dataset.encendido === '1') {
+          if (!v.paused) v.pause();
+          /* El cardenal dura 4 s y lo que importa es el trazo dibujandose. Si
+             se retoma donde quedo, la segunda vez se ve un logo ya hecho: deja
+             de ser una animacion y pasa a ser una imagen. Vuelve a cero. */
+          if (v.hasAttribute('data-reinicia')) { try { v.currentTime = 0; } catch (x) {} }
+        }
       });
     };
 
@@ -806,7 +843,11 @@
       scrollTrigger: {
         trigger: caja,
         start: 'center center',
-        end: function () { return '+=' + recorrido(); },
+        /* El recorrido horizontal no tiene por que costar un pixel de scroll
+           por pixel de riel: a 1:1 el mundo de Cardinal se comia 4,3 pantallas
+           contra 1,2 de los otros tres. A 0,75 el riel recorre lo mismo y pide
+           un cuarto menos de rueda. */
+        end: function () { return '+=' + Math.round(recorrido() * 0.75); },
         pin: true,
         scrub: 0.8,
         anticipatePin: 1,

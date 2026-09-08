@@ -1132,6 +1132,19 @@ body[data-menu-abierto] { overflow: hidden; }
 [data-fx-desde] > [data-entra] { translate: 0 22px; }
 [data-fx-desde="escala"] > [data-entra] { scale: .975; translate: 0 14px; }
 
+/* Al terminar la entrada hay que SACAR el transform, no sólo dejarlo en cero.
+   `translate: none` dentro de un keyframe interpola a `0px`, y un `translate`
+   distinto de `none` convierte al elemento en bloque contenedor de cualquier
+   `position: fixed` de adentro. Con eso el pin de GSAP dejaba de agarrarse al
+   viewport: el riel de Cardinal se iba para arriba con la pagina y quedaban
+   1,6 pantallas vacias (medido en los cuatro anchos de escritorio). */
+[data-fx="reveal"] > [data-entra][data-entrado] {
+  animation: none;
+  opacity: 1;
+  translate: none;
+  scale: none;
+}
+
 @media (min-width: 64rem) {
   [data-fx-desde="arriba"] > [data-entra] { translate: 0 26px; }
   [data-fx-desde="izq"]    > [data-entra] { translate: -28px 0; }
@@ -1408,19 +1421,28 @@ body[data-menu-abierto] { overflow: hidden; }
     flex-direction: column;
     gap: 14px;
   }
+  /* El enlace ES la caja de 44: la raya se dibuja con el ::before. Antes el
+     enlace medía 34x2 y el area la ponía un ::before estirado, pero el
+     `transform: scaleX(.65)` del enlace escalaba tambien al pseudo y el toque
+     real quedaba en 35 px. Un pseudo no se puede sacar de la escala del padre:
+     lo que hay que hacer es no escalar el padre. */
   nav.indice a {
     position: relative;
     display: block;
-    width: 34px; height: 2px;
-    background: var(--tinta-apoyo);
-    opacity: .28;
-    transform: scaleX(.65);
-    transform-origin: left;
-    transition: opacity var(--hover) var(--curva), transform var(--hover) var(--curva);
+    width: 44px; height: 44px;
+    background: none;
   }
-  /* el área táctil crece sin tapar la raya: el ::before no lleva fondo */
-  nav.indice a::before { content: ""; position: absolute; inset: -10px 0; }
-  nav.indice a[aria-current="true"] { opacity: 1; transform: scaleX(1); }
+  nav.indice a::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%;
+    width: 22px; height: 2px;
+    background: var(--tinta-apoyo);
+    opacity: .42;
+    transition: width var(--hover) var(--curva), opacity var(--hover) var(--curva);
+  }
+  nav.indice a[aria-current="true"]::before { width: 34px; opacity: 1 }
+  nav.indice { gap: 0 }
   nav.indice a::after {
     content: attr(aria-label);
     position: absolute;
@@ -1434,6 +1456,13 @@ body[data-menu-abierto] { overflow: hidden; }
     pointer-events: none;
   }
   nav.indice a:hover::after, nav.indice a:focus-visible::after { opacity: 1; }
+  /* En reposo era casi invisible; adentro de un mundo oscuro, invisible del
+     todo, porque su tono es tinta. Sube el reposo y se invierte con el bloque
+     que tiene detrás, igual que la barra de arriba. */
+  nav.indice[data-tema="oscuro"] a::before { background: var(--sobre-foto); opacity: .5 }
+  nav.indice[data-tema="oscuro"] a[aria-current="true"]::before { opacity: 1 }
+  nav.indice[data-tema="oscuro"] a::after { color: var(--sobre-foto) }
+  nav.indice a:focus-visible { outline: 2px solid currentColor; outline-offset: 6px }
 }
 
 /* ==========================================================================
@@ -1636,12 +1665,10 @@ body[data-menu-abierto] { overflow: hidden; }
   width: min(100%, 18rem);
   aspect-ratio: 1;
   justify-self: center;
-  border: 1px solid var(--linea);
-  border-radius: 6px;
-  background: var(--papel-capa-1);
-  /* nada de mix-blend: el papel del video y el de la página no son el mismo
-     gris, y multiplicar deja un cuadrado más oscuro. Con filete se lee como
-     lámina, que es lo que es. */
+  background: var(--papel);
+  /* nada de mix-blend: multiplicar sobre bordó deja el trazo oscuro sobre
+     oscuro. El video ya viene sobre su propio papel (#ECEAEA, dos puntos de
+     --papel): lo que hace falta no es disimularlo, es darle la banda. */
 }
 .cardenal__copy {
   margin-top: .5rem;
@@ -1659,10 +1686,9 @@ body[data-menu-abierto] { overflow: hidden; }
   color: var(--tinta-bordo);
 }
 
-@media (min-width: 64rem) {
-  figure.cardenal { grid-template-columns: 20rem 1fr; }
-  figure.cardenal .cardenal__video { width: 100%; justify-self: start; }
-}
+/* La grilla y el tamaño del video los define ahora el bloque "la banda del
+   cardenal" del final del archivo. Acá quedaba `figure.cardenal` (0,1,1), que
+   por especificidad le ganaba a `.cardenal` y dejaba el video en 20 rem. */
 
 /* ==========================================================================
    Porto y WA
@@ -2367,8 +2393,29 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
 .mundo-pleno details p,
 .mundo-pleno summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
 .mundo-pleno details, .mundo-pleno summary {
-  border-color: color-mix(in srgb, var(--sobre-foto) 26%, transparent);
+  border-color: color-mix(in srgb, var(--sobre-foto) 34%, transparent);
 }
+
+/* Las dos maneras de romper el bloque de legibilidad de arriba. Van juntas
+   porque son la misma leccion al derecho y al reves.
+
+   1. Un descendiente que trae `color` PROPIO no hereda del contenedor. Pintar
+      el `summary` no alcanzaba: los seis nombres del mapa quedaban tinta sobre
+      tinta, contraste medido 1,00. Invisibles.
+   2. Un descendiente con FONDO propio claro no puede recibir el tono claro del
+      mundo. El texto de la ficha vacia quedaba papel sobre papel: 1,06. */
+.mundo-pleno .territorio__nombre,
+.mundo-pleno .paso__nombre { color: var(--sobre-foto) }
+
+.mundo-pleno .hueco:not(.hueco--claro),
+.mundo-pleno .hueco:not(.hueco--claro) p,
+.mundo-pleno .hueco:not(.hueco--claro) .hueco__texto,
+.mundo-pleno .hueco:not(.hueco--claro) .hueco__rotulo { color: var(--tinta-apoyo) }
+.mundo-pleno .hueco:not(.hueco--claro) { border-color: var(--linea-acento) }
+
+/* El signo del acordeon estaba al limite sobre la tinta casi negra. */
+.mundo-pleno .paso__signo::before,
+.mundo-pleno .paso__signo::after { background: var(--sobre-foto) }
 
 /* --- 1. El título de contacto no puede pasarse de su columna --------------- */
 /* `var(--t-hero)` se mide contra el viewport: a 1512 daba 96 px y "MOVAMOS"
@@ -2548,4 +2595,110 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
     aspect-ratio: auto;
     block-size: min(26svh, 14rem);
   }
+}
+
+/* ==========================================================================
+   Correcciones 08/09 — la vuelta del video de proyectos
+   ========================================================================== */
+
+/* --- 5. El cardenal deja de ser un recuadro y pasa a ser una banda -------- */
+/* El video viene sobre su propio papel. Metido en una caja de 18 rem dentro
+   del mundo bordó leía como imagen rota: un cuadrado claro y una marca chica
+   en el medio. La salida no es esconderlo, es abrirle la página entera. El
+   mundo de CARDINAL corta en papel, el ave se dibuja, y el mundo cierra.
+   Es la misma lección que la ficha vacía: un bloque con fondo propio claro
+   adentro de un mundo oscuro necesita que le devuelvan TODOS sus tonos. */
+.cardenal {
+  margin-inline: calc(var(--margen-ext) * -1);
+  margin-top: clamp(2.5rem, 1.5rem + 3.6vw, 5rem);
+  padding: clamp(2.25rem, 1.25rem + 3.6vw, 4.5rem) var(--margen-ext);
+  /* --papel-capa-1 es papel 93 % + linea = #ECEAE9, que es exactamente el gris
+     sobre el que viene filmado el video (#ECEAEA). Con --papel a secas quedaba
+     un escalon de dos puntos y se veia el rectangulo del video. */
+  background: var(--papel-capa-1);
+  border-top: 0;
+  padding-top: clamp(2.25rem, 1.25rem + 3.6vw, 4.5rem);
+  gap: clamp(1.25rem, .75rem + 2vw, 3rem);
+}
+.cardenal__video {
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  border: 0;
+  border-radius: 0;
+  background: var(--papel-capa-1);
+}
+.mundo-pleno .cardenal { border-color: transparent }
+.mundo-pleno .cardenal .margen   { color: var(--tinta-apoyo) }
+.mundo-pleno .cardenal__copy     { color: var(--tinta-parrafo) }
+.mundo-pleno .cardenal__cierre   { color: var(--tinta-bordo) }
+
+@media (min-width: 64rem) {
+  .cardenal {
+    margin-inline: calc(var(--margen-int) * -1);
+    padding-inline: var(--margen-int);
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+  }
+  .cardenal__texto { max-width: 46ch; align-self: center }
+  /* `aspect-ratio` en una caja sin ancho resuelve el ANCHO, no estira: acá el
+     alto es el dato y el ancho sale de él. Con svh para el notebook bajo. */
+  .cardenal__video {
+    block-size: min(52svh, 26rem);
+    inline-size: auto;
+    width: auto;
+    max-width: none;
+    aspect-ratio: 1;
+    justify-self: start;
+  }
+  /* La frase de cierre es de Vero y es el remate del mundo: tiene que pesar
+     tanto como el trazo que se acaba de dibujar al lado. */
+  .cardenal__cierre { font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3rem); line-height: 1.12 }
+}
+
+/* --- 6. El bloque del Espacio necesita su propio contexto de apilamiento --- */
+/* Las piezas `sangre__*` viven en `#espacio-bloque` sin la clase `.sangre` del
+   padre, que era la que traia `isolation: isolate` y `overflow: hidden`. Sin
+   contexto propio, el `z-index: -2` de la foto la manda detras del fondo del
+   mundo y la foto desaparece; y sin recorte, la foto se pasa 53 px por abajo y
+   el pie del mundo ("03 / 04 - Siguiente") le queda encima.
+   Venia andando de rebote: el `translate: 0px` que dejaba la animacion de
+   entrada creaba ese contexto sin querer. Al sacar ese transform para que
+   agarre el pin del riel, esto quedo a la vista. Ahora es explicito. */
+#espacio-bloque {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* --- 4. Toques de 44 px: la regla vale tambien en escritorio -------------- */
+/* Medido con el auditor nuevo: los enlaces de la barra daban 39 de ancho y las
+   rayas del indice 34. El alto ya estaba; el ancho no lo habia mirado nunca
+   porque solo contaba toques en los carriles de celular. */
+.cabecera__enlaces a { min-width: 44px; justify-content: center }
+
+
+/* --- 11. La volanta sobre la aerea del Espacio --------------------------- */
+/* 3,7:1 medido: es micro-tipografia en mayusculas, o sea el peor caso posible
+   para leer. Sube a papel pleno. */
+.sangre__interior .margen--claro { color: color-mix(in srgb, var(--sobre-foto) 92%, transparent) }
+
+/* --- Telefono acostado: los retratos no pueden medir tres pantallas ------- */
+/* 812x375. Con `aspect-ratio: 4/5` un retrato a ancho de columna da 875 px de
+   alto: dos pantallas y media de foto sola, sin nada mas a la vista. El
+   auditor lo marco con ocho paradas seguidas al 0 % de tinta; a ojo, en las
+   capturas de 390 y de escritorio, no se veia. El tope va por consulta de
+   ALTO con tope de ancho, para no atrapar al notebook de 1366x657. */
+@media (max-height: 33rem) and (max-width: 63.99rem) {
+  .persona__hueco,
+  .persona--principal .persona__hueco,
+  .persona:not(.persona--principal) .persona__hueco {
+    aspect-ratio: auto;
+    block-size: min(74svh, 17rem);
+  }
+  .pieza--grande img, .pieza img { max-block-size: 80svh; object-fit: cover }
+  /* Mismo caso: el video del cardenal a ancho completo daria 812 px de alto en
+     una pantalla de 375. Se mide contra el alto, como todo lo vertical. */
+  .cardenal__video { aspect-ratio: auto; block-size: min(78svh, 18rem); width: auto; justify-self: start }
+  .equipo-seccion .personas { gap: 1.25rem }
 }
