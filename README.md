@@ -1,13 +1,25 @@
 # Mavenz — plataforma web
 
-Assets y brief para construir la plataforma de Mavenz. Todo lo de acá salió del material que
-mandó la clienta: kit de marca, videos de sus posteos y fotos de sus proyectos.
-
-Una vez publicado con GitHub Pages, cada archivo tiene URL directa:
+Demo de la plataforma de Mavenz. HTML/CSS/JS estático sobre GitHub Pages: `git push` es el deploy.
 
 ```
-https://davidtaranto96.github.io/mavenz-web/assets/<carpeta>/<archivo>
+https://davidtaranto96.github.io/mavenz-web/
 ```
+
+## Qué hay acá
+
+| Carpeta | Qué es |
+|---|---|
+| `demo/` | **El sitio.** Tres páginas generadas por `armar.py` desde `contenido/sitio.json` |
+| `img/` | Las fotos ya optimizadas a webp en los anchos que usa el sitio |
+| `video/` | Los videos recortados y sus pósters |
+| `fuente/` | Urbanist |
+
+Los originales pesados (46 MB de renders y aéreas sin optimizar) y las cuatro versiones
+anteriores del diseño **ya no viven en el repo**: están en la carpeta de trabajo local, en
+`VERONICA/3-fotos-y-videos/` y `VERONICA/_PARA-BORRAR/`. Siguen en el historial de git.
+
+Nunca se edita un `.html` a mano: se toca el JSON y se corre `python3 demo/armar.py`.
 
 ---
 
