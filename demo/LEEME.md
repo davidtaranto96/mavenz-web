@@ -21,7 +21,7 @@ no está aprobado no se muestra: se apaga por dato en el generador, nunca con un
 |---|---|---|
 | `index.html` | oscura, sobre el video | hero con video y la cinta de los cinco mundos (`#inicio`) · Somos Mavenz (`#quienes`) · el puente, decorativo · El Universo Mavenz, en bistre (`#universo`) · Cómo trabajamos (`#metodo`) · Proyectos en movimiento (`#mundos`) · Mirada Mavenz con el mapa de seis territorios adentro (`#mirada`) |
 | `proyectos.html` | clara | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) |
-| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con el nombre del proyecto corriendo detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería en cascada (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó, con el botón a WhatsApp y el enlace al contacto (`#financiacion`) · el visor `<dialog>` |
+| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con el nombre del proyecto corriendo detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería en escalera que avanza con el scroll (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó, con el botón a WhatsApp y el enlace al contacto (`#financiacion`) · el visor `<dialog>` |
 | `espacio.html` | clara | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) |
 | `nosotros.html` | clara | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) |
 | `contacto.html` | clara | cinta "Contacto" · Movamos algo juntos (`#contacto`): la palabra corriendo en vertical, las cuatro opciones y el formulario. `?motivo=proyecto|oportunidad|alianza|espacio` abre esa solapa |
@@ -189,9 +189,17 @@ Cada bloque que depende de material de la clienta tiene una clave. Vacía, el ge
   sale hacia arriba a la derecha, no vertical.
 - **La cinta de la ficha dice CARDINAL** (`proyectos.cardinal.marquee`, decorativa); el nombre
   salió del copy y queda en un `h1` sólo para lectores de pantalla.
-- **La galería es una cascada**, no un carril: grilla de tres columnas con escalera, cada foto
-  entra al llegar y las columnas se deslizan a distinta velocidad (`cascada()`). Nada que
-  arrastrar; `arrastrar()` se fue.
+- **La galería es un riel en escalera que avanza solo con el scroll** (segunda vuelta del
+  10/09: la cascada en grilla no le gustó, quería la escalera moviéndose): la sección mide lo
+  que mide el riel más el recorrido, el riel queda fijo centrado en la pantalla y se corre a la
+  izquierda a medida que se baja (`galeriaRiel()`). La escalera baja de izquierda a derecha por
+  margen, no por translate, así la última foto apoya sobre el cardenal sin aire. Nada que
+  arrastrar; sin guion, overflow nativo.
+- **La barra**: enlaces más grandes que ruedan (el `.rodar` del flotante), entrada escalonada
+  al cargar, activo con subrayado, botón de 48 px con barrido. **El pie compacto.** **El
+  contacto sin la cinta de arriba** y comprimido para entrar en una pantalla de escritorio,
+  con la palabra vertical más ancha. **Proyectos** abre con los tres bloques de Inicio y
+  Cardinal resumido debajo.
 - **El cardenal se funde con el papel**: sin fondo propio, `mix-blend-mode: darken` y una
   máscara radial en el video.
 - **La ficha termina en Financiación**, con el botón a WhatsApp y el enlace al contacto. El
@@ -300,11 +308,12 @@ a la caja, oculta en celular.
 - `marcador()` y `marcadores()`: la línea vertical de 1 por 72 px que escala de 0 a 1 en .6 s
   cuando un IntersectionObserver la ve (margen inferior del 10 %). Va antes del título, de
   Financiación y del cierre.
-- `galeria()` y `cascada()`: grilla de tres columnas (dos entre 40 y 64rem, una en celular),
-  escalera por columna (`margin-top: calc(var(--col) * -6svh)`), cada lámina entra al llegar
-  (IO, retardo de 90 ms por `--i`) y cada columna se desliza con el scroll (`--desliz`, sólo
-  transform). Sin guion o con menos movimiento, todo a la vista y quieto. La misma lista
-  `galeria` alimenta la grilla y el visor: `data-foto` es el índice.
+- `galeria()` y `galeriaRiel()`: un riel `width: max-content` dentro de `.galeria__pin`
+  (sticky, centrado con `top: calc((100svh - var(--alto-pin)) / 2)`); la sección mide
+  `--alto-pin + --recorrido` y el guion escribe los dos en resize (0,85 px de rueda por px de
+  riel) y `--corrida` en scroll. Escalera por `--escalones` (n - 1 - i) en `margin-bottom`. Sin
+  guion o con menos movimiento el pin no se fija y el riel scrollea nativo. La misma lista
+  `galeria` alimenta el riel y el visor: `data-foto` es el índice.
 - Lo que había antes (`carrusel()` y `arrastrar()`, un carril con `scroll-snap-type: x proximity`, cada lámina un
   escalón más arriba que la anterior (`translate: 0 calc(var(--i) * -4.5svh)`) y anchos
   alternados (`ancha` a 3:2, `angosta` a 3:4), a sangre por los dos lados. `arrastrar()` suma el

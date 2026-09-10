@@ -983,15 +983,18 @@
     var medirSobra = function () {
       sobra = Math.max(0, riel.scrollWidth - pin.clientWidth);
       caja.style.setProperty('--recorrido', Math.round(sobra * .85) + 'px');
+      caja.style.setProperty('--alto-pin', Math.round(pin.offsetHeight) + 'px');
       caja.setAttribute('data-vivo', '');
     };
     var pedido = false;
     var correr = function () {
       pedido = false;
       var r = caja.getBoundingClientRect();
-      var recorrido = r.height - (window.innerHeight || 1);
+      var recorrido = r.height - pin.offsetHeight;
       if (recorrido <= 0 || r.bottom < 0 || r.top > window.innerHeight) return;
-      var p = -r.top / recorrido;
+      /* El pin se pega a (vh - alto) / 2 del borde: desde ahi cuenta. */
+      var tope = ((window.innerHeight || 1) - pin.offsetHeight) / 2;
+      var p = (tope - r.top) / recorrido;
       p = p < 0 ? 0 : p > 1 ? 1 : p;
       riel.style.setProperty('--corrida', (p * sobra).toFixed(1));
     };

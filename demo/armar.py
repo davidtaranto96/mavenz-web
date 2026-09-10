@@ -520,7 +520,7 @@ def galeria(d):
     el visor: data-foto es el indice en `galeria`."""
     c, ui = d["proyectos"]["cardinal"], d["interfaz"]
     fotos = "".join(
-        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i}">'
+        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i};--escalones:{len(c["galeria"]) - 1 - i}">'
         f'<button class="lamina__abrir" type="button" data-foto="{i}" aria-label="{e(ui["abrir_foto"])}: {e(x["epigrafe"])}">'
         f'{img(x["foto"], "(min-width:64rem) 34vw, 70vw")}</button>'
         f'<figcaption class="lamina__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
@@ -1009,19 +1009,19 @@ def pagina_nosotros(d, lang):
 
 
 def pagina_proyectos(d, lang):
-    """El indice liviano (PROY-1..3): cinta, intro, Cardinal resumido con su
-    CTA a la ficha, otros proyectos (solo si hay confirmados) y las
-    oportunidades de inversion, que llevan al formulario. Espacio Mavenz y
-    Territorio ya no viven aca: no son proyectos."""
+    """Proyectos (David, 10/09): arriba los tres bloques de Inicio, cada uno
+    a su destino (Cardinal a la ficha, los otros dos al contacto con su
+    opcion), y debajo Cardinal resumido y otros proyectos si hay confirmados.
+    Espacio Mavenz y Territorio no viven aca: no son proyectos."""
     pg, p = d["paginas"]["proyectos"], d["proyectos"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 <section class="seccion proyectos-intro"{fx("proyectos")}>
   <p class="bajada bajada--angosta proyectos-intro__texto">{e(p["intro"])}</p>
 </section>
+{cms("mundos", mundos(d, cabeza=False))}
 {cms("cardinal", cardinal_resumen(d))}
 {cms("otros", otros(d))}
-{cms("oportunidades", oportunidades(d))}
 </div></div>'''
     return cascara(d, lang, "proyectos", cuerpo)
 
@@ -1110,7 +1110,7 @@ def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
             f'<div class="cinta__riel" data-cinta-riel>{"".join(copias)}</div></div>')
 
 
-def mundos(d):
+def mundos(d, cabeza=True):
     """Proyectos en movimiento (PROY-1, 3, 4, 5): tres paneles con aire entre
     si, cada uno con su tinta, la foto en el tercio de abajo y el nombre en
     vertical (la mecanica de realevate que pidio el documento). Tilt al pasar
@@ -1130,11 +1130,10 @@ def mundos(d):
         f'{img(x["foto"], "(min-width:64rem) 30vw, 100vw", clase="mundo__foto") if x.get("foto") else ""}'
         f'</a>')
     paneles = "".join(panel(i, x) for i, x in enumerate(w["lista"]))
-    return f'''<section class="seccion mundos-seccion" id="mundos"{fx("proyectos")}>
-  <div class="seccion__cabeza">
-    <h2 class="titulo" data-letras>{e(w["rotulo"])}</h2>
-    <p class="bajada">{e(w["intro"])}</p>
-  </div>
+    cab = (f'<div class="seccion__cabeza"><h2 class="titulo" data-letras>{e(w["rotulo"])}</h2>'
+           f'<p class="bajada">{e(w["intro"])}</p></div>') if cabeza else f'<h2 class="visualmente-oculto">{e(w["rotulo"])}</h2>'
+    return f'''<section class="seccion mundos-seccion{"" if cabeza else " mundos-seccion--sola"}" id="mundos"{fx("proyectos")}>
+  {cab}
   <div class="mundos">{paneles}</div>
 </section>'''
 

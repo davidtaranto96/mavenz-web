@@ -2859,14 +2859,18 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
    mas arriba que la anterior. Sin guion (sin data-vivo): overflow nativo. */
 .galeria-seccion {
   --recorrido: 0px;
+  --alto-pin: 100svh;
   position: relative;
-  height: calc(100svh + var(--recorrido));
+  /* Lo que mide el riel mas el recorrido: sin la pantalla entera de base,
+     que dejaba medio svh vacio antes del cardenal (David, 10/09). */
+  height: calc(var(--alto-pin) + var(--recorrido));
   margin-inline: calc(-1 * (var(--margen-ext) + var(--margen-int))) calc(-1 * var(--margen-der));
 }
 .galeria__pin {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  /* Centrado en la pantalla mientras esta fijo. */
+  top: calc((100svh - var(--alto-pin)) / 2);
+  height: auto;
   display: flex;
   align-items: center;
   overflow-x: auto;
@@ -2882,14 +2886,16 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
   width: max-content;
   padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
   /* Lugar para la escalera: la ultima foto sube (n-1) escalones. */
-  padding-top: clamp(4rem, 26svh, 14rem);
+  padding-block: 1rem .5rem;
   translate: calc(var(--corrida, 0) * -1px) 0;
   will-change: translate;
 }
 .lamina {
   flex: 0 0 auto;
-  margin: 0;
-  translate: 0 calc(var(--i, 0) * -3.5svh);
+  /* La escalera baja de izquierda a derecha (--escalones = n - 1 - i, lo pone
+     el generador): la ultima foto apoya abajo y no deja aire antes del
+     cardenal. Es margen, no translate: el riel mide lo que se ve. */
+  margin: 0 0 calc(var(--escalones, 0) * 3.5svh);
 }
 .lamina--ancha { width: clamp(16rem, 34vw, 36rem); }
 .lamina--angosta { width: clamp(11rem, 19vw, 19rem); }
@@ -2900,11 +2906,11 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 @media (max-width: 63.99rem) {
   .lamina--ancha { width: min(70vw, 24rem); }
   .lamina--angosta { width: min(44vw, 15rem); }
-  .lamina { translate: 0 calc(var(--i, 0) * -2.5svh); }
+  .lamina { margin-bottom: calc(var(--escalones, 0) * 2.5svh); }
 }
 @media (prefers-reduced-motion: reduce) {
   .galeria-seccion, .galeria-seccion[data-vivo] { height: auto; }
-  .galeria-seccion[data-vivo] .galeria__pin { overflow-x: auto; height: auto; padding-block: 2rem; }
+  .galeria-seccion[data-vivo] .galeria__pin { overflow-x: auto; position: static; padding-block: 2rem; }
   .galeria__riel { translate: none; }
 }
 
@@ -3117,3 +3123,31 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 
 /* El contacto solo, sin la cinta de arriba: un poco mas de aire al header. */
 .dossier--contacto .contacto { padding-block: clamp(2.5rem, 8svh, 5rem) clamp(4rem, 12svh, 7rem); }
+
+/* =========================================================================
+   Ronda 10/09, tercera vuelta: el cardenal pegado a la galeria, el contacto
+   en una pantalla con la palabra mas ancha, los tres bloques en Proyectos
+   ========================================================================= */
+.cardenal { margin-top: 0; }
+
+/* Contacto: la palabra vertical mas ancha y todo comprimido para que entre
+   en una pantalla de escritorio hasta el enlace a WhatsApp. */
+@media (min-width: 64rem) {
+  .dossier--contacto .contacto__caja { --ancho-marca: clamp(8rem, 11vw, 13rem); }
+  .dossier--contacto .contacto { padding-block: clamp(1rem, 2.5svh, 1.5rem) clamp(1.5rem, 4svh, 2.5rem); }
+  .dossier--contacto .contacto__caja { min-height: 0; gap: clamp(1.5rem, 3vw, 3rem); }
+  .dossier--contacto .contacto__apertura { font-size: var(--t-cuerpo); max-width: 40ch; }
+  .dossier--contacto .contacto__titulo { font-size: clamp(2rem, 11cqi, 3.5rem); }
+  .dossier--contacto .contacto__copia { margin-block: .25rem .5rem; }
+  .dossier--contacto .solapas { margin-top: .25rem; }
+  .dossier--contacto .formulario { gap: .35rem; }
+  .dossier--contacto .campo { gap: .15rem; }
+  .dossier--contacto .campo__entrada { min-height: 44px; padding: .25rem 0; }
+  .dossier--contacto textarea.campo__entrada { min-height: 3.25rem; }
+  .dossier--contacto .contacto__alternativa { margin-block-start: .75rem; }
+  .dossier--contacto .contacto__datos { gap: .75rem; }
+}
+
+/* Proyectos: los tres bloques primero, sin cabeza (la cinta ya titula). */
+.mundos-seccion--sola { border-top: 0; padding-top: clamp(1.5rem, 4svh, 2.5rem); }
+.mundos-seccion--sola .mundos { margin-top: 0; }
