@@ -1,353 +1,473 @@
-# Mavenz — tres páginas
+# Mavenz: cinco páginas en dos idiomas
 
 `https://davidtaranto96.github.io/mavenz-web/demo/`
 
-Rediseño del 08/09/2026, después de la reunión con Vero del 07/09. Reemplaza la página única
-anterior. Las referencias que ella eligió: `edificiolatorre.com` (nuestra), `realevate.agency`
-y `akaru.fr`.
+Rediseño del 08 al 10/09/2026, a partir del documento que Vero mandó el 08/09 después de ver
+la demo de tres páginas. La reemplaza entera. Vive en la rama `rediseno-0909` (un commit por
+fase) y se publica con el merge a `main` cuando David apruebe las capturas. Las tres
+referencias que ella eligió están medidas en el código: realevate.agency (la ficha de proyecto y
+el menú flotante), rogo.ai (la cabecera y el hero) y era-residence.com (el aviso de cookies).
 
-**La idea, en una línea:** el trazo de la M es el hilo. Se dibuja en el hero, se cierra en la
-órbita de las esferas, se aprieta en el círculo del método, se estira como riel de los
-proyectos y se apaga en el pie. Un gesto en todo el sitio, no un efecto por sección.
-
-**Tres páginas**, castellano. El inglés lo debe la clienta; `fundir()` y `sitio.en.json`
-siguen en pie para cuando llegue.
-
-| Página | Qué cuenta |
-|---|---|
-| `index.html` | el relato: hero, quiénes, las 4 esferas en órbita, el método en ciclo, los 4 mundos, contacto |
-| `about.html` | quiénes son, el equipo, la mirada, la red |
-| `proyectos.html` | cada proyecto es un mundo de color entero, con su cinta y su "Siguiente". Del último se vuelve al primero |
-
-**Las cuatro esferas** son textuales del WhatsApp de Vero del 07/09. **"Marca y comunicación"
-no es una esfera: es el anillo que las rodea** — decisión de David del 08/09. El componente
-tolera de 4 a 6 esferas sin tocar CSS.
-
-**Las cuatro tintas de los mundos** salen del manual de Fractura. No hay un hex nuevo en toda
-la hoja de estilos.
+**La idea, en una línea:** papel quieto, tres bloques de tinta (el Universo en bistre, Espacio
+en wenge, la ficha y la red en bordó) y un solo gesto de marca, el trazo de la M, que se dibuja
+con el scroll en Cómo trabajamos y corre como cinta en el hero y en la ficha de Cardinal. Lo que
+no está aprobado no se muestra: se apaga por dato en el generador, nunca con un placeholder.
 
 ---
 
+## Las páginas
+
+| Archivo | Cabecera | Qué tiene, en orden, con su `id` |
+|---|---|---|
+| `index.html` | oscura, sobre el video | hero con video y la cinta de los cinco mundos (`#inicio`) · Somos Mavenz (`#quienes`) · el puente, decorativo · El Universo Mavenz, en bistre (`#universo`) · Cómo trabajamos (`#metodo`) · Proyectos en movimiento (`#mundos`) · Mirada Mavenz con el mapa de seis territorios adentro (`#mirada`) · Movamos algo juntos (`#contacto`) |
+| `proyectos.html` | clara | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) · contacto (`#contacto`) |
+| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con la cinta de isotipos detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería escalonada (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó (`#financiacion`) · cierre (`#cierre`) · contacto (`#contacto`) · el visor `<dialog>` |
+| `espacio.html` | clara | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) · contacto (`#contacto`) |
+| `nosotros.html` | clara | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) · contacto (`#contacto`) |
+| `en/` | | las mismas cinco en inglés: `<html lang="en">`, canónica propia y `hreflang` es-AR / en / x-default en las diez páginas |
+
+El menú sale de `paginas` del JSON y hoy tiene cinco entradas: Inicio · Universo Mavenz
+(`#universo`, o `index.html#universo` desde otra página) · Proyectos · Espacio Mavenz ·
+Contactanos (`#contacto`, que existe en todas). Lo leen la barra, el pie y el flotante desde la
+misma función, `enlaces_menu()`.
+
+**Nosotros tiene `publicar: false`**: se genera igual, con `<meta name="robots"
+content="noindex">`, pero no entra al menú hasta que el equipo esté completo. **Cardinal tiene
+`en_menu: false`**: no va en el menú; se llega desde la cinta del hero, desde el panel de
+Proyectos en movimiento y desde el resumen de `proyectos.html`.
+
+---
 
 ## Cómo se edita
 
 Un dato vive en un solo lugar: `contenido/sitio.json`.
 
 ```bash
-python3 armar.py
+python3 armar.py                        # arma las diez páginas: ES en demo/, EN en demo/en/
+python3 armar.py --plantilla en         # vuelca la estructura de textos del castellano, para rellenar
+python3 armar.py --palabra movimiento   # lista cada texto que contiene la palabra, con su clave
 ```
 
-Eso reescribe `index.html`, `about.html` y `proyectos.html`. **El HTML no se toca a mano.** Cada región que sale del JSON queda
-envuelta en `<!--cms:nombre--> … <!--/cms:nombre-->` para que el panel de `web-editable` la
-pueda regenerar sola más adelante.
+**El HTML no se toca a mano.** Cada región que sale del JSON queda envuelta en
+`<!--cms:nombre--> … <!--/cms:nombre-->` para que el panel de `web-editable` la pueda regenerar
+sola más adelante. El CSS, el JS, los videos y sus pósters salen enlazados con `?v=` y ocho
+caracteres del hash del archivo: sin eso el navegador sirve la versión vieja y una corrección no
+se ve.
 
 | Archivo | Qué es |
 |---|---|
-| `contenido/sitio.json` | todo el texto, las fotos, los datos de contacto |
-| `contenido/sitio.en.json` | la capa en inglés: sólo lo que cambia. Las listas van enteras |
-| `armar.py` | genera las tres páginas desde una cáscara compartida |
-| `estilos.css` | tokens y los cuatro carriles |
-| `guion.js` | Lenis+GSAP, órbita, ciclo, cintas por scroll, riel fijado, solapas, cabecera, menú, entrada de los títulos y de las secciones, trazo con el scroll, visor de fotos, índice lateral |
+| `contenido/sitio.json` | todo: textos, fotos, videos, datos de contacto, el mapa de páginas, los idiomas, la medición |
+| `contenido/sitio.en.json` | la capa en inglés: sólo textos |
+| `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las diez páginas |
+| `estilos.css` | tokens en `:root` y todo lo demás. Siete hex, todos en `:root`; los tres que aparecen más abajo están en comentarios |
+| `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita, puente, trazo del método, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
+| `consent.js` | el aviso de cookies, con su cola de eventos |
+| `auditar.sh` | el auditor de siete carriles sobre las diez URLs |
 | `../img/` | fotos en WebP, dos anchos cada una |
-| `../fuente/urbanist.woff2` | Urbanist variable, 100–900, 24 KB |
+| `../video/` | `hero.mp4`, `cardinal.mp4` y `cardenal.mp4`, con póster cada uno |
+| `../fuente/urbanist.woff2` | Urbanist variable, 100 a 900, 24 KB |
+
+### La capa en inglés
+
+`sitio.en.json` es una capa sobre `sitio.json`: **lleva sólo lo que cambia**, que son textos.
+`fundir()` la mezcla clave por clave; una lista de fichas del mismo largo se funde posición por
+posición, así la capa no repite fotos, ids ni tintas (repetirlos fue lo que pudrió la capa
+inglesa anterior: se desincronizaba en silencio). Una lista de textos sueltos, como los `datos`
+de Cardinal, se reemplaza entera. Una lista de fichas más larga que en castellano corta el
+generador por ruta huérfana; una más corta ya no se funde posición por posición, se reemplaza
+entera, y el generador se cae porque le faltan las fotos.
+
+Lo que no es texto para leer no se traduce ni se reclama. Es la lista `TECNICAS` de `armar.py`:
+`src`, `poster`, `href`, `id`, `tinta`, `lang`, `og`, `archivo`, `carpeta`, `ancla`, `en`,
+`whatsapp`, `correo`, `sitio_espacio`, `proporcion`, `numero`, `n`, `x`, `y`, `sangria`, `peso`,
+`anchos`, `ancho`, `alto`, `columnas`, `solo_visor`, `bn`, `genera`, `publicar`, `en_menu`,
+`clave`, `ga4`, `pixel`, `otros_publicar`, `servicio`, `motivo`. Las claves que empiezan con `_`
+tampoco.
+
+Un nombre propio que queda igual en los dos idiomas (Cardinal, Espacio Mavenz, Salta) se declara
+en `_iguales` de la capa y deja de contar como deuda.
+
+`chequear_capas()` corre antes de generar cada idioma: **corta** si la capa tiene una ruta que no
+existe en el castellano (se corrige la capa, o se corre `--plantilla en` y se rearma), y
+**avisa** por cada texto del castellano que la capa no traduce. Hoy no avisa nada: la capa está
+completa, con 28 entradas en `_iguales`. Completa no quiere decir aprobada: la tradujo DT System
+y Mavenz la tiene que revisar (está anotado en `_revisar`).
+
+El portugués existe en `idiomas` con `genera: false`: entra al selector como texto deshabilitado
+con el título "Próximamente" y no se genera nada hasta que haya un `sitio.pt.json`.
+
+Además, en cada corrida: `auditar_enlaces()` avisa si un `wa.me` tiene un rótulo que no dice
+WhatsApp ni consulta, y si un `#ancla` no existe en su página; `comprobar_rutas()` resuelve cada
+`src` y `href` relativo contra la carpeta de salida, que es lo que atrapa un `../` de más cuando
+el inglés baja a `en/`.
+
+### Lo que se apaga por dato
+
+Cada bloque que depende de material de la clienta tiene una clave. Vacía, el generador emite
+`""` y no hay placeholder.
+
+| Clave | Qué prende |
+|---|---|
+| `quienes.circulos` con `fondo` y `frente` | la columna de los dos círculos de Somos Mavenz; sin ella el texto ocupa el ancho |
+| `proyectos.otros_publicar` y `proyectos.otros` | la sección Otros proyectos de `proyectos.html` (hoy `false`) |
+| `proyectos.cardinal.sub_items[]`, con `foto` **y** `copy` | cada sub-item de la ficha; sin ninguno completo la sección `#detalles` no existe (hoy) |
+| `proyectos.cardinal.unidades.foto` | la columna de foto de Unidades |
+| `proyectos.cardinal.financiacion.copy` | el párrafo de la franja de Financiación (hoy sólo título y CTA) |
+| `proyectos.cardinal.cierre.titulo` | la frase del cierre de la ficha (hoy sólo el botón) |
+| `espacio.foto` | la columna de foto de Espacio Mavenz (hoy `null`) |
+| `equipo.personas[]` con `foto`, `nombre`, `apellido`, `rol` y `linea` | cada persona de Nosotros; un perfil incompleto no se publica, y sin ninguno la sección queda con título y texto |
+| `paginas.nosotros.publicar` | Nosotros en el menú y sin `noindex` |
+| `medicion.ga4` o `medicion.pixel` | el aviso de cookies y el botón "Cookies" del pie; sin IDs no aparece nada |
+| `contacto.formulario.clave` | el envío por Web3Forms; vacía, el formulario abre WhatsApp con el mensaje armado |
+| `contacto_datos.whatsapp` | los enlaces a `wa.me`; vacío, van a `#contacto` |
+| `contacto_datos.correo` | el correo en el pie, en el contacto y en el flotante |
+| `redes[].href` | cada red como enlace; vacío, queda el nombre en texto |
+| `contacto.motivos[].copy` | la línea sobre el formulario de esa opción (`:empty` la esconde) |
 
 ---
 
-## Lo que pidió Vero y dónde está
+## Las decisiones del 08 al 10/09, con David
 
-| Respuesta del tablero | Cómo se resolvió |
-|---|---|
-| Fondo: papel con tinta bordó | El bordó es tinta, nunca fondo de sección |
-| Direcciones: al margen · un solo trazo · dossier · el pliegue · ondas | Las cinco comparten papel y trazo: se fusionaron en una |
-| Títulos ExtraBold gigante, en mayúscula (audio) | `--t-hero` y `--t-titulo`, peso 800, versalita sólo en títulos de display |
-| Un solo efecto: los títulos entran letra por letra | Es el único movimiento de scroll de toda la página |
-| Movimiento suave | `cubic-bezier(.22,.61,.36,1)`, 0 animaciones en bucle |
-| Botones: píldora rellena y texto subrayado | `.boton` y `.subrayado` |
-| Sólo CARDINAL | La cuarta ficha del estante está vacía, y se ve que lo está |
-| Fotos: color, blanco y negro, con velo y texto | Las tres, una por ficha |
-| Universo: rueda conectada, se apilan como cartas | Heptagrama + tres capas de papel |
-| Menú siempre a la vista | Cabecera pegada arriba |
-| Entrada: que pida una reunión | Es el botón principal en la cabecera y en el cierre |
-| Redes: Instagram, LinkedIn, Facebook | En el pie, sin enlace hasta que pase las URL |
-| **Grilla de tarjetas** y **estante que se desliza** | Las dos: estante en el celular, grilla de cuatro columnas de notebook para arriba |
-| **Las dos versiones completas de idioma** | `index.html` y `en.html`, con selector real, `hreflang` y `lang` |
-| Los tres públicos del audio | Cuatro motivos en el cierre, cada uno abre WhatsApp con su propio mensaje |
-
----
-
-## Lo que se agregó el 06/09 (pasada de subir-nivel)
-
-De las catorce opciones del menú, David tildó doce. Todas salen de la receta editorial de
-SAURIUM, que es la única web que elogió espontáneamente, del auditor de efectos o del detector
-de genérico.
-
-| Qué | De dónde sale |
-|---|---|
-| **La cortina**: el hero queda fijo y el dossier sube encima con radio y sombra invertida | SAURIUM. Es el gesto grande, una sola vez en toda la página |
-| **El solape**: la grilla de proyectos cruza el corte y su pie vive en la sección siguiente | SAURIUM. El margen negativo y el padding salen del mismo token |
-| **Cada sección entra con su gesto** (izquierda, derecha, escala) | Auditor 8/10 + anti-slop. En celular todo entra desde abajo: un desplazamiento lateral abre scroll horizontal en un teléfono |
-| **El nav se invierte** según el bloque de abajo, con los dos logos | SAURIUM. Sondea `offsetTop`, no una lista de ids |
-| **Grilla asimétrica** de proyectos: 7/5 y 5/7, cuatro proporciones distintas | Anti-slop: la grilla de tarjetas iguales es el tell número uno de web hecha con IA |
-| **Visor de fotos** con swipe nativo dentro de un `<dialog>` | SAURIUM. La inercia la pone el sistema |
-| **Barrido de luz** al cambiar de capacidad en la rueda | SAURIUM: sin el barrido el visitante duda de si el clic hizo algo |
-| **El método cuenta qué pasa**: los cinco verbos se abren | SAURIUM. Copy del documento de Vero |
-| **Vuelve el Mapa Mavenz**, adentro del Universo | Del vault: está construido y pago dentro de los USD 300 |
-| **Índice lateral de rayas** desde 1180 px | SAURIUM. `scaleX` desde la izquierda, que se lee como progreso |
-| **El trazo se dibuja con el scroll** en vez de solo al cargar | El gesto de la marca atado al del visitante |
-| **Pie de foto catalogada**: leyenda y las siete muestras del manual | SAURIUM. La aérea deja de ser un banner de stock |
-
-Quedaron sin tildar el wordmark gigante de fondo y el corte duro de entrada de la foto.
-
-Y tres arreglos de celular que no eran gusto sino QA: **el menú ocupa la pantalla y bloquea el
-scroll de atrás**, **el globo de WhatsApp se esconde donde ya hay WhatsApp a la vista** (el hero
-y el cierre), y **el CSS y el JS llevan `?v=` con el hash del archivo**, sin lo cual el
-navegador sirve la versión vieja y una corrección no se ve.
+- **Formulario sin backend.** Un solo `<form>` que manda a Web3Forms con la clave pública en
+  `contacto.formulario.clave`. Sin clave, el `submit` arma el mensaje con motivo, nombre,
+  teléfono, correo y texto, y abre WhatsApp: el sitio nunca queda con un botón que no hace nada.
+  Sin checkbox de privacidad: una nota inline (`formulario.privacidad`).
+- **Cookies con Aceptar y Rechazar, del mismo peso.** Es una excepción a la regla de la casa (un
+  solo botón, Entendido), decidida por David para este proyecto el 10/09. El aviso existe sólo si
+  hay un ID de GA4 o de pixel en `medicion`; hoy no hay y no se muestra nada.
+- **El marquee continuo es la única excepción documentada a "cero animaciones infinitas".**
+  `@keyframes mvCinta` (y `mvCintaY` para la vertical) con `infinite`, pero con
+  `animation-play-state: paused` hasta que un IntersectionObserver marca `data-vivo` en la cinta,
+  y con `animation: none` bajo `prefers-reduced-motion`. El auditor las reconoce por
+  `data-fx="marquee"` y las lista aparte como `cintas: N` en vez de contarlas como infinitas.
+- **ES y EN ahora, PT deshabilitado con aviso.** Selector ES · EN · PT en la cabecera, en el pie
+  y en el flotante; cada enlace lleva a la misma página en el otro idioma.
+- **El mapa de páginas**: menú de seis (Inicio, Universo Mavenz, Proyectos, Espacio Mavenz,
+  Nosotros, Contactanos), que hoy son cinco porque Nosotros espera al equipo. La ficha
+  `cardinal.html` fuera del menú. **Mirada Mavenz es una sección de Inicio**, no una página.
+- **Los paneles 2 y 3 van al contacto.** Otros proyectos y Oportunidades de inversión
+  (`mundos.lista`) llevan a `#contacto` con `data-motivo`, que preselecciona la opción del
+  formulario ("Tengo un proyecto", "Busco una oportunidad de inversión"). Su copy es el que ya
+  existía en las opciones del contacto. En `proyectos.html`, la sección Oportunidades hace lo
+  mismo.
+- **La cinta del hero son los mundos del sitio**: Cardinal · Universo Mavenz · Espacio Mavenz ·
+  Mirada Mavenz · Cómo trabajamos, cada uno enlazado a su página o su sección (`hero.cinta`).
+- **La cortina se fue.** El hero deja de ser `sticky`. Con un `<video>` de fondo, un hero pegado
+  sigue "en pantalla" para el observador de videos diferidos y corría tapado toda la página; el
+  documento pide además que nunca se vea el fondo del inicio al bajar; y sin cabecera pegajosa la
+  cortina no tenía con qué dialogar.
+- **Un solo menú, el flotante.** Se fueron la hamburguesa, el panel de celular a pantalla
+  completa y el globo `.wa` suelto. La cabecera es `position: relative`, casi transparente (alfa
+  .10 sobre un RGB de la paleta, **sin blur**: el blur de 18 px la convertía en placa) y se va con
+  la página. Su tema lo escribe el generador por página (`data-tema="oscuro"` en Inicio y en la
+  ficha), no una sonda.
+- **`.oscuro` es el único bloque de legibilidad.** Reasigna de una vez todos los tonos de texto,
+  filetes y enlaces de lo que va sobre tinta. Lo usan el Universo (bistre), Espacio (wenge), la
+  franja de Financiación y el hero de la ficha (bordó).
+- **Dos excepciones a "sólo transform, opacity y filter"**: los keyframes del marquee y
+  `clip-path: inset()` en el hero de la ficha, porque el efecto medido en la referencia (el ancho
+  y el alto abren por separado y la foto revela encuadre en vez de deformarse) no existe con
+  `scale`, y `clip-path` no dispara layout. Ya venía de antes y queda: la transición de
+  `grid-template-rows` (`0fr` a `1fr`) del acordeón del mapa, la receta del vault para no
+  inventar un `max-height`.
 
 ---
 
-## Segunda pasada de subir-nivel (06/09, noche)
+## Cómo funciona cada pieza
 
-De catorce opciones entraron doce, y quedaron afuera las dos del hero que sumaban una capa
-decorativa. Lo que cambió:
+**El hero** (`hero()`). Sección de `100svh` con `margin-top` negativo para meterse debajo de la
+cabecera. El video es de fondo y diferido: no tiene `src` hasta que entra en pantalla, y con
+`data-pesado="1"` bajo 64rem no se baja nunca, queda el póster. Título y bajada centrados, el
+título con `data-letras`. Al pie, la cinta continua de los cinco mundos (`cinta(..., continua=True,
+velocidad=70)`), con `mask-image` lateral al 14 y al 86 % para que las piezas entren difuminadas,
+y `filter: blur(var(--foco))` por pieza: `cintasContinuas()` escribe `--foco` según la distancia
+al centro (hasta 3 px, cuantizado a medio píxel), sólo con puntero fino.
 
-| Qué | De dónde sale |
-|---|---|
-| **Dos secciones a sangre**: Espacio Mavenz sobre la aérea con velo bordó, y La red en tinta bordó maciza | El pedido de que los bloques no fueran todos iguales |
-| **Banda de video** panorámica entre el método y Espacio | `banda-aerea-1.mp4`, de 1,4 MB a 119 KB |
-| **El método en horizontal**: la sección se clava y las cinco cartas pasan de costado | El scroll lateral que pidió David |
-| **El cardenal que se dibuja** | `assets/video/cardinal-trazo.mp4`, pieza de Fractura, 65 KB. El ave se dibuja, se posa sobre la M del isotipo y cierra con *"Y esto recién se pone en movimiento"* |
-| **El film de CARDINAL** de fondo en la ficha del proyecto | `cardinal-film.mp4`, de 17 MB a 3 MB |
-| **Palabras que se forman con el scroll** en la cita de Somos Mavenz | Pedido de David |
-| **El mapa en grilla** de seis territorios numerados, la ficha abierta ocupa el ancho | Antes eran seis renglones idénticos |
-| **Las piezas de marca** de Fractura (agenda y carpeta) en Somos Mavenz | Estaban en el repo sin usar |
-| **Tres proyectos**: CARDINAL en profundidad, más Porto y WA | Pendiente de confirmar con Vero |
-| **Sección de ellas**, con los huecos de los retratos a la vista | Pedido de David |
-| **Las capas de la rueda y las píldoras tenues** dejan de verse apagadas | Lo que marcó David en la captura |
+**El flotante** (`flotante()` en `armar.py`; módulo Flotante al final de `guion.js`). WhatsApp y
+el botón del menú abajo a la derecha, `fixed` con `z-index: 30`. En escritorio nace escondido y
+aparece cuando un IntersectionObserver ve que la cabecera salió de la pantalla
+(`body[data-lejos]`); bajo 64rem está siempre, porque ahí la barra lleva sólo el logo y el
+idioma. Sobre `#contacto` se esconde (`data-oculto`). `mirarTema` sondea qué bloque hay a 60 px
+del borde inferior y le escribe `data-tema="oscuro"` para invertir tinta y fondo. El panel abre
+en dos tiempos sólo con `scale` (alto y después ancho), los ítems entran escalonados por `--i` y
+ruedan en vertical al pasar el puntero (`.rodar`); adentro van WhatsApp, correo y el selector de
+idioma. Al abrir: `aria-expanded`, foco al primer enlace a los 430 ms y `lenis.stop()`; al cerrar
+(botón, Escape, clic afuera o clic en un enlace), `lenis.start()`. Para probar desde la consola:
+`window.__flotante.abrir()`.
 
-**Videos, todos diferidos**: `preload="none"` no alcanza, con `autoplay` el navegador se baja el
-archivo igual. Ninguno tiene `src` hasta que entra en pantalla.
+**Cookies** (`cookies()` en `armar.py`; `consent.js`). El generador escribe un
+`<template id="cookies">` inerte y pone los IDs en `<body data-ga4 data-pixel>`. `consent.js` los
+lee; sin IDs corta ahí y no muestra nada. Con IDs y sin decisión guardada clona la tarjeta y la
+cuelga de `<body>`, nunca de un bloque con transform. Aceptar carga GA4 y el pixel como
+`<script async>` y vacía la cola de `window.mavenzEvento` (tope de 40 eventos); Rechazar no carga
+nada y tira la cola; Escape cierra sin decidir. La decisión queda en `localStorage` con la clave
+`mavenz.cookies`, con nombre propio porque GitHub Pages sirve todos los sitios de David desde el
+mismo origen. El botón "Cookies" del pie nace con `hidden` y `consent.js` se lo saca sólo con
+IDs: la reabre. La tarjeta va abajo a la izquierda, con la palabra "Cookies" gigante, rotada 12
+grados y cortada por el `overflow: clip`, y las dos acciones son `.barajar`: dos copias del
+rótulo partidas por letra (`letras()`), que se intercambian con un retraso de 30 ms por letra.
 
-**Tres bugs de esta pasada, anotados porque son de los que se repiten:**
+**Somos Mavenz** (`quienes()`). Título y dos párrafos en una columna de 34ch y, a la derecha, dos
+fotos en círculo posicionadas por porcentaje dentro de una caja cuadrada: la de fondo al 58 %
+arriba a la derecha, la de frente al 50 % abajo a la izquierda, pisándola. En celular la columna
+va abajo. Sólo vive en Inicio.
 
-1. El `position: fixed` del fondo de Espacio **no queda contenido por el `overflow` de su
-   sección** y terminaba pintando la foto sobre toda la página. Va con `translate` desde el guion.
-2. El hero queda `sticky` toda la página: **todo bloque que venga después tiene que ser opaco y
-   estar posicionado**, o se ve la foto por atrás.
-3. El signo `+` del acordeón se salía 28 px del ancho cuando el nombre del territorio era largo.
-   La fila necesita `flex-wrap` y `min-width: 0`.
+**El puente** (`puente()` en los dos archivos). Un `div` decorativo entre Somos y el Universo:
+gradiente quieto de papel a bistre y, encima, una capa de bistre con `scale: 1 var(--mezcla)`
+que crece desde abajo con el scroll. Sin guion o con menos movimiento queda el gradiente. Lleva
+`data-decorativo` para que el auditor no le mida tinta.
+
+**El Universo** (`orbita()`; `circular()`, `anillo()` y `carrilEsferas()`). Sección `.oscuro` en
+bistre. `orbita()` reparte las esferas sobre una circunferencia al 36 % del centro arrancando
+arriba (con tres: a las 12, a las 4 y a las 8) y las une con un `<polygon>`; MAVENZ fijo en el
+centro y el anillo de Marca y comunicación afuera, con su rótulo abajo. Tolera de 3 a 6 esferas
+sin tocar CSS. `circular()` activa una esfera por clic, por foco o por `pointerenter` con mouse,
+y hasta que alguien toca avanza sola según la posición de la sección en la pantalla; la activa
+sube a `scale: 1.3` y su descripción se lee al costado, en un bloque `aria-live`. `anillo()`
+dibuja el anillo en 900 ms al entrar en vista (`--dibujo`). Bajo 64rem el diagrama queda chico y
+las descripciones son un carril con `scroll-snap`, una tarjeta por vez y flechas de 44 px:
+`carrilEsferas()` lo sincroniza en los dos sentidos por el evento `mv:activar`.
+
+**Cómo trabajamos** (`metodo()` y `puntos_onda()`; `trazoMetodo()`). El trazo es `ONDA`, un solo
+path de la M con `pathLength="1"`, que se dibuja con `stroke-dashoffset: calc(1 - var(--trazo))`.
+Los cinco pasos se posicionan sobre el trazo a las fracciones .14, .32, .52, .72 y .92 **de su
+longitud**, no del parámetro de cada curva: `puntos_onda()` aplana las seis cúbicas en 120
+segmentos cada una y busca en la tabla de longitud de arco. Rótulos alternados arriba y abajo.
+`trazoMetodo()` escribe `--trazo` con el scroll (0 cuando la caja asoma por abajo, 1 cuando su
+base llega al 40 % de la pantalla) y marca `data-visto` en cada paso cuando el trazo pasó por su
+`data-t`; los dos son acumulativos, al subir no se deshacen. Sin pin. En celular el trazo queda de
+adorno arriba y los pasos son una lista con filete, cada uno entra por IntersectionObserver. Sin
+guion o con menos movimiento todo está a la vista.
+
+**Proyectos en movimiento** (`mundos()`; `tilt()`). Tres paneles con aire entre sí, cada uno con
+su tinta por `data-tinta` (bordó, bistre, wenge), la foto abajo (el 30 % en escritorio) y el
+nombre en vertical desde 64rem. Cada tarjeta es un `<a>` con `data-fx="tilt" data-fx-grados="5"`:
+`tilt()` escribe `--fx-rx` y `--fx-ry` por `pointermove` y el CSS los aplica con
+`perspective(900px)`, sólo con puntero fino. Los paneles con `data-motivo` eligen esa opción del
+contacto al hacer clic.
+
+**Mirada Mavenz** (`mirada()` y `mapa()`). Las cinco categorías como lista numerada y, debajo, el
+mapa de seis territorios como acordeón `<details name="territorio">` (uno abierto por vez, sin
+JS); en escritorio en dos columnas, y el abierto ocupa el ancho.
+
+**El contacto** (`contacto()`; `formulario()`). Cuatro opciones como solapas (`role="tab"`) y un
+solo formulario: al elegir cambian la línea de arriba y el `<input type="hidden" name="motivo">`,
+no el formulario. La primera opción viene activa con el formulario a la vista; `?motivo=x` en la
+URL y un clic en `a[data-motivo]` preseleccionan. El cambio es en tres tiempos, medido en el video
+de Vero: fade-out del bloque en 170 ms, 150 ms vacío, y las filas entrando de arriba abajo cada
+65 ms por `--i`. El indicador de la solapa crece desde el centro (`scale`), un tercio en hover.
+Validación propia con `novalidate`, `aria-invalid` y errores por `aria-live`; honeypot
+`botcheck`. El envío es un `fetch` JSON a `api.web3forms.com/submit`; sin clave, WhatsApp. A la
+izquierda, desde 64rem, la cinta vertical "Contacto" (`cinta(..., vertical=True, velocidad=125,
+decorativa=True)`): color con `color-mix` al 12 % y nunca `opacity`, absoluta para no darle alto
+a la caja, oculta en celular.
+
+**La ficha de Cardinal** (`pagina_cardinal()`):
+
+- `ficha_hero()` y `fichaHero()`: una sección de `100svh` más `120svh` de recorrido
+  (`--recorrido`, sólo con `data-vivo`), con el contenido `sticky` a `100svh`. La foto es un
+  bloque a pantalla completa recortado con `clip-path: inset()` a una ventana de `--w` por
+  `--h`, que arranca en una tarjeta cuadrada (`--tarjeta`, `clamp(9rem, 12.5vw, 15rem)`). Un
+  ScrollTrigger con `scrub` y sin pin escribe `--w` con `power1.out` y `--h` con
+  `power1.inOut`: el ancho abre más rápido y la ventana pasa de 1:1 a 16:9. Detrás corre la
+  cinta continua de cuatro isotipos al 18 % de opacidad, que sube a 1,5 veces el scroll; el
+  nombre y la bajada se van en el primer cuarto, y "(Scroll)" a 0,4. Sin GSAP o con menos
+  movimiento: foto abierta, sin recorrido.
+- `marcador()` y `marcadores()`: la línea vertical de 1 por 72 px que escala de 0 a 1 en .6 s
+  cuando un IntersectionObserver la ve (margen inferior del 10 %). Va antes del título, de
+  Financiación y del cierre.
+- `carrusel()` y `arrastrar()`: un carril con `scroll-snap-type: x proximity`, cada lámina un
+  escalón más arriba que la anterior (`translate: 0 calc(var(--i) * -4.5svh)`) y anchos
+  alternados (`ancha` a 3:2, `angosta` a 3:4), a sangre por los dos lados. `arrastrar()` suma el
+  arrastre con el mouse, inercia con factor .92 por fotograma, un umbral de 6 px para que un clic
+  siga abriendo el visor, y un `click` en captura que se come el arrastre. Las flechas mueven una
+  lámina. La misma lista `galeria` alimenta el carrusel y el visor: `data-foto` es el índice.
+- `sub_items()`: foto 3:4 y texto, los pares espejados, el tercero alineado abajo. Sólo se emite
+  el que tiene foto y copy.
+- `franja_video()`: `cardinal.mp4` a sangre, diferido y pesado (en celular sólo el póster).
+- `unidades()`: rótulo, título, texto y la foto si hay.
+- `financiacion()`: franja `.oscuro` en bordó de `50svh` mínimo, con marcador, título, el copy
+  si hay y el CTA a WhatsApp.
+- `cierre_ficha()`: marcador, la frase si hay y el botón a `#contacto`.
+- `cardenal()`: la pieza de Fractura, diferida y con `data-reinicia`: al salir de pantalla vuelve
+  a cero, porque lo que importa es el trazo dibujándose y no un logo ya hecho.
+
+**Espacio Mavenz** (`espacio()`). Un bloque `.sangre.oscuro` en wenge con título, bajada, copy y
+el botón claro al sitio externo (con "(sitio externo)" sólo para lectores de pantalla). Cuando
+`espacio.foto` traiga un dict, entra como columna al lado.
+
+**Nosotros** (`equipo()` y `red()`; `nubeRed()`). Sólo perfiles completos; hoy ninguno lo es y
+la sección queda con título y texto. La red es la sección a sangre en bordó: los nodos entran
+escalonados cuando la nube aparece y después derivan apenas con el scroll (`--deriva`), sin
+keyframe.
+
+**Videos diferidos** (bloque de `guion.js`). `preload="none"` no alcanza: con `autoplay` el
+navegador baja el archivo igual. Ninguno tiene `src` hasta que entra en pantalla, con red de
+seguridad por scroll y por reloj para cuando el observador no dispara.
 
 ---
 
 ## Medido, no estimado
 
-| | Demo vieja (`v1/`) | Esta |
-|---|---|---|
-| Pantallas en celular (390×844) | 23,6 | **11,7** |
-| Pantallas en notebook (1366×657) | 26,2 | **16,3** |
-| Animaciones en bucle en el celular | 17 | **0** |
-| Peso de la primera carga | 10 MB | **260 KB** |
-| Peso de la página entera | — | **1,0 MB** |
-| `@keyframes` | 22 | **4** |
-| Videos, con su póster y diferidos | 1 sin diferir, 10 MB | **3**, 3,2 MB |
-| Colores fuera de `:root` | 109 | **0** |
-| Hex en toda la hoja | — | **7** (los del manual de Fractura, ni uno más) |
-| Tamaños de texto renderizados | 26 | **13** |
-| Áreas táctiles por debajo de 44 px | — | **0** |
-| Imágenes repetidas | hasta 5 veces | **0** |
+`auditar.sh`, siete carriles por URL, el 10/09. Pantallas de alto por carril:
 
-Los cuatro tonos de papel (pie, huecos, capas de la ficha) **no son colores nuevos**: salen de
-mezclar Anti-flash white con Timberwolf por `color-mix`. La paleta sigue siendo de siete.
+| URL | 390×844 | 390×660 | 812×375 | 1366×657 | 1512×982 | 1705×900 | 1920×1080 | cintas |
+|---|---|---|---|---|---|---|---|---|
+| `index.html` | 10,8 | 13,1 | 19,4 | 9,4 | 7,5 | 7,9 | 7,1 | 2 |
+| `proyectos.html` | 4,2 | 5,2 | 9,1 | 4,0 | 2,8 | 2,9 | 2,5 | 1 |
+| `cardinal.html` | 8,8 | 10,3 | 16,0 | 9,4 | 7,7 | 8,1 | 7,5 | 2 |
+| `espacio.html` | 2,9 | 3,6 | 6,2 | 3,2 | 2,2 | 2,3 | 2,0 | 1 |
+| `nosotros.html` | 3,7 | 4,6 | 7,9 | 4,1 | 2,9 | 3,0 | 2,6 | 1 |
+| `en/index.html` | 10,6 | 12,9 | 19,3 | 9,4 | 7,4 | 7,9 | 7,1 | 2 |
+| `en/proyectos.html` | 4,2 | 5,2 | 9,0 | 3,9 | 2,7 | 2,8 | 2,5 | 1 |
+| `en/cardinal.html` | 8,8 | 10,2 | 16,1 | 9,4 | 7,7 | 8,1 | 7,5 | 2 |
+| `en/espacio.html` | 2,9 | 3,6 | 6,2 | 3,2 | 2,2 | 2,3 | 2,0 | 1 |
+| `en/nosotros.html` | 3,6 | 4,4 | 7,9 | 4,0 | 2,8 | 3,0 | 2,6 | 1 |
 
----
+En las setenta corridas: **cero** desborde horizontal, **cero** contenido recortado, **cero**
+toques por debajo de 44 px (también en escritorio), **cero** contrastes por debajo de 4,5 y
+**cero** animaciones infinitas fuera de las cintas.
 
-## Los tres carriles
+**`cintas: N` es a propósito**: son las cintas continuas (`data-fx="marquee"`), dos en Inicio
+(hero y contacto), dos en la ficha (isotipos y contacto) y una en las demás (contacto). El
+auditor las lista aparte en vez de contarlas como infinitas. Lo marcado con `data-sangra` (las
+cintas se pasan del recorte adrede) no cuenta como recortado, y lo marcado con `data-decorativo`
+(el puente) no cuenta como pantalla sin tinta.
 
-| Carril | Medida | Qué cambia |
-|---|---|---|
-| Celular | 390×844 | Rueda de puntos, verbos del método en línea, red apilada |
-| Notebook horizontal | 1366×657 | **Todo lo que ocupa alto se mide contra `svh`**: el ritmo entre secciones, la rueda, el hero, el trazo del método |
-| Escritorio | ≥1512 | La rueda con las píldoras, la red como nube, la marginalia al margen |
+Las diez URLs dan `ok` en los siete carriles. El auditor exceptúa el pie de la cuenta de
+paradas casi vacías (en el celular acostado la última pantalla es solo el pie, que a propósito
+no cuenta como tinta) y la cabecera flotante del contraste (su fondo real es el video).
 
-Y un cuarto que no se rompe aunque no esté en la lista: **celular acostado** (812×375), que cae
-por una consulta de **alto** con tope de ancho, para que no se lleve puesta a la notebook.
+Los videos, con póster y diferidos:
 
----
-
-## Decisiones que tomé y conviene revisar
-
-1. **No hay formulario, hay motivos.** El diseño no trae formulario y Vero marcó que lo que
-   quiere es que pidan una reunión. En el cierre hay cuatro motivos —presentar un proyecto,
-   buscar una oportunidad, proponer una alianza, conocer Espacio Mavenz— y cada uno abre
-   WhatsApp con su propio mensaje. Eso recupera lo que hacía el formulario de la demo vieja:
-   saber quién escribe. Son los tres públicos que nombró en el audio del 04/09
-   —desarrollador, consumidor final e inversor— más los partners.
-2. **El copy en inglés lo escribí yo**, traduciendo el de Vero. Mavenz lo tiene que revisar, y
-   sobre todo confirmar el claim del hero: *Mavenz creates momentum* es la traducción fiel de
-   *Mavenz genera movimiento*, pero un claim de marca lo decide la marca. La alternativa que ya
-   usaba el kit es *Moving things forward*. Está anotado en `sitio.en.json`.
-3. **El WhatsApp y el correo hay que confirmarlos.** El número viene de la demo vieja y
-   `hola@mavenz.com.ar` salió del diseño. Están en `contacto_datos` del JSON.
-4. **Sin banner de cookies**, porque todavía no hay etiquetas de medición configuradas. Cuando
-   entren, va el de la convención: una línea, un botón *Entendido*, abajo a la izquierda.
-5. **Cuatro pesos tipográficos** (300, 400, 600, 800) en vez de tres. Vero pidió en el audio
-   "el grueso y gigante, y después los subtítulos más finitos": ese contraste necesita los dos
-   extremos, y el peso 400 es el de la interfaz.
-6. **El `backdrop-filter` de la cabecera y del botón de WhatsApp se queda.** No es
-   glassmorphism decorativo: es una barra translúcida sobre una foto, que es lo que resuelve la
-   legibilidad del menú sobre el hero.
-7. **El dossier da 79/100.** Sus tres primeras recomendaciones son sumar efectos —reveal por
-   sección, parallax, entrada de títulos— y las tres están descartadas a propósito: Vero marcó
-   **un solo efecto** de diez.
-
-## Lo que falta y hay que pedirle a Vero
-
-Está construido con marcadores a la vista, no con relleno disimulado, así ella ve qué debe:
-
-- **Foto de Espacio Mavenz.** Cero material y es una sección entera.
-- **Fotos del equipo y de la red.**
-- **Qué otros proyectos entran y con qué fotos.** Hoy sólo CARDINAL tiene material.
-- **Los textos reales de "Contenido y mirada".**
-- **Las URL de Instagram, LinkedIn y Facebook.**
-- **Confirmar el WhatsApp y el correo.**
-- **Que Mavenz revise el inglés**, en especial el claim del hero.
-
-Aparte, en mensaje separado: **rotar la credencial de Gmail** que vino en texto plano en el
-archivo de 2 Clics.
-
----
-
-## Verificado y lo que no
-
-Verificado con medición en vivo y captura: los tres carriles más el celular acostado, cero
-desborde horizontal en los cuatro, las anclas del menú no quedan tapadas por la cabecera, la
-rueda cambia de capacidad, el menú de celular abre y cierra, el selector ES/EN va y vuelve
-entre las dos versiones, ninguna palabra en castellano se coló en `en.html`,
-`prefers-reduced-motion` deja la página completa y legible, consola sin errores en las dos.
-
-**Sobre el largo, que es lo que hay que mirar**: la notebook pasó de 10,5 a 16,3 pantallas en las
-dos pasadas. Sigue por debajo de la demo vieja (26,2) y con muchísimo más adentro —tres
-proyectos, seis territorios, el método con contenido, la sección de ellas, tres videos—, pero es
-lo contrario de lo que pidió Vero cuando dijo que la anterior era muy larga.
-
-Lo que ya se hizo para contenerlo: tres de las nueve fotos de CARDINAL viven **sólo en el visor**
-(el contenido está, el scroll no crece), las fichas de la grilla no pasan de `46svh` de alto, y
-el pin del método mide lo que miden las cartas y no la pantalla entera.
-
-Lo que queda como palanca, a una variable: `--ritmo` en el bloque de la notebook, hoy en
-`8.5svh`. Y la decisión más grande, si Vero insiste con el largo: **el pin del método cuesta
-cerca de una pantalla y media**; sin él los cinco pasos siguen siendo un estante que se desliza.
-
-**No verificado:** el toque real en un teléfono. El panel del navegador corre oculto en esta
-máquina y no completa los clicks; las áreas táctiles están medidas (44 px, ninguna por debajo)
-pero el gesto hay que probarlo en el teléfono.
-
-**Una trampa del método, anotada porque costó caro:** `--window-size` de Chrome headless **no
-baja de 500 px**. Si le pedís 390 maqueta a 500 y recorta la imagen a 390, así que la captura
-muestra textos cortados y botones fuera de pantalla en una web que no desborda. Las capturas de
-celular de este LEEME salen del capturador por DevTools
-(`~/.claude/skills/visual-verify/scripts/capturar-celular.py`), que usa
-`Emulation.setDeviceMetricsOverride` y lo reaplica después de navegar.
-
----
-
-## Medido el 08/09, contra el sitio publicado
-
-| | Inicio | Nosotras | Proyectos |
+| Video | Peso | Póster | Dónde |
 |---|---|---|---|
-| Pantallas en celular (390×844) | 7,3 | 5,3 | 8,2 |
-| Pantallas en notebook (1366×657) | 7,4 | 6,2 | 11,0 |
-| Primera carga, celular | 348 KB | 242 KB | 663 KB |
+| `hero.mp4` | 707 KB | 112 KB | el hero de Inicio: recorte de 2,9 s del post de Cardinal, en ida y vuelta, sin el subtítulo quemado. En celular sólo el póster |
+| `cardinal.mp4` | 3,0 MB | 72 KB | la franja de la ficha. En celular sólo el póster |
+| `cardenal.mp4` | 22 KB | 4 KB | el cardenal, en la ficha. Se baja en todos los carriles |
 
-**Cero scroll lateral** en los cinco carriles (390×844, 390×660, 1366×657, 1512×982 y 812×375
-acostado), probado moviendo la página de costado de verdad y no leyendo `scrollWidth` — el
-`pin-spacer` de GSAP infla ese número 28 px sin que se vea ni se pueda scrollear.
+`@keyframes` en la hoja: siete (`mvLetra`, `mvEntra`, `mvCinta`, `mvCintaY`, `cookiesEntrar`,
+`cookiesAparecer`, `flotante-pliegue`). Una sola con `infinite`: la cinta.
 
-**Cero** `@keyframes` infinitos, **cero** hex fuera de `:root`, **cero** errores de consola,
-**cero** toques por debajo de 44 px en los carriles de celular.
+---
 
-Con `prefers-reduced-motion` y con salto directo al fondo, **ningún bloque queda invisible** en
-las tres páginas.
+## Trampas
 
-### Dos cosas que el auditor marca y quedan así a propósito
+Las que costaron una vuelta, viejas y nuevas.
 
-- **`transition: grid-template-rows`** en el acordeón. Es una propiedad de layout, sí, pero es
-  la receta `0fr↔1fr` del vault, que existe justamente para no inventar un `max-height: 1000px`
-  ni medir con JS. Se anima una fila de un elemento chico.
-- **El puntaje del auditor de efectos es 73/100.** Este sitio tiene motor propio de reveal;
-  encimarle un segundo motor sobre los mismos elementos es el error ya documentado (dos
-  animaciones de opacidad sobre el mismo nodo lo dejan invisible) y ningún puntaje lo compensa.
-  Lo que el auditor marcaba **y era real** ya se arregló: los cuatro mundos no tenían encabezado
-  ni entrada propia, y faltaba `scroll-padding-top`.
+- **El motor de reveal compara `data-fx="reveal"` por igualdad exacta.** Un
+  `data-fx="reveal tilt"` no es una sección de reveal. Por eso el tilt va en la tarjeta
+  (`.mundo`) y nunca en una sección: `tilt()` busca `[data-fx~="tilt"]`, el motor busca
+  `[data-fx="reveal"]`, y son dos elementos distintos.
+- **La cinta nunca es hija directa de una sección de reveal.** El motor le escribe `opacity` y
+  un transform a cada hijo directo: a la cinta le pisaría la opacidad, y el transform la
+  convertiría en bloque contenedor. En el contacto vive adentro de `.contacto__caja`, y su tinte
+  es color con `color-mix`, no `opacity`: un elemento, una sola cosa que lo controle.
+- **El observador de una cinta continua va sobre el ancestro quieto, nunca sobre el riel.** Un
+  riel en movimiento entra y sale del umbral solo y apaga lo que tiene que prender.
+  `cintasContinuas()` observa `[data-cinta-continua]`, no `[data-cinta-riel]`.
+- **`translate: 0px` no es `none`.** `@keyframes mvEntra { to { translate: none } }` interpola a
+  `0px`, y un `translate` distinto de `none` convierte al elemento en bloque contenedor de todo
+  `position: fixed` que tenga adentro, y además le crea un contexto de apilamiento que sus hijos
+  con `z-index` negativo pueden estar usando sin que nadie lo sepa. Por eso, cuando la entrada
+  termina, `animationend` marca `data-entrado` y el CSS saca el transform del todo. Y por eso la
+  tarjeta de cookies cuelga de `<body>` y de nada más.
+- **`lenis.stop()` con el menú abierto.** Lenis mueve el scroll a mano, así que el
+  `overflow: hidden` del `body` no lo frena. El flotante lo para al abrir y lo arranca al cerrar;
+  y como `guion.js` intercepta los `href="#ancla"` y los manda a `lenis.scrollTo`, que Lenis
+  parado ignora, el clic en un enlace del panel cierra **en captura**, antes de que el enlace haga
+  lo suyo.
+- **`min-width: 0` en los hijos de la grilla del contacto.** Un item de grilla es
+  `minmax(auto, 1fr)`: no encoge por debajo de su contenido, y una solapa larga estiraba la
+  columna y rompía el 4fr / 6fr. Lo mismo en la fila del acordeón: `flex-wrap` y `min-width: 0`
+  para que el signo no se salga cuando el nombre del territorio es largo.
+- **El snap alinea contra el borde del scrollport, no del padding.** Un carril a sangre con
+  `padding-inline` para alinearse con el texto necesita el mismo valor en
+  `scroll-padding-inline` (el carril de esferas y el carrusel lo llevan), y `carrilEsferas()`
+  descuenta ese padding al calcular a qué tarjeta ir.
+- **Una lista de selectores huérfana se pega a la regla siguiente.** Al borrar un bloque de CSS
+  y dejar sus selectores sin llaves, el parser los une con coma a la regla de abajo, y esa regla
+  pasa a aplicarse a lo que uno creía borrado. Pasó en este rediseño al sacar los bloques viejos;
+  con `grep -c` a cero antes y el auditor después se atrapa.
+- **El `h2` de la cinta no puede heredar el cuerpo.** La primera pieza de una cinta con
+  `titulo=True` es un `h2`; `h2.cinta__pieza` resetea sólo el margen, porque con `font: inherit`
+  tomaba el cuerpo del `body` y la primera pieza salía chica.
+- **El pie va con `flex-wrap`.** En 390 la fila de abajo lleva lugar, páginas, idioma y el botón
+  de cookies; sin wrap el último se salía y el celular hacía zoom out (`innerWidth` 425 en vez de
+  390).
+- **`.oscuro` se rompe de dos maneras.** Un descendiente con `color` propio no hereda (pintar el
+  `summary` no alcanzaba para el `span` del nombre), y uno con fondo propio claro no puede
+  recibir el tono claro (el botón `.boton--claro` necesita su propia regla, más específica).
+- **El título del contacto se mide contra la columna, no contra el viewport.** `var(--t-hero)` a
+  1512 daba 96 px y la palabra pisaba el botón de al lado; ahora es
+  `clamp(2.25rem, 15cqi, var(--t-hero))` con `container-type: inline-size` en la columna.
+- **Dos clases para la cinta del hero y la de la ficha.** La base `.cinta` (papel, filete,
+  padding) está más abajo en la hoja y con una sola clase le ganaba: texto papel sobre fondo
+  papel, una banda vacía.
 
-## Trampas que costaron una vuelta cada una
+---
 
-- **Un item de grilla es `minmax(auto, 1fr)`: no encoge.** `#proyectos-bloque` empujaba 1675 px
-  dentro de un viewport de 812. Va `min-width: 0`.
-- **El motor de reveal escribe `opacity` a los hijos de la sección**, así que el `opacity: .07`
-  de la palabra gigante de contacto se lo comía y la palabra tapaba el texto. Se resolvió con
-  color tintado en vez de opacidad: un elemento, una sola cosa que lo controle.
-- **La órbita no entra en 390 px.** Cuatro rótulos a radio 38 % más un panel al centro se
-  cruzan entre sí y con el anillo. En celular el arco se desenrolla y queda una lista vertical.
-- **Las secciones traen sus colores de papel.** Adentro de un mundo el fondo es la tinta y el
-  bordó sobre bordó desaparece. Hay un bloque de legibilidad que reasigna todos los tonos de
-  una vez, en lugar de parchear sección por sección.
-- **El video de fondo de Cardinal son 3 MB.** En celular no se baja: el póster ya cuenta la
-  escena. La página pasó de 3679 KB a 663 KB.
+## Lo que debe Vero
 
-## Ronda 08/09 — los once del video de proyectos
+Cada cosa tiene su clave y, mientras falta, el sitio se ve así.
 
-David grabó 34 segundos de `proyectos.html` y salieron once cosas. Las seis
-primeras eran errores duros, medidos y reproducidos antes de tocar nada.
-
-| # | Qué pasaba | Causa |
+| Qué falta | Clave | Cómo queda mientras |
 |---|---|---|
-| 1 | 1,6 pantallas vacías en el mundo Cardinal | el pin de GSAP no agarraba |
-| 2 | los seis nombres del mapa, invisibles | tinta sobre tinta, contraste 1,00 |
-| 3 | el texto de la ficha vacía, invisible | papel sobre papel, 1,06 |
-| 4 | el índice lateral eran cinco rayas de 22×2 | sin área de toque y con tono de papel |
-| 5 | el video del cardenal leía como imagen rota | cuadrado claro dentro del mundo bordó |
-| 6 | el pie del mundo encima de la foto del Espacio | sin contexto de apilamiento propio |
-| 7-8 | copy repetido en Territorio y en Espacio | dos frases dichas dos veces |
-| 9 | Cardinal pesaba 4,3 pantallas contra 1,2 de los otros | riel a 1:1 con el scroll |
-| 10-11 | aire del mosaico y legibilidad de Territorio | se resolvieron con 1 y 2 |
+| Metraje de dron limpio, sin subtítulos | `hero.video` | el recorte de 2,9 s del post de Cardinal |
+| Las dos fotos en círculo de Somos Mavenz | `quienes.circulos` | dos aéreas reales, provisorias, para que se vea la composición |
+| Proyectos confirmados para Otros proyectos (Porto y WA son de Grupo MDay y no los confirmó) | `proyectos.otros_publicar`, `proyectos.otros`, `mundos.lista[1].foto` | la sección no se emite; el panel de Inicio lleva al formulario, con una aérea provisoria |
+| Fotos y copy de jardines, cochera, SUM y espacios verdes; copy de la pileta | `proyectos.cardinal.sub_items` | los sub-items no se emiten |
+| Plano o foto de tipologías | `proyectos.cardinal.unidades.foto` | el render interior |
+| Copy de financiación (plazos, anticipo, cuotas) | `proyectos.cardinal.financiacion.copy` | título y CTA |
+| La frase de cierre de la ficha | `proyectos.cardinal.cierre.titulo` | el botón solo |
+| Confirmar los epígrafes reescritos sin "casas" y la grafía de GRIFIL | `proyectos.cardinal.galeria[].epigrafe`, `proyectos.cardinal.aclaracion` | neutros, como vinieron |
+| Foto aprobada de Espacio Mavenz | `espacio.foto` | sin foto |
+| El equipo completo: foto, nombre y apellido, rol y una línea por persona | `equipo.personas`, `paginas.nosotros.publicar` | la página se genera con `noindex` y fuera del menú |
+| Copy de las opciones "Quiero generar una alianza" y "Quiero conocer Espacio Mavenz" | `contacto.motivos[2].copy`, `contacto.motivos[3].copy` | sin línea sobre el formulario |
+| Aprobar la nota de privacidad y el texto de cookies, que propuso DT | `contacto.formulario.privacidad`, `cookies.texto` | la propuesta |
+| La clave pública de Web3Forms (se crea con el mail de Mavenz) | `contacto.formulario.clave` | el formulario abre WhatsApp |
+| Las URL de Instagram, LinkedIn y Facebook | `redes[].href` | los nombres en texto |
+| Confirmar el WhatsApp y el correo (el número viene de la demo vieja, el correo del diseño) | `contacto_datos` | los datos actuales; quedan fuera de los datos estructurados hasta que confirme |
+| IDs de GA4 y de pixel | `medicion` | sin aviso de cookies |
+| Revisar el inglés, en especial el claim del hero (*Mavenz creates momentum* o *Moving things forward*) | `sitio.en.json` | la traducción de DT |
+| El copy en portugués | `sitio.pt.json` | PT deshabilitado en el selector |
+| Confirmar que Gestión & Evolución desaparece del Universo (el documento fija tres esferas) | `universo.esferas` | tres esferas y el anillo |
+| Decidir qué "movimiento" cambia: hoy aparece en 10 textos, `python3 armar.py --palabra movimiento` los lista | varias | no se reescribe nada sin ella |
 
-### La trampa que las explica a casi todas
+Aparte, y viene del LEEME anterior sin novedad conocida: **rotar la credencial de Gmail** que
+vino en texto plano en el archivo de 2 Clics.
 
-**Una animación CSS que toca `translate` deja el valor en `0px`, no en `none`.**
-`@keyframes mvEntra { to { translate: none } }` interpola a `0px`, y un
-`translate` distinto de `none` convierte al elemento en **bloque contenedor de
-todo `position: fixed` que tenga adentro**. El pin de GSAP se declaraba `fixed`
-pero se posicionaba contra `.mundo-pleno__interior`: medido, su borde superior
-pasaba de −746 a −1446 mientras la página bajaba 700. El riel se iba de la
-pantalla y quedaba el hueco que el `pin-spacer` había reservado.
+---
 
-La solución es sacar el transform cuando la entrada termina (`data-entrado` por
-`animationend`), no dejarlo en cero. Eso destapó de paso el error 6: el bloque
-del Espacio venía andando **de rebote**, porque ese mismo `translate: 0px` le
-creaba sin querer el contexto de apilamiento que sus hijos `z-index: -2`
-necesitaban. Al sacarlo, la foto se fue detrás del fondo del mundo. Ahora el
-contexto es explícito (`#espacio-bloque { isolation: isolate; overflow: hidden }`).
+## Verificación
 
-### La otra lección, la de los tonos
+```bash
+cd mavenz-web && python3 -m http.server 8899    # sirve /demo/...
+demo/auditar.sh                                   # las diez URLs, siete carriles
+```
 
-El bloque que reasigna los colores adentro de un mundo oscuro se rompe de dos
-maneras, y las dos aparecieron el mismo día:
+`auditar.sh` corre `~/.claude/skills/visual-verify/scripts/auditar.py` (necesita el venv con
+`websocket-client`) sobre `index`, `proyectos`, `cardinal`, `espacio` y `nosotros`, en ES y en
+`en/`. Los siete carriles: celular 390×844, celular bajo 390×660, acostado 812×375, notebook
+1366×657, escritorio 1512×982, el ancho de David 1705×900 y 1920×1080. Pregunta lo que una
+captura no contesta: pantallas sin tinta scrolleando de verdad, desborde moviendo la página de
+costado, contenido recortado por un ancestro con `overflow: clip`, toques de 44 px en todos los
+carriles, contraste compuesto contra el primer fondo opaco e infinitas fuera de las cintas.
 
-1. Un descendiente con **`color` propio** no hereda: pintar el `summary` no
-   alcanzaba para el `<span>` del nombre.
-2. Un descendiente con **fondo propio claro** no puede recibir el tono claro
-   del mundo: la ficha vacía quedó blanco sobre papel.
+Lo que el auditor no mide y hay que probar con la pestaña al frente o en el teléfono: la
+apertura de la tarjeta de Cardinal (con `?sinlenis` en la URL para depurar sin scroll suave), el
+trazo del método dibujándose, hover y toque en la órbita, el carril con swipe, el flotante con
+teclado (Tab, Enter, Escape, foco de vuelta), el envío real con una clave de Web3Forms (hoy no
+hay: sólo existe el fallback a WhatsApp), el aviso de cookies con un ID de prueba y recarga,
+`prefers-reduced-motion` forzado con salto directo al fondo, y el toque real en un teléfono.
+**Una trampa del método**: `--window-size` de Chrome headless no baja de 500 px; las capturas de
+celular salen del capturador por DevTools
+(`~/.claude/skills/visual-verify/scripts/capturar-celular.py`), que usa
+`Emulation.setDeviceMetricsOverride`.
 
-### Verificación
-
-`~/.claude/skills/visual-verify/scripts/auditar.py` pregunta lo que una captura
-no contesta: pantallas sin tinta (scrolleando de verdad, porque un pin reserva
-altura y da falso positivo si se mide el documento quieto), contraste real
-compuesto contra el primer fondo opaco, toques de 44 px **también en
-escritorio**, y contenido recortado por un ancestro con `overflow: clip`.
-Siete carriles, incluido el 1705×900 que usa David.
-
-Sabe dos cosas que no puede medir y las saltea en vez de mentir: lo que está
-adentro de algo `fixed`/`sticky` flota sobre lo que hay debajo, que no está en
-su cadena de ancestros; y lo marcado con `data-sangra` (la cinta) se pasa del
-recorte a propósito.
+La limpieza final ya pasó: el CSS de la versión anterior se podó con un parser de reglas
+(103 reglas, de 132 a 120 KB; `scratchpad/podar_css.py` en la sesión del 10/09 tiene el
+método: una clase que no aparece en ningún HTML generado ni en el JS es muerta, salvo los
+bloques que el generador emite solo con dato), el guion perdió la rueda, el método horizontal,
+la foto quieta y las palabras que se forman, y `video/banda.mp4` con su póster salieron del
+repo. Siguen en el historial de git.

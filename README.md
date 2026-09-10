@@ -10,7 +10,7 @@ https://davidtaranto96.github.io/mavenz-web/
 
 | Carpeta | Qué es |
 |---|---|
-| `demo/` | **El sitio.** Tres páginas generadas por `armar.py` desde `contenido/sitio.json` |
+| `demo/` | **El sitio.** Cinco páginas (más `en/`) generadas por `armar.py` desde `contenido/sitio.json` y la capa `sitio.en.json` |
 | `img/` | Las fotos ya optimizadas a webp en los anchos que usa el sitio |
 | `video/` | Los videos recortados y sus pósters |
 | `fuente/` | Urbanist |
@@ -66,15 +66,21 @@ quién lo elige, qué oportunidades aparecen, qué ve Mavenz.
 
 ### Color
 
-| Token | Hex | Uso |
-|---|---|---|
-| Marrón principal | `#342223` | Fondo oscuro dominante |
-| Marrón elevado | `#3d2729` | Superficie un escalón más clara |
-| Marrón medio | `#5b484a` | Texto secundario sobre claro |
-| Arena | `#b7a18a` | Acento |
-| Arena oscuro | `#9c8976` | Hover del acento |
-| Gris | `#a1a7a8` | Texto secundario sobre oscuro |
-| Blanco | `#ffffff` | Fondo claro |
+Son exactamente **siete**, los del manual de Fractura Studio. `#FFFFFF` no existe: el fondo es el
+papel. Viven como tokens en `demo/estilos.css` y no hay ningún otro hex en la hoja.
+
+| Nombre del manual | Token | Hex | Uso |
+|---|---|---|---|
+| Eerie Black | `--tinta` | `#1E1E20` | la tinta de los títulos |
+| Old Burgundy | `--tinta-bordo` | `#3C2527` | la tinta de la marca; fondo del hero de Cardinal y de Financiación |
+| Bistre | `--tinta-parrafo` | `#492F22` | el párrafo; fondo del Universo Mavenz |
+| Wenge | `--tinta-apoyo` | `#715D55` | tinta de apoyo; fondo de Espacio Mavenz |
+| Grullo | `--linea-acento` | `#B7A28B` | filetes con acento |
+| Timberwolf | `--linea` | `#D3CFC8` | filetes comunes |
+| Anti-flash white | `--papel` | `#EEECEC` | el papel: el fondo de todo el sitio |
+
+Los tonos intermedios (`--papel-pie`, las capas de papel, los velos) son mezclas de esos siete con
+`color-mix` o alfa, nunca un hex nuevo.
 
 ### Tipografía
 

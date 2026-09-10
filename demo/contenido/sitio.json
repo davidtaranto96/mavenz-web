@@ -27,36 +27,9 @@
       "href": ""
     }
   ],
-  "menu": [
-    {
-      "id": "universo",
-      "rotulo": "Universo"
-    },
-    {
-      "id": "metodo",
-      "rotulo": "Cómo trabajamos"
-    },
-    {
-      "id": "espacio",
-      "rotulo": "Espacio Mavenz"
-    },
-    {
-      "id": "proyectos",
-      "rotulo": "Proyectos"
-    },
-    {
-      "id": "red",
-      "rotulo": "Red"
-    },
-    {
-      "id": "mirada",
-      "rotulo": "Contenido"
-    }
-  ],
   "hero": {
     "titulo": "Mavenz genera movimiento",
     "bajada": "Somos el partner estratégico que mueve el real estate.",
-    "apoyo": "Conectamos visión, estrategia, comunicación, negocios y personas para transformar oportunidades en proyectos que avanzan.",
     "cta1": {
       "rotulo": "Conocé el Universo Mavenz",
       "href": "#universo"
@@ -65,365 +38,383 @@
       "rotulo": "Hablemos",
       "href": "#contacto"
     },
-    "foto": {
-      "src": "../img/aerea-dia",
-      "anchos": [
-        800,
-        1600
-      ],
+    "video": {
+      "src": "video/hero.mp4",
+      "poster": "video/hero-poster.webp",
       "alt": "Vista aérea de San Lorenzo, Salta",
-      "ancho": 1600,
-      "alto": 739
-    }
+      "_dt": "Recorte de 2,9 s del post de Cardinal (25,0-27,9 s), en ida y vuelta, sin el subtitulo quemado. Es un reemplazo: el clip de dron limpio lo debe Vero. En celular solo se ve el poster."
+    },
+    "cinta": [
+      {
+        "rotulo": "Cardinal",
+        "href": "cardinal.html"
+      },
+      {
+        "rotulo": "Universo Mavenz",
+        "href": "#universo"
+      },
+      {
+        "rotulo": "Espacio Mavenz",
+        "href": "espacio.html"
+      },
+      {
+        "rotulo": "Mirada Mavenz",
+        "href": "#mirada"
+      },
+      {
+        "rotulo": "Cómo trabajamos",
+        "href": "#metodo"
+      }
+    ],
+    "_dt": "Los destinos de la cinta se actualizan cuando existan cardinal.html, espacio.html y la seccion #mirada en Inicio (fases 4 y 5)."
   },
   "quienes": {
-    "margen": "Salta, Argentina",
     "titulo": "Somos Mavenz",
-    "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance.",
-    "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién.",
-    "piezas_rotulo": "Dónde trabajamos",
-    "piezas": [
-      {
-        "epigrafe": "San Lorenzo, Salta",
-        "foto": {
-          "src": "../img/sanlorenzo",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Vista aérea de San Lorenzo al atardecer",
-          "ancho": 1600,
-          "alto": 739
-        }
-      }
-    ],
-    "_dt": "Los mockups de agenda y carpeta salieron por pedido de David del 08/09. PENDIENTE: no hay ninguna foto propia de Mavenz en el material; esta es la mejor disponible. Pedirsela a Vero."
-  },
-  "universo": {
-    "titulo": "El Universo Mavenz",
-    "intro": "Mavenz funciona como un universo de capacidades conectadas. No son servicios sueltos: cada una empuja a la siguiente.",
-    "ayuda": "Cada esfera se activa al pasar.",
-    "_dt": "Las cuatro esferas son textuales del WhatsApp de Vero del 07/09/26. Marca y comunicacion NO es esfera: es el anillo que las rodea, decision de David del 08/09. El componente tolera de 4 a 6 esferas sin tocar CSS.",
-    "esferas": [
-      {
-        "id": "estrategia",
-        "numero": "01",
-        "nombre": "Estrategia y Consultoría",
-        "copy": "Definimos el rumbo y diseñamos el mejor camino para potenciar cada oportunidad."
-      },
-      {
-        "id": "desarrollo",
-        "numero": "02",
-        "nombre": "Desarrollo de Negocios",
-        "copy": "Generamos alianzas, conectamos actores e impulsamos nuevas oportunidades."
-      },
-      {
-        "id": "comercializacion",
-        "numero": "03",
-        "nombre": "Comercialización",
-        "copy": "Llevamos cada oportunidad al mercado mediante una estrategia comercial y de posicionamiento."
-      },
-      {
-        "id": "gestion",
-        "numero": "04",
-        "nombre": "Gestión & Evolución",
-        "copy": "Acompañamos el crecimiento, la administración y la evolución de cada oportunidad para seguir generando valor."
-      }
-    ],
-    "mapa": {
-      "titulo": "El mapa Mavenz",
-      "intro": "Seis territorios, y quién está comprando en cada uno.",
-      "rotulo_quien": "Quién compra ahí",
-      "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
-      "territorios": [
-        {
-          "id": "micro",
-          "nombre": "Micro y Macrocentro",
-          "bajada": "Donde el patrimonio comienza a transformarse",
-          "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
-          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
-        },
-        {
-          "id": "norte",
-          "nombre": "Zona Norte",
-          "bajada": "La ciudad crece hacia la naturaleza",
-          "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
-          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
-        },
-        {
-          "id": "sanlorenzo",
-          "nombre": "San Lorenzo",
-          "bajada": "Dos territorios, dos formas distintas de vivir",
-          "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
-          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
-        },
-        {
-          "id": "aeropuerto",
-          "nombre": "Zona Aeropuerto y San Luis",
-          "bajada": "Conectividad que impulsa crecimiento",
-          "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
-          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
-        },
-        {
-          "id": "cafayate",
-          "nombre": "Cafayate y Cachi",
-          "bajada": "Invertir también es elegir una forma de vivir",
-          "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
-          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
-        },
-        {
-          "id": "vaqueros",
-          "nombre": "Vaqueros",
-          "bajada": "Una respuesta eco-cultural",
-          "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
-          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
-        }
-      ]
-    },
-    "anillo": {
-      "nombre": "Marca y comunicación",
-      "copy": "Atraviesa las cuatro. No es una etapa: es la manera en que todo lo que hacemos se ve, se dice y se sostiene."
-    }
-  },
-  "metodo": {
-    "titulo": "Método Mavenz",
-    "intro": "El Universo Mavenz cobra vida a través de una metodología propia. No es un proceso lineal, sino un ciclo continuo donde cada resultado impulsa una nueva oportunidad.",
-    "_dt": "Copy textual del WhatsApp de Vero del 07/09/26. El quinto paso vuelve al primero: el ciclo es el mensaje.",
-    "pasos": [
-      {
-        "numero": "01",
-        "nombre": "Descubrir",
-        "copy": "Identificamos oportunidades con potencial."
-      },
-      {
-        "numero": "02",
-        "nombre": "Analizar y diseñar",
-        "copy": "Construimos la estrategia para desarrollarlas."
-      },
-      {
-        "numero": "03",
-        "nombre": "Conectar",
-        "copy": "Vinculamos personas, alianzas, recursos y oportunidades."
-      },
-      {
-        "numero": "04",
-        "nombre": "Activar",
-        "copy": "Ponemos en acción todas las capacidades del Universo Mavenz para maximizar su valor."
-      },
-      {
-        "numero": "05",
-        "nombre": "Generar Movimiento",
-        "copy": "La oportunidad se convierte en una realidad que impulsa nuevos negocios, nuevas conexiones y nuevas oportunidades. El ciclo vuelve a comenzar."
-      }
-    ],
-    "cierre": "Porque cada movimiento genera el siguiente."
-  },
-  "espacio": {
-    "margen": "Presentaciones y lanzamientos",
-    "titulo": "Un espacio donde las cosas pasan",
-    "copy": "Espacio Mavenz no es una oficina: es donde viven los proyectos. El lugar de la web donde se muestran, se presentan y se lanzan los desarrollos que Mavenz comercializa.",
-    "nota": "",
-    "cta": {
-      "rotulo": "Entrar al Espacio Mavenz",
-      "href": "https://espaciomavenz.com.ar"
-    },
-    "hueco": {
-      "rotulo": "Imagen del espacio",
-      "texto": "Reservado para una foto del lugar. Todavía no hay material."
-    },
-    "fondo": {
-      "src": "../img/aerea-amplia",
-      "anchos": [
-        800,
-        1600
-      ],
-      "alt": "Vista aérea del valle de Lerma",
-      "ancho": 1600,
-      "alto": 739
-    }
-  },
-  "proyectos": {
-    "margen": "Imágenes de render",
-    "titulo": "El movimiento, en hechos",
-    "intro": "No es un catálogo. Es una selección de proyectos, desarrollos y oportunidades en los que Mavenz participa o cree.",
-    "_dt": "Vero marcó en el tablero que entra SÓLO CARDINAL. Porto y WA los sumó David el 06/09 para que la sección tenga cuerpo, pero son de Grupo MDay: hay que confirmarlos con ella antes de mostrar la web.",
-    "destacado": {
-      "nombre": "Cardinal",
-      "meta": "San Lorenzo Chico, Salta — en comercialización",
-      "cta": "Ver el proyecto",
-      "href": "#contacto",
-      "rotulo_foto": "Imagen de render",
-      "foto": {
-        "src": "../img/casas",
+    "copy": "Nacimos con una manera diferente de trabajar dentro del Real Estate: integral, estratégica y colaborativa.",
+    "copy2": "Acompañamos a desarrolladores, inversores y propietarios de tierras, conectando estrategia, negocios, comunicación y comercialización para transformar oportunidades en proyectos que avanzan.",
+    "circulos": {
+      "_dt": "PROVISORIAS (SOM-4, 08/09): Vero pidio dos fotos en circulo, una de fondo y otra superpuesta, y no dijo cuales. Van dos aereas reales para que se vea la composicion; se cambian por las que mande. Si `circulos` queda vacio ({}), la columna no se emite y el texto ocupa el ancho.",
+      "fondo": {
+        "src": "img/aerea-verde",
         "anchos": [
           800,
           1600
         ],
-        "alt": "Calle arbolada de Cardinal con familias caminando",
+        "alt": "Vista aérea del valle de San Lorenzo",
         "ancho": 1600,
         "alto": 739
       },
-      "video": {
-        "src": "../video/cardenal.mp4",
-        "poster": "../video/cardenal-poster.webp",
+      "frente": {
+        "src": "img/aerea-dia",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Vista aérea de un barrio en San Lorenzo",
+        "ancho": 1600,
+        "alto": 739
+      }
+    },
+    "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3)."
+  },
+  "universo": {
+    "titulo": "El Universo Mavenz",
+    "intro": "Integramos estrategia, comercialización y oportunidades para acompañar todo el recorrido de un proyecto: desde la identificación de su potencial hasta su transformación en un negocio que genera valor.",
+    "centro": "Mavenz",
+    "ayuda": "Explorá cada capacidad",
+    "_dt": "Tres esferas y el anillo, textuales del documento del 08/09 (UNI-3). Gestion & Evolucion desaparece: el documento fija tres. Marca y comunicacion NO es esfera: es el anillo que las rodea.",
+    "esferas": [
+      {
+        "id": "estrategia",
+        "numero": "01",
+        "nombre": "Estrategia",
+        "copy": "Identificamos oportunidades, analizamos su potencial y diseñamos el camino estratégico para convertirlas en proyectos sólidos y diferenciales."
+      },
+      {
+        "id": "comercializacion",
+        "numero": "02",
+        "nombre": "Comercialización",
+        "copy": "Diseñamos e implementamos estrategias comerciales y de posicionamiento para acompañar el lanzamiento, la comunicación y la comercialización de cada proyecto."
+      },
+      {
+        "id": "oportunidades",
+        "numero": "03",
+        "nombre": "Oportunidades",
+        "copy": "Detectamos nuevas posibilidades de inversión, impulsamos alianzas y conectamos proyectos, personas y capital para desarrollar nuevos negocios."
+      }
+    ],
+    "anillo": {
+      "nombre": "Marca y comunicación",
+      "copy": "Acompañan todo el proceso para construir identidad, posicionamiento y coherencia en cada punto de contacto."
+    },
+    "cierre": "En Mavenz no trabajamos por áreas aisladas. Conectamos distintas capacidades según lo que cada oportunidad necesita para avanzar."
+  },
+  "metodo": {
+    "titulo": "Cómo trabajamos",
+    "intro": "Cada proyecto necesita una mirada propia. Por eso trabajamos con una metodología flexible, estratégica y colaborativa, conectando capacidades según cada desafío.",
+    "_dt": "Textual del documento del 08/09 (MET-1, MET-2). Los cinco pasos se despliegan desde la cola del trazo de la M a medida que se baja (MET-3); fondo papel y trazo en bordo (MET-4).",
+    "pasos": [
+      {
+        "numero": "01",
+        "nombre": "Descubrimos",
+        "copy": "Detectamos oportunidades con potencial."
+      },
+      {
+        "numero": "02",
+        "nombre": "Conectamos",
+        "copy": "Vinculamos a las personas y actores adecuados."
+      },
+      {
+        "numero": "03",
+        "nombre": "Estructuramos",
+        "copy": "Ordenamos la estrategia, el negocio y la oportunidad."
+      },
+      {
+        "numero": "04",
+        "nombre": "Potenciamos",
+        "copy": "Desarrollamos el valor del proyecto."
+      },
+      {
+        "numero": "05",
+        "nombre": "Movemos",
+        "copy": "Convertimos la oportunidad en acción concreta."
+      }
+    ],
+    "cierre": "Cada movimiento abre una nueva oportunidad."
+  },
+  "espacio": {
+    "titulo": "Espacio Mavenz",
+    "bajada": "Un punto de encuentro para proyectos, personas y oportunidades.",
+    "copy": "Espacio Mavenz es nuestra oficina y también un espacio colaborativo dentro del Real Estate. Un lugar pensado para trabajar, conectar, presentar proyectos, generar alianzas y hacer que nuevas oportunidades empiecen a moverse.",
+    "cta": {
+      "rotulo": "Conocé el espacio",
+      "href": "https://espaciomavenz.com.ar",
+      "externo": "(sitio externo)"
+    },
+    "foto": null,
+    "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una."
+  },
+  "proyectos": {
+    "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
+    "_dt": "proyectos.html es un indice liviano (Cardinal resumido, otros, oportunidades); la ficha completa es cardinal.html (proyectos.cardinal). Textos de Cardinal textuales del documento del 08/09 (PROY-2). Los epigrafes y alt que hablaban de 'casas' se reescribieron neutros: el producto son unidades desde 74 m2 con distintas tipologias; Vero confirma la grafia de GRIFIL.",
+    "cardinal": {
+      "nombre": "Cardinal",
+      "meta": "San Lorenzo Chico, Salta",
+      "estado": "En comercialización",
+      "titulo": "Una nueva forma de habitar San Lorenzo Chico.",
+      "texto": "Un proyecto residencial ubicado sobre una de las principales avenidas de San Lorenzo Chico, pensado para integrar arquitectura contemporánea, naturaleza y calidad de vida.",
+      "datos": [
+        "Unidades desde 74 m²",
+        "Distintas tipologías",
+        "Jardines privados",
+        "Cochera incluida",
+        "Pileta, SUM y espacios verdes",
+        "Financiación durante la obra"
+      ],
+      "aclaracion": "Desarrolla GRIFIL · Comercializa MAVENZ",
+      "cta_principal": "Conocé Cardinal",
+      "cta_comercial": "Consultá disponibilidad",
+      "wa": "Hola Mavenz, quisiera consultar la disponibilidad de Cardinal.",
+      "scroll": "(Scroll)",
+      "hero_foto": {
+        "src": "img/pileta-gente",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "La pileta de Cardinal un domingo",
+        "ancho": 1600,
+        "alto": 739
+      },
+      "galeria": [
+        {
+          "epigrafe": "Amenities — pileta y quincho",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/amenities",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta y quincho de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Calle interna",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/calle-casas",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Calle interna de Cardinal",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "La galería",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/galeria",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Galería de una unidad de Cardinal",
+            "ancho": 1600,
+            "alto": 901
+          }
+        },
+        {
+          "epigrafe": "La esquina comercial",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/render-comercial",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Esquina comercial de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Interior de una unidad",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/render-interior",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Interior de una unidad de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Atardecer sobre el barrio",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/atardecer",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Atardecer sobre Cardinal",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "San Lorenzo desde arriba",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/sanlorenzo",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Vista aérea de San Lorenzo",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "La pileta, un domingo",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/pileta-gente",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta de Cardinal con gente",
+            "ancho": 1600,
+            "alto": 692
+          }
+        }
+      ],
+      "galeria_titulo": "El proyecto en imágenes",
+      "sub_items": [
+        {
+          "id": "jardines",
+          "nombre": "Jardines privados",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "cochera",
+          "nombre": "Cochera incluida",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "pileta",
+          "nombre": "Pileta",
+          "copy": "",
+          "foto": {
+            "src": "img/pileta",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "id": "sum",
+          "nombre": "SUM",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "verdes",
+          "nombre": "Espacios verdes",
+          "copy": "",
+          "foto": null
+        }
+      ],
+      "_dt_sub_items": "FICHA-4/5: un sub-item se muestra solo con foto Y copy. Hoy ninguno tiene copy: Vero debe las fotos de jardines, cochera y SUM y el texto de los cinco. Se ocultan por dato, sin placeholder.",
+      "cardenal": {
+        "src": "video/cardenal.mp4",
+        "poster": "video/cardenal-poster.webp",
         "rotulo": "El cardenal de CARDINAL",
         "copy": "¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia, movimiento e identidad.",
         "cierre": "Y esto recién se pone en movimiento.",
         "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
       },
-      "fondo": {
-        "src": "../video/cardinal.mp4",
-        "poster": "../video/cardinal-poster.webp",
-        "_dt": "cardinal-film.mp4 recomprimido de 17 MB a 3 MB. Va de fondo con el póster primero y el video diferido."
+      "franja": {
+        "src": "video/cardinal.mp4",
+        "poster": "video/cardinal-poster.webp",
+        "alt": "Recorrido en video por Cardinal"
+      },
+      "unidades": {
+        "rotulo": "Unidades",
+        "titulo": "Unidades desde 74 m²",
+        "texto": "Distintas tipologías para distintas formas de vivir. Consultá la disponibilidad y los planos de cada una.",
+        "foto": {
+          "src": "img/render-interior",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Interior de una unidad de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        },
+        "_dt": "Falta el plano o la foto de tipologias (FICHA-6); mientras, el render interior."
+      },
+      "financiacion": {
+        "titulo": "Financiación durante la obra",
+        "copy": "",
+        "cta": "Consultá disponibilidad",
+        "_dt": "FICHA-7: falta el copy de financiacion (plazos, anticipo, cuotas). Mientras, titulo y CTA."
+      },
+      "cierre": {
+        "titulo": "",
+        "cta": "Contactanos",
+        "_dt": "FICHA-8: falta la frase de cierre. Mientras, el boton solo."
       }
     },
-    "estante": [
-      {
-        "epigrafe": "Amenities — pileta y quincho",
-        "columnas": 7,
-        "proporcion": "3 / 2",
-        "foto": {
-          "src": "../img/amenities",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pileta y quincho de Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Calle interna",
-        "bn": true,
-        "columnas": 5,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "../img/calle-casas",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Calle interna de Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Casas — galería",
-        "velo": "La galería, el fuego y el fondo",
-        "columnas": 5,
-        "proporcion": "1 / 1",
-        "foto": {
-          "src": "../img/galeria",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Galería de una casa de Cardinal",
-          "ancho": 1600,
-          "alto": 901
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "La esquina comercial",
-        "columnas": 4,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "../img/render-comercial",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Esquina comercial de Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Interior",
-        "columnas": 4,
-        "proporcion": "1 / 1",
-        "foto": {
-          "src": "../img/render-interior",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Interior de una casa de Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Atardecer sobre el barrio",
-        "bn": true,
-        "columnas": 4,
-        "proporcion": "3 / 2",
-        "foto": {
-          "src": "../img/atardecer",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Atardecer sobre Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
-      },
-      {
-        "epigrafe": "San Lorenzo desde arriba",
-        "columnas": 7,
-        "proporcion": "16 / 9",
-        "foto": {
-          "src": "../img/sanlorenzo",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Vista aérea de San Lorenzo",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
-      },
-      {
-        "epigrafe": "La pileta, un domingo",
-        "columnas": 5,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "../img/pileta-gente",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pileta de Cardinal con gente",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
-      }
-    ],
-    "hueco": {
-      "epigrafe": "Lugar disponible",
-      "texto": "Acá entran los próximos proyectos y oportunidades",
-      "columnas": 4,
-      "proporcion": "1 / 1"
-    },
-    "otros_rotulo": "También en movimiento",
+    "otros_rotulo": "Otros proyectos",
+    "otros_intro": "Proyectos confirmados y con información suficiente.",
+    "otros_publicar": false,
+    "_dt_otros": "PROY-3: solo proyectos confirmados. Porto y WA son de Grupo MDay y Vero no los confirmo: otros_publicar queda en false y no se emiten.",
     "otros": [
       {
         "nombre": "Porto",
         "meta": "Salta — en comercialización",
         "copy": "Departamentos y unidades en el corredor norte.",
         "foto": {
-          "src": "../img/porto-01",
+          "src": "img/porto-01",
           "anchos": [
             800,
             1600
@@ -438,7 +429,7 @@
         "meta": "Salta — cocheras y storages",
         "copy": "Inventario de cocheras y storages, con plano de disponibilidad.",
         "foto": {
-          "src": "../img/wa-storages",
+          "src": "img/wa-storages",
           "anchos": [
             697
           ],
@@ -447,7 +438,12 @@
           "alto": 733
         }
       }
-    ]
+    ],
+    "oportunidades": {
+      "rotulo": "Oportunidades de inversión",
+      "bajada": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
+      "cta": "Busco una oportunidad"
+    }
   },
   "red": {
     "titulo": "El movimiento nunca se genera solo",
@@ -493,86 +489,161 @@
     ]
   },
   "mirada": {
-    "titulo": "Lo que vemos antes de que se mueva",
-    "intro": "Análisis, ideas, tendencias y lecturas del mercado. Nuestra forma de mirar, escrita.",
-    "hueco": "Los primeros textos se publican con el lanzamiento.",
-    "margen": "Contenido y mirada",
-    "cita": "Antes de que un proyecto se mueva, alguien lo vio venir.",
-    "_dt": "PENDIENTE de Vero: las notas reales. Hasta que lleguen, la seccion sostiene con la cita.",
+    "titulo": "Mirada Mavenz",
+    "intro": "Analizamos el mercado, las tendencias y los territorios para anticiparnos a las oportunidades y tomar mejores decisiones.",
+    "_dt": "Seccion editorial que reemplaza a Territorio (documento del 08/09). Las cinco categorias son las sugeridas por Vero; las notas reales siguen pendientes. El mapa entra como contenido editorial con el titulo nuevo y 'Perfil y oportunidades de la zona' en vez de 'Quien compra ahi'.",
     "temas": [
       {
         "n": "01",
-        "rotulo": "Lecturas de mercado"
+        "rotulo": "Mercado y tendencias"
       },
       {
         "n": "02",
-        "rotulo": "Territorio y desarrollo"
+        "rotulo": "Desarrollo urbano"
       },
       {
         "n": "03",
+        "rotulo": "Inversión"
+      },
+      {
+        "n": "04",
+        "rotulo": "Negocios"
+      },
+      {
+        "n": "05",
         "rotulo": "Marca y comunicación"
       }
-    ]
+    ],
+    "mapa": {
+      "titulo": "Dónde está creciendo Salta y por qué",
+      "intro": "Seis territorios, y qué está pasando en cada uno.",
+      "rotulo_quien": "Perfil y oportunidades de la zona",
+      "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
+      "territorios": [
+        {
+          "id": "micro",
+          "nombre": "Micro y Macrocentro",
+          "bajada": "Donde el patrimonio comienza a transformarse",
+          "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
+          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
+        },
+        {
+          "id": "norte",
+          "nombre": "Zona Norte",
+          "bajada": "La ciudad crece hacia la naturaleza",
+          "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
+          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
+        },
+        {
+          "id": "sanlorenzo",
+          "nombre": "San Lorenzo",
+          "bajada": "Dos territorios, dos formas distintas de vivir",
+          "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
+          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
+        },
+        {
+          "id": "aeropuerto",
+          "nombre": "Zona Aeropuerto y San Luis",
+          "bajada": "Conectividad que impulsa crecimiento",
+          "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
+          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
+        },
+        {
+          "id": "cafayate",
+          "nombre": "Cafayate y Cachi",
+          "bajada": "Invertir también es elegir una forma de vivir",
+          "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
+          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
+        },
+        {
+          "id": "vaqueros",
+          "nombre": "Vaqueros",
+          "bajada": "Una respuesta eco-cultural",
+          "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
+          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
+        }
+      ]
+    }
   },
   "contacto": {
-    "apertura": "Hay proyectos, ideas y oportunidades que necesitan el movimiento correcto.",
+    "apertura": "Si tenés un proyecto, una oportunidad de inversión o una propuesta para desarrollar, queremos conocerla.",
     "titulo": "Movamos algo juntos",
-    "cta_reunion": "Pedir una reunión",
     "cta_wa": "Escribir por WhatsApp",
-    "_dt": "El diseño no lleva formulario: la entrada es pedir una reunión, que es lo que Vero marcó en el tablero. Sin servidor, cada motivo abre WhatsApp con su propio mensaje escrito. Los cuatro motivos son los tres públicos que nombró en el audio del 04/09 —desarrollador, consumidor final e inversor— más los partners: sin esto, los tres caen en el mismo mensaje y no se sabe quién escribe.",
-    "wa_reunion": "Hola Mavenz, quiero coordinar una reunión.",
-    "wa_general": "Hola Mavenz, vi la web y quiero consultar.",
+    "_dt": "Reescrito el 09/09 por pedido del documento del 08/09: cuatro opciones, cada una con su formulario (el mismo formulario, cambia el motivo y la linea de arriba). El formulario manda por Web3Forms al mail de Mavenz cuando `formulario.clave` tiene la clave publica; sin clave, compone el mensaje y abre WhatsApp. Los copys de alianza y espacio no vinieron en el documento: van vacios hasta que lleguen.",
+    "wa_general": "Hola Mavenz, estuve viendo la web y quisiera ponerme en contacto con ustedes.",
     "rotulo_motivos": "Qué querés mover",
     "motivos": [
       {
         "id": "proyecto",
-        "rotulo": "Presentar un proyecto",
+        "rotulo": "Tengo un proyecto",
+        "copy": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo.",
         "wa": "Hola Mavenz, quiero presentarles un proyecto."
       },
       {
         "id": "oportunidad",
-        "rotulo": "Buscar una oportunidad",
+        "rotulo": "Busco una oportunidad de inversión",
+        "copy": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
         "wa": "Hola Mavenz, estoy buscando una oportunidad de inversión."
       },
       {
         "id": "alianza",
-        "rotulo": "Proponer una alianza",
+        "rotulo": "Quiero generar una alianza",
+        "copy": "",
         "wa": "Hola Mavenz, quiero proponerles una alianza."
       },
       {
         "id": "espacio",
-        "rotulo": "Conocer Espacio Mavenz",
+        "rotulo": "Quiero conocer Espacio Mavenz",
+        "copy": "",
         "wa": "Hola Mavenz, quiero conocer Espacio Mavenz."
       }
     ],
     "palabra": "Contacto",
-    "solapas": [
-      {
-        "id": "invertir",
-        "rotulo": "Quiero invertir",
-        "copy": "Contanos qué estás buscando y con qué horizonte. Te acercamos lo que se mueve."
+    "bloque_datos": "Dónde encontrarnos",
+    "cta_contacto": "Contactanos",
+    "formulario": {
+      "_dt": "`clave` es la clave PUBLICA de Web3Forms (se crea con el mail de Mavenz en web3forms.com). No es un secreto: viaja en el navegador. Vacia = el formulario abre WhatsApp con el mensaje armado.",
+      "servicio": "web3forms",
+      "clave": "",
+      "asunto": "Consulta desde la web de Mavenz",
+      "campos": {
+        "nombre": "Nombre",
+        "correo": "Correo",
+        "telefono": "Teléfono (opcional)",
+        "mensaje": "Mensaje"
       },
-      {
-        "id": "proyecto",
-        "rotulo": "Tengo un proyecto",
-        "copy": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo."
-      }
-    ],
-    "bloque_datos": "Dónde encontrarnos"
+      "privacidad": "Usamos tus datos sólo para responderte.",
+      "enviar": "Enviar",
+      "enviando": "Enviando…",
+      "gracias": "Recibimos tu mensaje. Te respondemos a la brevedad.",
+      "error": "No pudimos enviar el mensaje. Probá de nuevo o escribinos por WhatsApp.",
+      "falta": "Completá este campo.",
+      "correo_invalido": "Revisá el correo."
+    },
+    "alternativa": "O escribinos directo por"
   },
   "idiomas": {
-    "_dt": "Las dos versiones están completas. El copy en inglés lo escribió DT System traduciendo el de Vero: Mavenz tiene que revisarlo, sobre todo el claim del hero.",
+    "_dt": "Cada idioma es una carpeta: el castellano en demo/, el ingles en demo/en/. `genera: false` deja el idioma en el selector como texto deshabilitado hasta que exista el copy. El ingles lo tradujo DT System del castellano de Vero: Mavenz tiene que revisarlo.",
     "es": {
       "rotulo": "ES",
-      "href": "index.html",
+      "carpeta": "",
       "lang": "es-AR",
-      "og": "es_AR"
+      "og": "es_AR",
+      "genera": true
     },
     "en": {
       "rotulo": "EN",
-      "href": "en.html",
+      "carpeta": "en/",
       "lang": "en",
-      "og": "en"
+      "og": "en_US",
+      "genera": true
+    },
+    "pt": {
+      "rotulo": "PT",
+      "carpeta": "pt/",
+      "lang": "pt-BR",
+      "og": "pt_BR",
+      "genera": false
     }
   },
   "interfaz": {
@@ -580,46 +651,29 @@
     "cerrar": "Cerrar",
     "saltar": "Saltar al contenido",
     "whatsapp": "WhatsApp",
+    "correo": "Correo",
     "idioma": "Idioma",
     "_dt": "Rótulos de interfaz, no copy de marca.",
     "abrir_foto": "Ver la foto",
     "anterior": "Anterior",
     "siguiente": "Siguiente",
-    "indice": "Secciones",
     "ver_video": "Ver el video",
-    "silenciar": "Silenciar"
+    "silenciar": "Silenciar",
+    "idioma_pronto": "Próximamente"
   },
   "equipo": {
-    "margen": "Quiénes están detrás",
-    "titulo": "Quiénes mueven Mavenz",
-    "intro": "Mavenz no es una marca sin cara. Detrás hay personas que deciden qué se mueve, cómo y con quién.",
-    "_dt": "Vero salio de los retratos por pedido de David del 08/09 (ella ya se habia excluido en la reunion). PENDIENTE de ella: las fotos, los nombres y el rol de los dos bloques nuevos. Los huecos quedan a la vista a proposito.",
+    "titulo": "Las personas detrás de Mavenz",
+    "intro": "Somos un equipo con experiencia en estrategia, negocios, comunicación y comercialización. Trabajamos de forma colaborativa y sumamos especialistas de acuerdo con las necesidades de cada proyecto.",
+    "_dt": "NOS-1..4: cada integrante lleva foto, nombre y apellido, rol real y una linea profesional; un perfil incompleto NO se publica (se genera solo si tiene los cuatro). Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. La pagina queda con noindex y fuera del menu hasta que el equipo este completo (paginas.nosotros.publicar).",
     "personas": [
       {
         "nombre": "Luchi",
+        "apellido": "",
         "rol": "Dirección",
-        "linea": "Decide qué se mueve y con quién.",
-        "hueco": "Retrato"
-      },
-      {
-        "nombre": "Pendiente",
-        "rol": "Comercialización",
         "linea": "",
-        "hueco": "Retrato"
-      },
-      {
-        "nombre": "Pendiente",
-        "rol": "Desarrollo de negocios",
-        "linea": "",
-        "hueco": "Retrato"
+        "foto": null
       }
     ]
-  },
-  "banda": {
-    "src": "../video/banda.mp4",
-    "poster": "../video/banda-poster.webp",
-    "alt": "Banda aérea del valle",
-    "_dt": "banda-aerea-1.mp4 recomprimido de 1,4 MB a 119 KB. Corta el ritmo entre el método y Espacio Mavenz sin agregar una sección."
   },
   "paginas": {
     "inicio": {
@@ -627,56 +681,118 @@
       "rotulo": "Inicio",
       "titulo": "Mavenz genera movimiento"
     },
-    "about": {
-      "archivo": "about.html",
-      "rotulo": "El equipo",
-      "titulo": "El equipo",
-      "cinta": "El equipo"
+    "universo": {
+      "ancla": "universo",
+      "en": "inicio",
+      "rotulo": "Universo Mavenz"
     },
     "proyectos": {
       "archivo": "proyectos.html",
       "rotulo": "Proyectos",
-      "titulo": "Proyectos y oportunidades",
+      "titulo": "Proyectos en movimiento",
       "cinta": "Proyectos"
+    },
+    "espacio": {
+      "archivo": "espacio.html",
+      "rotulo": "Espacio Mavenz",
+      "titulo": "Espacio Mavenz",
+      "cinta": "Espacio Mavenz",
+      "publicar": true
+    },
+    "nosotros": {
+      "archivo": "nosotros.html",
+      "rotulo": "Nosotros",
+      "titulo": "Las personas detrás de Mavenz",
+      "cinta": "Nosotros",
+      "publicar": false,
+      "_dt": "Se publica cuando el equipo este completo (foto, nombre, rol y linea de cada persona). Mientras, se genera con noindex y no entra al menu."
+    },
+    "contacto": {
+      "ancla": "contacto",
+      "rotulo": "Contactanos"
+    },
+    "cardinal": {
+      "archivo": "cardinal.html",
+      "titulo": "Cardinal",
+      "en_menu": false,
+      "publicar": true,
+      "_dt": "La ficha del proyecto. No va en el menu."
     }
   },
   "mundos": {
-    "rotulo": "La selección",
-    "ayuda": "Cada mundo, su color.",
-    "_dt": "tinta = token de estilos.css, no un hex suelto. El orden es el orden del riel y del loop.",
+    "rotulo": "Proyectos en movimiento",
+    "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
+    "_dt": "PROY-1, 3, 4, 5 del 08/09: tres paneles con foto abajo (mecanica de realevate), tilt al pasar el puntero. Cardinal lleva a su ficha (cardinal.html desde la Fase 5). Otros proyectos y Oportunidades llevan a su opcion del contacto (`motivo`) con copy tomado del contacto, decision de David del 10/09. Las fotos de otros y oportunidades son PROVISORIAS (aereas reales) hasta que Vero mande las suyas. tinta = token de estilos.css.",
     "lista": [
       {
         "id": "cardinal",
         "nombre": "Cardinal",
         "tinta": "bordo",
-        "bajada": "San Lorenzo Chico — en comercialización",
-        "cierre": "Empezá por Cardinal",
-        "href": "proyectos.html#cardinal"
+        "bajada": "San Lorenzo Chico, en comercialización",
+        "cierre": "Conocé Cardinal",
+        "href": "cardinal.html",
+        "foto": {
+          "src": "img/amenities",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Pileta y quincho de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        }
       },
       {
-        "id": "desarrollos",
-        "nombre": "Desarrollos",
+        "id": "otros",
+        "nombre": "Otros proyectos",
         "tinta": "bistre",
-        "bajada": "Proyectos en marcha y oportunidades de inversión",
-        "cierre": "Ver los desarrollos",
-        "href": "proyectos.html#desarrollos"
+        "bajada": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo.",
+        "cierre": "Contanos tu proyecto",
+        "href": "#contacto",
+        "motivo": "proyecto",
+        "foto": {
+          "src": "img/aerea-amplia",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Vista aérea amplia del valle de Lerma",
+          "ancho": 1600,
+          "alto": 739
+        }
       },
       {
-        "id": "espacio",
-        "nombre": "Espacio Mavenz",
+        "id": "oportunidades",
+        "nombre": "Oportunidades de inversión",
         "tinta": "wenge",
-        "bajada": "Donde los proyectos se presentan y se muestran",
-        "cierre": "Entrar al Espacio",
-        "href": "proyectos.html#espacio"
-      },
-      {
-        "id": "territorio",
-        "nombre": "Territorio",
-        "tinta": "tinta",
-        "bajada": "Dónde está creciendo Salta, y por qué",
-        "cierre": "Recorrer el mapa",
-        "href": "proyectos.html#territorio"
+        "bajada": "Contanos qué tipo de oportunidad estás buscando.",
+        "cierre": "Busco una oportunidad",
+        "href": "#contacto",
+        "motivo": "oportunidad",
+        "foto": {
+          "src": "img/atardecer",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Atardecer sobre San Lorenzo",
+          "ancho": 1600,
+          "alto": 692
+        }
       }
     ]
+  },
+  "medicion": {
+    "_dt": "IDs de medicion. Vacios = no hay nada que consentir y el aviso de cookies no aparece. Se activan pegando el ID real.",
+    "ga4": "",
+    "pixel": ""
+  },
+  "cookies": {
+    "titulo": "Cookies",
+    "texto": "Usamos cookies de medición para entender cómo se usa el sitio.",
+    "aceptar": "Aceptar",
+    "rechazar": "Rechazar",
+    "enlace_pie": "Cookies",
+    "_dt": "El texto lo propuso DT System: Mavenz lo aprueba o lo cambia."
   }
 }

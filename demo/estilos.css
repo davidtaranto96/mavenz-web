@@ -68,7 +68,7 @@
   --margen-int: clamp(1.25rem, 8vw - .7rem, 6.5rem);           /*  20 → 104 */
   --margen-der: clamp(1.5rem, 10.667vw - 1.1rem, 8.5rem);      /*  24 → 136 */
   --ritmo:      clamp(4rem, 2.7rem + 5.333vw, 7.5rem);         /*  64 → 120 */
-  --alto-nav:   clamp(3.75rem, 3.193rem + 2.286vw, 5.25rem);   /*  60 → 84  */
+  --alto-nav:   clamp(4rem, 3.4rem + 2.4vw, 5.75rem);           /*  64 → 92, el logo al 40 % necesita aire */
 
   /* ---- el solape de la cortina: un solo token para el margen y el padding ---- */
   --solape: clamp(80px, 12vh, 140px);
@@ -129,7 +129,8 @@ h1, h2, h3, p, figure, figcaption { margin: 0; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 
-[id] { scroll-margin-top: calc(var(--alto-nav) + 1.5rem); }
+/* Sin barra fija arriba, el ancla frena a un respiro del borde, no debajo de nada. */
+[id] { scroll-margin-top: 1.5rem; }
 
 .saltar {
   position: absolute;
@@ -184,29 +185,30 @@ p { text-wrap: pretty; }
 }
 
 /* ==========================================================================
-   Cabecera — siempre a la vista
+   Cabecera — arriba, casi transparente, y se va con la pagina
    ========================================================================== */
-
+/* Pedido del 08/09: la barra no es pegajosa (se pierde al scrollear y la
+   reemplaza el flotante), y es casi transparente como la referencia (rogo:
+   0-6 puntos de diferencia entre la barra y lo que hay debajo). El velo es
+   un alfa de .10 sobre un RGB de la paleta, sin blur: el blur de 18 px era lo
+   que la convertia en placa. `relative` y no `static` porque el hero se mete
+   debajo con margen negativo y sin z-index la barra queda tapada. */
 .cabecera {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  position: relative;
+  z-index: 21;
   height: var(--alto-nav);
   padding-inline: var(--margen-ext);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--papel-vidrio);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--hover) var(--curva);
+  background: rgba(238, 236, 236, .10);
 }
-.cabecera[data-scroll] { border-bottom-color: var(--linea); }
 
 .cabecera__marca { display: inline-flex; align-items: center; min-height: 44px; }
-.cabecera__logo { height: clamp(1.125rem, .98rem + .38vw, 1.4375rem); width: auto; }
+/* El logo mide el 40 % del alto de la barra, la proporcion de la referencia
+   (34 px en 82). Antes: 18-23 px en 60-84, un puntito. */
+.cabecera__logo { height: calc(var(--alto-nav) * .4); width: auto; }
 
 .cabecera__derecha { display: flex; align-items: center; gap: 1.125rem; }
 
@@ -214,63 +216,24 @@ p { text-wrap: pretty; }
 
 .idioma { display: flex; align-items: center; gap: .1875rem; font-size: var(--t-nota); }
 .idioma__on  { font-weight: var(--medio); color: var(--tinta); }
+/* El idioma que todavia no tiene copy se ve, pero no es un enlace. */
+.idioma__off--pronto { opacity: .55; cursor: default; }
 .idioma__sep { color: var(--linea-acento); }
-.idioma__off {
+.idioma__off,
+.idioma__on {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
-  padding-inline: .375rem;
+  min-width: 44px;          /* medido: 27 px de ancho; el toque vale en los dos ejes */
+  padding-inline: .25rem;
   font-weight: var(--ui);
   color: var(--tinta-apoyo);
   transition: color var(--hover) var(--curva);
 }
 
-.hamburguesa {
-  width: 44px; height: 44px;
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
-  gap: 5px;
-  margin-right: -10px;
-}
-.hamburguesa span {
-  display: block; width: 22px; height: 1.5px;
-  background: var(--tinta);
-  transition: transform var(--hover) var(--curva), opacity var(--hover) var(--curva);
-}
-.cabecera[data-menu] .hamburguesa span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.cabecera[data-menu] .hamburguesa span:nth-child(2) { opacity: 0; }
-.cabecera[data-menu] .hamburguesa span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-/* Panel de menú en celular */
-.panel {
-  position: fixed;
-  /* ocupa la pantalla entera debajo de la barra, no es un desplegable */
-  inset: var(--alto-nav) 0 0 0;
-  z-index: 19;
-  background: var(--papel);
-  padding: 2rem var(--margen-ext) 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  transform: translateY(-8px);
-  opacity: 0;
-  visibility: hidden;
-  transition: transform var(--cambio) var(--curva), opacity var(--cambio) var(--curva), visibility var(--cambio);
-}
-.panel[data-abierto] { transform: none; opacity: 1; visibility: visible; }
-.panel a {
-  display: flex;
-  align-items: center;
-  min-height: 56px;
-  font-size: var(--t-cita);
-  font-weight: var(--ui);
-  letter-spacing: -.01em;
-  color: var(--tinta);
-  border-bottom: 1px solid var(--linea);
-}
-.panel a:last-of-type { border-bottom: 0; }
-.panel .boton { margin-top: auto; }
+/* La hamburguesa y el panel de celular se fueron (09/09): el unico menu
+   desplegable es el flotante de abajo a la derecha. */
 
 /* mientras el menú está abierto el fondo no scrollea */
 body[data-menu-abierto] { overflow: hidden; }
@@ -312,21 +275,23 @@ body[data-menu-abierto] { overflow: hidden; }
 
 .cabecera .boton { display: none; }
 
-.panel .boton { width: 100%; margin-top: 1.25rem; }
-
 /* ==========================================================================
    Hero
    ========================================================================== */
 
+/* La primera pantalla es de alto completo con la cinta al pie, como la
+   referencia. El video es de fondo y esta diferido: en el celular no se baja
+   nunca (data-pesado), queda el poster. */
 .hero {
   position: relative;
   margin-top: calc(var(--alto-nav) * -1);
-  height: min(88svh, 55rem);
-  min-height: 30rem;
+  height: 100svh;
+  min-height: 34rem;
   overflow: hidden;
   isolation: isolate;
+  background: var(--tinta);
 }
-.hero__foto {
+.hero__fondo {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
@@ -337,27 +302,20 @@ body[data-menu-abierto] { overflow: hidden; }
   inset: 0;
   background: linear-gradient(180deg, var(--velo-1) 0%, var(--velo-2) 38%, var(--velo-3) 100%);
 }
-.hero__trazos {
-  position: absolute;
-  left: 0; right: 0;
-  /* Anclado al pie como el bloque de texto: así cruza siempre por detrás del
-     título, sea cual sea el alto del hero. */
-  bottom: 19.75rem;
-  height: 11.875rem;
-  pointer-events: none;
-}
-.hero__trazos svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero__trazos .eco { opacity: .5; }
-
+/* Titulo y bajada centrados (pedido del 08/09, con la referencia al lado):
+   una columna centrada, sin nada pegado a los bordes. El bloque vive en el
+   tercio medio y deja libre el pie para la cinta. */
 .hero__texto {
   position: absolute;
-  left: var(--margen-ext);
-  right: var(--margen-ext);
-  bottom: clamp(2.25rem, 1rem + 3.5vw, 6rem);
+  inset: var(--alto-nav) var(--margen-ext) clamp(5.5rem, 12svh, 8rem);
   z-index: 2;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
 }
 .hero__titulo {
-  max-width: 15ch;
+  max-width: 14ch;
   font-size: var(--t-hero);
   font-weight: var(--grueso);
   text-transform: uppercase;
@@ -367,77 +325,62 @@ body[data-menu-abierto] { overflow: hidden; }
 }
 .hero__bajada {
   margin-top: clamp(1.25rem, .8rem + 1.14vw, 1.875rem);
-  max-width: 26ch;
+  max-width: 34ch;
   font-size: var(--t-lead);
   font-weight: var(--fino);
   line-height: 1.45;
   color: var(--sobre-foto);
 }
-.hero__apoyo {
-  margin-top: .75rem;
-  max-width: 42ch;
-  font-size: var(--t-cuerpo);
-  font-weight: var(--fino);
-  line-height: 1.6;
-  color: var(--sobre-foto-2);
-}
 .hero__acciones {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   gap: .25rem;
   margin-top: clamp(1.625rem, 1rem + 1.6vw, 2.75rem);
 }
-.hero__acciones .boton { width: 100%; }
+.hero__acciones .boton { width: auto; }
 .hero__acciones .subrayado { align-self: center; }
 
-/* Botón flotante de WhatsApp: siempre disponible, que fue el pedido. */
-.wa {
-  position: fixed;
-  right: clamp(1rem, .5rem + 1.3vw, 2.5rem);
-  bottom: clamp(1rem, .5rem + 1.3vw, 2.5rem);
-  z-index: 15;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  height: 44px;
-  padding-inline: 1rem;
-  border-radius: 999px;
-  background: var(--papel-vidrio);
-  color: var(--tinta-bordo);
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  box-shadow: 0 8px 24px var(--sombra);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* La cinta del pie: los mundos del sitio corriendo sobre el video. Entran
+   difuminados y se afinan hacia el centro: la mascara resuelve la opacidad
+   (con el token de tinta como color opaco de la mascara) y el JS escribe el
+   desenfoque por pieza segun la distancia al centro, solo con puntero fino. */
+.hero__cinta {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding-block: clamp(.75rem, 2svh, 1.25rem);
+  background: linear-gradient(180deg, transparent, rgba(30, 30, 32, .45));
+  mask-image: linear-gradient(90deg, transparent, var(--tinta) 14%, var(--tinta) 86%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, var(--tinta) 14%, var(--tinta) 86%, transparent);
 }
-.wa__punto {
-  width: 7px; height: 7px;
-  border-radius: 999px;
-  background: var(--tinta-bordo);
+/* Dos clases a proposito: la base `.cinta` (papel, filete, padding) esta mas
+   abajo en la hoja y con una sola clase le ganaba a esta, dejando texto papel
+   sobre fondo papel: la cinta salia como una banda vacia. */
+.hero__cinta .cinta { padding: 0; border: 0; background: transparent; overflow: hidden; }
+.hero__cinta .cinta__riel { gap: clamp(2rem, 5vw, 5rem); align-items: baseline; }
+.hero__cinta .cinta__pieza {
+  /* 44px de caja: son enlaces y el toque vale en la cinta tambien (median 35 y 27). */
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.5rem);
+  font-weight: var(--grueso);
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  color: var(--sobre-foto);
+  filter: blur(var(--foco, 0px));
+  will-change: filter;
 }
 
-/* Un globo permanente es ruido: se esconde donde el visitante ya tiene el
-   WhatsApp a la vista (el hero y el cierre). Lo pone y lo saca el guion; si
-   el guion no corre, queda visible, que es el lado seguro. */
-.wa {
-  transition: opacity var(--cambio) var(--curva), transform var(--cambio) var(--curva),
-              scale var(--pulsado) var(--curva);
-}
-.wa[data-oculto] {
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-}
+/* El globo .wa se fue (09/09): lo reemplaza el flotante, al final de la hoja. */
 
 /* ==========================================================================
    El dossier: margen ancho y una sola línea vertical que lo cose todo
    ========================================================================== */
 
 .dossier {
-  /* Todo lo que viene después del hero tiene que ser opaco y estar posicionado:
-     el hero queda sticky toda la página, y un bloque transparente o sin
-     contexto deja ver la foto por atrás. */
+  /* Opaco y posicionado: es el papel sobre el que se apoya cada tramo del
+     relato (el hero ya no es sticky, pero el puente y el Universo son bloques
+     a sangre entre dossiers y conviene que cada uno tenga su propio fondo). */
   position: relative;
   z-index: 1;
   background: var(--papel);
@@ -456,15 +399,6 @@ body[data-menu-abierto] { overflow: hidden; }
 }
 .seccion:first-child { border-top: 0; }
 
-.seccion__margen {
-  display: none;
-  position: absolute;
-  left: calc(var(--margen-int) * -1 + 2rem);
-  top: calc(var(--ritmo) + .375rem);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
 .seccion__cabeza { display: flex; flex-direction: column; gap: 1.25rem; }
 .seccion__cabeza .titulo { flex: 0 0 auto; }
 .seccion__cabeza .bajada { flex: 1; }
@@ -473,12 +407,8 @@ body[data-menu-abierto] { overflow: hidden; }
    Quiénes somos
    ========================================================================== */
 
-.quienes__cierre {
-  margin-top: clamp(2rem, 1.3rem + 2.9vw, 4.5rem);
-  max-width: 42ch;
-  border-top: 1px solid var(--linea-acento);
-  padding-top: clamp(1.25rem, .9rem + .9vw, 1.75rem);
-}
+/* La cita, el rotulo lateral y la foto se fueron el 08/09 (SOM-1, SOM-3).
+   La seccion nueva esta en el bloque "Fase 3" al final de la hoja. */
 
 /* ==========================================================================
    El universo: la rueda de las siete capacidades
@@ -490,127 +420,12 @@ body[data-menu-abierto] { overflow: hidden; }
   aspect-ratio: 1;
   margin: clamp(1.875rem, 1rem + 2.24vw, 3.25rem) auto 0;
 }
-.rueda__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-.rueda__ficha {
-  position: absolute;
-  left: 50%; top: 50%;
-  translate: -50% -50%;
-  width: 62%;
-  z-index: 1;
-}
-/* Antes eran dos rectángulos grises que sobresalían abajo a la derecha y se
-   leían como una sombra mal hecha. Ahora son papel con filete y una pizca de
-   rotación: se leen como cartas apiladas, que es lo que eligió la clienta. */
-.rueda__capa {
-  position: absolute;
-  inset: 0;
-  background: var(--papel);
-  border: 1px solid var(--linea);
-  box-shadow: 0 1px 0 var(--papel-capa-2);
-}
-.rueda__capa--1 { translate: 4px 5px; rotate: .7deg; }
-.rueda__capa--2 { translate: 8px 10px; rotate: 1.5deg; }
-.rueda__cara {
-  position: relative;
-  display: grid;
-  border: 1px solid var(--linea-acento);
-  background: var(--papel);
-  padding: clamp(1.125rem, .8rem + .9vw, 2rem) clamp(1.125rem, .85rem + .8vw, 1.875rem);
-}
-.rueda__panel {
-  grid-area: 1 / 1;
-  transition: opacity var(--cambio) var(--curva), transform var(--cambio) var(--curva);
-}
-.rueda__panel[aria-hidden="true"] {
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
-}
-.rueda__panel h3 {
-  font-size: var(--t-sub);
-  font-weight: var(--grueso);
-  text-transform: uppercase;
-  letter-spacing: -.02em;
-  line-height: 1.05;
-  color: var(--tinta);
-}
-.rueda__panel p {
-  margin-top: clamp(.625rem, .43rem + .48vw, 1.125rem);
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  line-height: 1.5;
-  color: var(--tinta-parrafo);
-}
-
-.rueda__nodo {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  translate: -50% -50%;
-  z-index: 2;
-  width: 44px; height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.rueda__punto {
-  /* La caja es siempre de 15 px y lo que cambia es la escala: animar width y
-     height provoca reflow en cada cuadro. */
-  width: 15px; height: 15px;
-  scale: .867;
-  border-radius: 999px;
-  background: var(--papel);
-  border: 1px solid var(--linea-acento);
-  transition: scale var(--cambio) var(--curva),
-              background var(--cambio) var(--curva), border-color var(--cambio) var(--curva);
-}
-.rueda__nodo[data-tenue] .rueda__punto {
-  scale: .72;
-  background: var(--papel);
-  border-color: var(--tinta-apoyo);
-}
-.rueda__nodo[aria-pressed="true"] .rueda__punto {
-  scale: 1;
-  background: var(--tinta-bordo);
-  border-color: var(--tinta-bordo);
-}
-.rueda__nombre { display: none; }
-
-.rueda__ayuda {
-  margin-top: .875rem;
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  color: var(--tinta-apoyo);
-}
 
 /* ==========================================================================
    Cómo trabajamos: el trazo con sus cinco nodos
    ========================================================================== */
 
-.metodo__trazo { position: relative; margin-top: clamp(2rem, 1.4rem + 2.4vw, 4rem); }
-.metodo__trazo svg { width: 100%; height: clamp(6.875rem, 3rem + 9.9vw, 17.5rem); }
-
-.metodo__nodo { display: none; }
-
-.metodo__lista {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .625rem .875rem;
-  margin-top: 1.5rem;
-}
-.metodo__paso {
-  font-size: clamp(1.3125rem, 1.1rem + .87vw, 1.625rem);
-  font-weight: var(--medio);
-  letter-spacing: -.01em;
-  color: var(--tinta);
-}
-.metodo__punto {
-  width: 6px; height: 6px;
-  border-radius: 999px;
-  background: var(--tinta-bordo);
-}
+/* El metodo del 09/09 (trazo con nodos) esta en el bloque "Fase 4". */
 
 /* ==========================================================================
    Huecos: lo que espera material de la clienta, a la vista
@@ -628,106 +443,13 @@ body[data-menu-abierto] { overflow: hidden; }
   background: var(--papel-hueco);
   color: var(--tinta-apoyo);
 }
-.hueco__rotulo {
-  font-size: var(--t-micro);
-  font-weight: var(--medio);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.hueco__texto { font-size: var(--t-nota); font-weight: var(--fino); line-height: 1.5; }
-
-.espacio__hueco {
-  margin-top: clamp(1.625rem, 1.1rem + 1.9vw, 2.75rem);
-  height: auto;
-  max-width: 34rem;
-  padding: 1.25rem 1.5rem;
-  align-items: flex-start;
-  text-align: left;
-}
-.espacio__nota { margin-top: .75rem; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
-.espacio__cta { margin-top: 1.375rem; }
 
 /* ==========================================================================
    Proyectos: el destacado y el estante
    ========================================================================== */
 
-.proyecto {
-  position: relative;
-  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3.5rem);
-  height: clamp(26.25rem, 15rem + 25vw, 35rem);
-  overflow: hidden;
-  isolation: isolate;
-}
-.proyecto__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.proyecto__velo {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--velo-apenas) 0%, var(--velo-2) 50%, var(--velo-3) 100%);
-}
-.proyecto__pie {
-  position: absolute;
-  left: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  bottom: clamp(1.5rem, 1rem + 1.3vw, 2.75rem);
-  z-index: 2;
-}
-.proyecto__nombre {
-  font-size: clamp(2.5rem, 1.76rem + 3.05vw, 3.75rem);
-  font-weight: var(--grueso);
-  text-transform: uppercase;
-  letter-spacing: -.03em;
-  line-height: 1;
-  color: var(--sobre-foto);
-}
-.proyecto__meta {
-  margin-top: .625rem;
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  color: var(--sobre-foto-2);
-}
-.proyecto__rotulo {
-  position: absolute;
-  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  top: clamp(1.25rem, 1rem + .76vw, 2.25rem);
-  z-index: 2;
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--sobre-foto-2);
-}
-
-.estante {
-  display: flex;
-  gap: clamp(.875rem, .5rem + .95vw, 1.5rem);
-  margin-top: 1rem;
-  padding-bottom: .5rem;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: thin;
-  overscroll-behavior-x: contain;
-}
-.ficha { flex: 0 0 clamp(14.75rem, 8rem + 17vw, 21.5rem); scroll-snap-align: start; }
-.ficha__abrir { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); border-radius: 6px; }
-.ficha__abrir img { width: 100%; height: 100%; object-fit: cover; }
-.ficha__epigrafe { border-top: 1px solid var(--linea); padding-top: .5rem; }
-.ficha--bn img { filter: grayscale(1) contrast(1.04); }
-.ficha__velo {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--velo-nada) 0%, var(--velo-bordo) 100%);
-}
-.ficha__sobretexto {
-  position: absolute;
-  left: 1rem; right: 1rem; bottom: .875rem;
-  font-size: var(--t-sub);
-  font-weight: var(--medio);
-  letter-spacing: -.01em;
-  line-height: 1.2;
-  color: var(--sobre-foto);
-}
-.ficha__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
-.ficha__hueco { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); }
+/* El destacado, el estante y las fichas viejas se fueron el 09/09: la ficha de
+   Cardinal (cardinal.html) esta en el bloque "Fase 5". */
 
 /* ==========================================================================
    La red
@@ -764,18 +486,6 @@ body[data-menu-abierto] { overflow: hidden; }
    Contenido y mirada
    ========================================================================== */
 
-.mirada__hueco {
-  display: flex;
-  align-items: center;
-  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3rem);
-  height: clamp(7.5rem, 3rem + 11vw, 12.5rem);
-  border-top: 1px solid var(--linea-acento);
-  border-bottom: 1px solid var(--linea-acento);
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  color: var(--tinta-apoyo);
-}
-
 /* ==========================================================================
    Cierre
    ========================================================================== */
@@ -790,31 +500,6 @@ body[data-menu-abierto] { overflow: hidden; }
   line-height: .94;
   color: var(--tinta-bordo);
 }
-.contacto__acciones {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-  margin-top: clamp(2.125rem, 1.5rem + 1.6vw, 3.25rem);
-}
-.contacto__acciones .boton { width: 100%; }
-.contacto__acciones .subrayado { align-self: flex-start; }
-
-.motivos {
-  margin-top: clamp(2.25rem, 1.6rem + 1.7vw, 3.25rem);
-  border-top: 1px solid var(--linea-acento);
-  padding-top: clamp(1.125rem, .9rem + .76vw, 1.5rem);
-}
-.motivos__rotulo { margin-bottom: .75rem; }
-.motivos__lista {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: .125rem;
-}
-.motivos__lista .subrayado { align-self: flex-start; }
 
 /* ==========================================================================
    Pie
@@ -833,7 +518,10 @@ body[data-menu-abierto] { overflow: hidden; }
 .pie__iso { height: clamp(1.375rem, 1.2rem + .38vw, 1.625rem); width: auto; }
 .pie__redes { display: flex; align-items: center; gap: 1.25rem; font-size: var(--t-nota); font-weight: var(--ui); }
 .pie__redes a { color: var(--tinta-parrafo); min-height: 44px; display: inline-flex; align-items: center; }
-.pie__abajo { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+/* flex-wrap: en 390 la fila lleva lugar, paginas, idioma y el enlace de
+   cookies (cuando hay etiquetas); sin wrap el ultimo se salia de la pantalla
+   y el celular hacia zoom out (innerWidth 425 en vez de 390). */
+.pie__abajo { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1rem; }
 .pie__lugar { font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
 
 /* ==========================================================================
@@ -848,22 +536,14 @@ body[data-menu-abierto] { overflow: hidden; }
    gesto del visitante. --trazo se declara con @property para que se pueda
    animar; arranca en 1 (dibujado) para que sin JS y sin animación se vea. */
 @property --trazo { syntax: "<number>"; inherits: true; initial-value: 1; }
-@keyframes mvTrazo { from { --trazo: 0; } to { --trazo: .72; } }
 
-.trazo-vivo {
-  stroke-dasharray: 1;
-  stroke-dashoffset: calc(1 - var(--trazo));
-  animation: mvTrazo 1.9s var(--curva) .3s forwards;
-}
-
+/* .trazo-vivo se fue con el hero del 08/09; @property --trazo queda para el metodo. */
 /* ==========================================================================
    Carril 2 — tableta y notebook (≥ 64rem / 1024 px)
    Los selectores llevan la etiqueta: un @media no agrega especificidad.
    ========================================================================== */
 
-@media (min-width: 64rem) {
-
-  header.cabecera .cabecera__enlaces {
+@media (min-width: 64rem) {header.cabecera .cabecera__enlaces {
     display: flex;
     align-items: center;
     /* el gap descuenta el padding de cada enlace: la separación a la vista
@@ -880,85 +560,18 @@ body[data-menu-abierto] { overflow: hidden; }
     color: var(--tinta);
     transition: color var(--hover) var(--curva);
   }
-  header.cabecera .hamburguesa { display: none; }
   header.cabecera .boton { display: inline-flex; height: 42px; padding-inline: 1.5rem; font-size: var(--t-nota); }
   header.cabecera .cabecera__derecha { gap: clamp(1rem, -.5rem + 2.1vw, 1.625rem); }
-  div.panel { display: none; }
-
-  section.seccion .seccion__margen { display: block; }
 
   section.seccion .seccion__cabeza { flex-direction: row; gap: clamp(2.5rem, -1rem + 5.5vw, 5rem); align-items: flex-start; }
   section.seccion .seccion__cabeza .titulo { flex: 0 0 clamp(24rem, 4rem + 38vw, 40rem); }
-  section.seccion .seccion__cabeza--pie { align-items: flex-end; }
 
-  .hero .hero__texto { left: calc(var(--margen-ext) + var(--margen-int)); right: var(--margen-der); }
-  .hero .hero__trazos { bottom: 7.375rem; height: 26.875rem; }
   .hero .hero__acciones { flex-direction: row; align-items: center; gap: clamp(1.25rem, -1rem + 3.4vw, 2.125rem); }
   .hero .hero__acciones .boton { width: auto; }
   .hero .hero__acciones .subrayado { align-self: auto; }
 
-  .quienes__cierre { margin-left: clamp(12rem, -12rem + 37.5vw, 23.75rem); }
-
   /* La rueda pasa de puntos a píldoras con nombre. */
   div.rueda { width: min(100%, 44rem); }
-  div.rueda .rueda__ficha { width: 48%; }
-  div.rueda .rueda__capa--1 { translate: 8px 8px; }
-  div.rueda .rueda__capa--2 { translate: 16px 16px; }
-  div.rueda .rueda__nodo {
-    width: auto; height: auto;
-    padding: .6875rem 1.25rem;
-    border-radius: 999px;
-    border: 1px solid var(--linea-acento);
-    background: transparent;
-    white-space: nowrap;
-    transition: background var(--cambio) var(--curva), color var(--cambio) var(--curva),
-                border-color var(--cambio) var(--curva), scale var(--pulsado) var(--curva);
-  }
-  div.rueda .rueda__punto { display: none; }
-  div.rueda .rueda__nombre {
-    display: block;
-    font-size: var(--t-chico);
-    font-weight: var(--medio);
-    letter-spacing: -.005em;
-    color: var(--tinta);
-  }
-  /* secundarias, no deshabilitadas: filete completo y tinta de apoyo */
-  div.rueda .rueda__nodo[data-tenue] { border-color: var(--tinta-apoyo); padding: .5625rem 1.0625rem; }
-  div.rueda .rueda__nodo[data-tenue] .rueda__nombre { font-weight: var(--ui); color: var(--tinta-apoyo); }
-  div.rueda .rueda__nodo[aria-pressed="true"] { background: var(--tinta-bordo); border-color: var(--tinta-bordo); }
-  div.rueda .rueda__nodo[aria-pressed="true"] .rueda__nombre { color: var(--sobre-foto); font-weight: var(--medio); }
-  div.rueda + .rueda__ayuda { display: none; }
-
-  /* El método: los nodos se paran sobre el trazo. */
-  div.metodo__trazo { aspect-ratio: 1104 / 280; height: auto; }
-  div.metodo__trazo svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  div.metodo__trazo .metodo__nodo {
-    display: block;
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-  }
-  div.metodo__trazo .metodo__nodo::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 0;
-    translate: -50% -50%;
-    width: 9px; height: 9px;
-    border-radius: 999px;
-    background: var(--tinta-bordo);
-  }
-  div.metodo__trazo .metodo__nodo span {
-    position: absolute;
-    left: 0; top: 0;
-    translate: -50% 90%;
-    font-size: clamp(1.375rem, .8rem + .9vw, 1.625rem);
-    font-weight: var(--medio);
-    letter-spacing: -.01em;
-    white-space: nowrap;
-    color: var(--tinta);
-  }
-  div.metodo__trazo .metodo__nodo[data-arriba] span { translate: -50% -190%; }
-  div.metodo__trazo + .metodo__lista { display: none; }
 
   /* La red: de listado a nube. */
   div.red__nube {
@@ -973,35 +586,10 @@ body[data-menu-abierto] { overflow: hidden; }
   /* Grilla asimétrica: 12 columnas con reparto 7/5 y 5/7 invertido, y
      proporciones que no se repiten. Cuatro tarjetas idénticas es el tell
      número uno de una web hecha con IA. */
-  div.estante {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: clamp(1.25rem, -.5rem + 2.6vw, 2rem) clamp(1rem, -.5rem + 2.1vw, 1.5rem);
-    /* start y no stretch: si no, la fila iguala los altos y las proporciones
-       distintas dejan de verse, que es justo lo que se buscaba */
-    align-items: start;
-    overflow: visible;
-  }
-  div.estante .ficha { flex: initial; grid-column: span var(--cols, 6); min-width: 0; }
-  div.estante .ficha__abrir,
-  div.estante .ficha__hueco {
-    height: auto;
-    aspect-ratio: var(--prop, 3 / 2);
-    /* que ninguna ficha se coma media pantalla de alto: la proporción sigue
-       variando, pero la fila no se dispara */
-    max-block-size: 46svh;
-  }
-  div.estante .ficha__abrir img { height: 100%; }
-
-  .motivos .motivos__lista { flex-direction: row; flex-wrap: wrap; gap: .25rem clamp(1.25rem, -1rem + 3.4vw, 2.25rem); }
-
-  .contacto .contacto__acciones { flex-direction: row; align-items: center; gap: clamp(1.5rem, -1rem + 3.9vw, 2.25rem); }
-  .contacto .contacto__acciones .boton { width: auto; }
 
   footer.pie { flex-direction: row; align-items: center; justify-content: space-between; }
   footer.pie .pie__redes { gap: 1.75rem; }
-  footer.pie .pie__abajo { gap: 1.5rem; }
-}
+  footer.pie .pie__abajo { gap: 1.5rem; }}
 
 /* ==========================================================================
    Carril 2 bis — la notebook horizontal: ancha y BAJA
@@ -1010,50 +598,36 @@ body[data-menu-abierto] { overflow: hidden; }
    alta; sólo muerden cuando el alto es el que escasea.
    ========================================================================== */
 
-@media (min-width: 64rem) {
-  body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 8.5svh); }
+@media (min-width: 64rem) {body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 8.5svh); }
 
   div.rueda { width: min(100%, 44rem, 76svh); }
-  article.proyecto { height: min(clamp(26.25rem, 15rem + 25vw, 35rem), 76svh); }
-  div.metodo__trazo { max-height: 40svh; }
-  div.red__nube { max-height: 42svh; }
-  div.mirada__hueco { height: min(clamp(7.5rem, 3rem + 11vw, 12.5rem), 26svh); }
-}
+  div.red__nube { max-height: 42svh; }}
 
 /* El hero es lo primero que se rompe: con 657 px de alto el título gigante se
    mete abajo del nav. Acá el cuerpo del hero se mide contra svh. */
-@media (min-width: 64rem) and (max-height: 50rem) {
-  .hero .hero__titulo  { font-size: min(var(--t-hero), 12svh); }
+@media (min-width: 64rem) and (max-height: 50rem) {.hero .hero__titulo  { font-size: min(var(--t-hero), 11svh); }
   .hero .hero__bajada  { margin-top: 1rem; }
-  .hero .hero__apoyo   { margin-top: .5rem; }
-  .hero .hero__acciones { margin-top: 1.5rem; }
-  .hero .hero__texto   { bottom: 2.5rem; }
-  .hero .hero__trazos  { bottom: 4rem; height: 20rem; }
-}
+  .hero .hero__acciones { margin-top: 1.5rem; }}
 
 /* ==========================================================================
    Carril 3 — escritorio grande (≥ 100rem / 1600 px)
    ========================================================================== */
 
-@media (min-width: 100rem) {
-  body { --margen-ext: 6rem; --margen-int: 6.5rem; --margen-der: 8.5rem; }
-  main.contenido { max-width: 120rem; margin-inline: auto; }
-}
+@media (min-width: 100rem) {body { --margen-ext: 6rem; --margen-int: 6.5rem; --margen-der: 8.5rem; }
+  main.contenido { max-width: 120rem; margin-inline: auto; }}
 
 /* ==========================================================================
    Puntero fino: el hover sólo existe donde hay puntero
    ========================================================================== */
 
-@media (hover: hover) and (pointer: fine) {
-  .cabecera__enlaces a:hover { color: var(--tinta-bordo); }
+@media (hover: hover) and (pointer: fine) {.cabecera__enlaces a:hover { color: var(--tinta-bordo); }
   .boton:hover { background: var(--tinta); }
   .boton--claro:hover { background: var(--sobre-foto-2); }
   .subrayado:hover { border-bottom-color: var(--tinta-bordo); }
   .subrayado--claro:hover { border-bottom-color: var(--sobre-foto); }
-  .rueda__nodo:hover:not([aria-pressed="true"]) { border-color: var(--tinta-apoyo); }
+
   .pie__redes a:hover { color: var(--tinta); }
-  .idioma__off:hover { color: var(--tinta); }
-}
+  .idioma__off:hover { color: var(--tinta); }}
 
 /* ==========================================================================
    Celular acostado — cae acá por ALTO, no por ancho. El tope de ancho está
@@ -1061,34 +635,21 @@ body[data-menu-abierto] { overflow: hidden; }
    apaisada y baja (1366 x 657) pero es otro carril.
    ========================================================================== */
 
-@media (max-height: 46rem) and (orientation: landscape) and (max-width: 63.99rem) {
-  /* El hero deja de meterse abajo del nav: con 375 px de alto no sobra nada. */
+@media (max-height: 46rem) and (orientation: landscape) and (max-width: 63.99rem) {/* El hero deja de meterse abajo del nav: con 375 px de alto no sobra nada. */
   .hero { height: auto; min-height: 0; margin-top: 0; padding-block: 2rem 2.5rem; }
   /* relative y no static: en estático el z-index no aplica y la foto lo tapa.
      inset:auto porque en relative un `bottom` no ancla, corre el bloque. */
-  .hero__texto { position: relative; inset: auto; padding-inline: var(--margen-ext); }
-  .hero__trazos { top: 1rem; bottom: auto; height: 9rem; }
   .hero__titulo { font-size: clamp(2.25rem, 1rem + 5vw, 3.5rem); }
-  .rueda { width: min(60%, 20rem); }
-}
+  .rueda { width: min(60%, 20rem); }}
 
 /* ==========================================================================
    Menos movimiento: cada bloque pegado al efecto que apaga
    ========================================================================== */
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .trazo-vivo { animation: none; --trazo: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-letras] span { animation: none !important; opacity: 1 !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  :where(a, button):active { scale: none; }
-}
+@media (prefers-reduced-motion: reduce) {html { scroll-behavior: auto; }}
 
+@media (prefers-reduced-motion: reduce) {[data-letras] span { animation: none !important; opacity: 1 !important; }}
+@media (prefers-reduced-motion: reduce) {:where(a, button):active { scale: none; }}
 
 /* ==========================================================================
    La cortina — el gesto grande, una sola vez en toda la página
@@ -1097,22 +658,15 @@ body[data-menu-abierto] { overflow: hidden; }
    como un rectángulo pegado.
    ========================================================================== */
 
-.cortina-fondo { position: sticky; top: 0; z-index: 0; }
-.cortina-tapa {
-  position: relative;
-  z-index: 1;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -24px 60px rgba(30, 30, 32, .28);
-}
-@media (min-width: 56.25rem) { div.cortina-tapa { border-radius: 28px 28px 0 0; } }
+/* La cortina (hero sticky, dossier subiendo encima) se fue el 09/09: con un
+   video de fondo seguia corriendo tapado toda la pagina, y MET-5 pide que
+   nunca se vea el fondo del inicio al bajar. */
 
 /* El solape: la grilla de proyectos baja y su pie ya vive adentro de la
    sección siguiente, así el corte entre bloques deja de ser una línea recta.
    El margen negativo y el padding salen del mismo token: nunca se descalibran.
    Va en la grilla porque es lo último de su sección; en un bloque del medio el
    solape se come a lo que viene abajo en vez de cruzar el corte. */
-.estante { margin-bottom: calc(-1 * var(--solape)); position: relative; z-index: 2; }
-#red { padding-top: calc(var(--ritmo) + var(--solape) + 1rem); }
 
 /* ==========================================================================
    Entrada por sección, con dirección heredada
@@ -1145,70 +699,38 @@ body[data-menu-abierto] { overflow: hidden; }
   scale: none;
 }
 
-@media (min-width: 64rem) {
-  [data-fx-desde="arriba"] > [data-entra] { translate: 0 26px; }
+@media (min-width: 64rem) {[data-fx-desde="arriba"] > [data-entra] { translate: 0 26px; }
   [data-fx-desde="izq"]    > [data-entra] { translate: -28px 0; }
   [data-fx-desde="der"]    > [data-entra] { translate: 28px 0; }
-  [data-fx-desde="escala"] > [data-entra] { scale: .965; translate: 0 14px; }
-}
+  [data-fx-desde="escala"] > [data-entra] { scale: .965; translate: 0 14px; }}
 
 /* ==========================================================================
    El nav se invierte según el bloque que tiene debajo
    ========================================================================== */
 
 .cabecera__logo--papel { display: none; }
-.cabecera[data-tema="oscuro"] { background: rgba(30, 30, 32, .42); }
+.cabecera[data-tema="oscuro"] { background: rgba(30, 30, 32, .10); }
 .cabecera[data-tema="oscuro"] .cabecera__logo--tinta { display: none; }
 .cabecera[data-tema="oscuro"] .cabecera__logo--papel { display: block; }
 .cabecera[data-tema="oscuro"] .cabecera__enlaces a,
 .cabecera[data-tema="oscuro"] .idioma__on { color: var(--sobre-foto); }
 .cabecera[data-tema="oscuro"] .idioma__off { color: var(--sobre-foto-2); }
-.cabecera[data-tema="oscuro"] .hamburguesa span { background: var(--sobre-foto); }
 .cabecera[data-tema="oscuro"] .boton { background: var(--sobre-foto); color: var(--tinta-bordo); }
-.cabecera[data-tema="oscuro"][data-scroll] { border-bottom-color: rgba(238, 236, 236, .22); }
 
 /* ==========================================================================
    El pie de foto del hero: lámina catalogada, no banner de stock
    ========================================================================== */
 
-.hero__pie {
-  position: absolute;
-  left: var(--margen-ext);
-  right: var(--margen-ext);
-  top: calc(var(--alto-nav) + 1rem);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.hero__leyenda {
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  letter-spacing: .12em;
-  color: var(--sobre-foto-2);
-  max-width: 22ch;
-}
-.muestras { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.muestras li { width: 12px; height: 12px; border: 1px solid rgba(238, 236, 236, .35); }
-.muestras li:nth-child(1) { background: var(--tinta); }
-.muestras li:nth-child(2) { background: var(--tinta-bordo); }
-.muestras li:nth-child(3) { background: var(--tinta-parrafo); }
-.muestras li:nth-child(4) { background: var(--tinta-apoyo); }
-.muestras li:nth-child(5) { background: var(--linea-acento); }
-.muestras li:nth-child(6) { background: var(--linea); }
-.muestras li:nth-child(7) { background: var(--papel); }
+/* .hero__pie, .hero__leyenda y .muestras se fueron con el hero del 08/09. */
 
 /* ==========================================================================
    El método: cinco verbos que se abren y cuentan qué pasa
    ========================================================================== */
 
-.metodo__pasos { margin-top: clamp(1.5rem, 1rem + 1.3vw, 2.25rem); }
-
 .paso, .territorio { border-top: 1px solid var(--linea); }
 .paso:last-of-type, .territorio:last-of-type { border-bottom: 1px solid var(--linea); }
 
-.paso__cabeza, .territorio__cabeza {
+.territorio__cabeza {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -1219,22 +741,8 @@ body[data-menu-abierto] { overflow: hidden; }
   list-style: none;
   transition: color var(--hover) var(--curva);
 }
-.paso__cabeza::-webkit-details-marker,
 .territorio__cabeza::-webkit-details-marker { display: none; }
 
-.paso__n {
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  color: var(--tinta-apoyo);
-  font-variant-numeric: tabular-nums;
-}
-.paso__nombre {
-  flex: 1;
-  font-size: clamp(1.3125rem, 1.1rem + .87vw, 1.75rem);
-  font-weight: var(--medio);
-  letter-spacing: -.01em;
-  color: var(--tinta);
-}
 .territorio__nombre {
   flex: 1 1 auto;
   min-width: 0;
@@ -1269,7 +777,6 @@ body[data-menu-abierto] { overflow: hidden; }
   transition: transform var(--cambio) var(--curva);
 }
 .paso__signo::after { transform: rotate(90deg); }
-[open] > .paso__cabeza .paso__signo::after,
 [open] > .territorio__cabeza .paso__signo::after { transform: rotate(0deg); }
 
 .paso__cuerpo {
@@ -1322,15 +829,6 @@ body[data-menu-abierto] { overflow: hidden; }
 /* ==========================================================================
    El visor de fotos: swipe nativo dentro de un <dialog>
    ========================================================================== */
-
-.ficha__abrir, .proyecto__abrir {
-  display: block;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  cursor: zoom-in;
-}
-.proyecto__abrir { position: absolute; inset: 0; height: 100%; }
 
 .visor {
   width: 100%;
@@ -1390,95 +888,18 @@ body[data-menu-abierto] { overflow: hidden; }
    El barrido de luz de la rueda — el fundido solo deja dudando si el clic hizo algo
    ========================================================================== */
 
-@keyframes mvBarrido { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
-
-.rueda__cara { position: relative; overflow: hidden; }
-.rueda__cara::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 45%;
-  background: linear-gradient(100deg, transparent, rgba(238, 236, 236, .85), transparent);
-  transform: translateX(-120%);
-  pointer-events: none;
-}
-.rueda[data-cambio] .rueda__cara::after { animation: mvBarrido .55s var(--curva); }
 
 /* ==========================================================================
    Índice lateral de rayas — sólo desde 1180 px
    ========================================================================== */
 
-.indice { display: none; }
-
-@media (min-width: 73.75rem) {
-  nav.indice {
-    position: fixed;
-    left: clamp(1.25rem, -1rem + 2.4vw, 2rem);
-    top: 50%;
-    translate: 0 -50%;
-    z-index: 14;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  /* El enlace ES la caja de 44: la raya se dibuja con el ::before. Antes el
-     enlace medía 34x2 y el area la ponía un ::before estirado, pero el
-     `transform: scaleX(.65)` del enlace escalaba tambien al pseudo y el toque
-     real quedaba en 35 px. Un pseudo no se puede sacar de la escala del padre:
-     lo que hay que hacer es no escalar el padre. */
-  nav.indice a {
-    position: relative;
-    display: block;
-    width: 44px; height: 44px;
-    background: none;
-  }
-  nav.indice a::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 50%;
-    width: 22px; height: 2px;
-    background: var(--tinta-apoyo);
-    opacity: .42;
-    transition: width var(--hover) var(--curva), opacity var(--hover) var(--curva);
-  }
-  nav.indice a[aria-current="true"]::before { width: 34px; opacity: 1 }
-  nav.indice { gap: 0 }
-  nav.indice a::after {
-    content: attr(aria-label);
-    position: absolute;
-    left: 44px; top: 50%;
-    translate: 0 -50%;
-    white-space: nowrap;
-    font-size: var(--t-micro);
-    color: var(--tinta-apoyo);
-    opacity: 0;
-    transition: opacity var(--hover) var(--curva);
-    pointer-events: none;
-  }
-  nav.indice a:hover::after, nav.indice a:focus-visible::after { opacity: 1; }
-  /* En reposo era casi invisible; adentro de un mundo oscuro, invisible del
-     todo, porque su tono es tinta. Sube el reposo y se invierte con el bloque
-     que tiene detrás, igual que la barra de arriba. */
-  nav.indice[data-tema="oscuro"] a::before { background: var(--sobre-foto); opacity: .5 }
-  nav.indice[data-tema="oscuro"] a[aria-current="true"]::before { opacity: 1 }
-  nav.indice[data-tema="oscuro"] a::after { color: var(--sobre-foto) }
-  nav.indice a:focus-visible { outline: 2px solid currentColor; outline-offset: 6px }
-}
+/* El indice lateral de rayas se fue el 09/09: lo reemplaza el menu flotante. */
 
 /* ==========================================================================
    Menos movimiento — cada bloque pegado al efecto que apaga
    ========================================================================== */
 
-@media (prefers-reduced-motion: reduce) {
-  [data-fx="reveal"] > [data-entra] { animation: none; opacity: 1; translate: none; scale: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rueda[data-cambio] .rueda__cara::after { animation: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cortina-fondo { position: static; }
-}
-
+@media (prefers-reduced-motion: reduce) {[data-fx="reveal"] > [data-entra] { animation: none; opacity: 1; translate: none; scale: 1; }}
 
 /* ==========================================================================
    Secciones a sangre — las dos que salen del papel
@@ -1501,60 +922,40 @@ body[data-menu-abierto] { overflow: hidden; }
   object-fit: cover;
   z-index: -2;
 }
-.sangre__velo {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(160deg, rgba(60, 37, 39, .94) 0%, rgba(30, 30, 32, .90) 100%);
-}
+
 .sangre__interior { padding-inline: var(--margen-ext); }
 
 .titulo--claro { color: var(--sobre-foto); }
 .bajada--clara { color: var(--sobre-foto-2); }
 .cita--clara   { color: var(--sobre-foto); }
 .margen--claro { color: var(--sobre-foto-2); }
-.hueco--claro {
-  border-color: rgba(238, 236, 236, .34);
-  background: rgba(238, 236, 236, .06);
-  color: var(--sobre-foto-2);
-}
-.sangre .espacio__nota { color: var(--sobre-foto-2); }
+
 .sangre .red__nodo[data-peso="1"] { color: var(--sobre-foto); }
 .sangre .red__nodo[data-peso="2"] { color: var(--linea-acento); }
 .sangre .red__nodo[data-peso="3"] { color: var(--sobre-foto-2); }
 
-@media (min-width: 64rem) {
-  section.sangre .sangre__interior {
+@media (min-width: 64rem) {section.sangre .sangre__interior {
     padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
-  }
-}
+  }}
 
 /* La foto queda quieta con un recorrido corto que escribe el guion, NO con
    position:fixed: un fixed adentro de la sección no queda contenido por el
    overflow y termina pintando la foto sobre toda la página. */
 .sangre__fondo { will-change: transform; }
-@media (min-width: 64rem) {
-  section.sangre .sangre__fondo { height: 118%; top: -9%; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sangre__fondo { translate: none !important; }
-}
+@media (min-width: 64rem) {section.sangre .sangre__fondo { height: 118%; top: -9%; }}
+@media (prefers-reduced-motion: reduce) {.sangre__fondo { translate: none !important; }}
 
 /* ==========================================================================
    La banda de video entre bloques
    ========================================================================== */
 
-.banda { position: relative; height: clamp(9rem, 4rem + 14vw, 17rem); overflow: hidden; background: var(--tinta); }
-.banda__video { width: 100%; height: 100%; object-fit: cover; }
+/* La banda de video se fue el 09/09: el video ya vive en el hero. */
 
 /* ==========================================================================
    Las piezas de marca de Fractura
    ========================================================================== */
 
-.piezas { margin-top: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem); }
-.piezas__rotulo { margin-bottom: .875rem; }
-.piezas__par { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, .5rem + 1.6vw, 2rem); }
-.pieza img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 6px; }
+/* Las piezas de marca se fueron el 08/09 (SOM-3). */
 
 /* ==========================================================================
    El mapa: seis territorios en grilla, no seis renglones iguales
@@ -1575,79 +976,18 @@ body[data-menu-abierto] { overflow: hidden; }
 }
 .territorio__cabeza { gap: 1rem; }
 
-@media (min-width: 64rem) {
-  div.mapa__lista { grid-template-columns: 1fr 1fr; column-gap: clamp(1.5rem, 0rem + 2.6vw, 3rem); }
+@media (min-width: 64rem) {div.mapa__lista { grid-template-columns: 1fr 1fr; column-gap: clamp(1.5rem, 0rem + 2.6vw, 3rem); }
   /* la ficha abierta ocupa el ancho entero: el texto largo no entra en media columna */
   div.mapa__lista .territorio[open] { grid-column: 1 / -1; }
   div.mapa__lista .territorio__cabeza { align-items: baseline; }
   div.mapa__lista .territorio__bajada { flex: 1 1 100%; padding-left: 2.5rem; }
-  div.mapa__lista .territorio[open] .territorio__bajada { flex: 1; padding-left: 0; }
-}
+  div.mapa__lista .territorio[open] .territorio__bajada { flex: 1; padding-left: 0; }}
 
 /* ==========================================================================
    El método en horizontal — la sección se clava y las cartas pasan de costado
    ========================================================================== */
 
-.lateral { margin-top: clamp(2rem, 1.4rem + 2.2vw, 3.25rem); }
 .lateral__pin { overflow: hidden; }
-.lateral__carril {
-  display: flex;
-  gap: clamp(1rem, .5rem + 1.6vw, 1.75rem);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  padding-bottom: .5rem;
-}
-.lateral__carril::-webkit-scrollbar { display: none; }
-
-.carta {
-  flex: 0 0 min(78%, 22rem);
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: .75rem;
-  padding: clamp(1.25rem, 1rem + 1vw, 2rem);
-  border: 1px solid var(--linea);
-  background: var(--papel);
-  border-radius: 6px;
-}
-.carta__n {
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  letter-spacing: .12em;
-  color: var(--linea-acento);
-  font-variant-numeric: tabular-nums;
-}
-.carta__nombre {
-  font-size: clamp(1.625rem, 1.3rem + 1.33vw, 2.5rem);
-  font-weight: var(--grueso);
-  text-transform: uppercase;
-  letter-spacing: -.03em;
-  line-height: 1;
-  color: var(--tinta);
-}
-.carta__copy {
-  font-size: var(--t-cuerpo);
-  font-weight: var(--fino);
-  line-height: 1.6;
-  color: var(--tinta-parrafo);
-}
-
-/* Con el guion andando la sección se clava y el carril avanza con el scroll.
-   Sin guion, `data-pin` nunca llega y queda un estante que se desliza a dedo. */
-@media (min-width: 64rem) {
-  div.lateral[data-pin] { height: var(--alto-pin); }
-  /* el pin mide lo que miden las cartas, no la pantalla entera: con el alto
-     completo quedaban 300 px muertos arriba y abajo de la fila */
-  div.lateral[data-pin] .lateral__pin {
-    position: sticky;
-    top: calc(var(--alto-nav) + 3rem);
-    height: auto;
-  }
-  div.lateral[data-pin] .lateral__carril { scroll-snap-type: none; }
-  div.lateral .carta { flex: 0 0 clamp(16rem, 21vw, 20rem); }
-}
 
 /* ==========================================================================
    El cardenal que se dibuja
@@ -1714,7 +1054,7 @@ body[data-menu-abierto] { overflow: hidden; }
 .otro__meta { margin-top: .25rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
 .otro__copy { margin-top: .5rem; max-width: 40ch; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-parrafo); }
 
-@media (min-width: 64rem) { div.otros__par { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 64rem) {div.otros__par { grid-template-columns: 1fr 1fr; }}
 
 /* ==========================================================================
    Las dos que están detrás
@@ -1725,7 +1065,6 @@ body[data-menu-abierto] { overflow: hidden; }
   gap: clamp(1.5rem, .8rem + 2.2vw, 2.5rem);
   margin-top: clamp(2rem, 1.4rem + 2.2vw, 3rem);
 }
-.persona__hueco { aspect-ratio: 1; }
 .persona__nombre {
   margin-top: .875rem;
   font-size: var(--t-sub);
@@ -1737,23 +1076,11 @@ body[data-menu-abierto] { overflow: hidden; }
 .persona__rol { margin-top: .25rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
 .persona__linea { margin-top: .5rem; max-width: 38ch; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-parrafo); }
 
-@media (min-width: 64rem) {
-  div.personas { grid-template-columns: repeat(2, minmax(0, 15rem)); }
-}
+@media (min-width: 64rem) {div.personas { grid-template-columns: repeat(2, minmax(0, 15rem)); }}
 
 /* ==========================================================================
    El video de fondo de CARDINAL
    ========================================================================== */
-
-.proyecto__fondo {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-.proyecto__abrir { z-index: 1; }
-.proyecto .proyecto__velo { z-index: 1; }
 
 /* ==========================================================================
    Palabras que se forman con el scroll
@@ -1761,15 +1088,7 @@ body[data-menu-abierto] { overflow: hidden; }
 
 [data-formar] span { transition: opacity .18s linear; }
 
-@media (prefers-reduced-motion: reduce) {
-  [data-formar] span { opacity: 1 !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  div.lateral[data-pin] { height: auto !important; }
-  div.lateral[data-pin] .lateral__pin { position: static; height: auto; }
-  div.lateral[data-pin] .lateral__carril { scroll-snap-type: x mandatory; }
-}
-
+@media (prefers-reduced-motion: reduce) {[data-formar] span { opacity: 1 !important; }}
 
 /* ==========================================================================
    REDISEÑO 08/09 — el trazo de la M como hilo de las tres páginas
@@ -1804,327 +1123,25 @@ body[data-menu-abierto] { overflow: hidden; }
   white-space: nowrap;
   text-transform: none;
 }
-.cinta--papel { background: transparent; border-block-color: var(--velo-apenas) }
-.cinta--papel .cinta__pieza { color: var(--sobre-foto) }
 
-/* --- La órbita: cuatro esferas, y Comunicación como el anillo ------------- */
-.orbita {
-  position: relative;
-  width: min(100%, 34rem);
-  aspect-ratio: 1;
-  margin-inline: auto;
-  margin-block: clamp(2rem, 6svh, 4rem);
-}
-.orbita__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
-/* El anillo se dibuja PRIMERO, antes que entren las esferas: así se lee que
-   las contiene y no que compite con ellas. */
-.orbita__anillo {
-  stroke-dasharray: var(--vuelta, 290);
-  stroke-dashoffset: calc(var(--vuelta, 290) * (1 - var(--dibujo, 1)));
-}
-.orbita__rotulo-anillo {
-  position: absolute;
-  inset-block-start: -.35rem;
-  inset-inline-start: 50%;
-  translate: -50% 0;
-  padding-inline: .6rem;
-  background: var(--papel);
-  font-size: var(--t-micro);
-  font-weight: var(--medio);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--tinta-bordo);
-}
-.orbita__nodo {
-  position: absolute;
-  inset-block-start: var(--y);
-  inset-inline-start: var(--x);
-  translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  gap: .3rem;
-  /* 44 px de área táctil aunque el punto mida 12. */
-  min-width: 44px;
-  min-height: 44px;
-  padding: .4rem;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva), opacity var(--hover) var(--curva);
-}
-.orbita__punto {
-  width: 12px; height: 12px;
-  border: 1.4px solid currentColor;
-  border-radius: 50%;
-  background: var(--papel);
-  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
-}
-.orbita__n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  opacity: .6;
-}
-.orbita__nombre {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  line-height: 1.15;
-  max-width: 7.5rem;
-  text-align: center;
-  text-wrap: balance;
-}
-/* La activa se enciende y las otras bajan a un tercio: el ojo va sola. */
-.orbita__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
-.orbita__nodo[aria-pressed="true"] .orbita__punto {
-  scale: 1.5;
-  background: var(--tinta-bordo);
-}
-.orbita[data-lista] .orbita__nodo[aria-pressed="false"] { opacity: .34 }
+/* La orbita se reescribio el 09/09 (tres esferas, MAVENZ al centro, fondo
+   bistre): esta en el bloque "Fase 3" al final de la hoja. */
 
-.orbita__cara {
-  position: absolute;
-  inset: 22%;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-.orbita__panel {
-  grid-area: 1 / 1;
-  display: grid;
-  gap: .5rem;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--cambio) var(--curva);
-}
-.orbita__panel[aria-hidden="false"] { opacity: 1; visibility: visible }
-.orbita__panel-n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--tinta-bordo);
-}
-.orbita__panel h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
-.orbita__panel p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
+/* El ciclo se fue el 09/09: lo reemplaza el trazo de Como trabajamos (Fase 4). */
 
-.orbita__anillo-copy {
-  max-width: 46ch;
-  margin-inline: auto;
-  text-align: center;
-  font-size: var(--t-chico);
-  color: var(--tinta-parrafo);
-  text-wrap: pretty;
-}
-.orbita__anillo-copy strong { color: var(--tinta-bordo); font-weight: var(--medio) }
-.orbita__ayuda {
-  margin-block-start: .75rem;
-  text-align: center;
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
-
-/* --- El ciclo: cinco pasos en círculo, y del quinto se vuelve al primero -- */
-.ciclo {
-  position: relative;
-  width: min(100%, 34rem);
-  aspect-ratio: 1;
-  margin-inline: auto;
-  margin-block: clamp(2rem, 6svh, 4rem);
-}
-.ciclo__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
-.ciclo__avance {
-  stroke-dasharray: var(--vuelta, 226);
-  stroke-dashoffset: calc(var(--vuelta, 226) * (1 - var(--avance, 0)));
-}
-.ciclo__nodo {
-  position: absolute;
-  inset-block-start: var(--y);
-  inset-inline-start: var(--x);
-  translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  gap: .3rem;
-  min-width: 44px; min-height: 44px;
-  padding: .4rem;
-  border: 0; background: none; cursor: pointer;
-  color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva);
-}
-.ciclo__punto {
-  width: 10px; height: 10px;
-  border: 1.4px solid currentColor;
-  border-radius: 50%;
-  background: var(--papel);
-  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
-}
-.ciclo__rotulo {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  max-width: 7rem;
-  text-align: center;
-  text-wrap: balance;
-  line-height: 1.15;
-}
-.ciclo__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
-.ciclo__nodo[aria-pressed="true"] .ciclo__punto { scale: 1.5; background: var(--tinta-bordo) }
-
-.ciclo__centro {
-  position: absolute;
-  inset: 24%;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-.ciclo__carta {
-  grid-area: 1 / 1;
-  display: grid;
-  gap: .4rem;
-  opacity: 0; visibility: hidden;
-  transition: opacity var(--cambio) var(--curva);
-}
-.ciclo__carta[aria-hidden="false"] { opacity: 1; visibility: visible }
-.ciclo__n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--tinta-bordo);
-}
-.ciclo__carta h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
-.ciclo__carta p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
-.ciclo__cierre {
-  text-align: center;
-  font-size: var(--t-cita);
-  font-weight: var(--fino);
-  color: var(--tinta-bordo);
-  text-wrap: balance;
-}
-
-/* --- Los mundos: cuatro paneles verticales, cada uno con su tinta --------- */
-/* En celular se apilan y el título va horizontal; recién desde 64rem rota a
-   vertical, que es donde la pieza tiene alto para lucirse. */
-.mundos {
-  display: grid;
-  gap: 2px;
-  margin-block: clamp(1.5rem, 5svh, 3rem);
-  background: var(--linea);
-  border: 1px solid var(--linea);
-}
-.mundo {
-  position: relative;
-  display: grid;
-  align-content: space-between;
-  gap: 1rem;
-  min-height: clamp(11rem, 26svh, 16rem);
-  padding: clamp(1.1rem, 3vw, 1.75rem);
-  text-decoration: none;
-  color: var(--sobre-foto);
-  overflow: hidden;
-  transition: filter var(--cambio) var(--curva);
-}
-/* Las cuatro tintas son las del manual de Fractura. No hay un hex nuevo acá. */
-.mundo[data-tinta="bordo"]  { background: var(--tinta-bordo) }
-.mundo[data-tinta="bistre"] { background: var(--tinta-parrafo) }
-.mundo[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
-.mundo[data-tinta="tinta"]  { background: var(--tinta) }
-
-.mundo__marca {
-  font-size: var(--t-sub);
-  font-weight: var(--grueso);
-  line-height: 1;
-  opacity: .55;
-}
-.mundo__nombre {
-  font-size: clamp(1.5rem, 5vw, 2.25rem);
-  font-weight: var(--medio);
-  line-height: 1;
-  letter-spacing: -.02em;
-}
-.mundo__bajada {
-  font-size: var(--t-nota);
-  opacity: .8;
-  max-width: 26ch;
-  text-wrap: pretty;
-}
-.mundo__cierre {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  padding-block-start: .6rem;
-  border-block-start: 1px solid currentColor;
-}
-.mundos__ayuda {
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
+/* Los paneles de Proyectos en movimiento (09/09) estan en el bloque "Fase 4". */
 
 /* --- Un mundo pleno: la tinta se apodera de la pantalla entera ------------ */
-.mundo-pleno {
-  position: relative;
-  padding-block: clamp(3rem, 9svh, 6rem);
-  color: var(--sobre-foto);
-  scroll-margin-block-start: var(--alto-nav);
-}
-.mundo-pleno[data-tinta="bordo"]  { background: var(--tinta-bordo) }
-.mundo-pleno[data-tinta="bistre"] { background: var(--tinta-parrafo) }
-.mundo-pleno[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
-.mundo-pleno[data-tinta="tinta"]  { background: var(--tinta) }
-
-.mundo-pleno__interior {
-  padding-inline: var(--margen-ext);
-  display: grid;
-  gap: clamp(1.5rem, 4svh, 2.5rem);
-}
-.mundo-pleno__bajada {
-  font-size: var(--t-lead);
-  font-weight: var(--fino);
-  max-width: 44ch;
-  opacity: .85;
-  text-wrap: pretty;
-}
-/* El salto al siguiente. Del último se vuelve al primero: es el loop que pidió
-   Vero, y por eso no hay "anterior". */
-.mundo-pleno__next {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 44px;
-  margin-block-start: clamp(2rem, 6svh, 3.5rem);
-  margin-inline: var(--margen-ext);
-  padding-block: .9rem;
-  border-block-start: 1px solid currentColor;
-  color: inherit;
-  text-decoration: none;
-  font-size: var(--t-nota);
-}
-.mundo-pleno__next-r { font-variant-numeric: tabular-nums; opacity: .7 }
-.mundo-pleno__next-t { font-weight: var(--medio) }
+/* Los mundos plenos (proyectos.html viejo) se fueron el 09/09. */
 
 /* Las secciones que viven adentro de un mundo no ponen su propio fondo: el
    color lo pone el mundo. Si no, se pisan y se pierde el efecto. */
-.adentro { background: transparent; padding-inline: 0; color: inherit }
-.adentro .titulo, .adentro h2, .adentro h3 { color: inherit }
-.adentro .bajada, .adentro p { color: inherit }
 
 /* --- La ventana de contacto ---------------------------------------------- */
 .contacto {
   position: relative;
   overflow: hidden;
   padding-block: clamp(3rem, 9svh, 6rem);
-}
-/* La palabra gigante sangra por el borde izquierdo. Es decorativa: el texto
-   real está en el h2, y por eso va aria-hidden. */
-.contacto__palabra {
-  --deriva: 0;
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 0;
-  translate: calc(-14% + var(--deriva) * 1%) -50%;
-  font-size: clamp(6rem, 30vw, 22rem);
-  font-weight: var(--grueso);
-  line-height: .8;
-  letter-spacing: -.04em;
-  color: var(--tinta-bordo);
-  opacity: .07;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
 }
 .contacto__caja {
   position: relative;
@@ -2140,90 +1157,72 @@ body[data-menu-abierto] { overflow: hidden; }
   margin-block-end: 1.25rem;
   border-block-end: 1px solid var(--linea);
 }
+/* El indicador crece DESDE EL CENTRO (medido en Contactos.mp4): 0 en reposo,
+   un tercio en hover, la celda entera activa. Es un scaleX, no una raya que se
+   desliza de una solapa a la otra. */
 .solapa {
+  position: relative;
+  flex: 1 1 auto;
   min-height: 44px;
-  padding: .6rem 1rem;
+  padding: .6rem .75rem;
   border: 0;
-  border-block-end: 2px solid transparent;
   background: none;
   cursor: pointer;
   font: inherit;
   font-size: var(--t-chico);
   color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva), border-color var(--hover) var(--curva);
+  text-align: center;
+  transition: color var(--hover) var(--curva);
 }
-.solapa[aria-pressed="true"] {
-  color: var(--tinta-bordo);
-  border-block-end-color: var(--tinta-bordo);
-  font-weight: var(--medio);
+.solapa::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 2px;
+  background: var(--tinta-bordo);
+  transform-origin: center;
+  scale: 0 1;
+  transition: scale .4s cubic-bezier(.45, 0, .55, 1), background var(--hover) var(--curva);
 }
-.solapa__cuerpo { display: grid; gap: 1rem; justify-items: start }
-.solapa__cuerpo[aria-hidden="true"] { display: none }
-.solapa__cuerpo p { max-width: 44ch; text-wrap: pretty }
+.solapa[aria-selected="true"] { color: var(--tinta-bordo); font-weight: var(--medio); }
+.solapa[aria-selected="true"]::after { scale: 1 1; }
+.solapa:focus-visible { outline: 2px solid var(--tinta-bordo); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {.solapa:not([aria-selected="true"]):hover::after { scale: .33 1; background: var(--linea-acento); transition-duration: .3s; }}
+@media (prefers-reduced-motion: reduce) {.solapa::after { transition: none }}
 
 /* --- Los cuatro carriles -------------------------------------------------- */
 
 /* Notebook 1366×657: ancho de sobra, alto que no alcanza. La órbita y el ciclo
    se miden contra svh o no entran con la barra puesta. */
-@media (min-width: 64rem) {
-  .orbita, .ciclo { width: min(34rem, 62svh) }
-  .mundos { grid-template-columns: repeat(4, 1fr) }
-  .mundo { min-height: min(30rem, 64svh) }
-  /* Recién acá el título rota: es donde hay alto para que se lea. */
-  .mundo__nombre {
-    writing-mode: vertical-rl;
-    rotate: 180deg;
-    justify-self: start;
-    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
-  }
-  .contacto__caja { grid-template-columns: 4fr 6fr; gap: clamp(2rem, 5vw, 5rem) }
+@media (min-width: 64rem) {.contacto__caja { grid-template-columns: 4fr 6fr; gap: clamp(2rem, 5vw, 5rem) }
   .contacto__datos { align-self: start }
-  .mundo-pleno__interior { padding-inline: var(--margen-int) }
-}
-
-/* Escritorio grande: la órbita a tamaño completo. */
-@media (min-width: 94.5rem) {
-  .orbita, .ciclo { width: min(38rem, 66svh) }
 }
 
 /* Celular acostado (812×375). Cae acá por consulta de ALTO con tope de ancho,
    para no atrapar el notebook, que también es bajo pero mide 1366. */
-@media (max-height: 46rem) and (max-width: 63.99rem) {
-  .orbita, .ciclo { width: min(100%, 74svh) }
-  .cinta__pieza { font-size: clamp(2.25rem, 9vw, 4rem) }
-}
+@media (max-height: 46rem) and (max-width: 63.99rem) {.cinta__pieza { font-size: clamp(2.25rem, 9vw, 4rem) }}
 
 /* En táctil no hay hover. Todo lo que dependa del puntero vive acá adentro. */
-@media (hover: hover) and (pointer: fine) {
-  .mundo:hover { filter: brightness(1.14) }
-  .mundo-pleno__next:hover .mundo-pleno__next-t { text-decoration: underline }
+@media (hover: hover) and (pointer: fine) {.mundo:hover { filter: brightness(1.14) }
 }
 
 /* Se suaviza, no se apaga. Un bloque por efecto, pegado al efecto que apaga. */
-@media (prefers-reduced-motion: reduce) {
-  .cinta__riel { translate: none }
-  .orbita__anillo { stroke-dashoffset: 0 }
-  .ciclo__avance { stroke-dashoffset: 0 }
-  .contacto__palabra { translate: -14% -50% }
-  .orbita__punto, .ciclo__punto { transition: none }
-}
+@media (prefers-reduced-motion: reduce) {.cinta__riel { translate: none }
+  .orbita__anillo { stroke-dashoffset: 0 }}
 
 /* --- Correcciones de la primera medición --------------------------------- */
 
 /* Un item de grilla es `minmax(auto, 1fr)`: NO encoge por debajo de su
    contenido, así que un video o un título largo empujan la página entera.
    Medido acá: #proyectos-bloque daba 1675 px dentro de un viewport de 812. */
-.mundo-pleno__interior,
-.mundo-pleno__interior > *,
-.contacto__caja > *,
-.adentro { min-width: 0 }
-.adentro img, .adentro video { max-width: 100%; height: auto }
+/* min-width: 0 en los hijos de la grilla del contacto: sin eso un campo o
+   una solapa larga estira la columna y rompe el 4fr / 6fr. */
+.contacto__caja > * { min-width: 0 }
 
 /* Los enlaces de la cabecera medían 20 px de alto. El área táctil se agranda
    sin mover el diseño: el texto queda donde estaba. */
 .cabecera__enlaces a,
-.pie__paginas a,
-.panel > a {
+.pie__paginas a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -2232,190 +1231,59 @@ body[data-menu-abierto] { overflow: hidden; }
 /* 38 px de ancho no llega a 44: se agranda con padding, sin mover el texto. */
 .cabecera__enlaces a, .pie__paginas a { padding-inline: .5rem }
 
-/* --- El estante de Cardinal, fijado en horizontal (sólo escritorio) ------- */
-/* Recorre el ancho mientras la pantalla queda quieta: dos pantallas de alto se
-   vuelven una. En celular no se fija — pelear con las barras del navegador es
-   una pelea perdida — y queda el estante nativo con el dedo. */
-@media (min-width: 64rem) {
-  .fijado { position: relative }
-  .fijado .estante {
-    display: flex;
-    grid-template-columns: none;
-    gap: clamp(1rem, 2vw, 2rem);
-    overflow: visible;
-    align-items: end;
-    width: max-content;
-    padding-inline-end: var(--margen-int);
-  }
-  .fijado .estante .ficha {
-    flex: 0 0 clamp(18rem, 24vw, 26rem);
-    grid-column: auto;
-  }
-  /* Las proporciones siguen sin repetirse: es lo que separa esto de una fila
-     de tarjetas iguales. */
-  .fijado .estante .ficha__abrir,
-  .fijado .estante .ficha__hueco {
-    height: auto;
-    aspect-ratio: var(--prop, 3 / 2);
-    max-block-size: 54svh;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .fijado .estante { overflow-x: auto }
-}
-/* El riel mide `max-content`: sin recorte ensancha el documento entero y abre
-   scroll lateral. `clip` y no `hidden` — hidden crea un contexto de scroll que
-   no hace falta. El pin de GSAP usa `fixed`, así que esto no lo rompe. */
-@media (min-width: 64rem) { .fijado { overflow: clip } }
+/* El estante fijado de Cardinal (pin de GSAP) se fue el 09/09 con
+   proyectos.html viejo. */
 
 /* --- Celular: el círculo se despliega en vertical -------------------------- */
-/* Cuatro rótulos a radio 38 % más un panel al centro no entran en 390 px:
-   medido, "Gestión & Evolución" se cruzaba con el texto del panel y el anillo
-   pasaba por encima del rótulo activo. Acá el arco se desenrolla y queda una
-   lista: se ve todo junto, sin tocar nada. */
-@media (max-width: 63.99rem) {
-  .orbita, .ciclo {
-    width: auto;
-    aspect-ratio: auto;
-    display: grid;
-    gap: 0;
-    padding-inline-start: 1.35rem;
-    /* La línea de la izquierda ES el arco desplegado. */
-    border-inline-start: 1.4px solid var(--tinta-bordo);
-  }
-  .orbita__dibujo, .ciclo__dibujo,
-  .orbita__nodo, .ciclo__nodo,
-  .orbita__rotulo-anillo { display: none }
-
-  .orbita__cara, .ciclo__centro {
-    position: static;
-    inset: auto;
-    display: grid;
-    gap: 0;
-    text-align: start;
-  }
-  /* Todos los paneles visibles y apilados: en el teléfono no se esconde
-     contenido detrás de un toque que nadie sabe que hay. */
-  .orbita__panel, .ciclo__carta {
-    grid-area: auto;
-    position: relative;
-    opacity: 1;
-    visibility: visible;
-    gap: .35rem;
-    padding-block: 1.1rem;
-    border-block-start: 1px solid var(--linea);
-  }
-  .orbita__panel:first-child, .ciclo__carta:first-child { border-block-start: 0 }
-  .orbita__panel[aria-hidden="true"], .ciclo__carta[aria-hidden="true"] {
-    opacity: 1;
-    visibility: visible;
-  }
-  /* El punto sobre la línea marca cada paso. */
-  .orbita__panel::before, .ciclo__carta::before {
-    content: "";
-    position: absolute;
-    inset-block-start: 1.45rem;
-    inset-inline-start: -1.35rem;
-    translate: -50% 0;
-    width: 9px; height: 9px;
-    border: 1.4px solid var(--tinta-bordo);
-    border-radius: 50%;
-    background: var(--papel);
-  }
-  .orbita__panel h3, .ciclo__carta h3 { font-size: var(--t-cuerpo) }
-  .orbita__panel p, .ciclo__carta p { font-size: var(--t-chico) }
-  .orbita__anillo-copy, .ciclo__cierre, .orbita__ayuda { text-align: start }
-  /* En vertical el anillo no se dibuja, así que la ayuda de "se activa al
-     pasar" no aplica: no hay nada que pasar. */
-  .orbita__ayuda { display: none }
-}
-
-/* --- La palabra gigante de contacto: color con alfa, no opacity ----------- */
-/* El motor de reveal le escribe `opacity` a los hijos de la sección, así que
-   un `opacity: .07` propio se lo come al revelar y la palabra queda opaca
-   encima del texto. Con el color tintado el reveal puede hacer lo suyo sin
-   pisar nada. Un elemento, una sola cosa que lo controle. */
-.contacto__palabra {
-  opacity: 1;
-  color: color-mix(in srgb, var(--tinta-bordo) 9%, var(--papel));
-}
-/* En 390 px no hay columna libre donde sangrar: la palabra taparía el texto.
-   Recién desde 64rem, donde la caja es 4fr/6fr, tiene dónde vivir. */
-@media (max-width: 63.99rem) { .contacto__palabra { display: none } }
-
-/* --- Legibilidad adentro de un mundo -------------------------------------- */
+/* --- Legibilidad sobre un bloque oscuro: .oscuro ------------------------- */
+/* Un solo bloque para todo lo que va sobre tinta: el Universo (bistre),
+   Espacio (wenge), las franjas de la ficha y, hasta la Fase 5, los mundos
+   viejos (.mundo-pleno) de proyectos.html. */
 /* Las secciones vienen de la página clara y traen sus propios colores de tinta
    sobre papel. Adentro de un mundo el fondo es la tinta, así que bordó sobre
    bordó desaparece — medido en el bloque del cardenal. Acá se reasignan todos
    los tonos de texto de una vez, en lugar de parchear sección por sección. */
-.mundo-pleno .titulo,
-.mundo-pleno h2, .mundo-pleno h3, .mundo-pleno h4,
-.mundo-pleno .cardenal__cierre,
-.mundo-pleno .otros__nombre,
-.mundo-pleno .proyecto__nombre { color: var(--sobre-foto) }
+:is(.oscuro) .titulo,
+:is(.oscuro) h2,
+:is(.oscuro) h3,
+:is(.oscuro) h4,
+:is(.oscuro) .cardenal__cierre,
+:is(.oscuro) .otros__nombre { color: var(--sobre-foto) }
 
-.mundo-pleno .bajada,
-.mundo-pleno p,
-.mundo-pleno li,
-.mundo-pleno .cardenal__copy,
-.mundo-pleno .ficha__epigrafe,
-.mundo-pleno figcaption,
-.mundo-pleno .otros__copy { color: color-mix(in srgb, var(--sobre-foto) 90%, transparent) }
+:is(.oscuro) .bajada,
+:is(.oscuro) p,
+:is(.oscuro) li,
+:is(.oscuro) .cardenal__copy,
+:is(.oscuro) figcaption,
+:is(.oscuro) .otros__copy { color: color-mix(in srgb, var(--sobre-foto) 90%, transparent) }
 
-.mundo-pleno .margen,
-.mundo-pleno .seccion__margen,
-.mundo-pleno .otros__rotulo { color: color-mix(in srgb, var(--sobre-foto) 74%, transparent) }
+:is(.oscuro) .margen,
+:is(.oscuro) .otros__rotulo { color: color-mix(in srgb, var(--sobre-foto) 74%, transparent) }
 
 /* Los filetes también: una línea pensada para papel no se ve sobre tinta. */
-.mundo-pleno .cardenal,
-.mundo-pleno .otros,
-.mundo-pleno .ficha__epigrafe,
-.mundo-pleno .seccion__cabeza--pie {
+:is(.oscuro) .cardenal,
+:is(.oscuro) .otros {
   border-color: color-mix(in srgb, var(--sobre-foto) 26%, transparent);
 }
 /* Los enlaces heredan y se distinguen por el subrayado, no por el color. */
-.mundo-pleno a { color: inherit }
+:is(.oscuro) a { color: inherit }
 /* La cinta es el encabezado de la sección: un h2 que además es la pieza
    gráfica más grande. Sin resetear el margen del h2 la cinta se descuadra. */
-h2.cinta__pieza { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit }
+/* Solo el margen: el cuerpo, el peso y el interlineado son los de .cinta__pieza
+   (con inherit tomaba el cuerpo del body y la primera pieza salia chica). */
+h2.cinta__pieza { margin: 0 }
 /* El scroll suave necesita que el ancla frene abajo del nav, no debajo de él. */
-html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
-/* Al fijar, GSAP envuelve el riel en un `pin-spacer` que hereda el ancho del
-   contenido, no el de la caja: 28 px de desborde medidos en 1512. El recorte
-   tiene que estar también en el envoltorio, no sólo adentro. */
-@media (min-width: 64rem) {
-  .pin-spacer { overflow: clip; max-width: 100% }
-}
+html { scroll-padding-top: 1rem }
+
 /* El acordeón del mapa trae sus tonos de papel: sobre la tinta casi negra del
    mundo Territorio quedaban al límite de contraste. */
-.mundo-pleno .territorio__bajada,
-.mundo-pleno .territorio summary,
-.mundo-pleno details p,
-.mundo-pleno summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
-.mundo-pleno details, .mundo-pleno summary {
+:is(.oscuro) .territorio__bajada,
+:is(.oscuro) .territorio summary,
+:is(.oscuro) details p,
+:is(.oscuro) summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
+:is(.oscuro) details, :is(.oscuro) summary {
   border-color: color-mix(in srgb, var(--sobre-foto) 34%, transparent);
 }
-
-/* Las dos maneras de romper el bloque de legibilidad de arriba. Van juntas
-   porque son la misma leccion al derecho y al reves.
-
-   1. Un descendiente que trae `color` PROPIO no hereda del contenedor. Pintar
-      el `summary` no alcanzaba: los seis nombres del mapa quedaban tinta sobre
-      tinta, contraste medido 1,00. Invisibles.
-   2. Un descendiente con FONDO propio claro no puede recibir el tono claro del
-      mundo. El texto de la ficha vacia quedaba papel sobre papel: 1,06. */
-.mundo-pleno .territorio__nombre,
-.mundo-pleno .paso__nombre { color: var(--sobre-foto) }
-
-.mundo-pleno .hueco:not(.hueco--claro),
-.mundo-pleno .hueco:not(.hueco--claro) p,
-.mundo-pleno .hueco:not(.hueco--claro) .hueco__texto,
-.mundo-pleno .hueco:not(.hueco--claro) .hueco__rotulo { color: var(--tinta-apoyo) }
-.mundo-pleno .hueco:not(.hueco--claro) { border-color: var(--linea-acento) }
-
-/* El signo del acordeon estaba al limite sobre la tinta casi negra. */
-.mundo-pleno .paso__signo::before,
-.mundo-pleno .paso__signo::after { background: var(--sobre-foto) }
 
 /* --- 1. El título de contacto no puede pasarse de su columna --------------- */
 /* `var(--t-hero)` se mide contra el viewport: a 1512 daba 96 px y "MOVAMOS"
@@ -2468,21 +1336,7 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
 .persona--pendiente .persona__nombre { color: var(--tinta-apoyo) }
 .persona--pendiente .persona__marco { border: 1px dashed var(--linea-acento) }
 
-/* --- 6. Una sola foto grande en vez de los dos mockups -------------------- */
-.pieza--grande img {
-  aspect-ratio: 21 / 9;
-  border-radius: 6px;
-}
-@media (max-width: 47.99rem) {
-  .pieza--grande img { aspect-ratio: 4 / 3 }
-}
-
 /* --- 3. La mirada deja de ser una caja gris ------------------------------- */
-.mirada__cita {
-  max-width: 22ch;
-  margin-block: clamp(2rem, 6svh, 3.5rem) 0;
-  color: var(--tinta-bordo);
-}
 .temas {
   list-style: none;
   margin: clamp(2rem, 6svh, 3rem) 0 0;
@@ -2508,14 +1362,8 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
   line-height: 1.05;
   letter-spacing: -.02em;
 }
-.mirada__nota {
-  margin-block-start: 1.25rem;
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
 
-@media (min-width: 64rem) {
-  /* 7 columnas para el principal, 5 para los otros dos apilados: proporciones
+@media (min-width: 64rem) {/* 7 columnas para el principal, 5 para los otros dos apilados: proporciones
      que no se repiten, que es lo que separa esto de una fila de tarjetas. */
   .personas {
     grid-template-columns: 7fr 5fr;
@@ -2523,9 +1371,7 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
   }
   .persona--principal { grid-row: span 2 }
   .persona:not(.persona--principal) .persona__hueco { aspect-ratio: 16 / 10 }
-  .mirada__cita { font-size: clamp(2rem, 3.4vw, 3.25rem); max-width: 18ch }
-  .temas { max-width: 46rem }
-}
+  .temas { max-width: 46rem }}
 
 /* --- 2. La red deja de estar plana ---------------------------------------- */
 /* Los nodos entran uno atrás de otro cuando la sección aparece, y después la
@@ -2556,46 +1402,36 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
 .red__nube[data-vivo="1"] .red__nodo[data-peso="1"] { translate: calc(var(--deriva) * 14px) 0 }
 .red__nube[data-vivo="1"] .red__nodo[data-peso="3"] { translate: calc(var(--deriva) * -22px) 0 }
 
-@media (hover: hover) and (pointer: fine) {
-  .red__nodo { transition: color var(--hover) var(--curva) }
+@media (hover: hover) and (pointer: fine) {.red__nodo { transition: color var(--hover) var(--curva) }
   .red__nube:hover .red__nodo { color: color-mix(in srgb, var(--sobre-foto) 40%, transparent) }
-  .red__nube .red__nodo:hover { color: var(--sobre-foto) }
-}
-@media (prefers-reduced-motion: reduce) {
-  .red__nube[data-vivo] .red__nodo { opacity: 1; translate: none; transition: none }
-  .red__nube[data-vivo="1"] .red__nodo { translate: none }
-}
+  .red__nube .red__nodo:hover { color: var(--sobre-foto) }}
+@media (prefers-reduced-motion: reduce) {.red__nube[data-vivo] .red__nodo { opacity: 1; translate: none; transition: none }
+  .red__nube[data-vivo="1"] .red__nodo { translate: none }}
 /* La grilla de piezas era de dos columnas para los dos mockups. Con una sola
    foto quedaba una estampilla a media pantalla: ahora ocupa el ancho entero. */
-.piezas__par:has(> .pieza--grande:only-child) { grid-template-columns: 1fr }
 /* Respaldo para navegadores sin :has — la clase la pone el generador. */
-.piezas__par--sola { grid-template-columns: 1fr }
 /* Los retratos medían 240 px dentro de una columna de 611: el `aspect-ratio`
    resolvía el ancho en vez de estirarse. Se fija el ancho y la proporción
    pasa a mandar sólo sobre el alto — que es lo que se quería. */
 .persona, .persona__marco, .persona__hueco { width: 100% }
 .persona__hueco { block-size: auto }
-@media (min-width: 64rem) {
-  /* Fotos grandes de verdad: el bloque usa todo el ancho de la página. */
+@media (min-width: 64rem) {/* Fotos grandes de verdad: el bloque usa todo el ancho de la página. */
   .equipo-seccion .personas {
     grid-template-columns: 8fr 5fr;
     gap: clamp(1.5rem, 2.4vw, 3rem);
-  }
-}
+  }}
 /* Con `aspect-ratio` y ancho completo el retrato principal daba 833 px de alto:
    más de una pantalla en el notebook de 657. En escritorio el alto lo fija el
    viewport y la proporción deja de mandar — la regla de siempre, lo vertical
    contra svh. Los dos chicos apilados suman lo mismo que el grande. */
-@media (min-width: 64rem) {
-  .persona--principal .persona__hueco {
+@media (min-width: 64rem) {.persona--principal .persona__hueco {
     aspect-ratio: auto;
     block-size: min(62svh, 34rem);
   }
   .persona:not(.persona--principal) .persona__hueco {
     aspect-ratio: auto;
     block-size: min(26svh, 14rem);
-  }
-}
+  }}
 
 /* ==========================================================================
    Correcciones 08/09 — la vuelta del video de proyectos
@@ -2628,13 +1464,8 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
   border-radius: 0;
   background: var(--papel-capa-1);
 }
-.mundo-pleno .cardenal { border-color: transparent }
-.mundo-pleno .cardenal .margen   { color: var(--tinta-apoyo) }
-.mundo-pleno .cardenal__copy     { color: var(--tinta-parrafo) }
-.mundo-pleno .cardenal__cierre   { color: var(--tinta-bordo) }
 
-@media (min-width: 64rem) {
-  .cardenal {
+@media (min-width: 64rem) {.cardenal {
     margin-inline: calc(var(--margen-int) * -1);
     padding-inline: var(--margen-int);
     grid-template-columns: auto minmax(0, 1fr);
@@ -2653,8 +1484,7 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
   }
   /* La frase de cierre es de Vero y es el remate del mundo: tiene que pesar
      tanto como el trazo que se acaba de dibujar al lado. */
-  .cardenal__cierre { font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3rem); line-height: 1.12 }
-}
+  .cardenal__cierre { font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3rem); line-height: 1.12 }}
 
 /* --- 6. El bloque del Espacio necesita su propio contexto de apilamiento --- */
 /* Las piezas `sangre__*` viven en `#espacio-bloque` sin la clase `.sangre` del
@@ -2677,7 +1507,6 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
    porque solo contaba toques en los carriles de celular. */
 .cabecera__enlaces a { min-width: 44px; justify-content: center }
 
-
 /* --- 11. La volanta sobre la aerea del Espacio --------------------------- */
 /* 3,7:1 medido: es micro-tipografia en mayusculas, o sea el peor caso posible
    para leer. Sube a papel pleno. */
@@ -2689,16 +1518,1439 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
    auditor lo marco con ocho paradas seguidas al 0 % de tinta; a ojo, en las
    capturas de 390 y de escritorio, no se veia. El tope va por consulta de
    ALTO con tope de ancho, para no atrapar al notebook de 1366x657. */
-@media (max-height: 33rem) and (max-width: 63.99rem) {
-  .persona__hueco,
+@media (max-height: 33rem) and (max-width: 63.99rem) {.persona__hueco,
   .persona--principal .persona__hueco,
   .persona:not(.persona--principal) .persona__hueco {
     aspect-ratio: auto;
     block-size: min(74svh, 17rem);
   }
-  .pieza--grande img, .pieza img { max-block-size: 80svh; object-fit: cover }
+  .pieza img { max-block-size: 80svh; object-fit: cover }
   /* Mismo caso: el video del cardenal a ancho completo daria 812 px de alto en
      una pantalla de 375. Se mide contra el alto, como todo lo vertical. */
   .cardenal__video { aspect-ratio: auto; block-size: min(78svh, 18rem); width: auto; justify-self: start }
-  .equipo-seccion .personas { gap: 1.25rem }
+  .equipo-seccion .personas { gap: 1.25rem }}
+
+/* --- FOOT-2: WhatsApp y correo a la vista en el pie ------------------------ */
+.pie__contacto { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: var(--t-nota); }
+.pie__contacto a { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta-parrafo); }
+.pie__cookies {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font: inherit; font-size: var(--t-nota); color: var(--tinta-apoyo);
+  background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: .2em;
 }
+.pie__abajo .idioma { margin-inline-start: auto; }
+
+/* ==========================================================================
+   Fase 2b (09/09) — la cinta continua y el contacto con formulario
+   ========================================================================== */
+
+/* --- La cinta continua: la unica excepcion a "cero infinitas" ------------ */
+/* Pedido del 08/09 (data-fx="marquee") en tres lugares: el pie del hero, el
+   fondo de la ficha de Cardinal y el titulo vertical del contacto. Corre con
+   un keyframe infinito, pero PAUSADA hasta que el observer la ve (data-vivo)
+   y apagada con reduced-motion. La duracion la escribe el JS para que la
+   velocidad sea constante en px/s: --cinta-dur = (largo / 2) / velocidad. */
+@keyframes mvCinta  { to { translate: -50% 0 } }
+@keyframes mvCintaY { to { translate: 0 -50% } }
+.cinta--continua { --corrida: 0 }
+.cinta--continua .cinta__riel {
+  translate: none;
+  animation: mvCinta var(--cinta-dur, 20s) linear infinite;
+  animation-play-state: paused;
+}
+.cinta--continua[data-vivo] .cinta__riel { animation-play-state: running }
+.cinta--vertical .cinta__riel {
+  flex-direction: column;
+  width: auto;
+  height: max-content;
+  animation-name: mvCintaY;
+}
+/* En vertical cada pieza se lee de abajo hacia arriba y sube en el mismo
+   sentido en que se lee, como en la referencia. */
+.cinta--vertical .cinta__pieza { writing-mode: vertical-rl; rotate: 180deg; line-height: 1; }
+.cinta__pieza--enlace { text-decoration: none; color: inherit; }
+@media (prefers-reduced-motion: reduce) {.cinta--continua .cinta__riel { animation: none }}
+
+/* --- La marca de agua del contacto: color con alfa, nunca opacity --------- */
+/* El motor de reveal le escribe `opacity` a los hijos directos de la seccion:
+   un `opacity` propio se lo come. Con el color tintado puede hacer lo suyo. */
+.cinta--marca {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  display: none;
+}
+/* La palabra mide lo que mide la columna que la contiene (--ancho-marca): un
+   glifo mas ancho que la columna se corta, y ese corte duro es el de la
+   referencia. Absoluta para que su riel de max-content no le de altura a la
+   caja: estira con ella, no al reves. */
+.cinta--marca .cinta__pieza {
+  font-size: calc(var(--ancho-marca, 8rem) * .92);
+  letter-spacing: -.04em;
+  color: color-mix(in srgb, var(--tinta-bordo) 12%, var(--papel));
+  user-select: none;
+  pointer-events: none;
+}
+.cinta--marca .cinta__riel { gap: clamp(1.5rem, 3vw, 3rem); align-items: center }
+@media (min-width: 64rem) {.contacto__caja { --ancho-marca: clamp(6rem, 8vw, 9rem); grid-template-columns: var(--ancho-marca) 4fr 6fr; }
+  /* La cinta es absoluta (no ocupa celda): las dos columnas de contenido se
+     ubican a mano o la grilla las corre a la primera celda, que es la angosta. */
+  .contacto__datos { grid-column: 2 }
+  .contacto__panel { grid-column: 3 }
+  /* Cuatro opciones largas: dos por fila, no una tira que se envuelve. */
+  .solapas { display: grid; grid-template-columns: 1fr 1fr; }
+  .contacto .cinta--marca {
+    display: block;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--margen-ext) + var(--ancho-marca));
+    text-align: center;
+  }
+  .contacto { overflow: hidden }}
+
+/* --- El formulario ---------------------------------------------------------- */
+.contacto__copia { margin-block: .5rem 1.25rem; max-width: 44ch; text-wrap: pretty; color: var(--tinta-parrafo); min-height: 1.5em; }
+.contacto__copia:empty { display: none }
+.formulario { display: grid; gap: 1rem; }
+.formulario__fila { display: grid; }
+.campo { display: grid; gap: .35rem; }
+.campo__rotulo { font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+/* Campos de linea, como la referencia: sin caja, solo la linea de abajo que
+   se enciende con el foco. 44 px de alto por regla de la casa. */
+.campo__entrada {
+  min-height: 44px;
+  padding: .5rem 0;
+  border: 0;
+  border-block-end: 1px solid var(--linea);
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--tinta);
+  transition: border-color var(--hover) var(--curva);
+}
+.campo__entrada:focus { outline: none; border-block-end: 1px solid var(--tinta-bordo); }
+.campo__entrada:focus-visible { outline: 2px solid var(--tinta-bordo); outline-offset: 4px; }
+.campo__entrada[aria-invalid="true"] { border-block-end-color: var(--tinta-bordo); }
+.campo__error { font-size: var(--t-nota); color: var(--tinta-bordo); }
+textarea.campo__entrada { resize: vertical; min-height: 6rem; }
+.formulario__nota { font-size: var(--t-nota); color: var(--tinta-apoyo); }
+.formulario__enviar { justify-self: start; }
+.formulario__estado { font-size: var(--t-nota); color: var(--tinta-parrafo); min-height: 1.5em; }
+.formulario__estado:empty { display: none }
+.formulario__trampa { position: absolute; left: -9999px; opacity: 0; }
+.contacto__alternativa { margin-block-start: 1.25rem; font-size: var(--t-nota); color: var(--tinta-apoyo); }
+.solapas { flex-wrap: wrap; gap: 0; }
+
+/* --- El cambio de opcion en tres tiempos (medido en Contactos.mp4) --------- */
+/* Fade-out del bloque entero (170 ms, sin moverse) -> 150 ms vacio -> las
+   filas entran de arriba hacia abajo cada 65 ms, subiendo 24 px en 420 ms. */
+.contacto__panel[data-saliendo] .formulario__fila,
+.contacto__panel[data-saliendo] .contacto__copia {
+  opacity: 0;
+  transition: opacity .17s cubic-bezier(.55, 0, 1, .45);
+}
+.contacto__panel[data-entrando] .formulario__fila,
+.contacto__panel[data-entrando] .contacto__copia {
+  opacity: 0;
+  translate: 0 24px;
+  transition: none;
+}
+.formulario__fila, .contacto__copia {
+  transition: opacity .42s cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 65ms),
+              translate .42s cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 65ms);
+}
+@media (prefers-reduced-motion: reduce) {.formulario__fila, .contacto__copia,
+  .contacto__panel[data-saliendo] .formulario__fila, .contacto__panel[data-saliendo] .contacto__copia,
+  .contacto__panel[data-entrando] .formulario__fila, .contacto__panel[data-entrando] .contacto__copia {
+    transition: none; translate: none; opacity: 1;
+  }}
+
+/* =========================================================================
+   Fase 2a — Aviso de cookies (modulo consent.js)
+   ========================================================================= */
+/* ==========================================================================
+   Mavenz — aviso de cookies
+   Una tarjeta del mismo papel que la página, abajo a la izquierda, con la
+   palabra "Cookies" enorme y torcida cortándose contra los bordes. Las dos
+   acciones son texto subrayado que se baraja al pasar el puntero, no botones
+   con caja.
+
+   Cero hex: todo sale de los tokens de estilos.css. Los tiempos del efecto
+   .barajar (200 / 220 ms, sus curvas) y la entrada de la tarjeta (500 ms)
+   están medidos en la referencia, era-residence.com, y por eso viven acá como
+   valores locales y no como --hover / --cambio, que son de otro gesto.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   La tarjeta
+   -------------------------------------------------------------------------- */
+
+@keyframes cookiesEntrar   { from { opacity: 0; translate: 0 12px; } }
+@keyframes cookiesAparecer { from { opacity: 0; } }
+
+.cookies {
+  /* El mismo margen que el globo de WhatsApp: los dos flotantes a una altura. */
+  --cookies-borde: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+
+  position: fixed;
+  left: var(--cookies-borde);
+  bottom: var(--cookies-borde);
+  z-index: 25;                                 /* sobre el globo (15), bajo el "saltar" (50) */
+  width: min(21rem, calc(100vw - 2rem));
+  padding: 1.5rem 1.75rem 1.5rem;
+  background: var(--papel);
+  color: var(--tinta-bordo);
+  border-radius: 6px;
+  /* clip y no hidden: corta la palabra sin abrir un contexto de scroll. */
+  overflow: clip;
+  /* Papel sobre papel: sin sombra la tarjeta no tiene borde contra la página.
+     La misma que lleva el globo, para que sean de la misma familia. */
+  box-shadow: 0 8px 24px var(--sombra);
+  animation: cookiesEntrar 500ms cubic-bezier(.16, 1, .3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {.cookies { animation-name: cookiesAparecer; }   /* aparece, no sube */}
+
+/* El marco: una línea metida 8 px del borde. Va en un pseudo y no en un
+   border para que la palabra grande pase por encima de la línea y se corte
+   contra el borde de la tarjeta, no contra el marco. */
+.cookies::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: 0;
+  border: 1px solid var(--linea);
+  border-radius: 1px;                          /* concéntrico: 6 px afuera menos 8 px adentro da cero */
+  pointer-events: none;
+}
+
+/* La palabra. Es la mitad del gesto: desborda a los dos lados y overflow:
+   clip de la tarjeta la corta. Gira sobre su esquina de abajo a la izquierda
+   y no sobre el centro, para que suba hacia la derecha y nunca baje sobre la
+   línea legal que tiene debajo. */
+.cookies__titulo {
+  position: relative;
+  z-index: 1;                                  /* por encima del marco */
+  margin-block: 0 .25em;
+  margin-inline: -.5em;
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: var(--grueso);
+  line-height: .9;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+  rotate: -12deg;
+  transform-origin: 0 100%;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* La línea legal: 13-14 px en peso 400, no en el 300 del cuerpo, que a ese
+   tamaño sobre papel se deshace. */
+.cookies__texto {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 .875rem;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.cookies__acciones {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .625rem;
+  font-size: var(--t-chico);
+  font-weight: var(--medio);
+}
+.cookies__barra { color: var(--linea-acento); }
+
+/* Celular: sube para no pisar el globo de WhatsApp, que en pantalla angosta
+   comparte la esquina, y la palabra baja de tamaño para que se lea entera. */
+@media (max-width: 63.99rem) {.cookies { bottom: 5.5rem; }
+  .cookies__titulo { font-size: clamp(3rem, 18vw, 4.5rem); }}
+
+/* Con el menú de celular abierto la tarjeta no tiene nada que hacer encima. */
+body[data-menu-abierto] .cookies { visibility: hidden; }
+
+/* El enlace del pie viene con hidden en el HTML y sólo consent.js se lo saca.
+   Se declara acá por si algún display del pie le gana al hidden del navegador. */
+[data-cookies-abrir][hidden] { display: none; }
+
+/* --------------------------------------------------------------------------
+   .barajar — la palabra que se baraja
+   Medido en era-residence.com. Dos copias de la misma palabra en la misma
+   celda: al entrar el puntero la copia 1 se apaga letra por letra hacia la
+   derecha mientras la copia 2 entra desde la izquierda, y el subrayado se
+   recoge hacia la derecha. Al salir, el mismo intercambio al revés y el
+   subrayado vuelve a crecer desde la izquierda.
+
+   Un solo interruptor, --vivo (0 en reposo, 1 con el puntero encima o con el
+   foco), y todo lo demás se calcula desde ahí. Así el :hover, que sólo existe
+   con puntero fino, y el :focus-visible, que existe siempre, prenden lo mismo
+   sin repetir las reglas dos veces.
+   -------------------------------------------------------------------------- */
+
+.barajar {
+  --vivo: 0;
+  --se-va: 200ms cubic-bezier(.55, 0, 1, .45);    /* la copia que se apaga: acelera y se va */
+  --llega: 220ms cubic-bezier(.16, 1, .3, 1);     /* la copia que entra: llega y frena */
+  /* En reposo (o sea, cuando el puntero acaba de salir) la copia 1 es la que
+     vuelve y la copia 2 la que se va. Prendido, al revés. */
+  --t-sale:  var(--llega);
+  --t-entra: var(--se-va);
+
+  position: relative;
+  /* Grilla y no absolute: las dos copias en la misma celda se pisan solas y
+     quedan centradas dentro del alto táctil sin calcular nada. */
+  display: inline-grid;
+  place-items: center;
+  min-height: 44px;                               /* área táctil; el aspecto no cambia */
+  padding-inline: .125rem;
+  color: var(--tinta-bordo);
+  line-height: 1.1;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.barajar:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* Los dos estados que prenden el efecto. Son las únicas tres líneas que se
+   repiten: el resto sale de --vivo. */
+.barajar:focus-visible { --vivo: 1; --t-sale: var(--se-va); --t-entra: var(--llega); }
+@media (hover: hover) and (pointer: fine) {.barajar:hover      { --vivo: 1; --t-sale: var(--se-va); --t-entra: var(--llega); }}
+
+.barajar__copia {
+  grid-area: 1 / 1;
+  position: relative;                             /* las dos posicionadas: gana el orden del DOM, la 2 arriba */
+  display: inline-block;
+}
+
+/* El subrayado va en la copia 1, que es la que no se mueve. El origen no se
+   transiciona, así que es el del estado destino el que manda: 100 % (derecha)
+   cuando se prende, para que se recoja hacia la derecha; 0 % (izquierda) en
+   reposo, para que al soltar vuelva a crecer desde la izquierda. */
+.barajar__copia--sale::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1.5px;
+  background: currentColor;
+  scale: calc(1 - var(--vivo)) 1;
+  transform-origin: calc(var(--vivo) * 100%) 50%;
+  transition: scale 200ms var(--curva);
+}
+
+/* Las letras. El delay va después del shorthand a propósito: el shorthand lo
+   pone en cero y lo pisaría. 30 ms por letra: la ola va de izquierda a
+   derecha, en las dos direcciones. */
+.barajar__letra { display: inline-block; }
+
+.barajar__copia--sale .barajar__letra {
+  opacity: calc(1 - var(--vivo));
+  translate: calc(var(--vivo) * var(--i, 0) * 2px) 0;     /* abanico: cada letra corre un poco más que la anterior */
+  transition: opacity var(--t-sale), translate var(--t-sale);
+  transition-delay: calc(var(--i, 0) * 30ms);
+}
+.barajar__copia--entra .barajar__letra {
+  opacity: var(--vivo);
+  translate: calc((1 - var(--vivo)) * -8px) 0;            /* llega desde la izquierda */
+  transition: opacity var(--t-entra), translate var(--t-entra);
+  transition-delay: calc(var(--i, 0) * 30ms);
+}
+
+/* Menos movimiento: sólo cambia el subrayado. La palabra se queda quieta y la
+   segunda copia sobra. Misma especificidad que las reglas de arriba, si no
+   no les gana. */
+@media (prefers-reduced-motion: reduce) {.barajar__copia--sale .barajar__letra { transition: none; opacity: 1; translate: none; }
+  .barajar__copia--entra { display: none; }}
+
+/* =========================================================================
+   Fase 2a — Flotante: menu + WhatsApp (modulo del 10/09)
+   ========================================================================= */
+/* ==========================================================================
+   Flotante — el menú y el WhatsApp viven juntos en la esquina de abajo a la
+   derecha. Reemplaza al globo .wa, a la .hamburguesa y al .panel de la
+   cabecera (sus bloques de estilos.css y de guion.js se van; queda
+   `body[data-menu-abierto] { overflow: hidden }`, que este módulo usa).
+
+   La mecánica está copiada de realevate.agency/bythesea, medida cuadro a
+   cuadro: el botón "se convierte" en el panel en dos tiempos (primero el
+   alto, después el ancho), el contenido entra escalonado desde abajo y cada
+   ítem rueda en vertical al pasar el puntero. La paleta y la tipografía son
+   las de Mavenz: cero hex, sólo las variables de :root.
+
+   Quién escribe qué:
+     body[data-lejos]              el guion, cuando la cabecera salió de la pantalla
+     .flotante[data-abierto]       el guion, al abrir el menú
+     .flotante[data-oculto]        el guion, sobre #contacto
+     .flotante[data-tema="oscuro"] mirarTema, según el bloque que hay detrás
+     style="--i: n"                el generador, en cada enlace del panel
+   ========================================================================== */
+
+.flotante {
+  /* Tokens locales: el par tinta/fondo se da vuelta con data-tema y todo el
+     módulo lo lee de acá, así la inversión es una regla y no diez. */
+  --flotante-tinta: var(--tinta-bordo);
+  --flotante-fondo: var(--papel);
+  /* La curva medida en la referencia: arranca fuerte y frena largo. No es
+     --curva porque ésta es más brusca a propósito: el panel tiene que saltar
+     del botón, no deslizarse. */
+  --flotante-curva: cubic-bezier(.16, 1, .3, 1);
+
+  position: fixed;
+  right: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  bottom: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  z-index: 30;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 5px;
+  color: var(--flotante-tinta);
+  transition: opacity 250ms var(--curva), translate 250ms var(--curva);
+}
+/* Sobre un bloque oscuro se invierte: --sobre-foto es papel, el token que el
+   sitio ya usa para lo que va encima de una foto. */
+.flotante[data-tema="oscuro"] {
+  --flotante-tinta: var(--sobre-foto);
+  --flotante-fondo: var(--tinta-bordo);
+}
+
+/* Escritorio: nace escondido y aparece cuando la cabecera salió de la
+   pantalla. Abajo de 64rem la cabecera no tiene enlaces, así que el
+   flotante es el único menú y está siempre. Abierto no se esconde nunca. */
+@media (min-width: 64rem) {.flotante:not([data-abierto]) {
+    opacity: 0;
+    translate: 0 12px;
+    pointer-events: none;
+  }
+  body[data-lejos] .flotante {
+    opacity: 1;
+    translate: none;
+    pointer-events: auto;
+  }}
+/* Sobre #contacto se va entero, como hacía el globo: ahí el WhatsApp ya está
+   delante del visitante. */
+.flotante[data-oculto]:not([data-abierto]) {
+  opacity: 0;
+  translate: 0 12px;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {.flotante:not([data-abierto]),
+  .flotante[data-oculto]:not([data-abierto]) { translate: none; transition: opacity 250ms var(--curva); }}
+
+/* --------------------------------------------------------------------------
+   La píldora de WhatsApp
+   -------------------------------------------------------------------------- */
+
+.flotante__wa {
+  position: relative;
+  z-index: 2;               /* encima del panel, que viene después en el DOM */
+  isolation: isolate;       /* el ::before con z-index -1 no se escapa del enlace */
+  overflow: hidden;         /* el barrido respeta el radio */
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding-inline: 1.125rem;
+  border: 1px solid var(--flotante-tinta);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--flotante-tinta);
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  line-height: 1;
+  white-space: nowrap;
+  transition: color .3s var(--flotante-curva), border-color var(--hover) var(--curva),
+              opacity var(--hover) var(--curva), visibility 0s;
+}
+/* El relleno: una caja del color de la tinta que crece desde la izquierda.
+   Al salir se recoge hacia el mismo lado porque el origen no cambia. */
+.flotante__wa::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--flotante-tinta);
+  transform-origin: left;
+  scale: 0 1;
+  transition: scale .3s var(--flotante-curva);
+}
+@media (hover: hover) and (pointer: fine) {.flotante__wa:hover { color: var(--flotante-fondo); }
+  .flotante__wa:hover::before { scale: 1 1; }}
+@media (prefers-reduced-motion: reduce) {.flotante__wa { transition: color 0s, border-color var(--hover) var(--curva), opacity var(--hover) var(--curva), visibility 0s; }
+  .flotante__wa::before { transition: none; }}
+/* Abierto, la píldora se va: el panel ya trae el WhatsApp en el pie y encima
+   compartiría renglón con el selector de idioma. Vuelve al cerrar. */
+.flotante[data-abierto] .flotante__wa {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--hover) var(--curva), visibility 0s linear var(--hover);
+}
+
+/* --------------------------------------------------------------------------
+   El botón: dos rayas desiguales, alineadas a la izquierda
+   -------------------------------------------------------------------------- */
+
+.flotante__boton {
+  position: relative;
+  z-index: 2;
+  width: 46px;
+  height: 44px;
+  border-radius: 6px;
+  background: var(--flotante-tinta);
+  /* El color del texto no se ve (no hay texto): está para que el aro de
+     foco, que es currentColor, sea del color del botón y se vea sobre lo que
+     haya detrás. Papel sobre papel no se vería. */
+  color: var(--flotante-tinta);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding-left: 15px;       /* (46 − 16) / 2: la larga queda centrada, la corta arranca en el mismo borde */
+  transition: background-color var(--hover) var(--curva), color var(--hover) var(--curva);
+}
+.flotante__raya {
+  display: block;
+  height: 2px;
+  background: var(--flotante-fondo);
+  transform-origin: left;
+  transition: scale .2s var(--flotante-curva), background-color var(--hover) var(--curva);
+}
+.flotante__raya--larga { width: 16px; }
+.flotante__raya--corta { width: 7px; }
+/* Abierto: la larga se recoge hacia la izquierda y queda el guioncito solo,
+   en su lugar. Ese guión es el cerrar. No hay X: la referencia no la usa. */
+.flotante__boton[aria-expanded="true"] .flotante__raya--larga { scale: 0 1; }
+/* Abierto el botón está parado sobre el panel, que es papel siempre: se
+   pinta de bordó sea cual sea el tema de atrás. */
+.flotante[data-abierto] .flotante__boton { background: var(--tinta-bordo); color: var(--tinta-bordo); }
+.flotante[data-abierto] .flotante__raya { background: var(--papel); }
+@media (prefers-reduced-motion: reduce) {.flotante__raya { transition: background-color var(--hover) var(--curva); }}
+
+/* --------------------------------------------------------------------------
+   El panel: anclado a la esquina del botón, crece desde ahí
+   -------------------------------------------------------------------------- */
+
+.flotante__panel {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;               /* debajo del botón, que es el que lo abre y lo cierra */
+  width: min(17rem, calc(100vw - 2rem));
+  /* Nunca más alto que la pantalla: el nav de adentro es el que cede. */
+  max-height: calc(100svh - 6rem);
+  /* El aire de arriba es a propósito: la mitad del efecto es que el panel
+     sea más grande que lo que contiene. */
+  padding: 5.5rem 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  color: var(--tinta-bordo);
+  /* Cerrado no existe para el teclado ni para el puntero. La visibilidad se
+     va recién cuando el fondo terminó de plegarse (.39s), por eso el retraso. */
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear .4s;
+}
+.flotante[data-abierto] .flotante__panel {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+/* Celular acostado: con 375px de alto el aire de arriba se come el menú. */
+@media (max-height: 30rem) {.flotante__panel { padding-top: 2.5rem; }}
+
+/* El fondo son dos cajas sin texto, una adentro de la otra, que crecen desde
+   la esquina del botón. Sólo transform, nada de width o height: no
+   relayoutan y el contenido no se reacomoda mientras crecen.
+   Apertura: alto (0 → .12s) y después ancho (.10 → .25s).
+   Cierre: al revés, ancho (.12 → .27s) y después alto (.27 → .39s).
+   Como la transición que manda es la del estado al que se va, cada estado
+   lleva sus propios tiempos: los de abajo son los del cierre. */
+.flotante__fondo-y {
+  position: absolute;
+  inset: 0;
+  transform-origin: 100% 100%;
+  scale: 1 0;
+  transition: scale .12s var(--flotante-curva) .27s;
+}
+.flotante__fondo-x {
+  position: absolute;
+  inset: 0;
+  transform-origin: 100% 100%;
+  scale: 0 1;
+  background: var(--papel);
+  /* Papel sobre papel: sin sombra el panel no tiene borde contra la pagina.
+     La misma que llevan la tarjeta de cookies y el globo viejo. */
+  box-shadow: 0 12px 32px var(--sombra);
+  transition: scale .15s var(--flotante-curva) .12s;
+}
+.flotante[data-abierto] .flotante__fondo-y { scale: 1 1; transition: scale .12s var(--flotante-curva); }
+.flotante[data-abierto] .flotante__fondo-x { scale: 1 1; transition: scale .15s var(--flotante-curva) .10s; }
+@media (prefers-reduced-motion: reduce) {.flotante__panel,
+  .flotante__fondo-y,
+  .flotante__fondo-x { transition: none; }}
+
+/* --------------------------------------------------------------------------
+   El contenido: encima del fondo, entra escalonado
+   -------------------------------------------------------------------------- */
+
+/* relative y no static: lo absoluto (el fondo) pinta arriba de lo estático
+   aunque venga antes en el DOM. */
+.flotante__enlaces,
+.flotante__pie,
+.flotante .idioma { position: relative; }
+
+.flotante__enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  flex: 1 1 auto;
+  min-height: 0;            /* sin esto el flex no deja achicar al nav y nunca scrollea */
+}
+/* Donde el panel puede topar con la pantalla, el nav scrollea. No en
+   escritorio alto: ahí sobra lugar y un overflow: auto muestra una barra
+   fugaz mientras los ítems entran translateados. */
+@media (max-width: 63.99rem), (max-height: 40rem) {.flotante__enlaces {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    /* El aro de foco sale 5px del enlace y el overflow lo recortaría: se le
+       hace lugar con padding y se lo devuelve con margen negativo. */
+    padding: .375rem;
+    margin: -.375rem;
+  }}
+
+/* Cada ítem es una ventana de una línea (1.12em) con la palabra dos veces
+   apilada; al pasar el puntero la pista sube media altura y aparece la
+   copia. Sin cambio de color ni subrayado: el movimiento es el hover.
+
+   El área de toque, que no es obvia: la ventana recorta con overflow, y
+   overflow recorta en el borde del PADDING, así que un padding agranda lo
+   tocable pero deja ver la segunda cara. El borde no: overflow no lo toca y
+   el borde sí cuenta para el clic. Van 44px de caja con un borde
+   transparente arriba y abajo, y la ventana de adentro queda de 1.12em. */
+.rodar {
+  display: block;
+  /* none y no el flex por defecto: es ítem de un flex en columna y con
+     overflow: hidden su mínimo automático es 0, así que cuando el nav queda
+     corto (celular acostado) los seis se aplastaban hasta quedar sin caja. */
+  flex: none;
+  height: max(44px, 1.12em);
+  border-block: solid transparent;
+  border-block-width: max(0px, calc((44px - 1.12em) / 2));
+  overflow: hidden;
+  line-height: 1.12;
+  font-size: var(--t-sub);
+  font-weight: var(--fino);
+  letter-spacing: -.01em;
+  color: var(--tinta-bordo);
+  text-decoration: none;
+  /* Entrada: abajo y apagado hasta que el fondo terminó de crecer. Estos
+     tiempos son los del cierre: se apaga en 120ms, todos juntos. */
+  opacity: 0;
+  translate: 0 25px;
+  transition: opacity .12s var(--flotante-curva), translate .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .rodar {
+  opacity: 1;
+  translate: none;
+  transition: opacity .15s var(--flotante-curva), translate .15s var(--flotante-curva);
+  /* .28s: el ancho terminó de crecer (.25s) y un respiro. --i lo pone el
+     generador, de 0 a 5. */
+  transition-delay: calc(.28s + var(--i, 0) * 55ms);
+}
+.rodar__pista {
+  display: grid;
+  transition: translate .2s var(--flotante-curva);
+}
+.rodar__cara { display: block; }
+@media (hover: hover) and (pointer: fine) {.rodar:hover .rodar__pista { translate: 0 -50%; }}
+.rodar:focus-visible .rodar__pista { translate: 0 -50%; }
+@media (prefers-reduced-motion: reduce) {.rodar,
+  .flotante[data-abierto] .rodar { translate: none; transition: opacity .15s var(--flotante-curva); transition-delay: 0s; }
+  .rodar__pista { transition: none; }
+  .rodar:hover .rodar__pista,
+  .rodar:focus-visible .rodar__pista { translate: none; }}
+
+/* El pie llega último, con un fade, y el idioma después. .60s: el sexto
+   enlace arranca a .555s (.28 + 5 × 55ms); si cambia la cantidad de enlaces
+   cambian estos dos números. */
+.flotante__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1.25rem;
+  margin-top: 1.5rem;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .flotante__pie { opacity: 1; transition: opacity .15s var(--flotante-curva) .60s; }
+.flotante .idioma {
+  flex-shrink: 0;
+  margin-top: .25rem;
+  opacity: 0;
+  transition: opacity .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .idioma { opacity: 1; transition: opacity .15s var(--flotante-curva) .68s; }
+@media (prefers-reduced-motion: reduce) {.flotante__pie,
+  .flotante .idioma,
+  .flotante[data-abierto] .flotante__pie,
+  .flotante[data-abierto] .idioma { transition: opacity .15s var(--flotante-curva); }}
+
+.flotante__dato {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 44px;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  color: var(--tinta-bordo);
+  text-decoration: none;
+}
+.flotante__icono {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+/* Al pasar el puntero el ícono se pliega sobre su eje horizontal y vuelve:
+   una vuelta sola, no un bucle. El texto no se mueve. ease-in-out y no la
+   curva del panel: es un pliegue, no un salto. */
+@keyframes flotante-pliegue {
+  50% { scale: 1 0; }
+}
+@media (hover: hover) and (pointer: fine) {.flotante__dato:hover .flotante__icono { animation: flotante-pliegue .3s ease-in-out; }}
+@media (prefers-reduced-motion: reduce) {.flotante__dato:hover .flotante__icono { animation: none; }}
+
+/* --------------------------------------------------------------------------
+   Foco: visible en todo, del color de lo que tiene el foco
+   -------------------------------------------------------------------------- */
+
+.flotante :is(a, button):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+/* El kit base pone border-radius: 2px al foco: deformaría la píldora y el botón. */
+.flotante__wa:focus-visible { border-radius: 999px; }
+.flotante__boton:focus-visible { border-radius: 6px; }
+
+/* =========================================================================
+   Fase 3 (09/09) — Somos Mavenz, el puente y el Universo en bistre
+   ========================================================================= */
+
+/* --- Somos Mavenz: texto angosto a la izquierda, dos circulos a la derecha - */
+.quienes { display: grid; gap: clamp(2rem, 6vw, 4rem); align-items: center; }
+.quienes__texto { display: grid; gap: 1.25rem; max-width: 34ch; }
+.quienes__texto .titulo { max-width: none; }
+/* La caja de los circulos es cuadrada; los dos se posicionan adentro por
+   porcentaje, asi el solape es el mismo en cualquier ancho: el de fondo
+   (58 %) arriba a la derecha, el de frente (50 %) abajo a la izquierda,
+   pisandolo un cuarto de su diametro (SOM-4, medido sobre el dibujo). */
+.circulos { position: relative; aspect-ratio: 1; width: min(100%, 26rem); margin-inline: auto; }
+.circulo { position: absolute; margin: 0; aspect-ratio: 1; border-radius: 50%; overflow: clip; }
+.circulo--fondo  { inset-block-start: 0;   inset-inline-end: 0;    width: 58%; }
+.circulo--frente { inset-block-end: 6%;    inset-inline-start: 4%; width: 50%; z-index: 1;
+                   box-shadow: 0 16px 40px var(--sombra); }
+.circulo__foto { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 64rem) {.quienes--con-circulos { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(3rem, 8vw, 8rem); }
+  .circulos { width: min(100%, 30rem); margin-inline: 0 auto; }}
+
+/* --- El puente: papel que se difumina en bistre --------------------------- */
+/* Un gradiente quieto y, encima, una capa de bistre que crece desde abajo
+   con el scroll (solo transform). Sin guion o con menos movimiento queda el
+   gradiente, que ya es la transicion que pide SOM-6. */
+.puente {
+  position: relative;
+  height: clamp(6rem, 18svh, 11rem);
+  overflow: clip;
+  background: linear-gradient(180deg, var(--papel), var(--tinta-parrafo));
+}
+.puente__tinta {
+  position: absolute;
+  inset: 0;
+  background: var(--tinta-parrafo);
+  transform-origin: 50% 100%;
+  scale: 1 var(--mezcla, 0);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {.puente__tinta { display: none; }}
+
+/* --- El Universo Mavenz: seccion a sangre en bistre ----------------------- */
+.universo {
+  /* Alineado con el texto del dossier: el mismo margen a la izquierda. */
+  --uni-izq: calc(var(--margen-ext) + var(--margen-int));
+  --uni-der: var(--margen-der);
+  padding-inline: var(--uni-izq) var(--uni-der);
+  padding-block: var(--ritmo);
+  border-top: 0;
+  background: var(--tinta-parrafo);
+  color: var(--sobre-foto);
+}
+.universo__cabeza .bajada { max-width: 46ch; }
+.universo__cuerpo {
+  display: grid;
+  gap: clamp(2rem, 6svh, 3.5rem);
+  margin-block: clamp(2rem, 6svh, 4rem);
+}
+
+/* La orbita: MAVENZ fijo en el centro, tres esferas alrededor unidas por
+   lineas que nunca se cortan, y el anillo de Marca y comunicacion afuera. */
+.orbita {
+  position: relative;
+  width: min(100%, 30rem, 62svh);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  color: var(--sobre-foto);
+}
+.orbita__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* El anillo se dibuja primero (anillo() en guion.js escribe --dibujo). */
+.orbita__anillo {
+  stroke-dasharray: var(--vuelta, 290);
+  stroke-dashoffset: calc(var(--vuelta, 290) * (1 - var(--dibujo, 1)));
+  opacity: .6;
+}
+.orbita__lineas { opacity: .38; }
+/* El rotulo del anillo va abajo, entre las dos esferas de abajo: arriba
+   choca con la esfera de las 12. El fondo corta la linea del anillo. */
+.orbita__rotulo-anillo {
+  position: absolute;
+  inset-block-end: -.45rem;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  margin: 0;
+  padding-inline: .6rem;
+  background: var(--tinta-parrafo);
+  font-size: var(--t-micro);
+  font-weight: var(--medio);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sobre-foto);
+  white-space: nowrap;
+}
+.orbita__centro {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  margin: 0;
+  font-size: clamp(1.1rem, .8rem + 1.2vw, 1.75rem);
+  font-weight: var(--grueso);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sobre-foto);
+}
+/* Cada esfera es un disco opaco (tapa las lineas que pasan por debajo) con
+   el numero y el nombre adentro. La elegida sube a primer plano; las otras
+   se achican y se apagan. */
+.orbita__nodo {
+  --d: clamp(5.25rem, 3.5rem + 5.5vw, 7.5rem);
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  translate: -50% -50%;
+  width: var(--d);
+  height: var(--d);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .1rem;
+  padding: .5rem;
+  border: 1px solid color-mix(in srgb, var(--sobre-foto) 55%, transparent);
+  border-radius: 50%;
+  background: var(--tinta-parrafo);
+  color: var(--sobre-foto);
+  cursor: pointer;
+  scale: .9;
+  opacity: .7;
+  transition: scale var(--cambio) var(--curva), opacity var(--cambio) var(--curva),
+              background-color var(--cambio) var(--curva), color var(--cambio) var(--curva),
+              border-color var(--cambio) var(--curva);
+}
+.orbita__n { font-size: var(--t-micro); font-variant-numeric: tabular-nums; opacity: .7; }
+.orbita__nombre {
+  max-width: 100%;
+  font-size: clamp(.7rem, .58rem + .35vw, .8rem);
+  font-weight: var(--medio);
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+  hyphens: auto;
+}
+.orbita__nodo[aria-pressed="true"] {
+  scale: 1.3;
+  opacity: 1;
+  z-index: 2;
+  background: var(--sobre-foto);
+  border-color: var(--sobre-foto);
+  color: var(--tinta-parrafo);
+}
+.orbita__nodo:focus-visible { outline: 2px solid var(--sobre-foto); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {.orbita__nodo { transition: none; }}
+
+/* El detalle: la descripcion de la elegida, al costado. Los tres paneles
+   apilados en la misma celda; el visible manda el alto. */
+.orbita__detalle { display: grid; gap: 1.25rem; align-content: center; }
+.orbita__paneles { position: relative; display: grid; }
+.orbita__panel {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: .5rem;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 8px;
+  transition: opacity var(--cambio) var(--curva), translate var(--cambio) var(--curva),
+              visibility 0s linear var(--cambio);
+}
+.orbita__panel[aria-hidden="false"] { opacity: 1; visibility: visible; translate: none; transition-delay: 0s; }
+.orbita__panel-n { font-size: var(--t-micro); font-variant-numeric: tabular-nums; opacity: .7; }
+.orbita__panel h3 { margin: 0; font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1; }
+.orbita__panel p { margin: 0; max-width: 38ch; font-size: var(--t-cuerpo); text-wrap: pretty; }
+@media (prefers-reduced-motion: reduce) {.orbita__panel { transition: opacity var(--cambio) var(--curva), visibility 0s linear var(--cambio); translate: none; }}
+.orbita__flechas { display: none; gap: .75rem; }
+.orbita__flecha {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--sobre-foto) 55%, transparent);
+  border-radius: 50%;
+  background: none;
+  color: var(--sobre-foto);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.orbita__flecha:focus-visible { outline: 2px solid var(--sobre-foto); outline-offset: 3px; }
+.orbita__ayuda { margin: 0; font-size: var(--t-nota); opacity: .72; }
+
+.orbita__anillo-copy {
+  max-width: 48ch;
+  margin: clamp(2rem, 6svh, 3.5rem) auto 0;
+  text-align: center;
+  font-size: var(--t-chico);
+  text-wrap: pretty;
+}
+.orbita__anillo-copy strong { font-weight: var(--medio); }
+/* El cierre (UNI-5) remata la seccion: mas aire, mas cuerpo, mas contraste. */
+.universo__cierre {
+  max-width: 34ch;
+  margin: clamp(2.5rem, 8svh, 4.5rem) auto 0;
+  text-align: center;
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  line-height: 1.35;
+  color: var(--sobre-foto);
+  text-wrap: balance;
+}
+
+@media (min-width: 64rem) {.universo__cuerpo {
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+  .orbita { margin-inline: 0; }}
+
+/* Celular: el diagrama chico arriba, y las descripciones como un carril
+   con una tarjeta por vez (el doc pide toque, swipe o botones). Todas
+   visibles: en el telefono no se esconde contenido detras de un toque. */
+@media (max-width: 63.99rem) {.orbita { width: min(100%, 22rem, 74svh); }
+  .orbita__paneles {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--uni-izq)) calc(-1 * var(--uni-der));
+    padding-inline: var(--uni-izq) var(--uni-der);
+    scroll-padding-inline: var(--uni-izq);
+    overscroll-behavior-x: contain;
+  }
+  .orbita__paneles::-webkit-scrollbar { display: none; }
+  .orbita__panel {
+    grid-area: auto;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+  }
+  .orbita__flechas { display: flex; }}
+
+/* =========================================================================
+   Fase 4 (09/09) — Como trabajamos, Proyectos en movimiento, Mirada Mavenz
+   ========================================================================= */
+
+/* --- Como trabajamos: el trazo de la M con los cinco pasos ---------------- */
+/* Fondo papel (no blanco puro: es el papel de todo el sitio), trazo y
+   palabras en bordo (MET-4). El trazo se dibuja con --trazo (0..1), que
+   escribe trazoMetodo() en guion.js con el scroll; sin guion vale 1 y se ve
+   entero. Cada paso aparece cuando el trazo llega a su punto
+   ([data-visto], acumulativo: no se esconde al subir). */
+.metodo { color: var(--tinta-bordo); }
+.trazo {
+  position: relative;
+  width: min(100%, calc(40svh * 3));
+  /* Aire para los rotulos de arriba y de abajo, que salen de la caja. */
+  margin: clamp(4rem, 10svh, 6rem) auto;
+}
+/* La caja del dibujo: 3:1 como el viewBox. El SVG, el isotipo y (en
+   escritorio) los nodos se posicionan contra ella en porcentaje. */
+.trazo__caja { position: relative; aspect-ratio: 3 / 1; }
+.trazo__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.trazo__onda {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--trazo, 1));
+  transition: stroke-dashoffset 120ms linear;
+}
+/* El isotipo arranca el trazo: chico, sobre el comienzo del path (que
+   empieza abajo a la izquierda, en 3 % / 74 %). */
+.trazo__iso {
+  position: absolute;
+  left: 0;
+  top: 74%;
+  translate: -10% -50%;
+  width: clamp(3.5rem, 7vw, 6rem);
+  height: auto;
+  opacity: .9;
+}
+.trazo__nodos { position: absolute; inset: 0; list-style: none; margin: 0; padding: 0; }
+.trazo__nodo {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0;
+  height: 0;
+}
+.trazo__punto {
+  position: absolute;
+  left: 0; top: 0;
+  translate: -50% -50%;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--tinta-bordo);
+  box-shadow: 0 0 0 4px var(--papel);
+}
+.trazo__rotulo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% 1rem;
+  width: max-content;
+  max-width: clamp(11rem, 15vw, 15rem);
+  text-align: center;
+  font-size: var(--t-nota);
+  line-height: 1.4;
+  color: var(--tinta-parrafo);
+  text-wrap: pretty;
+}
+.trazo__nodo[data-arriba] .trazo__rotulo { translate: -50% calc(-100% - 1rem); }
+.trazo__n { display: block; font-size: var(--t-micro); font-variant-numeric: tabular-nums; color: var(--tinta-apoyo); }
+.trazo__nombre {
+  display: block;
+  font-size: clamp(1.125rem, .9rem + .8vw, 1.5rem);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  line-height: 1.15;
+  color: var(--tinta-bordo);
+}
+/* Progresivo: lo pone el guion. Sin guion no existe y todo esta a la vista. */
+[data-progresivo] .trazo__nodo {
+  opacity: 0;
+  translate: 0 8px;
+  transition: opacity var(--cambio) var(--curva), translate var(--cambio) var(--curva);
+}
+[data-progresivo] .trazo__nodo[data-visto] { opacity: 1; translate: none; }
+@media (prefers-reduced-motion: reduce) {.trazo__onda { transition: none; }
+  [data-progresivo] .trazo__nodo { opacity: 1; translate: none; transition: none; }}
+.metodo__cierre {
+  max-width: 30ch;
+  margin: clamp(1.5rem, 5svh, 3rem) 0 0;
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  line-height: 1.3;
+  color: var(--tinta-bordo);
+  text-wrap: balance;
+}
+/* Celular: el trazo queda de adorno arriba (sin nodos encima, no entran) y
+   los pasos son una lista con filete; cada uno entra cuando se ve. */
+@media (max-width: 63.99rem) {.trazo { width: 100%; margin-block: clamp(1.5rem, 4svh, 2.5rem) 0; }
+  .trazo__caja { aspect-ratio: auto; }
+  /* El dibujo queda arriba, a 3:1, y la lista debajo. */
+  .trazo__dibujo { position: relative; aspect-ratio: 3 / 1; height: auto; }
+  .trazo__iso { top: 24.7%; }   /* 74 % del alto del dibujo, que es un tercio del ancho */
+  .trazo__nodos {
+    position: relative;
+    inset: auto;
+    margin-top: clamp(1.5rem, 4svh, 2.5rem);
+    padding-inline-start: 1.35rem;
+    border-inline-start: 1.4px solid var(--tinta-bordo);
+  }
+  .trazo__nodo { position: relative; left: auto; top: auto; width: auto; height: auto; padding-block: .9rem; border-block-end: 1px solid var(--linea); }
+  .trazo__nodo:last-child { border-block-end: 0; }
+  .trazo__punto { left: -1.35rem; top: 1.45rem; translate: -50% 0; width: 9px; height: 9px; box-shadow: none; }
+  .trazo__rotulo,
+  .trazo__nodo[data-arriba] .trazo__rotulo { position: static; translate: none; width: auto; max-width: 40ch; text-align: start; display: block; }}
+
+/* --- Proyectos en movimiento: tres paneles con aire y foto abajo ---------- */
+.mundos {
+  display: grid;
+  gap: clamp(.75rem, 1.2vw, 1.25rem);
+  margin-block: clamp(1.5rem, 5svh, 3rem) 0;
+}
+.mundo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(18rem, 60svh, 26rem);
+  text-decoration: none;
+  color: var(--sobre-foto);
+  overflow: hidden;
+  border-radius: 4px;
+  /* El tilt lo escribe el guion en --fx-rx / --fx-ry; solo con puntero fino. */
+  transform: perspective(900px) rotateX(var(--fx-rx, 0deg)) rotateY(var(--fx-ry, 0deg));
+  transition: transform .35s var(--curva);
+  will-change: transform;
+}
+.mundo[data-tinta="bordo"]  { background: var(--tinta-bordo) }
+.mundo[data-tinta="bistre"] { background: var(--tinta-parrafo) }
+.mundo[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
+.mundo[data-tinta="tinta"]  { background: var(--tinta) }
+.mundo__cuerpo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+.mundo__marca { display: block; width: clamp(2rem, 3vw, 2.75rem); opacity: .7; }
+.mundo__marca img { display: block; width: 100%; height: auto; filter: brightness(0) invert(1); opacity: .9; }
+.mundo__nombre {
+  align-self: end;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  font-weight: var(--medio);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.mundo__bajada { font-size: var(--t-nota); opacity: .85; max-width: 28ch; text-wrap: pretty; }
+.mundo__cierre {
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  padding-block-start: .6rem;
+  border-block-start: 1px solid currentColor;
+}
+.mundo__foto {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  height: clamp(7rem, 22svh, 11rem);
+  object-fit: cover;
+}
+@media (min-width: 64rem) {.mundos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Retrato 5:7 (el alto sale del ancho de la columna: un tercio del
+     contenedor menos los dos gaps), con tope para el notebook bajo. Foto en
+     el tercio de abajo; arriba, el bloque de tinta con el nombre en vertical
+     pegado al borde derecho y la bajada abajo a la izquierda. */
+  .mundos { --mundos-gap: clamp(.75rem, 1.2vw, 1.25rem); gap: var(--mundos-gap); }
+  .mundo { min-height: 0; height: min(calc((100cqi - 2 * var(--mundos-gap)) / 3 * 1.4), 78svh); }
+  .mundos { container-type: inline-size; }
+  .mundo__foto { flex-basis: 30%; height: 30%; }
+  .mundo__cuerpo {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "marca nombre" ". nombre" "bajada nombre" "cierre nombre";
+    grid-template-rows: auto 1fr auto auto;
+  }
+  .mundo__marca { grid-area: marca; }
+  .mundo__nombre {
+    grid-area: nombre;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    justify-self: end;
+    align-self: start;
+    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  }
+  .mundo__bajada { grid-area: bajada; align-self: end; }
+  .mundo__cierre { grid-area: cierre; }}
+/* Tilt: 5 grados con puntero fino; el resto no lo ve. */
+@media (hover: hover) and (pointer: fine) {.mundo.fx-activo { transition: transform .08s linear; }}
+@media (prefers-reduced-motion: reduce) {.mundo, .mundo.fx-activo { transform: none; transition: none; }}
+
+/* --- Mirada Mavenz: cinco categorias y el mapa como contenido editorial --- */
+.mirada-seccion .temas { margin-top: clamp(2rem, 6svh, 3rem); }
+.mirada-seccion .mapa { margin-top: clamp(2.5rem, 8svh, 5rem); }
+/* El mapa venia del mundo oscuro: sus numeros en Grullo sobre papel daban
+   2.09:1 (medido). En wenge llegan a 4.5. */
+.mirada-seccion .territorio__n { color: var(--tinta-apoyo); }
+
+/* Tablet y celular acostado: tres columnas con el nombre horizontal, si no
+   cada panel apilado era una pantalla entera de tinta con tres renglones. */
+@media (min-width: 48rem) and (max-width: 63.99rem) {.mundos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mundo { min-height: clamp(16rem, 70svh, 22rem); }
+  .mundo__foto { height: clamp(5rem, 20svh, 8rem); }
+  .mundo__nombre { font-size: clamp(1.25rem, 2.4vw, 1.75rem); }}
+
+/* =========================================================================
+   Fase 5 (09/09) — proyectos.html, espacio.html, nosotros.html, cardinal.html
+   ========================================================================= */
+
+.visualmente-oculto {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.titulo--chico { font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem); }
+
+/* --- proyectos.html: el indice liviano --------------------------------- */
+.proyectos-intro { padding-block: clamp(2rem, 6svh, 3.5rem) 0; border-top: 0; }
+.proyectos-intro__texto { max-width: 52ch; }
+.resumen { display: grid; gap: clamp(1.5rem, 4svh, 2.5rem); align-items: center; }
+.resumen__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+.resumen__texto { display: grid; gap: 1rem; }
+.resumen__texto .titulo { max-width: 16ch; }
+.datos { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; margin: .25rem 0 0; padding: 0; }
+.dato {
+  padding: .45rem .8rem;
+  border: 1px solid var(--linea-acento);
+  border-radius: 999px;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  color: var(--tinta-parrafo);
+}
+.oscuro .dato { border-color: color-mix(in srgb, var(--sobre-foto) 45%, transparent); color: inherit; }
+.resumen__aclaracion { font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+.resumen__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: .5rem; }
+.oportunidades__cta { margin-top: 1.25rem; }
+@media (min-width: 64rem) {.resumen { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2.5rem, 6vw, 6rem); }}
+
+/* --- espacio.html: un bloque plano en wenge ------------------------------ */
+.espacio { padding-block: calc(var(--ritmo) * 1.15); }
+.espacio[data-tinta="wenge"] { background: var(--tinta-apoyo); }
+.espacio[data-tinta="bistre"] { background: var(--tinta-parrafo); }
+.espacio__interior { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.espacio__texto { display: grid; gap: 1.25rem; max-width: 46ch; }
+.espacio__bajada {
+  font-size: var(--t-lead);
+  font-weight: var(--ui);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.espacio__cta { justify-self: start; margin-top: .5rem; }
+/* El bloque .oscuro pone `a { color: inherit }`: el boton claro quedaba papel
+   sobre papel. Mas especifico, gana. */
+.oscuro .boton.boton--claro { color: var(--tinta-bordo); }
+.espacio__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+@media (min-width: 64rem) {.espacio--con-foto .espacio__interior { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }}
+
+/* --- nosotros.html: personas con foto (solo perfiles completos) ---------- */
+.personas { margin-top: clamp(2rem, 6svh, 3rem); }
+.persona__marco { margin: 0; overflow: clip; border-radius: 6px; }
+.persona__marco img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+@media (min-width: 64rem) {div.personas { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }}
+
+/* --- cardinal.html: el hero que se abre ---------------------------------- */
+/* Una seccion de 220svh con el contenido sticky a 100svh. La foto es un
+   bloque a pantalla completa recortado con clip-path: inset(); --w y --h
+   son el ancho y el alto de la ventana (en px, los escribe fichaHero()).
+   Sin guion o con menos movimiento: --recorrido 0 y la ventana abierta. */
+.ficha-hero {
+  --recorrido: 0px;
+  --tarjeta: clamp(9rem, 12.5vw, 15rem);
+  --w: 100vw;
+  --h: 100svh;
+  position: relative;
+  margin-top: calc(var(--alto-nav) * -1);
+  height: calc(100svh + var(--recorrido));
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+}
+.ficha-hero[data-vivo] { --recorrido: 120svh; --w: var(--tarjeta); --h: var(--tarjeta); }
+.ficha-hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+  display: grid;
+  place-items: center;
+}
+/* La cinta del isotipo detras de todo: al 18 %, y sube mas rapido que el
+   scroll (--cinta-y, 1.5x) hasta salir por arriba. */
+.ficha-hero__cinta {
+  position: absolute;
+  inset: 50% 0 auto 0;
+  translate: 0 calc(-50% + var(--cinta-y, 0px));
+  z-index: 1;
+}
+.ficha-hero__cinta .cinta { padding: 0; border: 0; background: transparent; }
+.ficha-hero__cinta .cinta__riel { gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.ficha-hero__cinta .cinta__pieza--img {
+  display: block;
+  width: clamp(12rem, 26vw, 26rem);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: .18;
+}
+.ficha-hero__foto {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  clip-path: inset(calc((100% - var(--h)) / 2) calc((100% - var(--w)) / 2));
+  will-change: clip-path;
+}
+.ficha-hero__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ficha-hero__copia {
+  position: absolute;
+  inset: auto var(--margen-ext) clamp(5rem, 14svh, 8rem);
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: .5rem;
+  text-align: center;
+  translate: 0 var(--copia-y, 0px);
+  opacity: var(--copia-op, 1);
+}
+.ficha-hero__nombre {
+  margin: 0;
+  font-size: var(--t-hero);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  line-height: .94;
+}
+.ficha-hero__bajada { margin: 0; max-width: 34ch; font-size: var(--t-lead); font-weight: var(--fino); text-wrap: balance; }
+.ficha-hero__scroll {
+  position: absolute;
+  left: var(--margen-ext);
+  bottom: clamp(1.25rem, 4svh, 2.5rem);
+  z-index: 3;
+  margin: 0;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  translate: 0 var(--scroll-y, 0px);
+  opacity: .8;
+}
+/* Con la ventana chica el nombre queda debajo de la tarjeta: el copy va
+   abajo del centro, no encima de la foto. */
+@media (max-width: 63.99rem) {.ficha-hero { --tarjeta: clamp(9rem, 44vw, 14rem); }
+  .ficha-hero__copia { inset-inline: 1rem; }}
+@media (prefers-reduced-motion: reduce) {.ficha-hero[data-vivo] { --recorrido: 0px; --w: 100vw; --h: 100svh; }
+  .ficha-hero__cinta, .ficha-hero__copia, .ficha-hero__scroll { translate: none; }}
+
+/* --- el marcador: la linea vertical que entra 200 ms antes ---------------- */
+.marcador {
+  display: block;
+  width: 1px;
+  height: 72px;
+  margin: 0 auto clamp(1.25rem, 4svh, 2rem);
+  background: currentColor;
+  transform-origin: 50% 0;
+  scale: 1 0;
+  transition: scale .6s var(--curva);
+}
+.marcador[data-visto] { scale: 1 1; }
+@media (prefers-reduced-motion: reduce) {.marcador { scale: 1 1; transition: none; }}
+
+/* --- titulo de la ficha: centrado, con aire ------------------------------- */
+.ficha-titulo { display: grid; justify-items: center; gap: 1.25rem; text-align: center; color: var(--tinta-bordo); }
+.ficha-titulo__titulo { max-width: 16ch; text-wrap: balance; }
+.ficha-titulo__texto { max-width: 46ch; }
+.ficha-titulo .datos { justify-content: center; }
+
+/* --- la galeria escalonada y arrastrable --------------------------------- */
+.carrusel-seccion { border-top: 0; padding-top: 0; }
+.carrusel {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(.875rem, 1.5vw, 1.5rem);
+  /* A sangre: el carril sale del dossier por los dos lados. */
+  margin-inline: calc(-1 * (var(--margen-ext) + var(--margen-int))) calc(-1 * var(--margen-der));
+  padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
+  padding-top: clamp(4.5rem, 20svh, 9rem);   /* lugar para la escalera */
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.carrusel::-webkit-scrollbar { display: none; }
+.carrusel[data-arrastrando] { cursor: grabbing; scroll-snap-type: none; }
+.lamina {
+  flex: 0 0 auto;
+  margin: 0;
+  scroll-snap-align: start;
+  /* La escalera: cada foto un escalon mas arriba que la anterior. */
+  translate: 0 calc(var(--i, 0) * -4.5svh);
+}
+.lamina--ancha { width: clamp(16rem, 36vw, 38rem); }
+.lamina--angosta { width: clamp(11rem, 20vw, 20rem); }
+.lamina__abrir { display: block; width: 100%; overflow: clip; border-radius: 4px; cursor: zoom-in; }
+.lamina__abrir img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; -webkit-user-drag: none; }
+.lamina--angosta .lamina__abrir img { aspect-ratio: 3 / 4; }
+.lamina__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+.carrusel__flechas { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.25rem; color: var(--tinta-bordo); }
+@media (prefers-reduced-motion: reduce) {.lamina { translate: none; } .carrusel { padding-top: 0; }}
+
+/* --- sub-items: foto 3:4 y texto, alternados ------------------------------ */
+.subitems { display: grid; gap: clamp(3rem, 10svh, 6rem); }
+.subitem { display: grid; gap: 1.25rem; }
+.subitem__foto { margin: 0; }
+.subitem__foto img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
+.subitem__nombre { margin: 0 0 .75rem; font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1; color: var(--tinta-bordo); }
+.subitem__texto p { max-width: 38ch; }
+@media (min-width: 64rem) {.subitem { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .subitem--espejo .subitem__foto { order: 2; }
+  .subitem--abajo { align-items: end; }}
+
+/* --- franja de video a sangre -------------------------------------------- */
+.franja-video { position: relative; height: clamp(14rem, 62svh, 40rem); overflow: hidden; background: var(--tinta); }
+.franja-video__video { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- unidades ------------------------------------------------------------ */
+.unidades { display: grid; gap: clamp(1.5rem, 4svh, 2.5rem); align-items: center; }
+.unidades__texto { display: grid; gap: 1rem; }
+.unidades__foto { margin: 0; }
+.unidades__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+@media (min-width: 64rem) {.unidades { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 6rem); }}
+
+/* --- franja oscura (financiacion): corta, centrada, en bordo -------------- */
+.franja {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 1.25rem;
+  min-height: 50svh;
+  padding: clamp(3rem, 8svh, 5rem) var(--margen-ext);
+  text-align: center;
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+}
+.franja__titulo {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  line-height: .96;
+  text-wrap: balance;
+}
+.franja__copy { margin: 0; max-width: 46ch; font-size: var(--t-cuerpo); }
+
+/* --- cierre de la ficha --------------------------------------------------- */
+.ficha-cierre { display: grid; justify-items: center; gap: 1.25rem; text-align: center; color: var(--tinta-bordo); }
+.ficha-cierre__frase { margin: 0; max-width: 20ch; font-size: var(--t-cita); font-weight: var(--fino); line-height: 1.3; text-wrap: balance; }

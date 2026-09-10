@@ -12,163 +12,20 @@
 
   var menosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------------------------------------------------------------------- */
-  /* Cabecera: una línea aparece cuando la página se despegó de arriba       */
-  /* ---------------------------------------------------------------------- */
-
+  /* La cabecera ya no acompana el scroll (09/09): se va con la pagina y la
+     reemplaza el flotante. Su tema lo escribe el generador, no una sonda. */
   var cabecera = document.querySelector('[data-cabecera]');
-  if (cabecera) {
-    var pendiente = false;
-    var mirar = function () {
-      pendiente = false;
-      if (window.scrollY > 8) cabecera.setAttribute('data-scroll', '');
-      else cabecera.removeAttribute('data-scroll');
-    };
-    window.addEventListener('scroll', function () {
-      if (pendiente) return;
-      pendiente = true;
-      requestAnimationFrame(mirar);
-    }, { passive: true });
-    mirar();
-  }
+
+  /* El menu de celular y el globo de WhatsApp se fueron (09/09): los dos
+     viven ahora en el flotante de abajo a la derecha, modulo al final de
+     este archivo. */
+
+  /* La rueda del universo (v1) se fue el 09/09: la orbita vive en circular(). */
 
   /* ---------------------------------------------------------------------- */
-  /* Menú de celular                                                         */
-  /* ---------------------------------------------------------------------- */
 
-  var boton = document.querySelector('[data-menu-boton]');
-  var panel = document.querySelector('[data-menu-panel]');
-
-  if (boton && panel && cabecera) {
-    var cerrar = function () {
-      cabecera.removeAttribute('data-menu');
-      panel.removeAttribute('data-abierto');
-      document.body.removeAttribute('data-menu-abierto');
-      boton.setAttribute('aria-expanded', 'false');
-    };
-    var abrir = function () {
-      cabecera.setAttribute('data-menu', '');
-      panel.setAttribute('data-abierto', '');
-      document.body.setAttribute('data-menu-abierto', '');
-      boton.setAttribute('aria-expanded', 'true');
-    };
-
-    boton.addEventListener('click', function () {
-      if (boton.getAttribute('aria-expanded') === 'true') cerrar();
-      else abrir();
-    });
-
-    panel.addEventListener('click', function (e) {
-      if (e.target.closest('a')) cerrar();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && boton.getAttribute('aria-expanded') === 'true') {
-        cerrar();
-        boton.focus();
-      }
-    });
-
-    var ancho = window.matchMedia('(min-width: 64rem)');
-    var alAncho = function (m) { if (m.matches) cerrar(); };
-    if (ancho.addEventListener) ancho.addEventListener('change', alAncho);
-    else ancho.addListener(alAncho);
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* El globo de WhatsApp, por contexto                                      */
-  /*                                                                         */
-  /* Se esconde donde el visitante ya tiene el WhatsApp delante: el hero y   */
-  /* el cierre. En el medio es el único camino a la conversión, y ahí está.  */
-  /* ---------------------------------------------------------------------- */
-
-  var globo = document.querySelector('[data-wa]');
-  var tapan = document.querySelectorAll('.hero, #contacto');
-
-  if (globo && tapan.length && 'IntersectionObserver' in window) {
-    /* Un conjunto y no un contador: en la primera llamada llegan todas las
-       secciones juntas, y con un contador la que no se ve le resta a la que
-       sí, con lo que el globo nunca se escondía. */
-    var tapando = [];
-    var ojo = new IntersectionObserver(function (entradas) {
-      entradas.forEach(function (en) {
-        var i = tapando.indexOf(en.target);
-        if (en.isIntersecting && i < 0) tapando.push(en.target);
-        if (!en.isIntersecting && i >= 0) tapando.splice(i, 1);
-      });
-      if (tapando.length) globo.setAttribute('data-oculto', '');
-      else globo.removeAttribute('data-oculto');
-    }, { threshold: .05 });
-    Array.prototype.forEach.call(tapan, function (s) { ojo.observe(s); });
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* La rueda del universo                                                   */
-  /* ---------------------------------------------------------------------- */
-
-  document.querySelectorAll('[data-rueda]').forEach(function (rueda) {
-    var nodos = Array.prototype.slice.call(rueda.querySelectorAll('[data-cap]'));
-    var paneles = Array.prototype.slice.call(rueda.querySelectorAll('[data-panel]'));
-    if (!nodos.length) return;
-
-    var elegir = function (id) {
-      nodos.forEach(function (n) {
-        n.setAttribute('aria-pressed', String(n.dataset.cap === id));
-      });
-      paneles.forEach(function (p) {
-        p.setAttribute('aria-hidden', String(p.dataset.panel !== id));
-      });
-      if (!menosMovimiento) {
-        rueda.removeAttribute('data-cambio');
-        void rueda.offsetWidth;               /* reinicia la animación */
-        rueda.setAttribute('data-cambio', '');
-      }
-    };
-
-    rueda.addEventListener('click', function (e) {
-      var n = e.target.closest('[data-cap]');
-      if (n) elegir(n.dataset.cap);
-    });
-
-    /* Las flechas recorren las capacidades sin sacar el foco de la rueda. */
-    rueda.addEventListener('keydown', function (e) {
-      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      var actual = nodos.indexOf(e.target.closest('[data-cap]'));
-      if (actual < 0) return;
-      e.preventDefault();
-      var paso = e.key === 'ArrowRight' ? 1 : -1;
-      var siguiente = nodos[(actual + paso + nodos.length) % nodos.length];
-      elegir(siguiente.dataset.cap);
-      siguiente.focus();
-    });
-  });
-
-
-  /* ---------------------------------------------------------------------- */
-  /* El trazo de la marca se dibuja con el scroll                            */
-  /* ---------------------------------------------------------------------- */
-
-  var trazo = document.querySelector('.trazo-vivo');
-  var heroCaja = document.querySelector('.hero');
-
-  if (trazo && heroCaja && !menosMovimiento) {
-    var pendienteTrazo = false;
-    var dibujar = function () {
-      pendienteTrazo = false;
-      var y = window.scrollY;
-      if (y <= 4) { trazo.style.removeProperty('--trazo'); return; }
-      /* al cargar ya está casi entero (.72): un trazo a medio dibujar en el
-         hero se lee cortado, no en progreso. El scroll lo termina. */
-      var largo = heroCaja.offsetHeight * .55 || 1;
-      var p = .72 + .28 * Math.min(1, y / largo);
-      trazo.style.setProperty('--trazo', p.toFixed(3));
-    };
-    window.addEventListener('scroll', function () {
-      if (pendienteTrazo) return;
-      pendienteTrazo = true;
-      requestAnimationFrame(dibujar);
-    }, { passive: true });
-  }
+  /* El trazo del hero (.trazo-vivo) se fue el 08/09; el del metodo vive en
+     trazoMetodo(), en el segundo bloque. */
 
   /* ---------------------------------------------------------------------- */
   /* Cada sección entra con su propio gesto                                  */
@@ -256,12 +113,12 @@
 
   var conTema = Array.prototype.slice.call(document.querySelectorAll('main [data-tema], footer[data-tema]'));
 
-  if (cabecera && conTema.length) {
-    var temaActual = '', temaIndice = '';
-    var alturaNav = function () { return cabecera.offsetHeight / 2; };
-    /* Dos sondas, no una: la barra vive arriba y el indice lateral en el medio
-       de la pantalla. Con una sola sonda el indice se pintaba con el tema del
-       encabezado y quedaba tinta sobre tinta adentro de los mundos oscuros. */
+  var flotante = document.querySelector('[data-flotante]');
+
+  if (flotante && conTema.length) {
+    var temaFlotante = '';
+    /* Una sola sonda, a la altura del flotante (abajo): la barra ya no se
+       invierte porque no se mueve. */
     var temaEn = function (y) {
       var tema = 'claro';
       for (var i = 0; i < conTema.length; i++) {
@@ -272,19 +129,11 @@
       return tema;
     };
     var mirarTema = function () {
-      var tema = temaEn(window.scrollY + alturaNav());
-      if (tema !== temaActual) {
-        temaActual = tema;
-        if (tema === 'oscuro') cabecera.setAttribute('data-tema', 'oscuro');
-        else cabecera.removeAttribute('data-tema');
-      }
-      var ind = document.querySelector('[data-indice]');
-      if (!ind) return;
-      var t2 = temaEn(window.scrollY + (window.innerHeight || 0) / 2);
-      if (t2 === temaIndice) return;
-      temaIndice = t2;
-      if (t2 === 'oscuro') ind.setAttribute('data-tema', 'oscuro');
-      else ind.removeAttribute('data-tema');
+      var t = temaEn(window.scrollY + (window.innerHeight || 0) - 60);
+      if (t === temaFlotante) return;
+      temaFlotante = t;
+      if (t === 'oscuro') flotante.setAttribute('data-tema', 'oscuro');
+      else flotante.removeAttribute('data-tema');
     };
     var pendienteTema = false;
     window.addEventListener('scroll', function () {
@@ -294,35 +143,6 @@
     }, { passive: true });
     window.addEventListener('resize', mirarTema);
     mirarTema();
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* Índice lateral de rayas                                                 */
-  /* ---------------------------------------------------------------------- */
-
-  var indice = document.querySelector('[data-indice]');
-
-  if (indice) {
-    var rayas = Array.prototype.slice.call(indice.querySelectorAll('a'));
-    var destinos = rayas.map(function (a) {
-      return document.querySelector(a.getAttribute('href'));
-    });
-    var mirarIndice = function () {
-      var y = window.scrollY + (window.innerHeight || 0) * .35;
-      var activo = 0;
-      destinos.forEach(function (el, i) { if (el && y >= el.offsetTop) activo = i; });
-      rayas.forEach(function (a, i) {
-        if (i === activo) a.setAttribute('aria-current', 'true');
-        else a.removeAttribute('aria-current');
-      });
-    };
-    var pendienteIndice = false;
-    window.addEventListener('scroll', function () {
-      if (pendienteIndice) return;
-      pendienteIndice = true;
-      requestAnimationFrame(function () { pendienteIndice = false; mirarIndice(); });
-    }, { passive: true });
-    mirarIndice();
   }
 
   /* ---------------------------------------------------------------------- */
@@ -423,137 +243,8 @@
     }, 400);
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* El método en horizontal: la sección se clava y el carril avanza         */
-  /*                                                                         */
-  /* El carril mueve scrollLeft y no un transform: si el guion no corre,     */
-  /* sigue siendo un estante que se desliza con el dedo.                     */
-  /* ---------------------------------------------------------------------- */
-
-  var anchoGrande = window.matchMedia('(min-width: 64rem)');
-
-  document.querySelectorAll('[data-lateral]').forEach(function (caja) {
-    var carril = caja.querySelector('[data-carril]');
-    var pin = caja.querySelector('.lateral__pin');
-    if (!carril || !pin) return;
-
-    var sobra = function () { return carril.scrollWidth - carril.clientWidth; };
-
-    var acomodar = function () {
-      var corresponde = anchoGrande.matches && !menosMovimiento && sobra() > 4;
-      if (!corresponde) {
-        caja.removeAttribute('data-pin');
-        caja.style.removeProperty('--alto-pin');
-        return;
-      }
-      caja.setAttribute('data-pin', '');
-      caja.style.removeProperty('--alto-pin');
-      /* el alto de la caja es el del pin más lo que hay que recorrer de costado:
-         ni un píxel de más, o la sección se llena de vacío */
-      caja.style.setProperty('--alto-pin', (pin.offsetHeight + Math.round(sobra())) + 'px');
-    };
-
-    var mover = function () {
-      if (!caja.hasAttribute('data-pin')) return;
-      var recorrido = caja.offsetHeight - pin.offsetHeight;
-      if (recorrido <= 0) return;
-      var avance = Math.min(1, Math.max(0, -caja.getBoundingClientRect().top / recorrido));
-      carril.scrollLeft = avance * sobra();
-    };
-
-    var pendienteLat = false;
-    window.addEventListener('scroll', function () {
-      if (pendienteLat) return;
-      pendienteLat = true;
-      requestAnimationFrame(function () { pendienteLat = false; mover(); });
-    }, { passive: true });
-    window.addEventListener('resize', function () { acomodar(); mover(); });
-    acomodar();
-    /* las fuentes y las fotos cambian el ancho después del primer layout */
-    window.addEventListener('load', function () { acomodar(); mover(); }, { once: true });
-    setTimeout(function () { acomodar(); mover(); }, 800);
-  });
-
-  /* ---------------------------------------------------------------------- */
-  /* La foto de las secciones a sangre se queda quieta                       */
-  /*                                                                         */
-  /* Recorrido corto y escrito acá, no position:fixed: un fixed adentro de   */
-  /* la sección no queda contenido por el overflow y pinta sobre toda la     */
-  /* página. Sólo translate, que no provoca reflujo.                         */
-  /* ---------------------------------------------------------------------- */
-
-  var fondos = Array.prototype.slice.call(document.querySelectorAll('.sangre__fondo'));
-
-  if (fondos.length && !menosMovimiento && window.matchMedia('(min-width: 64rem)').matches) {
-    var correr = function () {
-      var alto = window.innerHeight || 1;
-      fondos.forEach(function (f) {
-        var s = f.parentElement.getBoundingClientRect();
-        if (s.bottom < 0 || s.top > alto) return;
-        var avance = (alto - s.top) / (alto + s.height);   /* 0 a 1 al cruzar */
-        f.style.translate = '0 ' + ((avance - .5) * 9).toFixed(2) + '%';
-      });
-    };
-    var pendienteFondo = false;
-    window.addEventListener('scroll', function () {
-      if (pendienteFondo) return;
-      pendienteFondo = true;
-      requestAnimationFrame(function () { pendienteFondo = false; correr(); });
-    }, { passive: true });
-    correr();
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* Palabras que se forman con el scroll                                    */
-  /* ---------------------------------------------------------------------- */
-
-  var frases = Array.prototype.slice.call(document.querySelectorAll('[data-formar]'));
-
-  if (frases.length && !menosMovimiento) {
-    frases.forEach(function (el) {
-      var texto = el.textContent;
-      el.setAttribute('aria-label', texto);
-      el.textContent = '';
-      texto.split(/(\s+)/).forEach(function (trozo) {
-        if (/^\s+$/.test(trozo)) { el.appendChild(document.createTextNode(' ')); return; }
-        var w = document.createElement('span');
-        w.textContent = trozo;
-        w.setAttribute('aria-hidden', 'true');
-        w.style.opacity = '.14';
-        el.appendChild(w);
-      });
-    });
-
-    var formar = function () {
-      frases.forEach(function (el) {
-        var r = el.getBoundingClientRect();
-        var alto = window.innerHeight || 1;
-        /* de 0 a 1 mientras la frase cruza el tercio central de la pantalla */
-        var avance = (alto * .78 - r.top) / (alto * .42);
-        avance = Math.min(1, Math.max(0, avance));
-        var palabras = el.querySelectorAll('span');
-        var hasta = avance * palabras.length;
-        palabras.forEach(function (w, i) {
-          w.style.opacity = i < hasta ? '1' : '.14';
-        });
-      });
-    };
-
-    var pendienteFrase = false;
-    window.addEventListener('scroll', function () {
-      if (pendienteFrase) return;
-      pendienteFrase = true;
-      requestAnimationFrame(function () { pendienteFrase = false; formar(); });
-    }, { passive: true });
-    formar();
-    /* seguro: a los 2 s, lo que ya pasó de largo queda entero */
-    setTimeout(function () {
-      frases.forEach(function (el) {
-        if (el.getBoundingClientRect().top < 0)
-          el.querySelectorAll('span').forEach(function (w) { w.style.opacity = '1'; });
-      });
-    }, 2000);
-  }
+  /* El metodo horizontal, la foto quieta de las secciones a sangre y las
+     palabras que se forman se fueron el 09/09 con las secciones que los usaban. */
 
   /* ---------------------------------------------------------------------- */
   /* Los títulos entran letra por letra                                      */
@@ -655,6 +346,8 @@
     var sin = /[?&]sinlenis/.test(location.search);
     if (menos || sin || !window.Lenis || !window.gsap) return;
     lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true });
+    /* Expuesto: el flotante lo para con el menu abierto (lenis.stop/start). */
+    window.lenis = lenis;
     if (window.ScrollTrigger) {
       window.gsap.registerPlugin(window.ScrollTrigger);
       lenis.on('scroll', window.ScrollTrigger.update);
@@ -666,7 +359,7 @@
         var el = document.getElementById(a.getAttribute('href').slice(1));
         if (!el) return;
         ev.preventDefault();
-        lenis.scrollTo(el, { offset: -92 });
+        lenis.scrollTo(el, { offset: -16 });   /* sin barra fija: un respiro y nada mas */
       });
     });
   }
@@ -699,7 +392,8 @@
         var p = (vh - r.top) / (vh + r.height);
         p = p < 0 ? 0 : p > 1 ? 1 : p;
         /* Una sola copia de recorrido: nunca se ve el hueco del final. */
-        c.style.setProperty('--corrida', (p * riel.scrollWidth / 4).toFixed(1));
+        var copias = parseInt(c.getAttribute('data-copias'), 10) || 4;
+        c.style.setProperty('--corrida', (p * riel.scrollWidth / copias).toFixed(1));
       });
     }
     function pedir() { if (!pedido) { pedido = true; requestAnimationFrame(pintar); } }
@@ -712,13 +406,19 @@
   function circular(caja, selNodo, selPanel, attrNodo, attrPanel, selTrazo, varTrazo) {
     if (!caja) return;
     var nodos = $$(selNodo, caja);
+    /* Los paneles pueden vivir afuera del diagrama (en el Universo estan al
+       costado, en .orbita__detalle): se buscan en la seccion entera. */
     var paneles = $$(selPanel, caja);
+    if (!paneles.length) paneles = $$(selPanel, caja.closest('section') || document);
     if (!nodos.length) return;
     caja.setAttribute('data-lista', '1');
 
+    var tocado = false;
     function activar(i) {
       nodos.forEach(function (n, j) { n.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
       paneles.forEach(function (p, j) { p.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
+      /* Quien tenga algo que sincronizar (el carril de celular) escucha esto. */
+      caja.dispatchEvent(new CustomEvent('mv:activar', { detail: i }));
       var trazo = selTrazo ? $(selTrazo, caja) : null;
       if (trazo && !menos) {
         /* El avance del trazo cuenta cuánto del ciclo llevás recorrido. */
@@ -726,15 +426,22 @@
       }
     }
     nodos.forEach(function (n, i) {
-      n.addEventListener('click', function () { activar(i); });
+      n.addEventListener('click', function () { tocado = true; activar(i); });
       n.addEventListener('focus', function () { activar(i); });
+      /* Con puntero fino, pasar por encima ya elige (UNI-3: "al seleccionar
+         o pasar sobre cada una") y congela el auto-avance igual que el clic.
+         El toque no entra aca: pointerType es 'touch'. */
+      n.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        tocado = true;
+        activar(i);
+      });
     });
     activar(0);
 
     /* Sin puntero, la activa avanza sola con el scroll: el visitante las ve
        todas sin tener que tocar nada. Se detiene apenas toca una. */
     if (menos) return;
-    var tocado = false;
     caja.addEventListener('pointerdown', function () { tocado = true; });
     var obs = new IntersectionObserver(function (ent) {
       ent.forEach(function (x) {
@@ -789,72 +496,195 @@
   }
 
   /* --- Las solapas de la ventana de contacto ----------------------------- */
-  function solapas() {
-    $$('.solapas').forEach(function (grupo) {
-      var caja = grupo.parentNode;
-      var botones = $$('[data-solapa]', grupo);
-      botones.forEach(function (b) {
-        b.addEventListener('click', function () {
-          botones.forEach(function (o) {
-            o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
-          });
-          $$('[data-cuerpo]', caja).forEach(function (c) {
-            c.setAttribute('aria-hidden',
-              c.getAttribute('data-cuerpo') === b.getAttribute('data-solapa') ? 'false' : 'true');
+  /* --- La cinta continua: infinita, pero solo mientras se la ve ------------ */
+  /* El observer mira la CINTA (quieta), nunca el riel que se mueve: un riel
+     en movimiento entra y sale del umbral solo y apaga lo que tiene que
+     prender. La duracion sale del largo real para que la velocidad sea
+     constante en px/s aunque cambie el cuerpo tipografico. */
+  function cintasContinuas() {
+    var lista = $$('[data-cinta-continua]');
+    if (!lista.length) return;
+    var medir = function (c) {
+      var riel = $('[data-cinta-riel]', c);
+      if (!riel) return;
+      var vertical = c.classList.contains('cinta--vertical');
+      var largo = (vertical ? riel.scrollHeight : riel.scrollWidth) / 2;
+      var vel = parseFloat(c.getAttribute('data-velocidad')) || 120;
+      c.style.setProperty('--cinta-dur', (largo / vel).toFixed(2) + 's');
+    };
+    lista.forEach(medir);
+    window.addEventListener('resize', function () { lista.forEach(medir); });
+    if (menos || !('IntersectionObserver' in window)) return;
+
+    /* El foco de la cinta del hero: cada pieza se desenfoca segun su distancia
+       al centro (hasta 3 px, cuantizado a medio pixel para no re-rasterizar
+       cada cuadro) y se afina en el medio. Solo con puntero fino: en tactil un
+       blur animado re-rasteriza y se lo paga en fps. */
+    var conFoco = lista.filter(function (c) { return c.classList.contains('cinta--hero'); });
+    if (conFoco.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      var enfocar = function () {
+        conFoco.forEach(function (c) {
+          if (!c.hasAttribute('data-vivo')) return;
+          var vw = window.innerWidth || 1;
+          $$('.cinta__pieza', c).forEach(function (p) {
+            var r = p.getBoundingClientRect();
+            var d = Math.abs((r.left + r.width / 2) / vw - .5) * 2;    /* 0 centro .. 1 borde */
+            var b = Math.round(Math.max(0, d - .35) / .65 * 6) / 2;   /* 0 .. 3 px, de a .5 */
+            p.style.setProperty('--foco', b + 'px');
           });
         });
+        requestAnimationFrame(enfocar);
+      };
+      requestAnimationFrame(enfocar);
+    }
+    var obs = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (x.isIntersecting) x.target.setAttribute('data-vivo', '');
+        else x.target.removeAttribute('data-vivo');
       });
-    });
+    }, { rootMargin: '80px 0px' });
+    lista.forEach(function (c) { obs.observe(c); });
   }
 
-  /* --- La palabra gigante de contacto deriva apenas con el scroll -------- */
-  function palabra() {
-    var p = $('[data-palabra]');
-    if (!p || menos) return;
-    var pedido = false;
-    function pintar() {
-      pedido = false;
-      var r = p.getBoundingClientRect();
-      var vh = window.innerHeight || 1;
-      if (r.bottom < -200 || r.top > vh + 200) return;
-      var t = (vh - r.top) / (vh + r.height);
-      p.style.setProperty('--deriva', ((t - .5) * 8).toFixed(2));
-    }
-    window.addEventListener('scroll', function () {
-      if (!pedido) { pedido = true; requestAnimationFrame(pintar); }
-    }, { passive: true });
-    pintar();
+  /* --- Contacto: cuatro opciones, un formulario, tres tiempos ------------- */
+  /* Al elegir una opcion cambia la linea de arriba y el motivo oculto. El
+     cambio es el medido en la referencia: fade-out del bloque (170 ms) ->
+     panel vacio (150 ms) -> filas entrando de arriba hacia abajo. El envio
+     va a Web3Forms si hay clave; si no, arma el mensaje y abre WhatsApp, asi
+     el sitio nunca queda con un boton que no hace nada. */
+  function formulario() {
+    var panel = $('[data-panel-contacto]');
+    if (!panel) return;
+    var solapas = $$('[data-solapa]', panel);
+    var copia = $('[data-copia-motivo]', panel);
+    var form = $('[data-formulario]', panel);
+    if (!form || !solapas.length) return;
+    var motivo = $('input[name="motivo"]', form);
+    var estado = $('.formulario__estado', form);
+    var enviar = $('.formulario__enviar', form);
+    var cambiando = false;
+
+    var aplicar = function (b) {
+      solapas.forEach(function (o) {
+        var es = o === b;
+        o.setAttribute('aria-selected', es ? 'true' : 'false');
+        o.setAttribute('tabindex', es ? '0' : '-1');
+      });
+      if (copia) copia.textContent = b.getAttribute('data-copia') || '';
+      if (motivo) motivo.value = b.querySelector('.solapa__texto').textContent;
+      form.setAttribute('data-wa', b.getAttribute('data-wa') || '');
+    };
+
+    var elegir = function (b, animar) {
+      if (b.getAttribute('aria-selected') === 'true' || cambiando) return;
+      if (!animar || menos) { aplicar(b); return; }
+      cambiando = true;
+      panel.setAttribute('data-saliendo', '');
+      setTimeout(function () {
+        aplicar(b);
+        panel.removeAttribute('data-saliendo');
+        panel.setAttribute('data-entrando', '');
+        void panel.offsetWidth;                 /* que el estado "entrando" se pinte */
+        setTimeout(function () {
+          panel.removeAttribute('data-entrando');
+          cambiando = false;
+        }, 150);
+      }, 170);
+    };
+
+    solapas.forEach(function (b, i) {
+      b.addEventListener('click', function () { elegir(b, true); });
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var sig = solapas[(i + d + solapas.length) % solapas.length];
+        sig.focus();
+        elegir(sig, true);
+      });
+    });
+
+    /* ?motivo=oportunidad preselecciona: lo usan los paneles de proyectos. */
+    var porId = function (id) {
+      return solapas.filter(function (b) { return b.getAttribute('data-solapa') === id; })[0];
+    };
+    var q = /[?&]motivo=([a-z]+)/.exec(window.location.search);
+    aplicar((q && porId(q[1])) || solapas[0]);
+    /* Un enlace a #contacto con data-motivo (los paneles de Proyectos en
+       movimiento) elige esa opcion sin recargar la pagina. */
+    document.addEventListener('click', function (ev) {
+      var a = ev.target.closest('a[data-motivo]');
+      if (!a) return;
+      var b = porId(a.getAttribute('data-motivo'));
+      if (b) elegir(b, true);
+    });
+
+    /* Validacion propia: `novalidate` para que el aviso sea el nuestro y vaya
+       al lector de pantalla por aria-live. */
+    var validar = function () {
+      var ok = true;
+      $$('[required]', form).forEach(function (campo) {
+        var fila = campo.closest('.campo');
+        var viejo = fila && fila.querySelector('.campo__error');
+        if (viejo) viejo.remove();
+        var falta = !campo.value.trim();
+        var mal = campo.type === 'email' && campo.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(campo.value);
+        campo.setAttribute('aria-invalid', (falta || mal) ? 'true' : 'false');
+        if (falta || mal) {
+          ok = false;
+          var p = document.createElement('p');
+          p.className = 'campo__error';
+          p.textContent = falta ? form.getAttribute('data-falta') : form.getAttribute('data-correo-invalido');
+          fila.appendChild(p);
+        }
+      });
+      return ok;
+    };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validar()) { var primero = $('[aria-invalid="true"]', form); if (primero) primero.focus(); return; }
+      var datos = {};
+      $$('input, textarea', form).forEach(function (c) { if (c.name && c.type !== 'checkbox') datos[c.name] = c.value.trim(); });
+      var clave = form.getAttribute('data-clave');
+      if (!clave) {
+        /* Sin servicio configurado: el mensaje viaja por WhatsApp, armado. */
+        var texto = datos.motivo + '. ' + datos.nombre + (datos.telefono ? ' (' + datos.telefono + ')' : '') +
+                    ' — ' + datos.email + '. ' + datos.mensaje;
+        var base = form.getAttribute('data-wa') || form.getAttribute('data-wa-base');
+        window.open(base.split('?')[0] + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+        return;
+      }
+      if ($('[name="botcheck"]', form).checked) return;   /* un bot lo marco */
+      enviar.disabled = true;
+      var rotulo = enviar.textContent;
+      enviar.textContent = form.getAttribute('data-enviando');
+      estado.textContent = '';
+      var cuerpo = { access_key: clave, subject: form.getAttribute('data-asunto') + ' — ' + datos.motivo,
+                     from_name: datos.nombre, motivo: datos.motivo, name: datos.nombre, email: datos.email,
+                     telefono: datos.telefono, message: datos.mensaje };
+      fetch(form.getAttribute('action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(cuerpo)
+      }).then(function (r) { return r.json(); }).then(function (r) {
+        if (!r.success) throw new Error(r.message || 'sin exito');
+        $$('.formulario__fila', form).forEach(function (f) { f.hidden = true; });
+        estado.textContent = form.getAttribute('data-gracias');
+      }).catch(function () {
+        estado.textContent = form.getAttribute('data-error');
+        enviar.disabled = false;
+        enviar.textContent = rotulo;
+      });
+    });
   }
 
   /* --- El estante recorre en horizontal con la pantalla fijada ----------- */
   /* Sólo escritorio y sólo si GSAP llegó. Si no, el CSS deja el estante como
      carril nativo y se sigue pudiendo recorrer con el dedo o la rueda. */
-  function fijarEstante() {
-    var caja = $('[data-fijado]');
-    if (!caja || menos || !window.gsap || !window.ScrollTrigger) return;
-    if (!window.matchMedia('(min-width: 64rem)').matches) return;
-    var riel = $('.estante', caja);
-    if (!riel) return;
-    var recorrido = function () { return Math.max(0, riel.scrollWidth - window.innerWidth * 0.86); };
-    if (recorrido() <= 0) return;
-    window.gsap.to(riel, {
-      x: function () { return -recorrido(); },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: caja,
-        start: 'center center',
-        /* El recorrido horizontal no tiene por que costar un pixel de scroll
-           por pixel de riel: a 1:1 el mundo de Cardinal se comia 4,3 pantallas
-           contra 1,2 de los otros tres. A 0,75 el riel recorre lo mismo y pide
-           un cuarto menos de rueda. */
-        end: function () { return '+=' + Math.round(recorrido() * 0.75); },
-        pin: true,
-        scrub: 0.8,
-        anticipatePin: 1,
-        invalidateOnRefresh: true
-      }
-    });
-  }
+  /* fijarEstante() (el riel de fichas con pin de GSAP) se fue el 09/09 con
+     proyectos.html viejo. La galeria de cardinal.html es un carril nativo con
+     arrastre (arrastrar()), sin pin. */
 
   /* --- 2. La nube de la red: entra escalonada y después deriva ----------- */
   /* El estado oculto lo escribe ACÁ, nunca el CSS: si el JS no corre, la nube
@@ -913,18 +743,306 @@
     derivar();
   }
 
+  /* --- El puente: el bistre sube con el scroll ---------------------------- */
+  /* Escribe --mezcla (0..1) en el puente: 0 cuando asoma por abajo de la
+     pantalla, 1 cuando su base llega al quinto superior. Solo transform: la
+     capa de bistre se estira desde abajo (scale: 1 var(--mezcla)). */
+  function puente() {
+    var p = $('[data-puente]');
+    if (!p || menos) return;
+    var pedido = false;
+    var medir = function () {
+      pedido = false;
+      var r = p.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -vh || r.top > vh * 2) return;
+      var t = (vh - r.top) / (vh * .8 + r.height);
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      p.style.setProperty('--mezcla', t.toFixed(3));
+    };
+    window.addEventListener('scroll', function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    window.addEventListener('resize', medir);
+    medir();
+  }
+
+  /* --- El carril de esferas en celular ------------------------------------ */
+  /* Bajo 64rem las descripciones son un carril con scroll-snap: una tarjeta
+     por vez, swipe o flechas. Se mantiene en sincronia con las esferas en
+     los dos sentidos: elegir una esfera lleva el carril a su tarjeta, y
+     deslizar el carril enciende la esfera que corresponde. Cuando el carril
+     no scrollea (escritorio) no hace nada. */
+  function carrilEsferas() {
+    var caja = $('[data-orbita]');
+    var carril = $('[data-carril-esferas]');
+    if (!caja || !carril) return;
+    var raiz = carril.closest('.universo') || document;
+    var nodos = $$('.orbita__nodo', caja);
+    var paneles = $$('.orbita__panel', carril);
+    var ant = $('[data-carril-ant]', raiz);
+    var sig = $('[data-carril-sig]', raiz);
+    if (!nodos.length || !paneles.length) return;
+    var actual = 0;
+    var programado = false;
+
+    var esCarril = function () { return carril.scrollWidth > carril.clientWidth + 4; };
+    var izquierda = function () { return parseFloat(getComputedStyle(carril).paddingLeft) || 0; };
+    var irA = function (i) {
+      if (!esCarril()) return;
+      var p = paneles[i];
+      if (!p) return;
+      programado = true;
+      carril.scrollTo({ left: p.offsetLeft - izquierda(), behavior: menos ? 'auto' : 'smooth' });
+      /* Mientras el carril viaja solo, sus eventos de scroll no cuentan. */
+      clearTimeout(irA.t);
+      irA.t = setTimeout(function () { programado = false; }, menos ? 50 : 600);
+    };
+
+    caja.addEventListener('mv:activar', function (e) {
+      actual = e.detail;
+      irA(actual);
+    });
+
+    var reloj = null;
+    carril.addEventListener('scroll', function () {
+      if (programado || !esCarril()) return;
+      clearTimeout(reloj);
+      reloj = setTimeout(function () {
+        var x = carril.scrollLeft + izquierda();
+        var mejor = 0, dist = Infinity;
+        paneles.forEach(function (p, i) {
+          var d = Math.abs(p.offsetLeft - x);
+          if (d < dist) { dist = d; mejor = i; }
+        });
+        if (mejor !== actual) nodos[mejor].click();
+      }, 80);
+    }, { passive: true });
+
+    var saltar = function (paso) {
+      var n = nodos.length;
+      nodos[(actual + paso + n) % n].click();
+    };
+    if (ant) ant.addEventListener('click', function () { saltar(-1); });
+    if (sig) sig.addEventListener('click', function () { saltar(1); });
+  }
+
+  /* --- Como trabajamos: el trazo se dibuja y los pasos salen de su cola --- */
+  /* Escritorio: --trazo es el avance de la caja del trazo por la pantalla
+     (0 cuando asoma por abajo, 1 cuando su base llega al 40 % de la
+     pantalla) y cada paso se marca visto cuando el trazo paso por su punto.
+     Los dos son acumulativos: al subir no se deshacen. Celular: los pasos son
+     una lista y cada uno entra al verse (IO). Sin guion o con menos
+     movimiento no se marca data-progresivo y todo esta a la vista. */
+  function trazoMetodo() {
+    var caja = $('[data-trazo]');
+    if (!caja || menos) return;
+    var nodos = $$('.trazo__nodo', caja);
+    caja.setAttribute('data-progresivo', '');
+    var celular = window.matchMedia('(max-width: 63.99rem)');
+
+    if (celular.matches && 'IntersectionObserver' in window) {
+      caja.style.setProperty('--trazo', '1');
+      var ojo = new IntersectionObserver(function (ent) {
+        ent.forEach(function (x) {
+          if (!x.isIntersecting) return;
+          x.target.setAttribute('data-visto', '');
+          ojo.unobserve(x.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      nodos.forEach(function (n) { ojo.observe(n); });
+      return;
+    }
+
+    var tope = 0, pedido = false;
+    var medir = function () {
+      pedido = false;
+      var r = caja.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -vh || r.top > vh * 1.5) return;
+      var t = (vh - r.top) / (vh * .6 + r.height);
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      if (t <= tope) return;
+      tope = t;
+      caja.style.setProperty('--trazo', t.toFixed(3));
+      nodos.forEach(function (n) {
+        if (!n.hasAttribute('data-visto') && parseFloat(n.getAttribute('data-t')) <= t) n.setAttribute('data-visto', '');
+      });
+    };
+    window.addEventListener('scroll', function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    window.addEventListener('resize', medir);
+    caja.style.setProperty('--trazo', '0');
+    medir();
+  }
+
+  /* --- Tilt: la tarjeta se inclina hacia el puntero ------------------------ */
+  /* Portado de dt-efectos (~20 lineas). Escribe --fx-rx / --fx-ry en la
+     tarjeta y el CSS los aplica con perspective(). Solo con puntero fino y
+     sin reduced-motion. Va en la tarjeta (data-fx="tilt"), nunca en una
+     seccion de reveal: el motor propio compara data-fx="reveal" exacto. */
+  function tilt() {
+    if (menos || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    $$('[data-fx~="tilt"]').forEach(function (el) {
+      var max = parseFloat(el.getAttribute('data-fx-grados')) || 5;
+      el.addEventListener('pointermove', function (ev) {
+        if (ev.pointerType && ev.pointerType !== 'mouse') return;
+        var r = el.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - .5;
+        var py = (ev.clientY - r.top) / r.height - .5;
+        el.style.setProperty('--fx-ry', (px * max * 2).toFixed(2) + 'deg');
+        el.style.setProperty('--fx-rx', (-py * max * 2).toFixed(2) + 'deg');
+        el.classList.add('fx-activo');
+      });
+      el.addEventListener('pointerleave', function () {
+        el.classList.remove('fx-activo');
+        el.style.removeProperty('--fx-rx');
+        el.style.removeProperty('--fx-ry');
+      });
+    });
+  }
+
+  /* --- cardinal.html: el hero que se abre con el scroll ------------------- */
+  /* La seccion mide 100svh + recorrido; el contenido es sticky. Con
+     ScrollTrigger (scrub, sin pin: el sticky es CSS) se escriben --w y --h
+     por separado: el ancho abre con power1.out y el alto con power1.inOut,
+     asi la ventana pasa de 1:1 a 16:9 revelando encuadre (medido en la
+     referencia). La cinta sube a 1.5x, el copy se va en el primer cuarto, el
+     "(Scroll)" a 0.4x. Sin GSAP o con menos movimiento no se marca data-vivo
+     y la foto queda abierta, sin recorrido. */
+  function fichaHero() {
+    var hero = $('[data-ficha-hero]');
+    if (!hero || menos || !window.gsap || !window.ScrollTrigger) return;
+    window.gsap.registerPlugin(window.ScrollTrigger);
+    hero.setAttribute('data-vivo', '');
+    var pin = $('.ficha-hero__pin', hero);
+    var tarjeta = function () {
+      return parseFloat(getComputedStyle(hero).getPropertyValue('--tarjeta')) || 240;
+    };
+    var pintar = function (p) {
+      var vw = pin.clientWidth || window.innerWidth;
+      var vh = pin.clientHeight || window.innerHeight;
+      var t = tarjeta();
+      var pw = 1 - Math.pow(1 - p, 2);                       /* power1.out */
+      var ph = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   /* power1.inOut */
+      hero.style.setProperty('--w', (t + (vw - t) * pw).toFixed(1) + 'px');
+      hero.style.setProperty('--h', (t + (vh - t) * ph).toFixed(1) + 'px');
+      hero.style.setProperty('--cinta-y', (-p * vh * 1.5).toFixed(1) + 'px');
+      hero.style.setProperty('--scroll-y', (-p * vh * .4).toFixed(1) + 'px');
+      var c = Math.min(1, p / .25);
+      hero.style.setProperty('--copia-op', (1 - c).toFixed(3));
+      hero.style.setProperty('--copia-y', (c * 24).toFixed(1) + 'px');
+    };
+    window.ScrollTrigger.create({
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: true,
+      invalidateOnRefresh: true,
+      onUpdate: function (st) { pintar(st.progress); },
+      onRefresh: function (st) { pintar(st.progress); }
+    });
+    pintar(0);
+  }
+
+  /* --- el marcador: entra 200 ms antes que el bloque -------------------- */
+  function marcadores() {
+    var lista = $$('[data-marcador]');
+    if (!lista.length) return;
+    if (menos || !('IntersectionObserver' in window)) {
+      lista.forEach(function (m) { m.setAttribute('data-visto', ''); });
+      return;
+    }
+    var ojo = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        x.target.setAttribute('data-visto', '');
+        ojo.unobserve(x.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    lista.forEach(function (m) { ojo.observe(m); });
+  }
+
+  /* --- la galeria: arrastre con inercia y flechas -------------------------- */
+  /* El carril ya scrollea solo (rueda, dedo, teclado). Esto suma el arrastre
+     con el puntero: pointerdown fija el origen, pointermove mueve el
+     scrollLeft, y al soltar la velocidad sigue con un factor .92 por
+     fotograma hasta frenar. Umbral de 6 px: un clic sin arrastre sigue
+     abriendo el visor; un arrastre lo cancela (click en captura). */
+  function arrastrar() {
+    var carril = $('[data-arrastre]');
+    if (!carril) return;
+    var raiz = carril.closest('section') || document;
+    var ant = $('[data-carrusel-ant]', raiz);
+    var sig = $('[data-carrusel-sig]', raiz);
+    var paso = function () {
+      var l = carril.querySelector('.lamina');
+      return l ? l.getBoundingClientRect().width + 16 : carril.clientWidth * .6;
+    };
+    if (ant) ant.addEventListener('click', function () { carril.scrollBy({ left: -paso(), behavior: menos ? 'auto' : 'smooth' }); });
+    if (sig) sig.addEventListener('click', function () { carril.scrollBy({ left: paso(), behavior: menos ? 'auto' : 'smooth' }); });
+
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    var activo = false, movio = false, x0 = 0, s0 = 0, vx = 0, xAnt = 0, tAnt = 0, inercia = null;
+
+    carril.addEventListener('pointerdown', function (ev) {
+      if (ev.pointerType !== 'mouse' || ev.button !== 0) return;
+      cancelAnimationFrame(inercia);
+      activo = true; movio = false;
+      x0 = xAnt = ev.clientX; s0 = carril.scrollLeft; vx = 0; tAnt = ev.timeStamp;
+      carril.setPointerCapture(ev.pointerId);
+    });
+    carril.addEventListener('pointermove', function (ev) {
+      if (!activo) return;
+      var dx = ev.clientX - x0;
+      if (!movio && Math.abs(dx) < 6) return;
+      if (!movio) { movio = true; carril.setAttribute('data-arrastrando', ''); }
+      carril.scrollLeft = s0 - dx;
+      var dt = ev.timeStamp - tAnt || 16;
+      vx = (xAnt - ev.clientX) / dt * 16;          /* px por fotograma */
+      xAnt = ev.clientX; tAnt = ev.timeStamp;
+    });
+    var soltar = function () {
+      if (!activo) return;
+      activo = false;
+      if (!movio) return;
+      var v = vx;
+      (function seguir() {
+        if (Math.abs(v) < .5) { carril.removeAttribute('data-arrastrando'); return; }
+        carril.scrollLeft += v;
+        v *= .92;
+        inercia = requestAnimationFrame(seguir);
+      })();
+    };
+    carril.addEventListener('pointerup', soltar);
+    carril.addEventListener('pointercancel', soltar);
+    /* Un arrastre no es un clic: se lo come antes de que llegue al visor. */
+    carril.addEventListener('click', function (ev) {
+      if (movio) { ev.preventDefault(); ev.stopPropagation(); movio = false; }
+    }, true);
+  }
+
   function arrancar() {
     arrancarScroll();
     nubeRed();
-    fijarEstante();
     cintas();
     circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
              'data-esfera', 'data-panel', null, null);
-    circular($('[data-ciclo]'), '.ciclo__nodo', '.ciclo__carta',
-             'data-paso', 'data-carta', '[data-avance]', '--avance');
     anillo();
-    solapas();
-    palabra();
+    puente();
+    carrilEsferas();
+    trazoMetodo();
+    tilt();
+    fichaHero();
+    marcadores();
+    arrastrar();
+    cintasContinuas();
+    formulario();
   }
 
   /* Los scripts van con defer, así que el DOM ya está: pero si esto llegara a
@@ -934,4 +1052,159 @@
   } else {
     arrancar();
   }
+})();
+
+/* ==========================================================================
+   Flotante — guion
+   Abre y cierra el menú de la esquina, lo hace aparecer en escritorio cuando
+   la cabecera salió de la pantalla y lo esconde sobre #contacto. Reemplaza
+   al bloque "Menú de celular" y al del globo de WhatsApp de guion.js.
+
+   Lo que escribe:
+     body[data-lejos]          la cabecera salió de la pantalla
+     body[data-menu-abierto]   el sitio ya le pone overflow: hidden
+     .flotante[data-abierto]   el panel está abierto
+     .flotante[data-oculto]    hay que esconderlo (sobre #contacto)
+   Lo que NO escribe: data-tema. Eso lo hace mirarTema, en guion.js, igual
+   que con la cabecera y el índice.
+
+   Sin librerías. Para probar desde la consola: window.__flotante.abrir() y
+   window.__flotante.cerrar().
+   ========================================================================== */
+
+(function () {
+  'use strict';
+
+  /* Cuándo mandar el foco al primer enlace: cuando ya entró. El primero
+     arranca a los .28s y tarda .15s (flotante.css); antes de eso el aro de
+     foco aparecería sobre una palabra a medio llegar. */
+  var ESPERA_FOCO = 430;
+
+  function flotante() {
+    var raiz = document.querySelector('[data-flotante]');
+    if (!raiz) return;
+    var boton = raiz.querySelector('[data-menu-boton]');
+    var panel = raiz.querySelector('[data-menu-panel]');
+    if (!boton || !panel) return;
+
+    var menos = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cuerpo = document.body;
+    var temporizador = null;
+
+    /* Lenis mueve el scroll a mano, así que el overflow: hidden del body no
+       lo frena: hay que pararlo. Se le pide por su nombre y si no está (sin
+       librería, ?sinlenis, menos movimiento) no pasa nada. */
+    var lenis = function (orden) {
+      var l = window.lenis;
+      if (l && typeof l[orden] === 'function') l[orden]();
+    };
+
+    var abierto = function () {
+      return boton.getAttribute('aria-expanded') === 'true';
+    };
+
+    var abrir = function () {
+      if (abierto()) return;
+      boton.setAttribute('aria-expanded', 'true');
+      raiz.setAttribute('data-abierto', '');
+      cuerpo.setAttribute('data-menu-abierto', '');
+      lenis('stop');
+      clearTimeout(temporizador);
+      temporizador = setTimeout(function () {
+        var primero = panel.querySelector('a[href]');
+        /* preventScroll: el panel es fijo, no hay nada que scrollear, y sin
+           esto algún navegador intenta igual y mueve el fondo. */
+        if (primero && abierto()) primero.focus({ preventScroll: true });
+      }, menos ? 0 : ESPERA_FOCO);
+    };
+
+    /* devolverFoco: al cerrar por teclado o por clic afuera el foco vuelve
+       al botón. Por clic en un enlace no: la página se va a otro lado. */
+    var cerrar = function (devolverFoco) {
+      if (!abierto()) return;
+      clearTimeout(temporizador);
+      boton.setAttribute('aria-expanded', 'false');
+      raiz.removeAttribute('data-abierto');
+      cuerpo.removeAttribute('data-menu-abierto');
+      lenis('start');
+      if (devolverFoco) boton.focus({ preventScroll: true });
+    };
+
+    boton.addEventListener('click', function () {
+      if (abierto()) cerrar(true);
+      else abrir();
+    });
+
+    /* Clic en un enlace del panel: cierra. En CAPTURA, antes de que el enlace
+       haga lo suyo: guion.js intercepta los href="#ancla" y los manda a
+       lenis.scrollTo, y Lenis parado ignora el scrollTo. Primero se lo
+       arranca (acá), después el enlace scrollea (allá). */
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a[href]')) cerrar(false);
+    }, true);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && abierto()) cerrar(true);
+    });
+
+    /* Clic fuera del flotante: cierra. Lo de adentro (botón, píldora, panel)
+       no cuenta; el botón ya tiene su propio manejador. */
+    document.addEventListener('click', function (e) {
+      if (abierto() && !raiz.contains(e.target)) cerrar(true);
+    });
+
+    /* ------------------------------------------------------------------ */
+    /* Escritorio: aparece cuando la cabecera salió de la pantalla         */
+    /* ------------------------------------------------------------------ */
+
+    var cabecera = document.querySelector('[data-cabecera]');
+    if (cabecera && 'IntersectionObserver' in window) {
+      var blanco = cabecera;
+      /* Si la cabecera es sticky o fixed nunca "sale" de la pantalla y el
+         observer diría siempre que está. En ese caso se mira una sonda de su
+         misma altura clavada arriba del todo del documento, que sí se va. */
+      var pos = getComputedStyle(cabecera).position;
+      if (pos === 'sticky' || pos === 'fixed') {
+        blanco = document.createElement('span');
+        blanco.setAttribute('aria-hidden', 'true');
+        blanco.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:' +
+          cabecera.offsetHeight + 'px;pointer-events:none;visibility:hidden';
+        cuerpo.insertBefore(blanco, cuerpo.firstChild);
+      }
+      new IntersectionObserver(function (entradas) {
+        var en = entradas[entradas.length - 1];
+        if (en.isIntersecting) cuerpo.removeAttribute('data-lejos');
+        else cuerpo.setAttribute('data-lejos', '');
+      }, { threshold: 0 }).observe(blanco);
+    } else {
+      /* Sin observer, mejor que esté siempre a que no esté nunca. */
+      cuerpo.setAttribute('data-lejos', '');
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Sobre #contacto se esconde: ahí el WhatsApp ya está delante        */
+    /* ------------------------------------------------------------------ */
+
+    var contacto = document.getElementById('contacto');
+    if (contacto && 'IntersectionObserver' in window) {
+      /* Dos medidas y no una: "se ve el 30% de la sección" falla cuando la
+         sección es más alta que la pantalla (celular acostado: nunca llega al
+         30%), así que también vale "la sección ocupa el 30% de la pantalla".
+         Los umbrales de a diez para que el callback dispare a lo largo del
+         recorrido y no sólo al entrar y salir. */
+      new IntersectionObserver(function (entradas) {
+        var en = entradas[entradas.length - 1];
+        var altoPantalla = (en.rootBounds && en.rootBounds.height) || window.innerHeight || 1;
+        var tapa = en.isIntersecting &&
+          (en.intersectionRatio >= .3 || en.intersectionRect.height / altoPantalla >= .3);
+        if (tapa) raiz.setAttribute('data-oculto', '');
+        else raiz.removeAttribute('data-oculto');
+      }, { threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] }).observe(contacto);
+    }
+
+    window.__flotante = { abrir: abrir, cerrar: cerrar };
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', flotante);
+  else flotante();
 })();
