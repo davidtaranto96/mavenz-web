@@ -188,7 +188,8 @@ def cabecera(d, lang, aqui, tema="claro"):
     se va con la pagina. Por eso su tema es un dato de la pagina (oscuro sobre
     el video del hero, claro sobre la cinta de papel) y no una sonda."""
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
-    enlaces = enlaces_menu(d, aqui)
+    # Los enlaces ruedan al pasar el puntero, como en el flotante (David, 10/09).
+    enlaces = enlaces_menu(d, aqui, rodar=True)
     # Sin hamburguesa ni panel (09/09): el unico menu desplegable es el
     # flotante de abajo a la derecha, en todos los carriles. En celular la
     # barra lleva solo el logo y el selector de idioma.
@@ -510,21 +511,25 @@ def ficha_titulo(d):
 
 
 def galeria(d):
-    """La galeria en cascada (David, 10/09: antes era un carril arrastrable):
-    una grilla de tres columnas con escalera, cada foto entra sola al llegar
-    con el scroll y las columnas se deslizan a velocidades distintas
-    (cascada() en guion.js, solo transform). Nada que arrastrar. La misma
-    lista alimenta el visor: data-foto es el indice en `galeria`."""
+    """La galeria escalonada que avanza con el scroll (David, 10/09, segunda
+    vuelta): un riel de fotos en escalera, fijo mientras la seccion mide lo
+    que hay que recorrer, y que se desliza a la izquierda a medida que se
+    baja, mostrando las que siguen. galeriaRiel() en guion.js escribe
+    --corrida y --recorrido; sin guion o con menos movimiento el riel se
+    recorre con el dedo o la rueda (overflow nativo). La misma lista alimenta
+    el visor: data-foto es el indice en `galeria`."""
     c, ui = d["proyectos"]["cardinal"], d["interfaz"]
     fotos = "".join(
-        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i};--col:{i % 3}">'
+        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i}">'
         f'<button class="lamina__abrir" type="button" data-foto="{i}" aria-label="{e(ui["abrir_foto"])}: {e(x["epigrafe"])}">'
-        f'{img(x["foto"], "(min-width:64rem) 30vw, 90vw")}</button>'
+        f'{img(x["foto"], "(min-width:64rem) 34vw, 70vw")}</button>'
         f'<figcaption class="lamina__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
         for i, x in enumerate(c["galeria"]))
-    return f'''<section class="seccion galeria-seccion" id="galeria">
+    return f'''<section class="galeria-seccion" id="galeria" data-galeria>
   <h2 class="visualmente-oculto">{e(c["galeria_titulo"])}</h2>
-  <div class="galeria" data-cascada>{fotos}</div>
+  <div class="galeria__pin">
+    <div class="galeria__riel" data-galeria-riel>{fotos}</div>
+  </div>
 </section>'''
 
 
@@ -1051,12 +1056,10 @@ def pagina_cardinal(d, lang):
 
 
 def pagina_contacto(d, lang):
-    """La ventana de contacto, sola (David, 10/09): cinta, la seccion entera
-    con la palabra corriendo en vertical, las cuatro opciones y el
-    formulario. `?motivo=` en la URL abre la solapa elegida."""
-    pg = d["paginas"]["contacto"]
-    cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
-<div class="dossier dossier--contacto" data-tema="claro"><div class="dossier__interior">
+    """La ventana de contacto, sola (David, 10/09): la seccion entera con la
+    palabra corriendo en vertical (sin la cinta de arriba: solo la lateral),
+    las cuatro opciones y el formulario. `?motivo=` abre la solapa elegida."""
+    cuerpo = f'''<div class="dossier dossier--contacto" data-tema="claro"><div class="dossier__interior">
 {cms("contacto", contacto(d))}
 </div></div>'''
     return cascara(d, lang, "contacto", cuerpo)

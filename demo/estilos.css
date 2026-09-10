@@ -2852,41 +2852,61 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 .ficha-titulo .datos { justify-content: center; }
 
 /* --- la galeria escalonada y arrastrable --------------------------------- */
-/* --- la galeria en cascada (David, 10/09: antes era un carril) ------------ */
-/* Tres columnas con escalera, cada foto entra sola al llegar (cascada() marca
-   data-visto con retardo por --i) y cada columna se desliza a otra velocidad
-   con el scroll (--desliz, solo transform). Sin guion: todo a la vista. */
-.galeria-seccion { border-top: 0; padding-top: 0; }
-.galeria {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.25rem, 3vw, 2.5rem) clamp(.875rem, 1.5vw, 1.5rem);
-  align-items: start;
+/* --- la galeria: un riel en escalera que avanza con el scroll ------------- */
+/* La seccion mide 100svh mas el recorrido (--recorrido, lo escribe
+   galeriaRiel()); adentro, .galeria__pin queda fijo y el riel se corre a la
+   izquierda (--corrida, en px) a medida que se baja. Cada foto un escalon
+   mas arriba que la anterior. Sin guion (sin data-vivo): overflow nativo. */
+.galeria-seccion {
+  --recorrido: 0px;
+  position: relative;
+  height: calc(100svh + var(--recorrido));
+  margin-inline: calc(-1 * (var(--margen-ext) + var(--margen-int))) calc(-1 * var(--margen-der));
 }
-.lamina {
-  margin: 0;
-  translate: 0 var(--desliz, 0px);
+.galeria__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: clip;
+  scrollbar-width: none;
+}
+.galeria__pin::-webkit-scrollbar { display: none; }
+.galeria-seccion[data-vivo] .galeria__pin { overflow-x: clip; }
+.galeria__riel {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(.875rem, 1.5vw, 1.5rem);
+  width: max-content;
+  padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
+  /* Lugar para la escalera: la ultima foto sube (n-1) escalones. */
+  padding-top: clamp(4rem, 26svh, 14rem);
+  translate: calc(var(--corrida, 0) * -1px) 0;
   will-change: translate;
 }
+.lamina {
+  flex: 0 0 auto;
+  margin: 0;
+  translate: 0 calc(var(--i, 0) * -3.5svh);
+}
+.lamina--ancha { width: clamp(16rem, 34vw, 36rem); }
+.lamina--angosta { width: clamp(11rem, 19vw, 19rem); }
 .lamina__abrir { display: block; width: 100%; overflow: clip; border-radius: 4px; cursor: zoom-in; }
 .lamina__abrir img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
 .lamina--angosta .lamina__abrir img { aspect-ratio: 3 / 4; }
 .lamina__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
-[data-cascada-viva] .lamina { opacity: 0; transition: opacity .7s var(--curva); transition-delay: calc(var(--i, 0) * 90ms); }
-[data-cascada-viva] .lamina[data-visto] { opacity: 1; }
-@media (min-width: 40rem) {
-  .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 64rem) {
-  .galeria { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: clamp(3rem, 12svh, 6rem); }
-  /* La escalera: cada columna arranca mas arriba que la anterior. */
-  .lamina { margin-top: calc(var(--col, 0) * -6svh); }
+@media (max-width: 63.99rem) {
+  .lamina--ancha { width: min(70vw, 24rem); }
+  .lamina--angosta { width: min(44vw, 15rem); }
+  .lamina { translate: 0 calc(var(--i, 0) * -2.5svh); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lamina { translate: none; transition: none; }
-  [data-cascada-viva] .lamina { opacity: 1; }
+  .galeria-seccion, .galeria-seccion[data-vivo] { height: auto; }
+  .galeria-seccion[data-vivo] .galeria__pin { overflow-x: auto; height: auto; padding-block: 2rem; }
+  .galeria__riel { translate: none; }
 }
-@media (prefers-reduced-motion: reduce) {.lamina { translate: none; } .carrusel { padding-top: 0; }}
 
 /* --- sub-items: foto 3:4 y texto, alternados ------------------------------ */
 .subitems { display: grid; gap: clamp(3rem, 10svh, 6rem); }
@@ -2951,7 +2971,7 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 }
 .pie__arriba { display: grid; gap: clamp(1.75rem, 4vw, 2.5rem); }
 .pie__marca { display: grid; gap: .75rem; align-content: start; max-width: 30ch; }
-.pie__logo { display: inline-flex; align-items: center; min-height: 44px; width: max-content; }
+.pie__logo { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; width: max-content; }
 .pie__iso { display: block; height: clamp(1.5rem, 1.2rem + .6vw, 2rem); width: auto; }
 .pie__mensaje {
   margin: .25rem 0 0;
@@ -3017,3 +3037,83 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 .persona__marco--sin-foto img { width: 38%; height: auto; opacity: .55; }
 /* Las personas: tarjetas de 14 a 18rem, las que haya, sin estirar. */
 .equipo-seccion .personas { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 18rem)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: clamp(2rem, 6svh, 3rem); }
+
+/* =========================================================================
+   Ronda 10/09, segunda vuelta: la barra, el pie compacto, el contacto solo
+   ========================================================================= */
+
+/* --- La barra: enlaces que ruedan, mas grandes, y el boton con barrido ---- */
+@keyframes cabEntra { from { opacity: 0; translate: 0 -8px; } }
+.cabecera__marca, .cabecera__derecha > * { animation: cabEntra .6s var(--curva) both; }
+.cabecera__derecha > * { animation-delay: .25s; }
+@media (min-width: 64rem) {
+  header.cabecera .cabecera__enlaces { gap: clamp(.5rem, 1.4vw, 1.5rem); }
+  header.cabecera .cabecera__enlaces .rodar {
+    /* block y no el inline-flex de los enlaces de la barra: la ventana del
+       roll tiene que mostrar una sola cara, no el medio de la pista. */
+    display: block;
+    height: 44px;
+    min-width: 0;
+    line-height: 1.12;
+    justify-content: normal;
+    padding-inline: .375rem;
+    border-block-width: calc((44px - 1.12em) / 2);
+    font-size: clamp(.9375rem, .85rem + .35vw, 1.0625rem);
+    font-weight: var(--ui);
+    letter-spacing: 0;
+    color: var(--tinta);
+    opacity: 1;
+    translate: none;
+    transition: color var(--hover) var(--curva);
+    animation: cabEntra .5s var(--curva) both;
+    animation-delay: calc(.08s + var(--i, 0) * 50ms);
+  }
+  header.cabecera .cabecera__enlaces .rodar[aria-current="page"] { font-weight: var(--medio); }
+  header.cabecera .cabecera__enlaces .rodar[aria-current="page"] .rodar__cara { text-decoration: underline; text-underline-offset: .16em; text-decoration-thickness: 1px; }
+  header.cabecera .cabecera__enlaces .rodar .rodar__pista { transition: translate .22s var(--flotante-curva); }
+  header.cabecera[data-tema="oscuro"] .cabecera__enlaces .rodar { color: var(--sobre-foto); }
+  header.cabecera .boton {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    height: 48px;
+    padding-inline: 1.75rem;
+    font-size: var(--t-chico);
+    --barrido: var(--tinta);
+  }
+  header.cabecera[data-tema="oscuro"] .boton { --barrido: var(--linea); }
+  header.cabecera .boton::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--barrido);
+    transform-origin: left;
+    scale: 0 1;
+    transition: scale .3s var(--flotante-curva);
+  }
+  header.cabecera .cabecera__derecha { gap: clamp(1rem, 1.6vw, 1.75rem); }
+  header.cabecera .idioma { font-size: var(--t-chico); gap: .375rem; }
+}
+@media (hover: hover) and (pointer: fine) {
+  header.cabecera .boton:hover::before { scale: 1 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cabecera__marca, .cabecera__derecha > *, header.cabecera .cabecera__enlaces .rodar { animation: none; }
+  header.cabecera .boton::before { transition: none; }
+}
+
+/* --- El pie, compacto: menos aire, las secciones en dos columnas ---------- */
+.pie { gap: 1.5rem; padding: clamp(2rem, 1.5rem + 1.5vw, 2.75rem) var(--margen-ext) 1rem; }
+.pie__arriba { gap: 1.5rem clamp(1.5rem, 3vw, 3rem); }
+.pie__marca { gap: .5rem; }
+.pie__mensaje { font-size: clamp(1.125rem, .95rem + .7vw, 1.5rem); }
+.pie__rotulo { margin-bottom: 0; }
+.pie__paginas { grid-template-columns: repeat(2, max-content); column-gap: 1.5rem; }
+.pie__abajo { padding-top: .875rem; }
+@media (min-width: 64rem) {
+  .pie__arriba { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* El contacto solo, sin la cinta de arriba: un poco mas de aire al header. */
+.dossier--contacto .contacto { padding-block: clamp(2.5rem, 8svh, 5rem) clamp(4rem, 12svh, 7rem); }

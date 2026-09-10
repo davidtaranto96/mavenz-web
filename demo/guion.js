@@ -968,51 +968,43 @@
     lista.forEach(function (m) { ojo.observe(m); });
   }
 
-  /* --- la galeria en cascada ---------------------------------------------- */
-  /* Cada foto entra al llegar (IO, con el retardo por --i que pone el CSS) y,
-     mientras la grilla cruza la pantalla, cada columna se desliza a una
-     velocidad distinta (--desliz por lamina, solo transform). Sin guion o
-     con menos movimiento no se marca data-cascada-viva y todo esta a la
-     vista, quieto. */
-  function cascada() {
-    var caja = $('[data-cascada]');
-    if (!caja || menos) return;
-    var laminas = $$('.lamina', caja);
-    if (!laminas.length) return;
-    caja.setAttribute('data-cascada-viva', '');
-    if ('IntersectionObserver' in window) {
-      var ojo = new IntersectionObserver(function (ent) {
-        ent.forEach(function (x) {
-          if (!x.isIntersecting) return;
-          x.target.setAttribute('data-visto', '');
-          ojo.unobserve(x.target);
-        });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: .15 });
-      laminas.forEach(function (l) { ojo.observe(l); });
-    } else {
-      laminas.forEach(function (l) { l.setAttribute('data-visto', ''); });
-    }
-    if (!window.matchMedia('(min-width: 64rem)').matches) return;
+  /* --- la galeria: el riel en escalera que avanza con el scroll ------------ */
+  /* La seccion mide 100svh mas el recorrido; mientras se la cruza, el riel
+     se corre a la izquierda tantos px como sobran (scrollWidth menos la
+     pantalla). --recorrido se escribe en resize para que la seccion mida lo
+     justo: 0,85 px de rueda por px de riel. Sin guion o con menos
+     movimiento el riel queda con overflow nativo. */
+  function galeriaRiel() {
+    var caja = $('[data-galeria]');
+    var riel = $('[data-galeria-riel]', caja || document);
+    if (!caja || !riel || menos) return;
+    var pin = riel.parentElement;
+    var sobra = 0;
+    var medirSobra = function () {
+      sobra = Math.max(0, riel.scrollWidth - pin.clientWidth);
+      caja.style.setProperty('--recorrido', Math.round(sobra * .85) + 'px');
+      caja.setAttribute('data-vivo', '');
+    };
     var pedido = false;
-    var medir = function () {
+    var correr = function () {
       pedido = false;
       var r = caja.getBoundingClientRect();
-      var vh = window.innerHeight || 1;
-      if (r.bottom < 0 || r.top > vh) return;
-      /* -1 cuando la grilla asoma por abajo, 1 cuando se va por arriba. */
-      var p = (vh - r.top) / (vh + r.height) * 2 - 1;
-      laminas.forEach(function (l) {
-        var col = parseFloat(l.style.getPropertyValue('--col')) || 0;
-        l.style.setProperty('--desliz', (-p * col * 28).toFixed(1) + 'px');
-      });
+      var recorrido = r.height - (window.innerHeight || 1);
+      if (recorrido <= 0 || r.bottom < 0 || r.top > window.innerHeight) return;
+      var p = -r.top / recorrido;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      riel.style.setProperty('--corrida', (p * sobra).toFixed(1));
     };
     window.addEventListener('scroll', function () {
       if (pedido) return;
       pedido = true;
-      requestAnimationFrame(medir);
+      requestAnimationFrame(correr);
     }, { passive: true });
-    window.addEventListener('resize', medir);
-    medir();
+    window.addEventListener('resize', function () { medirSobra(); correr(); });
+    medirSobra();
+    correr();
+    /* Las fotos cargan lazy y el ancho del riel cambia: se remide al rato. */
+    setTimeout(function () { medirSobra(); correr(); }, 800);
   }
 
   function arrancar() {
@@ -1028,7 +1020,7 @@
     tilt();
     fichaHero();
     marcadores();
-    cascada();
+    galeriaRiel();
     cintasContinuas();
     formulario();
   }
