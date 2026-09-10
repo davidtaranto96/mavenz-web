@@ -594,13 +594,19 @@
   function circular(caja, selNodo, selPanel, attrNodo, attrPanel, selTrazo, varTrazo) {
     if (!caja) return;
     var nodos = $$(selNodo, caja);
+    /* Los paneles pueden vivir afuera del diagrama (en el Universo estan al
+       costado, en .orbita__detalle): se buscan en la seccion entera. */
     var paneles = $$(selPanel, caja);
+    if (!paneles.length) paneles = $$(selPanel, caja.closest('section') || document);
     if (!nodos.length) return;
     caja.setAttribute('data-lista', '1');
 
+    var tocado = false;
     function activar(i) {
       nodos.forEach(function (n, j) { n.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
       paneles.forEach(function (p, j) { p.setAttribute('aria-hidden', j === i ? 'false' : 'true'); });
+      /* Quien tenga algo que sincronizar (el carril de celular) escucha esto. */
+      caja.dispatchEvent(new CustomEvent('mv:activar', { detail: i }));
       var trazo = selTrazo ? $(selTrazo, caja) : null;
       if (trazo && !menos) {
         /* El avance del trazo cuenta cuánto del ciclo llevás recorrido. */
@@ -608,15 +614,22 @@
       }
     }
     nodos.forEach(function (n, i) {
-      n.addEventListener('click', function () { activar(i); });
+      n.addEventListener('click', function () { tocado = true; activar(i); });
       n.addEventListener('focus', function () { activar(i); });
+      /* Con puntero fino, pasar por encima ya elige (UNI-3: "al seleccionar
+         o pasar sobre cada una") y congela el auto-avance igual que el clic.
+         El toque no entra aca: pointerType es 'touch'. */
+      n.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        tocado = true;
+        activar(i);
+      });
     });
     activar(0);
 
     /* Sin puntero, la activa avanza sola con el scroll: el visitante las ve
        todas sin tener que tocar nada. Se detiene apenas toca una. */
     if (menos) return;
-    var tocado = false;
     caja.addEventListener('pointerdown', function () { tocado = true; });
     var obs = new IntersectionObserver(function (ent) {
       ent.forEach(function (x) {
@@ -931,6 +944,92 @@
     derivar();
   }
 
+  /* --- El puente: el bistre sube con el scroll ---------------------------- */
+  /* Escribe --mezcla (0..1) en el puente: 0 cuando asoma por abajo de la
+     pantalla, 1 cuando su base llega al quinto superior. Solo transform: la
+     capa de bistre se estira desde abajo (scale: 1 var(--mezcla)). */
+  function puente() {
+    var p = $('[data-puente]');
+    if (!p || menos) return;
+    var pedido = false;
+    var medir = function () {
+      pedido = false;
+      var r = p.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -vh || r.top > vh * 2) return;
+      var t = (vh - r.top) / (vh * .8 + r.height);
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      p.style.setProperty('--mezcla', t.toFixed(3));
+    };
+    window.addEventListener('scroll', function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    window.addEventListener('resize', medir);
+    medir();
+  }
+
+  /* --- El carril de esferas en celular ------------------------------------ */
+  /* Bajo 64rem las descripciones son un carril con scroll-snap: una tarjeta
+     por vez, swipe o flechas. Se mantiene en sincronia con las esferas en
+     los dos sentidos: elegir una esfera lleva el carril a su tarjeta, y
+     deslizar el carril enciende la esfera que corresponde. Cuando el carril
+     no scrollea (escritorio) no hace nada. */
+  function carrilEsferas() {
+    var caja = $('[data-orbita]');
+    var carril = $('[data-carril-esferas]');
+    if (!caja || !carril) return;
+    var raiz = carril.closest('.universo') || document;
+    var nodos = $$('.orbita__nodo', caja);
+    var paneles = $$('.orbita__panel', carril);
+    var ant = $('[data-carril-ant]', raiz);
+    var sig = $('[data-carril-sig]', raiz);
+    if (!nodos.length || !paneles.length) return;
+    var actual = 0;
+    var programado = false;
+
+    var esCarril = function () { return carril.scrollWidth > carril.clientWidth + 4; };
+    var izquierda = function () { return parseFloat(getComputedStyle(carril).paddingLeft) || 0; };
+    var irA = function (i) {
+      if (!esCarril()) return;
+      var p = paneles[i];
+      if (!p) return;
+      programado = true;
+      carril.scrollTo({ left: p.offsetLeft - izquierda(), behavior: menos ? 'auto' : 'smooth' });
+      /* Mientras el carril viaja solo, sus eventos de scroll no cuentan. */
+      clearTimeout(irA.t);
+      irA.t = setTimeout(function () { programado = false; }, menos ? 50 : 600);
+    };
+
+    caja.addEventListener('mv:activar', function (e) {
+      actual = e.detail;
+      irA(actual);
+    });
+
+    var reloj = null;
+    carril.addEventListener('scroll', function () {
+      if (programado || !esCarril()) return;
+      clearTimeout(reloj);
+      reloj = setTimeout(function () {
+        var x = carril.scrollLeft + izquierda();
+        var mejor = 0, dist = Infinity;
+        paneles.forEach(function (p, i) {
+          var d = Math.abs(p.offsetLeft - x);
+          if (d < dist) { dist = d; mejor = i; }
+        });
+        if (mejor !== actual) nodos[mejor].click();
+      }, 80);
+    }, { passive: true });
+
+    var saltar = function (paso) {
+      var n = nodos.length;
+      nodos[(actual + paso + n) % n].click();
+    };
+    if (ant) ant.addEventListener('click', function () { saltar(-1); });
+    if (sig) sig.addEventListener('click', function () { saltar(1); });
+  }
+
   function arrancar() {
     arrancarScroll();
     nubeRed();
@@ -941,6 +1040,8 @@
     circular($('[data-ciclo]'), '.ciclo__nodo', '.ciclo__carta',
              'data-paso', 'data-carta', '[data-avance]', '--avance');
     anillo();
+    puente();
+    carrilEsferas();
     cintasContinuas();
     formulario();
   }

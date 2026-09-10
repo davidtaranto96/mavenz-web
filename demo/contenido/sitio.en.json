@@ -49,59 +49,42 @@
     ]
   },
   "quienes": {
-    "margen": "Salta, Argentina",
     "titulo": "We are Mavenz",
-    "copy": "We were born in Salta with a different way of looking at real estate. We read opportunities, connect the right people and build the strategy each project needs to move forward.",
-    "cierre": "It is not only about selling. It is about understanding what to move, how to move it and with whom.",
-    "piezas_rotulo": "The identity, applied"
+    "copy": "We were born with a different way of working in real estate: integral, strategic and collaborative.",
+    "copy2": "We work alongside developers, investors and landowners, connecting strategy, business, communication and sales to turn opportunities into projects that move forward.",
+    "circulos": {
+      "fondo": {
+        "alt": "Aerial view of the San Lorenzo valley"
+      },
+      "frente": {
+        "alt": "Aerial view of a neighbourhood in San Lorenzo"
+      }
+    }
   },
   "universo": {
-    "titulo": "The Mavenz universe",
-    "intro": "Mavenz works as a universe of connected capabilities. Each project activates a different combination.",
-    "ayuda": "Tap each capability to see it.",
-    "mapa": {
-      "titulo": "The Mavenz map",
-      "intro": "Six territories in Salta, and what is changing in each one.",
-      "rotulo_quien": "Who buys there",
-      "territorios": [
-        {
-          "nombre": "Downtown and city centre",
-          "bajada": "Where heritage begins to change hands",
-          "cambia": "The centre stopped growing outwards and grew by transformation. Companies, studios and offices now sit next to cafés and shops, and the colonial houses have left the traditional residential market.",
-          "quien": "Companies, professional practices, entrepreneurs, tourism and people who want urban, connected living."
-        },
-        {
-          "nombre": "North side",
-          "bajada": "The city grows towards nature",
-          "cambia": "One of the main expansion corridors in Salta. Every new development consolidates a residential ecosystem that keeps growing.",
-          "quien": "Young families, professionals and anyone planning a long-term home without giving up the city."
-        },
-        {
-          "nombre": "San Lorenzo",
-          "bajada": "Two territories, two ways of living",
-          "cambia": "San Lorenzo Viejo is a consolidated market with a stable setting. San Lorenzo Chico is no longer only residential: schools, offices, gyms and restaurants let people live and work in the same place.",
-          "quien": "Established families in Viejo. In Chico, young families, professionals and entrepreneurs who blend home, work and quality of life."
-        },
-        {
-          "nombre": "Airport area and San Luis",
-          "bajada": "Connectivity that drives growth",
-          "cambia": "The expansion southwards finds its engine here. Being close to the airport and the main access roads sustains steady demand, alongside new neighbourhoods, services and shops.",
-          "quien": "Working families, professionals and people tied to commerce and logistics who value access."
-        },
-        {
-          "nombre": "Cafayate and Cachi",
-          "bajada": "Investing is also choosing a way to live",
-          "cambia": "The Calchaquí Valleys are a different market: the purchase decision mixes heritage, enjoyment and yield. Demand for second homes and tourism-linked investment keeps growing.",
-          "quien": "People looking for a second home, heritage investors, tourism entrepreneurs and families who put experience and nature first."
-        },
-        {
-          "nombre": "Vaqueros",
-          "bajada": "An eco-cultural answer",
-          "cambia": "Vaqueros is emerging as an eco-cultural answer, more bohemian and open, with a strong sense of community. The new urban and environmental planning code and the widened access road reinforce the area.",
-          "quien": "Couples aged 30 to 45 who work downtown or remotely and want their children to grow up close to nature. Artists, architects and designers. Short-stay rental investors."
-        }
-      ]
-    }
+    "titulo": "The Mavenz Universe",
+    "intro": "We integrate strategy, sales and opportunities to accompany a project's whole journey: from identifying its potential to turning it into a business that creates value.",
+    "centro": "Mavenz",
+    "ayuda": "Explore each capability",
+    "esferas": [
+      {
+        "nombre": "Strategy",
+        "copy": "We identify opportunities, analyse their potential and design the strategic path to turn them into solid, distinctive projects."
+      },
+      {
+        "nombre": "Sales",
+        "copy": "We design and implement sales and positioning strategies to accompany the launch, communication and sale of each project."
+      },
+      {
+        "nombre": "Opportunities",
+        "copy": "We detect new investment possibilities, foster alliances and connect projects, people and capital to develop new business."
+      }
+    ],
+    "anillo": {
+      "nombre": "Brand and communication",
+      "copy": "They accompany the whole process to build identity, positioning and coherence at every point of contact."
+    },
+    "cierre": "At Mavenz we do not work in isolated areas. We connect different capabilities according to what each opportunity needs to move forward."
   },
   "metodo": {
     "titulo": "Every project activates a different movement",
@@ -263,7 +246,50 @@
   "mirada": {
     "titulo": "What we see before it moves",
     "intro": "Analysis, ideas, trends and readings of the market. Our way of looking, written down.",
-    "hueco": "The first pieces will be published at launch."
+    "hueco": "The first pieces will be published at launch.",
+    "mapa": {
+      "titulo": "The Mavenz map",
+      "intro": "Six territories in Salta, and what is changing in each one.",
+      "rotulo_quien": "Who buys there",
+      "territorios": [
+        {
+          "nombre": "Downtown and city centre",
+          "bajada": "Where heritage begins to change hands",
+          "cambia": "The centre stopped growing outwards and grew by transformation. Companies, studios and offices now sit next to cafés and shops, and the colonial houses have left the traditional residential market.",
+          "quien": "Companies, professional practices, entrepreneurs, tourism and people who want urban, connected living."
+        },
+        {
+          "nombre": "North side",
+          "bajada": "The city grows towards nature",
+          "cambia": "One of the main expansion corridors in Salta. Every new development consolidates a residential ecosystem that keeps growing.",
+          "quien": "Young families, professionals and anyone planning a long-term home without giving up the city."
+        },
+        {
+          "nombre": "San Lorenzo",
+          "bajada": "Two territories, two ways of living",
+          "cambia": "San Lorenzo Viejo is a consolidated market with a stable setting. San Lorenzo Chico is no longer only residential: schools, offices, gyms and restaurants let people live and work in the same place.",
+          "quien": "Established families in Viejo. In Chico, young families, professionals and entrepreneurs who blend home, work and quality of life."
+        },
+        {
+          "nombre": "Airport area and San Luis",
+          "bajada": "Connectivity that drives growth",
+          "cambia": "The expansion southwards finds its engine here. Being close to the airport and the main access roads sustains steady demand, alongside new neighbourhoods, services and shops.",
+          "quien": "Working families, professionals and people tied to commerce and logistics who value access."
+        },
+        {
+          "nombre": "Cafayate and Cachi",
+          "bajada": "Investing is also choosing a way to live",
+          "cambia": "The Calchaquí Valleys are a different market: the purchase decision mixes heritage, enjoyment and yield. Demand for second homes and tourism-linked investment keeps growing.",
+          "quien": "People looking for a second home, heritage investors, tourism entrepreneurs and families who put experience and nature first."
+        },
+        {
+          "nombre": "Vaqueros",
+          "bajada": "An eco-cultural answer",
+          "cambia": "Vaqueros is emerging as an eco-cultural answer, more bohemian and open, with a strong sense of community. The new urban and environmental planning code and the widened access road reinforce the area.",
+          "quien": "Couples aged 30 to 45 who work downtown or remotely and want their children to grow up close to nature. Artists, architects and designers. Short-stay rental investors."
+        }
+      ]
+    }
   },
   "contacto": {
     "apertura": "If you have a project, an investment opportunity or a proposal to develop, we want to hear about it.",
@@ -328,9 +354,6 @@
     "margen": "Who is behind it",
     "titulo": "The two who move Mavenz",
     "intro": "Mavenz is not a faceless brand. Behind it there are two people who decide together what moves and how."
-  },
-  "banda": {
-    "alt": "Aerial band over the valley"
   },
   "paginas": {
     "inicio": {

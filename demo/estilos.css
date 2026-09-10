@@ -379,9 +379,9 @@ body[data-menu-abierto] { overflow: hidden; }
    ========================================================================== */
 
 .dossier {
-  /* Todo lo que viene después del hero tiene que ser opaco y estar posicionado:
-     el hero queda sticky toda la página, y un bloque transparente o sin
-     contexto deja ver la foto por atrás. */
+  /* Opaco y posicionado: es el papel sobre el que se apoya cada tramo del
+     relato (el hero ya no es sticky, pero el puente y el Universo son bloques
+     a sangre entre dossiers y conviene que cada uno tenga su propio fondo). */
   position: relative;
   z-index: 1;
   background: var(--papel);
@@ -417,12 +417,8 @@ body[data-menu-abierto] { overflow: hidden; }
    Quiénes somos
    ========================================================================== */
 
-.quienes__cierre {
-  margin-top: clamp(2rem, 1.3rem + 2.9vw, 4.5rem);
-  max-width: 42ch;
-  border-top: 1px solid var(--linea-acento);
-  padding-top: clamp(1.25rem, .9rem + .9vw, 1.75rem);
-}
+/* La cita, el rotulo lateral y la foto se fueron el 08/09 (SOM-1, SOM-3).
+   La seccion nueva esta en el bloque "Fase 3" al final de la hoja. */
 
 /* ==========================================================================
    El universo: la rueda de las siete capacidades
@@ -1014,14 +1010,9 @@ body[data-menu-abierto] { overflow: hidden; }
    como un rectángulo pegado.
    ========================================================================== */
 
-.cortina-fondo { position: sticky; top: 0; z-index: 0; }
-.cortina-tapa {
-  position: relative;
-  z-index: 1;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -24px 60px rgba(30, 30, 32, .28);
-}
-@media (min-width: 56.25rem) { div.cortina-tapa { border-radius: 28px 28px 0 0; } }
+/* La cortina (hero sticky, dossier subiendo encima) se fue el 09/09: con un
+   video de fondo seguia corriendo tapado toda la pagina, y MET-5 pide que
+   nunca se vea el fondo del inicio al bajar. */
 
 /* El solape: la grilla de proyectos baja y su pie ya vive adentro de la
    sección siguiente, así el corte entre bloques deja de ser una línea recta.
@@ -1378,17 +1369,13 @@ body[data-menu-abierto] { overflow: hidden; }
    La banda de video entre bloques
    ========================================================================== */
 
-.banda { position: relative; height: clamp(9rem, 4rem + 14vw, 17rem); overflow: hidden; background: var(--tinta); }
-.banda__video { width: 100%; height: 100%; object-fit: cover; }
+/* La banda de video se fue el 09/09: el video ya vive en el hero. */
 
 /* ==========================================================================
    Las piezas de marca de Fractura
    ========================================================================== */
 
-.piezas { margin-top: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem); }
-.piezas__rotulo { margin-bottom: .875rem; }
-.piezas__par { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, .5rem + 1.6vw, 2rem); }
-.pieza img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 6px; }
+/* Las piezas de marca se fueron el 08/09 (SOM-3). */
 
 /* ==========================================================================
    El mapa: seis territorios en grilla, no seis renglones iguales
@@ -1641,119 +1628,8 @@ body[data-menu-abierto] { overflow: hidden; }
 .cinta--papel { background: transparent; border-block-color: var(--velo-apenas) }
 .cinta--papel .cinta__pieza { color: var(--sobre-foto) }
 
-/* --- La órbita: cuatro esferas, y Comunicación como el anillo ------------- */
-.orbita {
-  position: relative;
-  width: min(100%, 34rem);
-  aspect-ratio: 1;
-  margin-inline: auto;
-  margin-block: clamp(2rem, 6svh, 4rem);
-}
-.orbita__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
-/* El anillo se dibuja PRIMERO, antes que entren las esferas: así se lee que
-   las contiene y no que compite con ellas. */
-.orbita__anillo {
-  stroke-dasharray: var(--vuelta, 290);
-  stroke-dashoffset: calc(var(--vuelta, 290) * (1 - var(--dibujo, 1)));
-}
-.orbita__rotulo-anillo {
-  position: absolute;
-  inset-block-start: -.35rem;
-  inset-inline-start: 50%;
-  translate: -50% 0;
-  padding-inline: .6rem;
-  background: var(--papel);
-  font-size: var(--t-micro);
-  font-weight: var(--medio);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--tinta-bordo);
-}
-.orbita__nodo {
-  position: absolute;
-  inset-block-start: var(--y);
-  inset-inline-start: var(--x);
-  translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  gap: .3rem;
-  /* 44 px de área táctil aunque el punto mida 12. */
-  min-width: 44px;
-  min-height: 44px;
-  padding: .4rem;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva), opacity var(--hover) var(--curva);
-}
-.orbita__punto {
-  width: 12px; height: 12px;
-  border: 1.4px solid currentColor;
-  border-radius: 50%;
-  background: var(--papel);
-  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
-}
-.orbita__n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  opacity: .6;
-}
-.orbita__nombre {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  line-height: 1.15;
-  max-width: 7.5rem;
-  text-align: center;
-  text-wrap: balance;
-}
-/* La activa se enciende y las otras bajan a un tercio: el ojo va sola. */
-.orbita__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
-.orbita__nodo[aria-pressed="true"] .orbita__punto {
-  scale: 1.5;
-  background: var(--tinta-bordo);
-}
-.orbita[data-lista] .orbita__nodo[aria-pressed="false"] { opacity: .34 }
-
-.orbita__cara {
-  position: absolute;
-  inset: 22%;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-.orbita__panel {
-  grid-area: 1 / 1;
-  display: grid;
-  gap: .5rem;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--cambio) var(--curva);
-}
-.orbita__panel[aria-hidden="false"] { opacity: 1; visibility: visible }
-.orbita__panel-n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--tinta-bordo);
-}
-.orbita__panel h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
-.orbita__panel p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
-
-.orbita__anillo-copy {
-  max-width: 46ch;
-  margin-inline: auto;
-  text-align: center;
-  font-size: var(--t-chico);
-  color: var(--tinta-parrafo);
-  text-wrap: pretty;
-}
-.orbita__anillo-copy strong { color: var(--tinta-bordo); font-weight: var(--medio) }
-.orbita__ayuda {
-  margin-block-start: .75rem;
-  text-align: center;
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
+/* La orbita se reescribio el 09/09 (tres esferas, MAVENZ al centro, fondo
+   bistre): esta en el bloque "Fase 3" al final de la hoja. */
 
 /* --- El ciclo: cinco pasos en círculo, y del quinto se vuelve al primero -- */
 .ciclo {
@@ -1996,7 +1872,7 @@ body[data-menu-abierto] { overflow: hidden; }
 /* Notebook 1366×657: ancho de sobra, alto que no alcanza. La órbita y el ciclo
    se miden contra svh o no entran con la barra puesta. */
 @media (min-width: 64rem) {
-  .orbita, .ciclo { width: min(34rem, 62svh) }
+  .ciclo { width: min(34rem, 62svh) }
   .mundos { grid-template-columns: repeat(4, 1fr) }
   .mundo { min-height: min(30rem, 64svh) }
   /* Recién acá el título rota: es donde hay alto para que se lea. */
@@ -2013,13 +1889,13 @@ body[data-menu-abierto] { overflow: hidden; }
 
 /* Escritorio grande: la órbita a tamaño completo. */
 @media (min-width: 94.5rem) {
-  .orbita, .ciclo { width: min(38rem, 66svh) }
+  .ciclo { width: min(38rem, 66svh) }
 }
 
 /* Celular acostado (812×375). Cae acá por consulta de ALTO con tope de ancho,
    para no atrapar el notebook, que también es bajo pero mide 1366. */
 @media (max-height: 46rem) and (max-width: 63.99rem) {
-  .orbita, .ciclo { width: min(100%, 74svh) }
+  .ciclo { width: min(100%, 74svh) }
   .cinta__pieza { font-size: clamp(2.25rem, 9vw, 4rem) }
 }
 
@@ -2102,7 +1978,7 @@ body[data-menu-abierto] { overflow: hidden; }
    pasaba por encima del rótulo activo. Acá el arco se desenrolla y queda una
    lista: se ve todo junto, sin tocar nada. */
 @media (max-width: 63.99rem) {
-  .orbita, .ciclo {
+  .ciclo {
     width: auto;
     aspect-ratio: auto;
     display: grid;
@@ -2111,11 +1987,9 @@ body[data-menu-abierto] { overflow: hidden; }
     /* La línea de la izquierda ES el arco desplegado. */
     border-inline-start: 1.4px solid var(--tinta-bordo);
   }
-  .orbita__dibujo, .ciclo__dibujo,
-  .orbita__nodo, .ciclo__nodo,
-  .orbita__rotulo-anillo { display: none }
+  .ciclo__dibujo, .ciclo__nodo { display: none }
 
-  .orbita__cara, .ciclo__centro {
+  .ciclo__centro {
     position: static;
     inset: auto;
     display: grid;
@@ -2124,7 +1998,7 @@ body[data-menu-abierto] { overflow: hidden; }
   }
   /* Todos los paneles visibles y apilados: en el teléfono no se esconde
      contenido detrás de un toque que nadie sabe que hay. */
-  .orbita__panel, .ciclo__carta {
+  .ciclo__carta {
     grid-area: auto;
     position: relative;
     opacity: 1;
@@ -2133,13 +2007,13 @@ body[data-menu-abierto] { overflow: hidden; }
     padding-block: 1.1rem;
     border-block-start: 1px solid var(--linea);
   }
-  .orbita__panel:first-child, .ciclo__carta:first-child { border-block-start: 0 }
-  .orbita__panel[aria-hidden="true"], .ciclo__carta[aria-hidden="true"] {
+  .ciclo__carta:first-child { border-block-start: 0 }
+  .ciclo__carta[aria-hidden="true"] {
     opacity: 1;
     visibility: visible;
   }
   /* El punto sobre la línea marca cada paso. */
-  .orbita__panel::before, .ciclo__carta::before {
+  .ciclo__carta::before {
     content: "";
     position: absolute;
     inset-block-start: 1.45rem;
@@ -2150,47 +2024,47 @@ body[data-menu-abierto] { overflow: hidden; }
     border-radius: 50%;
     background: var(--papel);
   }
-  .orbita__panel h3, .ciclo__carta h3 { font-size: var(--t-cuerpo) }
-  .orbita__panel p, .ciclo__carta p { font-size: var(--t-chico) }
-  .orbita__anillo-copy, .ciclo__cierre, .orbita__ayuda { text-align: start }
-  /* En vertical el anillo no se dibuja, así que la ayuda de "se activa al
-     pasar" no aplica: no hay nada que pasar. */
-  .orbita__ayuda { display: none }
+  .ciclo__carta h3 { font-size: var(--t-cuerpo) }
+  .ciclo__carta p { font-size: var(--t-chico) }
+  .ciclo__cierre { text-align: start }
 }
 
 
-/* --- Legibilidad adentro de un mundo -------------------------------------- */
+/* --- Legibilidad sobre un bloque oscuro: .oscuro ------------------------- */
+/* Un solo bloque para todo lo que va sobre tinta: el Universo (bistre),
+   Espacio (wenge), las franjas de la ficha y, hasta la Fase 5, los mundos
+   viejos (.mundo-pleno) de proyectos.html. */
 /* Las secciones vienen de la página clara y traen sus propios colores de tinta
    sobre papel. Adentro de un mundo el fondo es la tinta, así que bordó sobre
    bordó desaparece — medido en el bloque del cardenal. Acá se reasignan todos
    los tonos de texto de una vez, en lugar de parchear sección por sección. */
-.mundo-pleno .titulo,
-.mundo-pleno h2, .mundo-pleno h3, .mundo-pleno h4,
-.mundo-pleno .cardenal__cierre,
-.mundo-pleno .otros__nombre,
-.mundo-pleno .proyecto__nombre { color: var(--sobre-foto) }
+:is(.oscuro, .mundo-pleno) .titulo,
+:is(.oscuro, .mundo-pleno) h2, :is(.oscuro, .mundo-pleno) h3, :is(.oscuro, .mundo-pleno) h4,
+:is(.oscuro, .mundo-pleno) .cardenal__cierre,
+:is(.oscuro, .mundo-pleno) .otros__nombre,
+:is(.oscuro, .mundo-pleno) .proyecto__nombre { color: var(--sobre-foto) }
 
-.mundo-pleno .bajada,
-.mundo-pleno p,
-.mundo-pleno li,
-.mundo-pleno .cardenal__copy,
-.mundo-pleno .ficha__epigrafe,
-.mundo-pleno figcaption,
-.mundo-pleno .otros__copy { color: color-mix(in srgb, var(--sobre-foto) 90%, transparent) }
+:is(.oscuro, .mundo-pleno) .bajada,
+:is(.oscuro, .mundo-pleno) p,
+:is(.oscuro, .mundo-pleno) li,
+:is(.oscuro, .mundo-pleno) .cardenal__copy,
+:is(.oscuro, .mundo-pleno) .ficha__epigrafe,
+:is(.oscuro, .mundo-pleno) figcaption,
+:is(.oscuro, .mundo-pleno) .otros__copy { color: color-mix(in srgb, var(--sobre-foto) 90%, transparent) }
 
-.mundo-pleno .margen,
-.mundo-pleno .seccion__margen,
-.mundo-pleno .otros__rotulo { color: color-mix(in srgb, var(--sobre-foto) 74%, transparent) }
+:is(.oscuro, .mundo-pleno) .margen,
+:is(.oscuro, .mundo-pleno) .seccion__margen,
+:is(.oscuro, .mundo-pleno) .otros__rotulo { color: color-mix(in srgb, var(--sobre-foto) 74%, transparent) }
 
 /* Los filetes también: una línea pensada para papel no se ve sobre tinta. */
-.mundo-pleno .cardenal,
-.mundo-pleno .otros,
-.mundo-pleno .ficha__epigrafe,
-.mundo-pleno .seccion__cabeza--pie {
+:is(.oscuro, .mundo-pleno) .cardenal,
+:is(.oscuro, .mundo-pleno) .otros,
+:is(.oscuro, .mundo-pleno) .ficha__epigrafe,
+:is(.oscuro, .mundo-pleno) .seccion__cabeza--pie {
   border-color: color-mix(in srgb, var(--sobre-foto) 26%, transparent);
 }
 /* Los enlaces heredan y se distinguen por el subrayado, no por el color. */
-.mundo-pleno a { color: inherit }
+:is(.oscuro, .mundo-pleno) a { color: inherit }
 /* La cinta es el encabezado de la sección: un h2 que además es la pieza
    gráfica más grande. Sin resetear el margen del h2 la cinta se descuadra. */
 h2.cinta__pieza { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit }
@@ -2204,11 +2078,11 @@ html { scroll-padding-top: 1rem }
 }
 /* El acordeón del mapa trae sus tonos de papel: sobre la tinta casi negra del
    mundo Territorio quedaban al límite de contraste. */
-.mundo-pleno .territorio__bajada,
-.mundo-pleno .territorio summary,
-.mundo-pleno details p,
-.mundo-pleno summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
-.mundo-pleno details, .mundo-pleno summary {
+:is(.oscuro, .mundo-pleno) .territorio__bajada,
+:is(.oscuro, .mundo-pleno) .territorio summary,
+:is(.oscuro, .mundo-pleno) details p,
+:is(.oscuro, .mundo-pleno) summary { color: color-mix(in srgb, var(--sobre-foto) 88%, transparent) }
+:is(.oscuro, .mundo-pleno) details, :is(.oscuro, .mundo-pleno) summary {
   border-color: color-mix(in srgb, var(--sobre-foto) 34%, transparent);
 }
 
@@ -2383,9 +2257,7 @@ html { scroll-padding-top: 1rem }
 }
 /* La grilla de piezas era de dos columnas para los dos mockups. Con una sola
    foto quedaba una estampilla a media pantalla: ahora ocupa el ancho entero. */
-.piezas__par:has(> .pieza--grande:only-child) { grid-template-columns: 1fr }
 /* Respaldo para navegadores sin :has — la clase la pone el generador. */
-.piezas__par--sola { grid-template-columns: 1fr }
 /* Los retratos medían 240 px dentro de una columna de 611: el `aspect-ratio`
    resolvía el ancho en vez de estirarse. Se fija el ancho y la proporción
    pasa a mandar sólo sobre el alto — que es lo que se quería. */
@@ -3274,3 +3146,255 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 /* El kit base pone border-radius: 2px al foco: deformaría la píldora y el botón. */
 .flotante__wa:focus-visible { border-radius: 999px; }
 .flotante__boton:focus-visible { border-radius: 6px; }
+
+/* =========================================================================
+   Fase 3 (09/09) — Somos Mavenz, el puente y el Universo en bistre
+   ========================================================================= */
+
+/* --- Somos Mavenz: texto angosto a la izquierda, dos circulos a la derecha - */
+.quienes { display: grid; gap: clamp(2rem, 6vw, 4rem); align-items: center; }
+.quienes__texto { display: grid; gap: 1.25rem; max-width: 34ch; }
+.quienes__texto .titulo { max-width: none; }
+/* La caja de los circulos es cuadrada; los dos se posicionan adentro por
+   porcentaje, asi el solape es el mismo en cualquier ancho: el de fondo
+   (58 %) arriba a la derecha, el de frente (50 %) abajo a la izquierda,
+   pisandolo un cuarto de su diametro (SOM-4, medido sobre el dibujo). */
+.circulos { position: relative; aspect-ratio: 1; width: min(100%, 26rem); margin-inline: auto; }
+.circulo { position: absolute; margin: 0; aspect-ratio: 1; border-radius: 50%; overflow: clip; }
+.circulo--fondo  { inset-block-start: 0;   inset-inline-end: 0;    width: 58%; }
+.circulo--frente { inset-block-end: 6%;    inset-inline-start: 4%; width: 50%; z-index: 1;
+                   box-shadow: 0 16px 40px var(--sombra); }
+.circulo__foto { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 64rem) {
+  .quienes--con-circulos { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(3rem, 8vw, 8rem); }
+  .circulos { width: min(100%, 30rem); margin-inline: 0 auto; }
+}
+
+/* --- El puente: papel que se difumina en bistre --------------------------- */
+/* Un gradiente quieto y, encima, una capa de bistre que crece desde abajo
+   con el scroll (solo transform). Sin guion o con menos movimiento queda el
+   gradiente, que ya es la transicion que pide SOM-6. */
+.puente {
+  position: relative;
+  height: clamp(6rem, 18svh, 11rem);
+  overflow: clip;
+  background: linear-gradient(180deg, var(--papel), var(--tinta-parrafo));
+}
+.puente__tinta {
+  position: absolute;
+  inset: 0;
+  background: var(--tinta-parrafo);
+  transform-origin: 50% 100%;
+  scale: 1 var(--mezcla, 0);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .puente__tinta { display: none; }
+}
+
+/* --- El Universo Mavenz: seccion a sangre en bistre ----------------------- */
+.universo {
+  /* Alineado con el texto del dossier: el mismo margen a la izquierda. */
+  --uni-izq: calc(var(--margen-ext) + var(--margen-int));
+  --uni-der: var(--margen-der);
+  padding-inline: var(--uni-izq) var(--uni-der);
+  padding-block: var(--ritmo);
+  border-top: 0;
+  background: var(--tinta-parrafo);
+  color: var(--sobre-foto);
+}
+.universo__cabeza .bajada { max-width: 46ch; }
+.universo__cuerpo {
+  display: grid;
+  gap: clamp(2rem, 6svh, 3.5rem);
+  margin-block: clamp(2rem, 6svh, 4rem);
+}
+
+/* La orbita: MAVENZ fijo en el centro, tres esferas alrededor unidas por
+   lineas que nunca se cortan, y el anillo de Marca y comunicacion afuera. */
+.orbita {
+  position: relative;
+  width: min(100%, 30rem, 62svh);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  color: var(--sobre-foto);
+}
+.orbita__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* El anillo se dibuja primero (anillo() en guion.js escribe --dibujo). */
+.orbita__anillo {
+  stroke-dasharray: var(--vuelta, 290);
+  stroke-dashoffset: calc(var(--vuelta, 290) * (1 - var(--dibujo, 1)));
+  opacity: .6;
+}
+.orbita__lineas { opacity: .38; }
+/* El rotulo del anillo va abajo, entre las dos esferas de abajo: arriba
+   choca con la esfera de las 12. El fondo corta la linea del anillo. */
+.orbita__rotulo-anillo {
+  position: absolute;
+  inset-block-end: -.45rem;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  margin: 0;
+  padding-inline: .6rem;
+  background: var(--tinta-parrafo);
+  font-size: var(--t-micro);
+  font-weight: var(--medio);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sobre-foto);
+  white-space: nowrap;
+}
+.orbita__centro {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  margin: 0;
+  font-size: clamp(1.1rem, .8rem + 1.2vw, 1.75rem);
+  font-weight: var(--grueso);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sobre-foto);
+}
+/* Cada esfera es un disco opaco (tapa las lineas que pasan por debajo) con
+   el numero y el nombre adentro. La elegida sube a primer plano; las otras
+   se achican y se apagan. */
+.orbita__nodo {
+  --d: clamp(5.25rem, 3.5rem + 5.5vw, 7.5rem);
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  translate: -50% -50%;
+  width: var(--d);
+  height: var(--d);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .1rem;
+  padding: .5rem;
+  border: 1px solid color-mix(in srgb, var(--sobre-foto) 55%, transparent);
+  border-radius: 50%;
+  background: var(--tinta-parrafo);
+  color: var(--sobre-foto);
+  cursor: pointer;
+  scale: .9;
+  opacity: .7;
+  transition: scale var(--cambio) var(--curva), opacity var(--cambio) var(--curva),
+              background-color var(--cambio) var(--curva), color var(--cambio) var(--curva),
+              border-color var(--cambio) var(--curva);
+}
+.orbita__n { font-size: var(--t-micro); font-variant-numeric: tabular-nums; opacity: .7; }
+.orbita__nombre {
+  max-width: 100%;
+  font-size: clamp(.7rem, .58rem + .35vw, .8rem);
+  font-weight: var(--medio);
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+  hyphens: auto;
+}
+.orbita__nodo[aria-pressed="true"] {
+  scale: 1.3;
+  opacity: 1;
+  z-index: 2;
+  background: var(--sobre-foto);
+  border-color: var(--sobre-foto);
+  color: var(--tinta-parrafo);
+}
+.orbita__nodo:focus-visible { outline: 2px solid var(--sobre-foto); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .orbita__nodo { transition: none; }
+}
+
+/* El detalle: la descripcion de la elegida, al costado. Los tres paneles
+   apilados en la misma celda; el visible manda el alto. */
+.orbita__detalle { display: grid; gap: 1.25rem; align-content: center; }
+.orbita__paneles { position: relative; display: grid; }
+.orbita__panel {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: .5rem;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 8px;
+  transition: opacity var(--cambio) var(--curva), translate var(--cambio) var(--curva),
+              visibility 0s linear var(--cambio);
+}
+.orbita__panel[aria-hidden="false"] { opacity: 1; visibility: visible; translate: none; transition-delay: 0s; }
+.orbita__panel-n { font-size: var(--t-micro); font-variant-numeric: tabular-nums; opacity: .7; }
+.orbita__panel h3 { margin: 0; font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1; }
+.orbita__panel p { margin: 0; max-width: 38ch; font-size: var(--t-cuerpo); text-wrap: pretty; }
+@media (prefers-reduced-motion: reduce) {
+  .orbita__panel { transition: opacity var(--cambio) var(--curva), visibility 0s linear var(--cambio); translate: none; }
+}
+.orbita__flechas { display: none; gap: .75rem; }
+.orbita__flecha {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--sobre-foto) 55%, transparent);
+  border-radius: 50%;
+  background: none;
+  color: var(--sobre-foto);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.orbita__flecha:focus-visible { outline: 2px solid var(--sobre-foto); outline-offset: 3px; }
+.orbita__ayuda { margin: 0; font-size: var(--t-nota); opacity: .72; }
+
+.orbita__anillo-copy {
+  max-width: 48ch;
+  margin: clamp(2rem, 6svh, 3.5rem) auto 0;
+  text-align: center;
+  font-size: var(--t-chico);
+  text-wrap: pretty;
+}
+.orbita__anillo-copy strong { font-weight: var(--medio); }
+/* El cierre (UNI-5) remata la seccion: mas aire, mas cuerpo, mas contraste. */
+.universo__cierre {
+  max-width: 34ch;
+  margin: clamp(2.5rem, 8svh, 4.5rem) auto 0;
+  text-align: center;
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  line-height: 1.35;
+  color: var(--sobre-foto);
+  text-wrap: balance;
+}
+
+@media (min-width: 64rem) {
+  .universo__cuerpo {
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+  .orbita { margin-inline: 0; }
+}
+
+/* Celular: el diagrama chico arriba, y las descripciones como un carril
+   con una tarjeta por vez (el doc pide toque, swipe o botones). Todas
+   visibles: en el telefono no se esconde contenido detras de un toque. */
+@media (max-width: 63.99rem) {
+  .orbita { width: min(100%, 22rem, 74svh); }
+  .orbita__paneles {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--uni-izq)) calc(-1 * var(--uni-der));
+    padding-inline: var(--uni-izq) var(--uni-der);
+    scroll-padding-inline: var(--uni-izq);
+    overscroll-behavior-x: contain;
+  }
+  .orbita__paneles::-webkit-scrollbar { display: none; }
+  .orbita__panel {
+    grid-area: auto;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+  }
+  .orbita__flechas { display: flex; }
+}

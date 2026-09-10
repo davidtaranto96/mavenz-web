@@ -69,113 +69,65 @@
     "_dt": "Los destinos de la cinta se actualizan cuando existan cardinal.html, espacio.html y la seccion #mirada en Inicio (fases 4 y 5)."
   },
   "quienes": {
-    "margen": "Salta, Argentina",
     "titulo": "Somos Mavenz",
-    "copy": "Nacimos en Salta con una forma distinta de mirar el real estate. Leemos oportunidades, conectamos a las personas correctas y armamos la estrategia necesaria para que cada proyecto avance.",
-    "cierre": "No se trata solamente de vender. Se trata de entender qué mover, cómo hacerlo y con quién.",
-    "piezas_rotulo": "Dónde trabajamos",
-    "piezas": [
-      {
-        "epigrafe": "San Lorenzo, Salta",
-        "foto": {
-          "src": "img/sanlorenzo",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Vista aérea de San Lorenzo al atardecer",
-          "ancho": 1600,
-          "alto": 739
-        }
+    "copy": "Nacimos con una manera diferente de trabajar dentro del Real Estate: integral, estratégica y colaborativa.",
+    "copy2": "Acompañamos a desarrolladores, inversores y propietarios de tierras, conectando estrategia, negocios, comunicación y comercialización para transformar oportunidades en proyectos que avanzan.",
+    "circulos": {
+      "_dt": "PROVISORIAS (SOM-4, 08/09): Vero pidio dos fotos en circulo, una de fondo y otra superpuesta, y no dijo cuales. Van dos aereas reales para que se vea la composicion; se cambian por las que mande. Si `circulos` queda vacio ({}), la columna no se emite y el texto ocupa el ancho.",
+      "fondo": {
+        "src": "img/aerea-verde",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Vista aérea del valle de San Lorenzo",
+        "ancho": 1600,
+        "alto": 739
+      },
+      "frente": {
+        "src": "img/aerea-dia",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Vista aérea de un barrio en San Lorenzo",
+        "ancho": 1600,
+        "alto": 739
       }
-    ],
-    "_dt": "Los mockups de agenda y carpeta salieron por pedido de David del 08/09. PENDIENTE: no hay ninguna foto propia de Mavenz en el material; esta es la mejor disponible. Pedirsela a Vero."
+    },
+    "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3)."
   },
   "universo": {
     "titulo": "El Universo Mavenz",
-    "intro": "Mavenz funciona como un universo de capacidades conectadas. No son servicios sueltos: cada una empuja a la siguiente.",
-    "ayuda": "Cada esfera se activa al pasar.",
-    "_dt": "Las cuatro esferas son textuales del WhatsApp de Vero del 07/09/26. Marca y comunicacion NO es esfera: es el anillo que las rodea, decision de David del 08/09. El componente tolera de 4 a 6 esferas sin tocar CSS.",
+    "intro": "Integramos estrategia, comercialización y oportunidades para acompañar todo el recorrido de un proyecto: desde la identificación de su potencial hasta su transformación en un negocio que genera valor.",
+    "centro": "Mavenz",
+    "ayuda": "Explorá cada capacidad",
+    "_dt": "Tres esferas y el anillo, textuales del documento del 08/09 (UNI-3). Gestion & Evolucion desaparece: el documento fija tres. Marca y comunicacion NO es esfera: es el anillo que las rodea.",
     "esferas": [
       {
         "id": "estrategia",
         "numero": "01",
-        "nombre": "Estrategia y Consultoría",
-        "copy": "Definimos el rumbo y diseñamos el mejor camino para potenciar cada oportunidad."
-      },
-      {
-        "id": "desarrollo",
-        "numero": "02",
-        "nombre": "Desarrollo de Negocios",
-        "copy": "Generamos alianzas, conectamos actores e impulsamos nuevas oportunidades."
+        "nombre": "Estrategia",
+        "copy": "Identificamos oportunidades, analizamos su potencial y diseñamos el camino estratégico para convertirlas en proyectos sólidos y diferenciales."
       },
       {
         "id": "comercializacion",
-        "numero": "03",
+        "numero": "02",
         "nombre": "Comercialización",
-        "copy": "Llevamos cada oportunidad al mercado mediante una estrategia comercial y de posicionamiento."
+        "copy": "Diseñamos e implementamos estrategias comerciales y de posicionamiento para acompañar el lanzamiento, la comunicación y la comercialización de cada proyecto."
       },
       {
-        "id": "gestion",
-        "numero": "04",
-        "nombre": "Gestión & Evolución",
-        "copy": "Acompañamos el crecimiento, la administración y la evolución de cada oportunidad para seguir generando valor."
+        "id": "oportunidades",
+        "numero": "03",
+        "nombre": "Oportunidades",
+        "copy": "Detectamos nuevas posibilidades de inversión, impulsamos alianzas y conectamos proyectos, personas y capital para desarrollar nuevos negocios."
       }
     ],
-    "mapa": {
-      "titulo": "El mapa Mavenz",
-      "intro": "Seis territorios, y quién está comprando en cada uno.",
-      "rotulo_quien": "Quién compra ahí",
-      "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
-      "territorios": [
-        {
-          "id": "micro",
-          "nombre": "Micro y Macrocentro",
-          "bajada": "Donde el patrimonio comienza a transformarse",
-          "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
-          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
-        },
-        {
-          "id": "norte",
-          "nombre": "Zona Norte",
-          "bajada": "La ciudad crece hacia la naturaleza",
-          "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
-          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
-        },
-        {
-          "id": "sanlorenzo",
-          "nombre": "San Lorenzo",
-          "bajada": "Dos territorios, dos formas distintas de vivir",
-          "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
-          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
-        },
-        {
-          "id": "aeropuerto",
-          "nombre": "Zona Aeropuerto y San Luis",
-          "bajada": "Conectividad que impulsa crecimiento",
-          "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
-          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
-        },
-        {
-          "id": "cafayate",
-          "nombre": "Cafayate y Cachi",
-          "bajada": "Invertir también es elegir una forma de vivir",
-          "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
-          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
-        },
-        {
-          "id": "vaqueros",
-          "nombre": "Vaqueros",
-          "bajada": "Una respuesta eco-cultural",
-          "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
-          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
-        }
-      ]
-    },
     "anillo": {
       "nombre": "Marca y comunicación",
-      "copy": "Atraviesa las cuatro. No es una etapa: es la manera en que todo lo que hacemos se ve, se dice y se sostiene."
-    }
+      "copy": "Acompañan todo el proceso para construir identidad, posicionamiento y coherencia en cada punto de contacto."
+    },
+    "cierre": "En Mavenz no trabajamos por áreas aisladas. Conectamos distintas capacidades según lo que cada oportunidad necesita para avanzar."
   },
   "metodo": {
     "titulo": "Método Mavenz",
@@ -504,7 +456,57 @@
         "n": "03",
         "rotulo": "Marca y comunicación"
       }
-    ]
+    ],
+    "mapa": {
+      "titulo": "El mapa Mavenz",
+      "intro": "Seis territorios, y quién está comprando en cada uno.",
+      "rotulo_quien": "Quién compra ahí",
+      "_dt": "Texto textual del documento Mapa Mavenz.docx de Vero. Está construido y pago dentro de los USD 300; ella lo sacó del orden de la página en el tablero, pero sin saber si entendió qué era.",
+      "territorios": [
+        {
+          "id": "micro",
+          "nombre": "Micro y Macrocentro",
+          "bajada": "Donde el patrimonio comienza a transformarse",
+          "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
+          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
+        },
+        {
+          "id": "norte",
+          "nombre": "Zona Norte",
+          "bajada": "La ciudad crece hacia la naturaleza",
+          "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
+          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
+        },
+        {
+          "id": "sanlorenzo",
+          "nombre": "San Lorenzo",
+          "bajada": "Dos territorios, dos formas distintas de vivir",
+          "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
+          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
+        },
+        {
+          "id": "aeropuerto",
+          "nombre": "Zona Aeropuerto y San Luis",
+          "bajada": "Conectividad que impulsa crecimiento",
+          "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
+          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
+        },
+        {
+          "id": "cafayate",
+          "nombre": "Cafayate y Cachi",
+          "bajada": "Invertir también es elegir una forma de vivir",
+          "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
+          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
+        },
+        {
+          "id": "vaqueros",
+          "nombre": "Vaqueros",
+          "bajada": "Una respuesta eco-cultural",
+          "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
+          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
+        }
+      ]
+    }
   },
   "contacto": {
     "apertura": "Si tenés un proyecto, una oportunidad de inversión o una propuesta para desarrollar, queremos conocerla.",
@@ -627,12 +629,6 @@
         "hueco": "Retrato"
       }
     ]
-  },
-  "banda": {
-    "src": "video/banda.mp4",
-    "poster": "video/banda-poster.webp",
-    "alt": "Banda aérea del valle",
-    "_dt": "banda-aerea-1.mp4 recomprimido de 1,4 MB a 119 KB. Corta el ritmo entre el método y Espacio Mavenz sin agregar una sección."
   },
   "paginas": {
     "inicio": {

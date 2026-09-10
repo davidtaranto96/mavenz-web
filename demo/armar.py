@@ -225,74 +225,109 @@ def hero(d):
 
 
 def quienes(d):
+    """Somos Mavenz, como quedo el 08/09 (SOM-1..5): titulo, dos parrafos en
+    una columna angosta, y a la derecha dos fotos en circulo, una de fondo y
+    otra un poco superpuesta (SOM-4). Sin `circulos` la columna no se emite y
+    el texto ocupa el ancho: lo que falta se oculta por dato, no con
+    placeholder. Se fueron el rotulo lateral, la cita y la foto de 'Donde
+    trabajamos'. Solo vive en Inicio."""
     q = d["quienes"]
-    piezas = "".join(
-        f'<figure class="pieza pieza--grande">'
-        f'{img(x["foto"], "(min-width:64rem) 88vw, 100vw")}'
-        f'<figcaption class="ficha__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
-        for x in q["piezas"])
-    return f'''<section class="seccion" id="quienes"{fx("quienes")}>
-  <p class="margen seccion__margen">{e(q["margen"])}</p>
-  <div class="seccion__cabeza">
+    c = q.get("circulos") or {}
+    circulos = ""
+    if c.get("fondo") and c.get("frente"):
+        circulos = (f'<div class="circulos" aria-hidden="false">'
+                    f'<figure class="circulo circulo--fondo">{img(c["fondo"], "(min-width:64rem) 28vw, 60vw", clase="circulo__foto")}</figure>'
+                    f'<figure class="circulo circulo--frente">{img(c["frente"], "(min-width:64rem) 24vw, 52vw", clase="circulo__foto")}</figure>'
+                    f'</div>')
+    return f'''<section class="seccion quienes{" quienes--con-circulos" if circulos else ""}" id="quienes"{fx("quienes")}>
+  <div class="quienes__texto">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["copy"])}</p>
+    <p class="bajada">{e(q["copy2"])}</p>
   </div>
-  <div class="quienes__cierre"><p class="cita" data-formar>{e(q["cierre"])}</p></div>
-  <div class="piezas">
-    <p class="margen piezas__rotulo">{e(q["piezas_rotulo"])}</p>
-    <div class="piezas__par{" piezas__par--sola" if len(q["piezas"]) == 1 else ""}">{piezas}</div>
-  </div>
+  {circulos}
 </section>'''
 
 
+def puente():
+    """El pliegue entre Somos y el Universo (SOM-6): el papel se difumina en
+    el bistre del Universo. Un gradiente quieto y, encima, una capa de bistre
+    que crece desde abajo con el scroll (`scale: 1 var(--mezcla)`, solo
+    transform, la escribe puente() de guion.js). Sin guion o con menos
+    movimiento queda el gradiente, que ya es la transicion. Decorativo: no
+    tiene texto y el auditor lo saltea."""
+    return ('<div class="puente" data-puente data-decorativo aria-hidden="true">'
+            '<div class="puente__tinta"></div></div>')
+
+
 def orbita(d):
+    """El Universo Mavenz del 08/09 (UNI-1..5): fondo bistre, MAVENZ fijo en
+    el centro, tres esferas alrededor (12h, 4h, 8h) unidas por lineas que no
+    se cortan, y el anillo de Marca y comunicacion rodeandolas. La elegida
+    pasa al primer plano (scale) y su descripcion se lee al costado, en un
+    bloque aria-live. En celular el diagrama queda chico y las descripciones
+    son un carril con una tarjeta por vez, con flechas de 44px (el doc pide
+    toque, swipe o botones). El anillo se dibuja al entrar (anillo() en
+    guion.js). El componente tolera de 3 a 6 esferas sin tocar CSS."""
+    import math
     u = d["universo"]
     n = len(u["esferas"])
-    nodos, paneles = [], []
+    nodos, paneles, puntos = [], [], []
     for i, sf in enumerate(u["esferas"]):
-        # Repartidas sobre la circunferencia, arrancando arriba. El radio es 38 %
-        # para que el rotulo no se coma el borde de la caja.
-        import math
+        # Repartidas sobre la circunferencia arrancando arriba, a un 36 % del
+        # centro: con tres, quedan a las 12, a las 4 y a las 8.
         ang = -math.pi / 2 + i * 2 * math.pi / n
-        x, y = 50 + 38 * math.cos(ang), 50 + 38 * math.sin(ang)
+        x, y = 50 + 36 * math.cos(ang), 50 + 36 * math.sin(ang)
+        puntos.append(f"{x:.2f},{y:.2f}")
         nodos.append(
             f'<button class="orbita__nodo" type="button" data-esfera="{sf["id"]}" '
             f'style="--x:{x:.2f}%;--y:{y:.2f}%" '
             f'aria-pressed="{"true" if i == 0 else "false"}">'
-            f'<span class="orbita__punto" aria-hidden="true"></span>'
             f'<span class="orbita__n" aria-hidden="true">{e(sf["numero"])}</span>'
             f'<span class="orbita__nombre">{e(sf["nombre"])}</span></button>')
         paneles.append(
             f'<div class="orbita__panel" data-panel="{sf["id"]}" '
             f'aria-hidden="{"false" if i == 0 else "true"}">'
-            f'<span class="orbita__panel-n" aria-hidden="true">({e(sf["numero"])})</span>'
+            f'<span class="orbita__panel-n" aria-hidden="true">{e(sf["numero"])}</span>'
             f'<h3>{e(sf["nombre"])}</h3><p>{e(sf["copy"])}</p></div>')
     a = u["anillo"]
-    return f'''<section class="seccion universo" id="universo"{fx("universo")}>
-  <div class="seccion__cabeza">
-    <h2 class="titulo titulo--bordo" data-letras>{e(u["titulo"])}</h2>
+    ui = d["interfaz"]
+    return f'''<section class="seccion universo oscuro" id="universo" data-tema="oscuro"{fx("universo")}>
+  <div class="seccion__cabeza universo__cabeza">
+    <h2 class="titulo" data-letras>{e(u["titulo"])}</h2>
     <p class="bajada">{e(u["intro"])}</p>
   </div>
-  <div class="orbita" data-orbita style="--esferas:{n}">
-    <svg class="orbita__dibujo" viewBox="0 0 100 100" aria-hidden="true">
-      <circle class="orbita__anillo" data-anillo cx="50" cy="50" r="46" fill="none"
-              stroke="var(--tinta-bordo)" stroke-width="1.4" vector-effect="non-scaling-stroke"/>
-      <circle cx="50" cy="50" r="38" fill="none" stroke="var(--linea)"
-              stroke-width="1" vector-effect="non-scaling-stroke"/>
-    </svg>
-    <p class="orbita__rotulo-anillo" aria-hidden="true">{e(a["nombre"])}</p>
-    <div class="orbita__cara">{"".join(paneles)}</div>
-    {"".join(nodos)}
+  <div class="universo__cuerpo">
+    <div class="orbita" data-orbita style="--esferas:{n}">
+      <svg class="orbita__dibujo" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="orbita__anillo" data-anillo cx="50" cy="50" r="46" fill="none"
+                stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+        <polygon class="orbita__lineas" points="{" ".join(puntos)}" fill="none"
+                 stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <p class="orbita__rotulo-anillo" aria-hidden="true">{e(a["nombre"])}</p>
+      <p class="orbita__centro" aria-hidden="true">{e(u["centro"])}</p>
+      {"".join(nodos)}
+    </div>
+    <div class="orbita__detalle">
+      <div class="orbita__paneles" data-carril-esferas aria-live="polite">{"".join(paneles)}</div>
+      <div class="orbita__flechas">
+        <button class="orbita__flecha" type="button" data-carril-ant aria-label="{e(ui["anterior"])}"><span aria-hidden="true">&larr;</span></button>
+        <button class="orbita__flecha" type="button" data-carril-sig aria-label="{e(ui["siguiente"])}"><span aria-hidden="true">&rarr;</span></button>
+      </div>
+      <p class="orbita__ayuda">{e(u["ayuda"])}</p>
+    </div>
   </div>
   <p class="orbita__anillo-copy"><strong>{e(a["nombre"])}.</strong> {e(a["copy"])}</p>
-  <p class="orbita__ayuda">{e(u["ayuda"])}</p>
+  <p class="universo__cierre">{e(u["cierre"])}</p>
 </section>'''
 
 
 def mapa(d):
     """Los seis territorios del Mapa Mavenz. Es contenido de la clienta y está
-    construido desde agosto: vuelve adentro del Universo, no como sección aparte."""
-    mp = d["universo"]["mapa"]
+    construido desde agosto. Desde el 08/09 vive en Mirada Mavenz (el Universo
+    quedo para las tres esferas), asi que lee de `mirada.mapa`."""
+    mp = d["mirada"]["mapa"]
     fichas = "".join(
         f'<details class="territorio" name="territorio" style="--n:{i}">'
         f'<summary class="territorio__cabeza">'
@@ -541,15 +576,6 @@ def equipo(d):
 </section>'''
 
 
-def banda(d):
-    """Corte panorámico a sangre entre dos bloques. El póster va primero y el
-    video entra diferido: sin esto se baja 119 KB que nadie pidió todavía."""
-    b = d["banda"]
-    return (f'<div class="banda" aria-hidden="true">'
-            f'<video class="banda__video" data-diferido data-src="{medio(b["src"])}" '
-            f'poster="{medio(b["poster"])}" muted loop playsinline preload="none"></video></div>')
-
-
 def contacto(d):
     """Movamos algo juntos, con las cuatro opciones del documento del 08/09.
     Un solo formulario: al elegir una opcion cambian la linea de arriba y el
@@ -788,15 +814,20 @@ def cascara(d, lang, slug, cuerpo, tema="claro"):
 
 
 def pagina_inicio(d, lang):
-    """El relato. El trazo se dibuja, se cierra en orbita, se aprieta en ciclo
-    y se abre en los cuatro mundos."""
+    """El relato del 08/09: hero con video, Somos, el pliegue al bistre del
+    Universo, Como trabajamos, Proyectos en movimiento, Mirada y Contacto.
+    La cortina (hero sticky con el dossier subiendo encima) se fue: con un
+    video de fondo seguia corriendo tapado toda la pagina y MET-5 pide que
+    nunca se vea el fondo del inicio al bajar."""
     cuerpo = f'''{cms("hero", hero(d))}
-<div class="dossier cortina-tapa" data-tema="claro"><div class="dossier__interior">
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("quienes", quienes(d))}
+</div></div>
+{puente()}
 {cms("universo", orbita(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("metodo", ciclo(d))}
 </div></div>
-{cms("banda", banda(d))}
 {cms("mundos", mundos(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("contacto", contacto(d))}
@@ -809,7 +840,6 @@ def pagina_nosotros(d, lang):
     pg = d["paginas"]["nosotros"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("quienes", quienes(d))}
 {cms("equipo", equipo(d))}
 {cms("mirada", mirada(d))}
 </div></div>
