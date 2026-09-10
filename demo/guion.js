@@ -968,63 +968,51 @@
     lista.forEach(function (m) { ojo.observe(m); });
   }
 
-  /* --- la galeria: arrastre con inercia y flechas -------------------------- */
-  /* El carril ya scrollea solo (rueda, dedo, teclado). Esto suma el arrastre
-     con el puntero: pointerdown fija el origen, pointermove mueve el
-     scrollLeft, y al soltar la velocidad sigue con un factor .92 por
-     fotograma hasta frenar. Umbral de 6 px: un clic sin arrastre sigue
-     abriendo el visor; un arrastre lo cancela (click en captura). */
-  function arrastrar() {
-    var carril = $('[data-arrastre]');
-    if (!carril) return;
-    var raiz = carril.closest('section') || document;
-    var ant = $('[data-carrusel-ant]', raiz);
-    var sig = $('[data-carrusel-sig]', raiz);
-    var paso = function () {
-      var l = carril.querySelector('.lamina');
-      return l ? l.getBoundingClientRect().width + 16 : carril.clientWidth * .6;
+  /* --- la galeria en cascada ---------------------------------------------- */
+  /* Cada foto entra al llegar (IO, con el retardo por --i que pone el CSS) y,
+     mientras la grilla cruza la pantalla, cada columna se desliza a una
+     velocidad distinta (--desliz por lamina, solo transform). Sin guion o
+     con menos movimiento no se marca data-cascada-viva y todo esta a la
+     vista, quieto. */
+  function cascada() {
+    var caja = $('[data-cascada]');
+    if (!caja || menos) return;
+    var laminas = $$('.lamina', caja);
+    if (!laminas.length) return;
+    caja.setAttribute('data-cascada-viva', '');
+    if ('IntersectionObserver' in window) {
+      var ojo = new IntersectionObserver(function (ent) {
+        ent.forEach(function (x) {
+          if (!x.isIntersecting) return;
+          x.target.setAttribute('data-visto', '');
+          ojo.unobserve(x.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: .15 });
+      laminas.forEach(function (l) { ojo.observe(l); });
+    } else {
+      laminas.forEach(function (l) { l.setAttribute('data-visto', ''); });
+    }
+    if (!window.matchMedia('(min-width: 64rem)').matches) return;
+    var pedido = false;
+    var medir = function () {
+      pedido = false;
+      var r = caja.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < 0 || r.top > vh) return;
+      /* -1 cuando la grilla asoma por abajo, 1 cuando se va por arriba. */
+      var p = (vh - r.top) / (vh + r.height) * 2 - 1;
+      laminas.forEach(function (l) {
+        var col = parseFloat(l.style.getPropertyValue('--col')) || 0;
+        l.style.setProperty('--desliz', (-p * col * 28).toFixed(1) + 'px');
+      });
     };
-    if (ant) ant.addEventListener('click', function () { carril.scrollBy({ left: -paso(), behavior: menos ? 'auto' : 'smooth' }); });
-    if (sig) sig.addEventListener('click', function () { carril.scrollBy({ left: paso(), behavior: menos ? 'auto' : 'smooth' }); });
-
-    if (!window.matchMedia('(pointer: fine)').matches) return;
-    var activo = false, movio = false, x0 = 0, s0 = 0, vx = 0, xAnt = 0, tAnt = 0, inercia = null;
-
-    carril.addEventListener('pointerdown', function (ev) {
-      if (ev.pointerType !== 'mouse' || ev.button !== 0) return;
-      cancelAnimationFrame(inercia);
-      activo = true; movio = false;
-      x0 = xAnt = ev.clientX; s0 = carril.scrollLeft; vx = 0; tAnt = ev.timeStamp;
-      carril.setPointerCapture(ev.pointerId);
-    });
-    carril.addEventListener('pointermove', function (ev) {
-      if (!activo) return;
-      var dx = ev.clientX - x0;
-      if (!movio && Math.abs(dx) < 6) return;
-      if (!movio) { movio = true; carril.setAttribute('data-arrastrando', ''); }
-      carril.scrollLeft = s0 - dx;
-      var dt = ev.timeStamp - tAnt || 16;
-      vx = (xAnt - ev.clientX) / dt * 16;          /* px por fotograma */
-      xAnt = ev.clientX; tAnt = ev.timeStamp;
-    });
-    var soltar = function () {
-      if (!activo) return;
-      activo = false;
-      if (!movio) return;
-      var v = vx;
-      (function seguir() {
-        if (Math.abs(v) < .5) { carril.removeAttribute('data-arrastrando'); return; }
-        carril.scrollLeft += v;
-        v *= .92;
-        inercia = requestAnimationFrame(seguir);
-      })();
-    };
-    carril.addEventListener('pointerup', soltar);
-    carril.addEventListener('pointercancel', soltar);
-    /* Un arrastre no es un clic: se lo come antes de que llegue al visor. */
-    carril.addEventListener('click', function (ev) {
-      if (movio) { ev.preventDefault(); ev.stopPropagation(); movio = false; }
-    }, true);
+    window.addEventListener('scroll', function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    window.addEventListener('resize', medir);
+    medir();
   }
 
   function arrancar() {
@@ -1040,7 +1028,7 @@
     tilt();
     fichaHero();
     marcadores();
-    arrastrar();
+    cascada();
     cintasContinuas();
     formulario();
   }

@@ -36,7 +36,7 @@
     },
     "cta2": {
       "rotulo": "Hablemos",
-      "href": "#contacto"
+      "href": "contacto.html"
     },
     "video": {
       "src": "video/hero.mp4",
@@ -396,13 +396,10 @@
         "titulo": "Financiación durante la obra",
         "copy": "",
         "cta": "Consultá disponibilidad",
-        "_dt": "FICHA-7: falta el copy de financiacion (plazos, anticipo, cuotas). Mientras, titulo y CTA."
+        "_dt": "FICHA-7: falta el copy de financiacion (plazos, anticipo, cuotas). Mientras, titulo y CTA.",
+        "cta2": "Contactanos"
       },
-      "cierre": {
-        "titulo": "",
-        "cta": "Contactanos",
-        "_dt": "FICHA-8: falta la frase de cierre. Mientras, el boton solo."
-      }
+      "marquee": "Cardinal"
     },
     "otros_rotulo": "Otros proyectos",
     "otros_intro": "Proyectos confirmados y con información suficiente.",
@@ -442,7 +439,8 @@
     "oportunidades": {
       "rotulo": "Oportunidades de inversión",
       "bajada": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
-      "cta": "Busco una oportunidad"
+      "cta": "Busco una oportunidad",
+      "href": "contacto.html?motivo=oportunidad"
     }
   },
   "red": {
@@ -623,7 +621,7 @@
     "alternativa": "O escribinos directo por"
   },
   "idiomas": {
-    "_dt": "Cada idioma es una carpeta: el castellano en demo/, el ingles en demo/en/. `genera: false` deja el idioma en el selector como texto deshabilitado hasta que exista el copy. El ingles lo tradujo DT System del castellano de Vero: Mavenz tiene que revisarlo.",
+    "_dt": "ES y EN. El portugues salio del selector por pedido de David del 10/09; si vuelve, se agrega {carpeta:'pt/', lang:'pt-BR', og:'pt_BR', genera:true} y su sitio.pt.json.",
     "es": {
       "rotulo": "ES",
       "carpeta": "",
@@ -637,13 +635,6 @@
       "lang": "en",
       "og": "en_US",
       "genera": true
-    },
-    "pt": {
-      "rotulo": "PT",
-      "carpeta": "pt/",
-      "lang": "pt-BR",
-      "og": "pt_BR",
-      "genera": false
     }
   },
   "interfaz": {
@@ -664,7 +655,7 @@
   "equipo": {
     "titulo": "Las personas detrás de Mavenz",
     "intro": "Somos un equipo con experiencia en estrategia, negocios, comunicación y comercialización. Trabajamos de forma colaborativa y sumamos especialistas de acuerdo con las necesidades de cada proyecto.",
-    "_dt": "NOS-1..4: cada integrante lleva foto, nombre y apellido, rol real y una linea profesional; un perfil incompleto NO se publica (se genera solo si tiene los cuatro). Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. La pagina queda con noindex y fuera del menu hasta que el equipo este completo (paginas.nosotros.publicar).",
+    "_dt": "NOS-1..4: cada integrante lleva nombre, rol y, cuando lleguen, apellido, foto y linea. Se publica con nombre y rol (David, 10/09); la foto entra cuando Vero la mande. Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'.",
     "personas": [
       {
         "nombre": "Luchi",
@@ -704,12 +695,14 @@
       "rotulo": "Nosotros",
       "titulo": "Las personas detrás de Mavenz",
       "cinta": "Nosotros",
-      "publicar": false,
-      "_dt": "Se publica cuando el equipo este completo (foto, nombre, rol y linea de cada persona). Mientras, se genera con noindex y no entra al menu."
+      "publicar": true
     },
     "contacto": {
-      "ancla": "contacto",
-      "rotulo": "Contactanos"
+      "archivo": "contacto.html",
+      "rotulo": "Contactanos",
+      "titulo": "Contacto",
+      "cinta": "Contacto",
+      "_dt": "Pagina propia desde el 10/09 (David): el contacto ya no va al pie de cada pagina. ?motivo=proyecto|oportunidad|alianza|espacio abre la solapa elegida."
     },
     "cardinal": {
       "archivo": "cardinal.html",
@@ -748,7 +741,7 @@
         "tinta": "bistre",
         "bajada": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo.",
         "cierre": "Contanos tu proyecto",
-        "href": "#contacto",
+        "href": "contacto.html?motivo=proyecto",
         "motivo": "proyecto",
         "foto": {
           "src": "img/aerea-amplia",
@@ -767,7 +760,7 @@
         "tinta": "wenge",
         "bajada": "Contanos qué tipo de oportunidad estás buscando.",
         "cierre": "Busco una oportunidad",
-        "href": "#contacto",
+        "href": "contacto.html?motivo=oportunidad",
         "motivo": "oportunidad",
         "foto": {
           "src": "img/atardecer",
@@ -794,5 +787,12 @@
     "rechazar": "Rechazar",
     "enlace_pie": "Cookies",
     "_dt": "El texto lo propuso DT System: Mavenz lo aprueba o lo cambia."
+  },
+  "pie": {
+    "rotulo_paginas": "Secciones",
+    "rotulo_contacto": "Contacto",
+    "rotulo_redes": "Redes",
+    "derechos": "Mavenz. Salta, Argentina.",
+    "credito": ""
   }
 }

@@ -19,16 +19,17 @@ no está aprobado no se muestra: se apaga por dato en el generador, nunca con un
 
 | Archivo | Cabecera | Qué tiene, en orden, con su `id` |
 |---|---|---|
-| `index.html` | oscura, sobre el video | hero con video y la cinta de los cinco mundos (`#inicio`) · Somos Mavenz (`#quienes`) · el puente, decorativo · El Universo Mavenz, en bistre (`#universo`) · Cómo trabajamos (`#metodo`) · Proyectos en movimiento (`#mundos`) · Mirada Mavenz con el mapa de seis territorios adentro (`#mirada`) · Movamos algo juntos (`#contacto`) |
-| `proyectos.html` | clara | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) · contacto (`#contacto`) |
-| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con la cinta de isotipos detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería escalonada (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó (`#financiacion`) · cierre (`#cierre`) · contacto (`#contacto`) · el visor `<dialog>` |
-| `espacio.html` | clara | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) · contacto (`#contacto`) |
-| `nosotros.html` | clara | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) · contacto (`#contacto`) |
-| `en/` | | las mismas cinco en inglés: `<html lang="en">`, canónica propia y `hreflang` es-AR / en / x-default en las diez páginas |
+| `index.html` | oscura, sobre el video | hero con video y la cinta de los cinco mundos (`#inicio`) · Somos Mavenz (`#quienes`) · el puente, decorativo · El Universo Mavenz, en bistre (`#universo`) · Cómo trabajamos (`#metodo`) · Proyectos en movimiento (`#mundos`) · Mirada Mavenz con el mapa de seis territorios adentro (`#mirada`) |
+| `proyectos.html` | clara | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) |
+| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con el nombre del proyecto corriendo detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería en cascada (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó, con el botón a WhatsApp y el enlace al contacto (`#financiacion`) · el visor `<dialog>` |
+| `espacio.html` | clara | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) |
+| `nosotros.html` | clara | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) |
+| `contacto.html` | clara | cinta "Contacto" · Movamos algo juntos (`#contacto`): la palabra corriendo en vertical, las cuatro opciones y el formulario. `?motivo=proyecto|oportunidad|alianza|espacio` abre esa solapa |
+| `en/` | | las mismas seis en inglés: `<html lang="en">`, canónica propia y `hreflang` es-AR / en / x-default en las doce páginas |
 
 El menú sale de `paginas` del JSON y hoy tiene cinco entradas: Inicio · Universo Mavenz
 (`#universo`, o `index.html#universo` desde otra página) · Proyectos · Espacio Mavenz ·
-Contactanos (`#contacto`, que existe en todas). Lo leen la barra, el pie y el flotante desde la
+Contactanos (`contacto.html`, su propia ventana desde el 10/09). Lo leen la barra, el pie y el flotante desde la
 misma función, `enlaces_menu()`.
 
 **Nosotros tiene `publicar: false`**: se genera igual, con `<meta name="robots"
@@ -43,7 +44,7 @@ Proyectos en movimiento y desde el resumen de `proyectos.html`.
 Un dato vive en un solo lugar: `contenido/sitio.json`.
 
 ```bash
-python3 armar.py                        # arma las diez páginas: ES en demo/, EN en demo/en/
+python3 armar.py                        # arma las doce páginas: ES en demo/, EN en demo/en/
 python3 armar.py --plantilla en         # vuelca la estructura de textos del castellano, para rellenar
 python3 armar.py --palabra movimiento   # lista cada texto que contiene la palabra, con su clave
 ```
@@ -58,11 +59,11 @@ se ve.
 |---|---|
 | `contenido/sitio.json` | todo: textos, fotos, videos, datos de contacto, el mapa de páginas, los idiomas, la medición |
 | `contenido/sitio.en.json` | la capa en inglés: sólo textos |
-| `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las diez páginas |
+| `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las doce páginas |
 | `estilos.css` | tokens en `:root` y todo lo demás. Siete hex, todos en `:root`; los tres que aparecen más abajo están en comentarios |
 | `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita, puente, trazo del método, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
 | `consent.js` | el aviso de cookies, con su cola de eventos |
-| `auditar.sh` | el auditor de siete carriles sobre las diez URLs |
+| `auditar.sh` | el auditor de siete carriles sobre las doce URLs |
 | `../img/` | fotos en WebP, dos anchos cada una |
 | `../video/` | `hero.mp4`, `cardinal.mp4` y `cardenal.mp4`, con póster cada uno |
 | `../fuente/urbanist.woff2` | Urbanist variable, 100 a 900, 24 KB |
@@ -113,13 +114,12 @@ Cada bloque que depende de material de la clienta tiene una clave. Vacía, el ge
 | `proyectos.cardinal.sub_items[]`, con `foto` **y** `copy` | cada sub-item de la ficha; sin ninguno completo la sección `#detalles` no existe (hoy) |
 | `proyectos.cardinal.unidades.foto` | la columna de foto de Unidades |
 | `proyectos.cardinal.financiacion.copy` | el párrafo de la franja de Financiación (hoy sólo título y CTA) |
-| `proyectos.cardinal.cierre.titulo` | la frase del cierre de la ficha (hoy sólo el botón) |
 | `espacio.foto` | la columna de foto de Espacio Mavenz (hoy `null`) |
 | `equipo.personas[]` con `foto`, `nombre`, `apellido`, `rol` y `linea` | cada persona de Nosotros; un perfil incompleto no se publica, y sin ninguno la sección queda con título y texto |
 | `paginas.nosotros.publicar` | Nosotros en el menú y sin `noindex` |
 | `medicion.ga4` o `medicion.pixel` | el aviso de cookies y el botón "Cookies" del pie; sin IDs no aparece nada |
 | `contacto.formulario.clave` | el envío por Web3Forms; vacía, el formulario abre WhatsApp con el mensaje armado |
-| `contacto_datos.whatsapp` | los enlaces a `wa.me`; vacío, van a `#contacto` |
+| `contacto_datos.whatsapp` | los enlaces a `wa.me`; vacío, van a `contacto.html` |
 | `contacto_datos.correo` | el correo en el pie, en el contacto y en el flotante |
 | `redes[].href` | cada red como enlace; vacío, queda el nombre en texto |
 | `contacto.motivos[].copy` | la línea sobre el formulario de esa opción (`:empty` la esconde) |
@@ -172,6 +172,30 @@ Cada bloque que depende de material de la clienta tiene una clave. Vacía, el ge
   inventar un `max-height`.
 
 ---
+
+### La ronda del 10/09, con David, sobre la demo publicada
+
+- **Solo ES y EN.** El portugués salió de `idiomas` y del selector.
+- **El contacto es una ventana propia**, `contacto.html`: no va al pie de ninguna página. Todos
+  los "Contactanos" (barra, flotante, hero, pie, Financiación) van ahí, y los accesos con opción
+  (los paneles Otros proyectos y Oportunidades, la sección Oportunidades de proyectos.html) la
+  abren con `?motivo=` y `formulario()` elige esa solapa.
+- **Nosotros se publica** con nombre y rol de cada integrante; foto, apellido y línea entran
+  cuando lleguen (sin foto, el isotipo sobre una capa de papel).
+- **El pie rehecho**: la marca con su mensaje, Secciones, Contacto y Redes en cuatro columnas,
+  y abajo los derechos, el idioma y el enlace de cookies.
+- **El trazo nace de la cola del isotipo**: el isotipo se coloca con `cqw` para que su cola
+  (punto 731,310 de su viewBox) caiga en el arranque del path, y el primer control de `ONDA`
+  sale hacia arriba a la derecha, no vertical.
+- **La cinta de la ficha dice CARDINAL** (`proyectos.cardinal.marquee`, decorativa); el nombre
+  salió del copy y queda en un `h1` sólo para lectores de pantalla.
+- **La galería es una cascada**, no un carril: grilla de tres columnas con escalera, cada foto
+  entra al llegar y las columnas se deslizan a distinta velocidad (`cascada()`). Nada que
+  arrastrar; `arrastrar()` se fue.
+- **El cardenal se funde con el papel**: sin fondo propio, `mix-blend-mode: darken` y una
+  máscara radial en el video.
+- **La ficha termina en Financiación**, con el botón a WhatsApp y el enlace al contacto. El
+  cierre aparte se fue.
 
 ## Cómo funciona cada pieza
 
@@ -276,7 +300,12 @@ a la caja, oculta en celular.
 - `marcador()` y `marcadores()`: la línea vertical de 1 por 72 px que escala de 0 a 1 en .6 s
   cuando un IntersectionObserver la ve (margen inferior del 10 %). Va antes del título, de
   Financiación y del cierre.
-- `carrusel()` y `arrastrar()`: un carril con `scroll-snap-type: x proximity`, cada lámina un
+- `galeria()` y `cascada()`: grilla de tres columnas (dos entre 40 y 64rem, una en celular),
+  escalera por columna (`margin-top: calc(var(--col) * -6svh)`), cada lámina entra al llegar
+  (IO, retardo de 90 ms por `--i`) y cada columna se desliza con el scroll (`--desliz`, sólo
+  transform). Sin guion o con menos movimiento, todo a la vista y quieto. La misma lista
+  `galeria` alimenta la grilla y el visor: `data-foto` es el índice.
+- Lo que había antes (`carrusel()` y `arrastrar()`, un carril con `scroll-snap-type: x proximity`, cada lámina un
   escalón más arriba que la anterior (`translate: 0 calc(var(--i) * -4.5svh)`) y anchos
   alternados (`ancha` a 3:2, `angosta` a 3:4), a sangre por los dos lados. `arrastrar()` suma el
   arrastre con el mouse, inercia con factor .92 por fotograma, un umbral de 6 px para que un clic
@@ -288,7 +317,7 @@ a la caja, oculta en celular.
 - `unidades()`: rótulo, título, texto y la foto si hay.
 - `financiacion()`: franja `.oscuro` en bordó de `50svh` mínimo, con marcador, título, el copy
   si hay y el CTA a WhatsApp.
-- `cierre_ficha()`: marcador, la frase si hay y el botón a `#contacto`.
+- `financiacion()` cierra la ficha: marcador, título, el copy si hay, el botón a WhatsApp y el enlace a `contacto.html`.
 - `cardenal()`: la pieza de Fractura, diferida y con `data-reinicia`: al salir de pantalla vuelve
   a cero, porque lo que importa es el trazo dibujándose y no un logo ya hecho.
 
@@ -334,7 +363,7 @@ auditor las lista aparte en vez de contarlas como infinitas. Lo marcado con `dat
 cintas se pasan del recorte adrede) no cuenta como recortado, y lo marcado con `data-decorativo`
 (el puente) no cuenta como pantalla sin tinta.
 
-Las diez URLs dan `ok` en los siete carriles. El auditor exceptúa el pie de la cuenta de
+Las doce URLs dan `ok` en los siete carriles. El auditor exceptúa el pie de la cuenta de
 paradas casi vacías (en el celular acostado la última pantalla es solo el pie, que a propósito
 no cuenta como tinta) y la cabecera flotante del contraste (su fondo real es el video).
 
@@ -419,7 +448,6 @@ Cada cosa tiene su clave y, mientras falta, el sitio se ve así.
 | Fotos y copy de jardines, cochera, SUM y espacios verdes; copy de la pileta | `proyectos.cardinal.sub_items` | los sub-items no se emiten |
 | Plano o foto de tipologías | `proyectos.cardinal.unidades.foto` | el render interior |
 | Copy de financiación (plazos, anticipo, cuotas) | `proyectos.cardinal.financiacion.copy` | título y CTA |
-| La frase de cierre de la ficha | `proyectos.cardinal.cierre.titulo` | el botón solo |
 | Confirmar los epígrafes reescritos sin "casas" y la grafía de GRIFIL | `proyectos.cardinal.galeria[].epigrafe`, `proyectos.cardinal.aclaracion` | neutros, como vinieron |
 | Foto aprobada de Espacio Mavenz | `espacio.foto` | sin foto |
 | El equipo completo: foto, nombre y apellido, rol y una línea por persona | `equipo.personas`, `paginas.nosotros.publicar` | la página se genera con `noindex` y fuera del menú |
@@ -430,7 +458,7 @@ Cada cosa tiene su clave y, mientras falta, el sitio se ve así.
 | Confirmar el WhatsApp y el correo (el número viene de la demo vieja, el correo del diseño) | `contacto_datos` | los datos actuales; quedan fuera de los datos estructurados hasta que confirme |
 | IDs de GA4 y de pixel | `medicion` | sin aviso de cookies |
 | Revisar el inglés, en especial el claim del hero (*Mavenz creates momentum* o *Moving things forward*) | `sitio.en.json` | la traducción de DT |
-| El copy en portugués | `sitio.pt.json` | PT deshabilitado en el selector |
+| El copy en portugués | `sitio.pt.json` | el portugués salió del selector el 10/09; vuelve con su capa y `genera: true` en `idiomas` |
 | Confirmar que Gestión & Evolución desaparece del Universo (el documento fija tres esferas) | `universo.esferas` | tres esferas y el anillo |
 | Decidir qué "movimiento" cambia: hoy aparece en 10 textos, `python3 armar.py --palabra movimiento` los lista | varias | no se reescribe nada sin ella |
 

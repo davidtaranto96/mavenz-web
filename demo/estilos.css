@@ -505,24 +505,7 @@ body[data-menu-abierto] { overflow: hidden; }
    Pie
    ========================================================================== */
 
-.pie {
-  display: flex;
-  flex-direction: column;
-  /* sin esto el flex estira el isotipo a todo el ancho y lo deforma */
-  align-items: flex-start;
-  gap: 1.25rem;
-  padding: clamp(1.75rem, 1.3rem + 1.7vw, 2.25rem) var(--margen-ext) clamp(2.125rem, 1.7rem + 1.6vw, 2.75rem);
-  border-top: 1px solid var(--linea);
-  background: var(--papel-pie);
-}
-.pie__iso { height: clamp(1.375rem, 1.2rem + .38vw, 1.625rem); width: auto; }
-.pie__redes { display: flex; align-items: center; gap: 1.25rem; font-size: var(--t-nota); font-weight: var(--ui); }
-.pie__redes a { color: var(--tinta-parrafo); min-height: 44px; display: inline-flex; align-items: center; }
-/* flex-wrap: en 390 la fila lleva lugar, paginas, idioma y el enlace de
-   cookies (cuando hay etiquetas); sin wrap el ultimo se salia de la pantalla
-   y el celular hacia zoom out (innerWidth 425 en vez de 390). */
-.pie__abajo { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1rem; }
-.pie__lugar { font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
+/* El pie se rehizo el 10/09: bloque "Ronda 10/09" al final de la hoja. */
 
 /* ==========================================================================
    Movimiento — el único que pidió la clienta: los títulos entran letra a letra
@@ -588,8 +571,7 @@ body[data-menu-abierto] { overflow: hidden; }
      número uno de una web hecha con IA. */
 
   footer.pie { flex-direction: row; align-items: center; justify-content: space-between; }
-  footer.pie .pie__redes { gap: 1.75rem; }
-  footer.pie .pie__abajo { gap: 1.5rem; }}
+}
 
 /* ==========================================================================
    Carril 2 bis — la notebook horizontal: ancha y BAJA
@@ -1448,10 +1430,11 @@ html { scroll-padding-top: 1rem }
   margin-inline: calc(var(--margen-ext) * -1);
   margin-top: clamp(2.5rem, 1.5rem + 3.6vw, 5rem);
   padding: clamp(2.25rem, 1.25rem + 3.6vw, 4.5rem) var(--margen-ext);
-  /* --papel-capa-1 es papel 93 % + linea = #ECEAE9, que es exactamente el gris
-     sobre el que viene filmado el video (#ECEAEA). Con --papel a secas quedaba
-     un escalon de dos puntos y se veia el rectangulo del video. */
-  background: var(--papel-capa-1);
+  /* Sin fondo propio (David, 10/09: que el video se funda con el papel). El
+     video viene sobre su propio gris (#ECEAEA, dos puntos mas oscuro que el
+     papel): con darken solo pinta lo que es mas oscuro que el fondo, y la
+     mascara radial apaga los bordes, asi no hay rectangulo. */
+  background: transparent;
   border-top: 0;
   padding-top: clamp(2.25rem, 1.25rem + 3.6vw, 4.5rem);
   gap: clamp(1.25rem, .75rem + 2vw, 3rem);
@@ -1462,7 +1445,10 @@ html { scroll-padding-top: 1rem }
   justify-self: stretch;
   border: 0;
   border-radius: 0;
-  background: var(--papel-capa-1);
+  background: transparent;
+  mix-blend-mode: darken;
+  mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
 }
 
 @media (min-width: 64rem) {.cardenal {
@@ -1531,15 +1517,12 @@ html { scroll-padding-top: 1rem }
   .equipo-seccion .personas { gap: 1.25rem }}
 
 /* --- FOOT-2: WhatsApp y correo a la vista en el pie ------------------------ */
-.pie__contacto { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: var(--t-nota); }
-.pie__contacto a { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta-parrafo); }
 .pie__cookies {
   display: inline-flex; align-items: center; min-height: 44px;
   font: inherit; font-size: var(--t-nota); color: var(--tinta-apoyo);
   background: none; border: 0; padding: 0; cursor: pointer;
   text-decoration: underline; text-underline-offset: .2em;
 }
-.pie__abajo .idioma { margin-inline-start: auto; }
 
 /* ==========================================================================
    Fase 2b (09/09) — la cinta continua y el contacto con formulario
@@ -2514,14 +2497,19 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 }
 /* El isotipo arranca el trazo: chico, sobre el comienzo del path (que
    empieza abajo a la izquierda, en 3 % / 74 %). */
+/* El isotipo con su cola en el arranque del trazo (David, 10/09: la linea
+   sigue dibujando el logo). La cola termina en el 81,2 % / 54,2 % de la caja
+   del isotipo (viewBox 900x572, punto 731,310); el path arranca en 3,33 % /
+   74 % de la caja del trazo, que es 3:1. Todo en cqw de la caja para que la
+   cuenta valga en cualquier ancho: iso de 9 cqw, alto 5,72 cqw. */
+.trazo__caja { container-type: inline-size; }
 .trazo__iso {
   position: absolute;
-  left: 0;
-  top: 74%;
-  translate: -10% -50%;
-  width: clamp(3.5rem, 7vw, 6rem);
+  left: calc(3.33cqw - .812 * 9cqw);
+  top: calc(24.67cqw - .542 * 5.72cqw);
+  width: 9cqw;
   height: auto;
-  opacity: .9;
+  opacity: .95;
 }
 .trazo__nodos { position: absolute; inset: 0; list-style: none; margin: 0; padding: 0; }
 .trazo__nodo {
@@ -2587,7 +2575,6 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
   .trazo__caja { aspect-ratio: auto; }
   /* El dibujo queda arriba, a 3:1, y la lista debajo. */
   .trazo__dibujo { position: relative; aspect-ratio: 3 / 1; height: auto; }
-  .trazo__iso { top: 24.7%; }   /* 74 % del alto del dibujo, que es un tercio del ancho */
   .trazo__nodos {
     position: relative;
     inset: auto;
@@ -2795,12 +2782,16 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 }
 .ficha-hero__cinta .cinta { padding: 0; border: 0; background: transparent; }
 .ficha-hero__cinta .cinta__riel { gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-.ficha-hero__cinta .cinta__pieza--img {
-  display: block;
-  width: clamp(12rem, 26vw, 26rem);
-  height: auto;
-  filter: brightness(0) invert(1);
-  opacity: .18;
+/* La cinta dice el nombre del proyecto, gigante y al 16 % de papel (David,
+   10/09). El nombre real esta en el h1 oculto: la cinta es decorativa. */
+.ficha-hero__cinta .cinta__pieza {
+  font-size: clamp(5rem, 15vw, 14rem);
+  font-weight: var(--grueso);
+  letter-spacing: -.03em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--sobre-foto) 16%, transparent);
+  white-space: nowrap;
 }
 .ficha-hero__foto {
   position: absolute;
@@ -2820,14 +2811,6 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
   text-align: center;
   translate: 0 var(--copia-y, 0px);
   opacity: var(--copia-op, 1);
-}
-.ficha-hero__nombre {
-  margin: 0;
-  font-size: var(--t-hero);
-  font-weight: var(--grueso);
-  text-transform: uppercase;
-  letter-spacing: -.03em;
-  line-height: .94;
 }
 .ficha-hero__bajada { margin: 0; max-width: 34ch; font-size: var(--t-lead); font-weight: var(--fino); text-wrap: balance; }
 .ficha-hero__scroll {
@@ -2869,40 +2852,40 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 .ficha-titulo .datos { justify-content: center; }
 
 /* --- la galeria escalonada y arrastrable --------------------------------- */
-.carrusel-seccion { border-top: 0; padding-top: 0; }
-.carrusel {
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(.875rem, 1.5vw, 1.5rem);
-  /* A sangre: el carril sale del dossier por los dos lados. */
-  margin-inline: calc(-1 * (var(--margen-ext) + var(--margen-int))) calc(-1 * var(--margen-der));
-  padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
-  padding-top: clamp(4.5rem, 20svh, 9rem);   /* lugar para la escalera */
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scroll-padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
+/* --- la galeria en cascada (David, 10/09: antes era un carril) ------------ */
+/* Tres columnas con escalera, cada foto entra sola al llegar (cascada() marca
+   data-visto con retardo por --i) y cada columna se desliza a otra velocidad
+   con el scroll (--desliz, solo transform). Sin guion: todo a la vista. */
+.galeria-seccion { border-top: 0; padding-top: 0; }
+.galeria {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem) clamp(.875rem, 1.5vw, 1.5rem);
+  align-items: start;
 }
-.carrusel::-webkit-scrollbar { display: none; }
-.carrusel[data-arrastrando] { cursor: grabbing; scroll-snap-type: none; }
 .lamina {
-  flex: 0 0 auto;
   margin: 0;
-  scroll-snap-align: start;
-  /* La escalera: cada foto un escalon mas arriba que la anterior. */
-  translate: 0 calc(var(--i, 0) * -4.5svh);
+  translate: 0 var(--desliz, 0px);
+  will-change: translate;
 }
-.lamina--ancha { width: clamp(16rem, 36vw, 38rem); }
-.lamina--angosta { width: clamp(11rem, 20vw, 20rem); }
 .lamina__abrir { display: block; width: 100%; overflow: clip; border-radius: 4px; cursor: zoom-in; }
-.lamina__abrir img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; -webkit-user-drag: none; }
+.lamina__abrir img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
 .lamina--angosta .lamina__abrir img { aspect-ratio: 3 / 4; }
 .lamina__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
-.carrusel__flechas { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.25rem; color: var(--tinta-bordo); }
+[data-cascada-viva] .lamina { opacity: 0; transition: opacity .7s var(--curva); transition-delay: calc(var(--i, 0) * 90ms); }
+[data-cascada-viva] .lamina[data-visto] { opacity: 1; }
+@media (min-width: 40rem) {
+  .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 64rem) {
+  .galeria { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: clamp(3rem, 12svh, 6rem); }
+  /* La escalera: cada columna arranca mas arriba que la anterior. */
+  .lamina { margin-top: calc(var(--col, 0) * -6svh); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lamina { translate: none; transition: none; }
+  [data-cascada-viva] .lamina { opacity: 1; }
+}
 @media (prefers-reduced-motion: reduce) {.lamina { translate: none; } .carrusel { padding-top: 0; }}
 
 /* --- sub-items: foto 3:4 y texto, alternados ------------------------------ */
@@ -2933,7 +2916,7 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
   justify-items: center;
   align-content: center;
   gap: 1.25rem;
-  min-height: 50svh;
+  min-height: clamp(18rem, 44svh, 30rem);
   padding: clamp(3rem, 8svh, 5rem) var(--margen-ext);
   text-align: center;
   background: var(--tinta-bordo);
@@ -2952,5 +2935,85 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 .franja__copy { margin: 0; max-width: 46ch; font-size: var(--t-cuerpo); }
 
 /* --- cierre de la ficha --------------------------------------------------- */
-.ficha-cierre { display: grid; justify-items: center; gap: 1.25rem; text-align: center; color: var(--tinta-bordo); }
-.ficha-cierre__frase { margin: 0; max-width: 20ch; font-size: var(--t-cita); font-weight: var(--fino); line-height: 1.3; text-wrap: balance; }
+
+/* =========================================================================
+   Ronda 10/09 — el pie nuevo, la ventana de contacto, la financiacion,
+   las personas sin foto
+   ========================================================================= */
+
+.pie {
+  display: grid;
+  gap: clamp(2rem, 5svh, 3rem);
+  padding: clamp(2.5rem, 2rem + 2vw, 4rem) var(--margen-ext) clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  border-top: 1px solid var(--linea);
+  background: var(--papel-pie);
+  color: var(--tinta-parrafo);
+}
+.pie__arriba { display: grid; gap: clamp(1.75rem, 4vw, 2.5rem); }
+.pie__marca { display: grid; gap: .75rem; align-content: start; max-width: 30ch; }
+.pie__logo { display: inline-flex; align-items: center; min-height: 44px; width: max-content; }
+.pie__iso { display: block; height: clamp(1.5rem, 1.2rem + .6vw, 2rem); width: auto; }
+.pie__mensaje {
+  margin: .25rem 0 0;
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: var(--tinta);
+}
+.pie__definicion { margin: 0; font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty; }
+.pie__col { display: grid; gap: .5rem; align-content: start; }
+.pie__rotulo {
+  margin: 0 0 .25rem;
+  font-size: var(--t-micro);
+  font-weight: var(--medio);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tinta-apoyo);
+}
+.pie__paginas { display: grid; gap: 0; }
+.pie__paginas a { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 0; font-size: var(--t-chico); color: var(--tinta-parrafo); text-decoration: none; }
+.pie__paginas a[aria-current="page"] { color: var(--tinta); font-weight: var(--medio); }
+.pie__contacto, .pie__redes { display: grid; gap: 0; font-size: var(--t-chico); }
+.pie__contacto a, .pie__redes a { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta-parrafo); text-decoration: none; }
+.pie__lugar { display: inline-flex; align-items: center; min-height: 44px; font-weight: var(--fino); color: var(--tinta-apoyo); }
+.pie__pronto { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta-apoyo); }
+.pie__abajo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .25rem 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linea);
+}
+.pie__derechos { margin: 0; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
+.pie__abajo .idioma { margin-inline-start: auto; }
+@media (hover: hover) and (pointer: fine) {
+  .pie__paginas a:hover, .pie__contacto a:hover, .pie__redes a:hover { color: var(--tinta); }
+}
+@media (min-width: 48rem) {
+  .pie__arriba { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 64rem) {
+  .pie__arriba { grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 4rem); }
+}
+
+/* La ventana de contacto, sola: ocupa la pantalla y no tiene nada abajo. */
+.dossier--contacto .contacto { padding-block: clamp(2rem, 6svh, 4rem) clamp(4rem, 12svh, 7rem); }
+.dossier--contacto .contacto__caja { min-height: calc(100svh - 24rem); }
+
+/* Financiacion: el boton a WhatsApp y el enlace al contacto, en fila. */
+.franja__acciones { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.75rem; margin-top: .5rem; }
+
+/* Personas sin foto todavia: el isotipo sobre una capa de papel. */
+.persona__marco--sin-foto {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  background: var(--papel-capa-1);
+}
+.persona__marco--sin-foto img { width: 38%; height: auto; opacity: .55; }
+/* Las personas: tarjetas de 14 a 18rem, las que haya, sin estirar. */
+.equipo-seccion .personas { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 18rem)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: clamp(2rem, 6svh, 3rem); }

@@ -111,11 +111,11 @@ def img(foto, sizes, clase="", lazy=True):
 
 def wa(d, texto):
     n = d["contacto_datos"]["whatsapp"]
-    return f'https://wa.me/{n}?text={quote(texto)}' if n else "#contacto"
+    return f'https://wa.me/{n}?text={quote(texto)}' if n else "contacto.html"
 
 
 # El trazo de la marca: la M de Mavenz como una sola onda continua.
-ONDA = ("M 40 296 C 44 148, 206 96, 302 178 C 382 246, 322 336, 240 302 "
+ONDA = ("M 40 296 C 130 240, 206 96, 302 178 C 382 246, 322 336, 240 302 "
         "C 168 272, 288 196, 516 258 C 642 292, 700 138, 832 158 "
         "C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272")
 
@@ -197,7 +197,7 @@ def cabecera(d, lang, aqui, tema="claro"):
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
     {selector_idioma(d, lang, aqui)}
-    <a class="boton cabecera__contacto" href="#contacto">{e(c["cta_contacto"])}</a>
+    <a class="boton cabecera__contacto" href="contacto.html">{e(c["cta_contacto"])}</a>
   </div>
 </header>'''
 
@@ -472,16 +472,18 @@ def ficha_hero(d):
     se abre a pantalla completa con el scroll (fichaHero() en guion.js
     escribe --w y --h por separado, con clip-path: inset(): el encuadre se
     revela en vez de deformarse, que es lo que se midio en la referencia). El
-    nombre y la bajada se van en el primer cuarto; "(Scroll)" mas lento. Sin
+    bajada se va en el primer cuarto; "(Scroll)" mas lento. La cinta dice el
+    nombre del proyecto (David, 10/09: antes era el isotipo) y el h1 queda
+    solo para lectores de pantalla. Sin
     GSAP o con menos movimiento: foto entera y sin recorrido."""
     c = d["proyectos"]["cardinal"]
     return f'''<section class="ficha-hero oscuro" id="inicio" data-ficha-hero data-tema="oscuro">
   <div class="ficha-hero__pin">
-    <div class="ficha-hero__cinta" data-ficha-cinta aria-hidden="true">{cinta(["img/isotipo.webp"] * 4, tono="iso", continua=True, velocidad=120, imagen=True)}</div>
+    <div class="ficha-hero__cinta" data-ficha-cinta aria-hidden="true">{cinta([c["marquee"]] * 3, tono="nombre", continua=True, velocidad=120, decorativa=True)}</div>
     <div class="ficha-hero__foto" data-ficha-foto>{img(c["hero_foto"], "100vw", lazy=False)}</div>
     <div class="ficha-hero__copia" data-ficha-copia>
+      <h1 class="visualmente-oculto">{e(c["nombre"])}</h1>
       <p class="margen margen--claro">{e(c["meta"])} · {e(c["estado"])}</p>
-      <h1 class="ficha-hero__nombre">{e(c["nombre"])}</h1>
       <p class="ficha-hero__bajada">{e(c["titulo"])}</p>
     </div>
     <p class="ficha-hero__scroll" data-ficha-scroll aria-hidden="true">{e(c["scroll"])}</p>
@@ -507,26 +509,22 @@ def ficha_titulo(d):
 </section>'''
 
 
-def carrusel(d):
-    """La galeria escalonada y arrastrable (FICHA-3, motor 4): un carril con
-    scroll-snap, cada foto un escalon mas arriba que la anterior y anchos
-    alternados; flechas de 44 px; arrastrar() le suma inercia con el puntero
-    y un umbral para no abrir el visor al soltar. La misma lista alimenta el
-    visor: data-foto es el indice en `galeria`."""
+def galeria(d):
+    """La galeria en cascada (David, 10/09: antes era un carril arrastrable):
+    una grilla de tres columnas con escalera, cada foto entra sola al llegar
+    con el scroll y las columnas se deslizan a velocidades distintas
+    (cascada() en guion.js, solo transform). Nada que arrastrar. La misma
+    lista alimenta el visor: data-foto es el indice en `galeria`."""
     c, ui = d["proyectos"]["cardinal"], d["interfaz"]
     fotos = "".join(
-        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i}">'
+        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i};--col:{i % 3}">'
         f'<button class="lamina__abrir" type="button" data-foto="{i}" aria-label="{e(ui["abrir_foto"])}: {e(x["epigrafe"])}">'
-        f'{img(x["foto"], "(min-width:64rem) 36vw, 80vw")}</button>'
+        f'{img(x["foto"], "(min-width:64rem) 30vw, 90vw")}</button>'
         f'<figcaption class="lamina__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
         for i, x in enumerate(c["galeria"]))
-    return f'''<section class="seccion carrusel-seccion" id="galeria"{fx("proyectos")}>
+    return f'''<section class="seccion galeria-seccion" id="galeria">
   <h2 class="visualmente-oculto">{e(c["galeria_titulo"])}</h2>
-  <div class="carrusel" data-carrusel data-arrastre>{fotos}</div>
-  <div class="carrusel__flechas">
-    <button class="orbita__flecha" type="button" data-carrusel-ant aria-label="{e(ui["anterior"])}"><span aria-hidden="true">&larr;</span></button>
-    <button class="orbita__flecha" type="button" data-carrusel-sig aria-label="{e(ui["siguiente"])}"><span aria-hidden="true">&rarr;</span></button>
-  </div>
+  <div class="galeria" data-cascada>{fotos}</div>
 </section>'''
 
 
@@ -571,6 +569,9 @@ def unidades(d):
 
 
 def financiacion(d):
+    """El remate de la ficha (FICHA-7 y FICHA-8 juntos, David 10/09: la web
+    termina aca y el contacto va aparte): titulo, el copy cuando llegue,
+    Consulta disponibilidad a WhatsApp y Contactanos a la pagina de contacto."""
     c = d["proyectos"]["cardinal"]
     fi = c["financiacion"]
     copia = f'<p class="franja__copy">{e(fi["copy"])}</p>' if fi.get("copy") else ""
@@ -578,17 +579,10 @@ def financiacion(d):
   {marcador()}
   <h2 class="franja__titulo" data-letras>{e(fi["titulo"])}</h2>
   {copia}
-  <a class="subrayado subrayado--claro" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(fi["cta"])}</a>
-</section>'''
-
-
-def cierre_ficha(d):
-    ci = d["proyectos"]["cardinal"]["cierre"]
-    frase = f'<p class="ficha-cierre__frase">{e(ci["titulo"])}</p>' if ci.get("titulo") else ""
-    return f'''<section class="seccion ficha-cierre" id="cierre"{fx("contacto")}>
-  {marcador()}
-  {frase}
-  <a class="boton" href="#contacto">{e(ci["cta"])}<span aria-hidden="true"> &rarr;</span></a>
+  <div class="franja__acciones">
+    <a class="boton boton--claro" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(fi["cta"])}</a>
+    <a class="subrayado subrayado--claro" href="contacto.html">{e(fi["cta2"])}</a>
+  </div>
 </section>'''
 
 
@@ -599,7 +593,7 @@ def oportunidades(d):
     <h2 class="titulo titulo--chico" data-letras>{e(o["rotulo"])}</h2>
     <div>
       <p class="bajada">{e(o["bajada"])}</p>
-      <a class="boton oportunidades__cta" href="#contacto" data-motivo="oportunidad">{e(o["cta"])}</a>
+      <a class="boton oportunidades__cta" href="{e(o["href"])}">{e(o["cta"])}</a>
     </div>
   </div>
 </section>'''
@@ -700,27 +694,21 @@ def mirada(d):
 </section>'''
 
 
-def persona_completa(x):
-    return bool(x.get("foto") and x.get("nombre") and x.get("apellido") and x.get("rol") and x.get("linea"))
-
-
 def equipo(d):
-    """Las personas detras de Mavenz (NOS-1..4): cada una con foto, nombre y
-    apellido, rol real y una linea. Un perfil incompleto no se publica: se
-    emiten solo los completos y, si no hay ninguno, la seccion queda con el
-    titulo y el texto. Sin huecos ni 'Retrato'."""
+    """Las personas detras de Mavenz (NOS-1..4). Se publica cada integrante
+    que tenga nombre y rol (David, 10/09); el apellido, la foto y la linea
+    entran cuando Vero los mande. Sin foto, la tarjeta lleva el isotipo."""
     q = d["equipo"]
-    completos = [x for x in q["personas"] if persona_completa(x)]
-    personas = "".join(
-        f'<article class="persona" style="--i:{i}">'
-        f'<figure class="persona__marco">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>'
-        f'<div class="persona__pie">'
-        f'<h3 class="persona__nombre">{e(x["nombre"])} {e(x["apellido"])}</h3>'
-        f'<p class="persona__rol">{e(x["rol"])}</p>'
-        f'<p class="persona__linea">{e(x["linea"])}</p>'
-        f'</div></article>'
-        for i, x in enumerate(completos))
-    grilla = f'<div class="personas">{personas}</div>' if personas else ""
+    con = [x for x in q["personas"] if x.get("nombre") and x.get("rol")]
+    def tarjeta(i, x):
+        foto = (f'<figure class="persona__marco">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>' if x.get("foto")
+                else f'<figure class="persona__marco persona__marco--sin-foto" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></figure>')
+        nombre = f'{x["nombre"]} {x.get("apellido", "")}'.strip()
+        linea = f'<p class="persona__linea">{e(x["linea"])}</p>' if x.get("linea") else ""
+        return (f'<article class="persona" style="--i:{i}">{foto}'
+                f'<div class="persona__pie"><h3 class="persona__nombre">{e(nombre)}</h3>'
+                f'<p class="persona__rol">{e(x["rol"])}</p>{linea}</div></article>')
+    grilla = f'<div class="personas">{"".join(tarjeta(i, x) for i, x in enumerate(con))}</div>' if con else ""
     return f'''<section class="seccion equipo-seccion" id="equipo"{fx("equipo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
@@ -795,25 +783,41 @@ def contacto(d):
 
 
 def pie(d, lang, slug):
-    """El pie repite el menu definitivo y deja el WhatsApp y el correo a la
-    vista (pedido del 08/09). El enlace de cookies nace oculto: consent.js le
-    saca el `hidden` solo si hay etiquetas de medicion que consentir."""
-    m, cd, c, ck = d["marca"], d["contacto_datos"], d["contacto"], d["cookies"]
-    paginas = enlaces_menu(d, None)
+    """El pie rehecho el 10/09: cuatro columnas en escritorio (la marca con su
+    mensaje, las secciones, el contacto, las redes) y una fila de abajo con
+    los derechos, el idioma y el enlace de cookies, que nace oculto y solo
+    aparece si hay etiquetas de medicion (consent.js le saca el hidden)."""
+    m, cd, c, ck, pf, ui = d["marca"], d["contacto_datos"], d["contacto"], d["cookies"], d["pie"], d["interfaz"]
+    paginas = enlaces_menu(d, slug)
     correo = (f'<a href="mailto:{e(cd["correo"])}">{e(cd["correo"])}</a>' if cd["correo"] else "")
-    contacto_pie = (f'<a href="{e(wa(d, c["wa_general"]))}" target="_blank" rel="noopener">WhatsApp</a>'
-                    f'{correo}')
+    href_wa = wa(d, c["wa_general"])
+    afuera = ' target="_blank" rel="noopener"' if href_wa.startswith("http") else ""
     redes = "".join(
         (f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["nombre"])}</a>'
-         if r["href"] else f'<span>{e(r["nombre"])}</span>')
+         if r["href"] else f'<span class="pie__pronto" title="{e(ui["idioma_pronto"])}">{e(r["nombre"])}</span>')
         for r in d["redes"])
     return f'''<footer class="pie" data-tema="claro">
-  <img class="pie__iso" src="{R.raiz}img/isotipo.webp" alt="{e(m["nombre"])}" width="600" height="381" loading="lazy" decoding="async">
-  <nav class="pie__redes" aria-label="{e(m["nombre"])}">{redes}</nav>
-  <p class="pie__contacto">{contacto_pie}</p>
+  <div class="pie__arriba">
+    <div class="pie__marca">
+      <a class="pie__logo" href="index.html" aria-label="{e(m["nombre"])}"><img class="pie__iso" src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></a>
+      <p class="pie__mensaje">{e(m["mensaje"])}</p>
+      <p class="pie__definicion">{e(m["definicion"])}</p>
+    </div>
+    <nav class="pie__col" aria-label="{e(ui["menu"])}">
+      <p class="pie__rotulo">{e(pf["rotulo_paginas"])}</p>
+      <div class="pie__paginas">{paginas}</div>
+    </nav>
+    <div class="pie__col">
+      <p class="pie__rotulo">{e(pf["rotulo_contacto"])}</p>
+      <div class="pie__contacto"><a href="{e(href_wa)}"{afuera}>{e(ui["whatsapp"])}</a>{correo}<span class="pie__lugar">{e(m["lugar"])}</span></div>
+    </div>
+    <div class="pie__col">
+      <p class="pie__rotulo">{e(pf["rotulo_redes"])}</p>
+      <nav class="pie__redes" aria-label="{e(pf["rotulo_redes"])}">{redes}</nav>
+    </div>
+  </div>
   <div class="pie__abajo">
-    <p class="pie__lugar">{e(m["lugar"])}</p>
-    <nav class="pie__paginas" aria-label="{e(d["interfaz"]["menu"])}">{paginas}</nav>
+    <p class="pie__derechos">&copy; {e(pf["derechos"])}</p>
     {selector_idioma(d, lang, slug)}
     <button class="pie__cookies" type="button" data-cookies-abrir hidden>{e(ck["enlace_pie"])}</button>
   </div>
@@ -983,7 +987,6 @@ def pagina_inicio(d, lang):
 {cms("metodo", metodo(d))}
 {cms("mundos", mundos(d))}
 {cms("mirada", mirada(d))}
-{cms("contacto", contacto(d))}
 </div></div>'''
     return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
 
@@ -996,10 +999,7 @@ def pagina_nosotros(d, lang):
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("equipo", equipo(d))}
 </div></div>
-{cms("red", red(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("contacto", contacto(d))}
-</div></div>'''
+{cms("red", red(d))}'''
     return cascara(d, lang, "nosotros", cuerpo)
 
 
@@ -1017,7 +1017,6 @@ def pagina_proyectos(d, lang):
 {cms("cardinal", cardinal_resumen(d))}
 {cms("otros", otros(d))}
 {cms("oportunidades", oportunidades(d))}
-{cms("contacto", contacto(d))}
 </div></div>'''
     return cascara(d, lang, "proyectos", cuerpo)
 
@@ -1026,10 +1025,7 @@ def pagina_espacio(d, lang):
     """Espacio Mavenz, con seccion propia en el menu (ESP-1)."""
     pg = d["paginas"]["espacio"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
-{cms("espacio", espacio(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("contacto", contacto(d))}
-</div></div>'''
+{cms("espacio", espacio(d))}'''
     return cascara(d, lang, "espacio", cuerpo)
 
 
@@ -1041,7 +1037,7 @@ def pagina_cardinal(d, lang):
     cuerpo = f'''{cms("hero", ficha_hero(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("titulo", ficha_titulo(d))}
-{cms("galeria", carrusel(d))}
+{cms("galeria", galeria(d))}
 {cms("cardenal", cardenal(d))}
 {cms("detalles", sub_items(d))}
 </div></div>
@@ -1050,12 +1046,20 @@ def pagina_cardinal(d, lang):
 {cms("unidades", unidades(d))}
 </div></div>
 {cms("financiacion", financiacion(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("cierre", cierre_ficha(d))}
-{cms("contacto", contacto(d))}
-</div></div>
 {visor(d)}'''
     return cascara(d, lang, "cardinal", cuerpo, tema="oscuro")
+
+
+def pagina_contacto(d, lang):
+    """La ventana de contacto, sola (David, 10/09): cinta, la seccion entera
+    con la palabra corriendo en vertical, las cuatro opciones y el
+    formulario. `?motivo=` en la URL abre la solapa elegida."""
+    pg = d["paginas"]["contacto"]
+    cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
+<div class="dossier dossier--contacto" data-tema="claro"><div class="dossier__interior">
+{cms("contacto", contacto(d))}
+</div></div>'''
+    return cascara(d, lang, "contacto", cuerpo)
 
 
 def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
@@ -1112,9 +1116,8 @@ def mundos(d):
     Un panel con `motivo` lleva al contacto con esa opcion preseleccionada."""
     w = d["mundos"]
     def panel(i, x):
-        motivo = f' data-motivo="{e(x["motivo"])}"' if x.get("motivo") else ""
         return (f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" data-fx="tilt" data-fx-grados="5" '
-        f'style="--i:{i}"{motivo}>'
+        f'style="--i:{i}">'
         f'<span class="mundo__cuerpo">'
         f'<span class="mundo__marca" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></span>'
         f'<span class="mundo__nombre">{e(x["nombre"])}</span>'
@@ -1134,7 +1137,7 @@ def mundos(d):
 
 
 PAGINAS = {"inicio": pagina_inicio, "nosotros": pagina_nosotros, "proyectos": pagina_proyectos,
-           "espacio": pagina_espacio, "cardinal": pagina_cardinal}
+           "espacio": pagina_espacio, "cardinal": pagina_cardinal, "contacto": pagina_contacto}
 
 # Claves que no son texto para leer: no se traducen y no se reclaman.
 TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "carpeta", "ancla",

@@ -235,10 +235,8 @@
       },
       "financiacion": {
         "titulo": "Financing during construction",
-        "cta": "Check availability on WhatsApp"
-      },
-      "cierre": {
-        "cta": "Contact us"
+        "cta": "Check availability on WhatsApp",
+        "cta2": "Contact us"
       }
     },
     "otros_rotulo": "Other projects",
@@ -448,7 +446,9 @@
       "cinta": "About us"
     },
     "contacto": {
-      "rotulo": "Contact us"
+      "rotulo": "Contact us",
+      "titulo": "Contact",
+      "cinta": "Contact"
     },
     "cardinal": {
       "titulo": "Cardinal"
@@ -482,7 +482,9 @@
     "redes.0.nombre",
     "redes.1.nombre",
     "redes.2.nombre",
-    "universo.centro"
+    "universo.centro",
+    "proyectos.cardinal.marquee",
+    "pie.derechos"
   ],
   "cookies": {
     "titulo": "Cookies",
@@ -520,5 +522,11 @@
         }
       }
     ]
+  },
+  "pie": {
+    "rotulo_paginas": "Sections",
+    "rotulo_contacto": "Contact",
+    "rotulo_redes": "Social",
+    "derechos": "Mavenz. Salta, Argentina."
   }
 }

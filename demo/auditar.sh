@@ -5,4 +5,4 @@
 B=${1:-http://localhost:8899/demo}
 exec python3 ~/.claude/skills/visual-verify/scripts/auditar.py \
   "$B/index.html" "$B/proyectos.html" "$B/cardinal.html" "$B/espacio.html" "$B/nosotros.html" \
-  "$B/en/index.html" "$B/en/proyectos.html" "$B/en/cardinal.html" "$B/en/espacio.html" "$B/en/nosotros.html"
+  "$B/contacto.html" "$B/en/index.html" "$B/en/proyectos.html" "$B/en/cardinal.html" "$B/en/espacio.html" "$B/en/nosotros.html" "$B/en/contacto.html"
