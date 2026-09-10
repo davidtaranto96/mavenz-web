@@ -52,12 +52,16 @@
     "titulo": "We are Mavenz",
     "copy": "We were born with a different way of working in real estate: integral, strategic and collaborative.",
     "copy2": "We work alongside developers, investors and landowners, connecting strategy, business, communication and sales to turn opportunities into projects that move forward.",
-    "circulos": {
+    "gotas": {
       "fondo": {
-        "alt": "Aerial view of the San Lorenzo valley"
+        "video": {
+          "alt": "San Lorenzo from the air, with the hills behind"
+        }
       },
       "frente": {
-        "alt": "Aerial view of a neighbourhood in San Lorenzo"
+        "video": {
+          "alt": "The Cardinal pool, rendered"
+        }
       }
     }
   },

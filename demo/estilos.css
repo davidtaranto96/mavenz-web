@@ -1447,8 +1447,8 @@ html { scroll-padding-top: 1rem }
   border-radius: 0;
   background: transparent;
   mix-blend-mode: darken;
-  mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
-  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+  mask-image: radial-gradient(closest-side, var(--tinta) 62%, transparent 100%);
+  -webkit-mask-image: radial-gradient(closest-side, var(--tinta) 62%, transparent 100%);
 }
 
 @media (min-width: 64rem) {.cardenal {
@@ -2233,42 +2233,104 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
    Fase 3 (09/09) — Somos Mavenz, el puente y el Universo en bistre
    ========================================================================= */
 
-/* --- Somos Mavenz: texto angosto a la izquierda, dos circulos a la derecha - */
+/* --- Somos Mavenz: texto angosto a la izquierda, dos gotas a la derecha ---- */
 .quienes { display: grid; gap: clamp(2rem, 6vw, 4rem); align-items: center; }
 .quienes__texto { display: grid; gap: 1.25rem; max-width: 34ch; }
 .quienes__texto .titulo { max-width: none; }
-/* La caja de los circulos es cuadrada; los dos se posicionan adentro por
-   porcentaje, asi el solape es el mismo en cualquier ancho: el de fondo
-   (58 %) arriba a la derecha, el de frente (50 %) abajo a la izquierda,
-   pisandolo un cuarto de su diametro (SOM-4, medido sobre el dibujo). */
-.circulos { position: relative; aspect-ratio: 1; width: min(100%, 26rem); margin-inline: auto; }
-.circulo { position: absolute; margin: 0; aspect-ratio: 1; border-radius: 50%; overflow: clip; }
-.circulo--fondo  { inset-block-start: 0;   inset-inline-end: 0;    width: 58%; }
-.circulo--frente { inset-block-end: 6%;    inset-inline-start: 4%; width: 50%; z-index: 1;
-                   box-shadow: 0 16px 40px var(--sombra); }
-.circulo__foto { display: block; width: 100%; height: 100%; object-fit: cover; }
-@media (min-width: 64rem) {.quienes--con-circulos { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(3rem, 8vw, 8rem); }
-  .circulos { width: min(100%, 30rem); margin-inline: 0 auto; }}
-
-/* --- El puente: papel que se difumina en bistre --------------------------- */
-/* Un gradiente quieto y, encima, una capa de bistre que crece desde abajo
-   con el scroll (solo transform). Sin guion o con menos movimiento queda el
-   gradiente, que ya es la transicion que pide SOM-6. */
-.puente {
-  position: relative;
-  height: clamp(6rem, 18svh, 11rem);
-  overflow: clip;
-  background: linear-gradient(180deg, var(--papel), var(--tinta-parrafo));
-}
-.puente__tinta {
+/* La caja de las gotas es cuadrada y las dos se posicionan adentro por
+   porcentaje, asi el solape es el mismo en cualquier ancho: la de fondo
+   (66 %) arriba a la derecha, la de frente (58 %) abajo a la izquierda,
+   pisandola (SOM-4; un 50 % mas grandes que el 09/09, pedido del 10/09).
+   Cada gota es un recorte organico (border-radius de ocho valores, distinto
+   en cada una) y se corre con el puntero: gotas() escribe --mx/--my (-1..1)
+   en la caja y cada gota los multiplica por su --prof (la de frente el
+   doble que la de fondo, como si estuviera mas cerca) y gira apenas por su
+   --giro; la transicion larga hace de inercia, sin bucle de rAF. El medio
+   de adentro va un poco en contra, como el agua dentro de la gota. Solo
+   transform. */
+.gotas { position: relative; aspect-ratio: 1; width: min(100%, 30rem); margin-inline: auto; --mx: 0; --my: 0; }
+.gota {
   position: absolute;
-  inset: 0;
-  background: var(--tinta-parrafo);
-  transform-origin: 50% 100%;
-  scale: 1 var(--mezcla, 0);
+  margin: 0;
+  aspect-ratio: 1;
+  overflow: clip;
+  translate: calc(var(--mx) * var(--prof, 1) * 2rem) calc(var(--my) * var(--prof, 1) * 1.5rem);
+  rotate: calc(var(--mx) * var(--giro, 0) * 1deg);
+  transition: translate .9s cubic-bezier(.16, 1, .3, 1), rotate .9s cubic-bezier(.16, 1, .3, 1);
   will-change: transform;
 }
-@media (prefers-reduced-motion: reduce) {.puente__tinta { display: none; }}
+.gota--fondo  { inset-block-start: 0; inset-inline-end: 0; width: 66%;
+                border-radius: 61% 39% 44% 56% / 63% 46% 54% 37%; }
+.gota--frente { inset-block-end: 2%; inset-inline-start: 0; width: 58%; z-index: 1;
+                border-radius: 41% 59% 63% 37% / 46% 38% 62% 54%;
+                box-shadow: 0 16px 40px var(--sombra); }
+.gota__medio {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  scale: 1.1;
+  translate: calc(var(--mx) * var(--prof, 1) * -.6rem) calc(var(--my) * var(--prof, 1) * -.45rem);
+  transition: translate .9s cubic-bezier(.16, 1, .3, 1);
+}
+@media (min-width: 64rem) {.quienes--con-gotas { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(3rem, 7vw, 7rem); }
+  .gotas { width: min(100%, 45rem); margin-inline: 0 auto; }}
+@media (prefers-reduced-motion: reduce) {.gota, .gota__medio { translate: none; rotate: none; transition: none; }}
+
+/* --- El puente: la tinta se filtra en el papel ----------------------------- */
+/* Rehecho el 10/09: el gradiente lineal con la capa que se estiraba dejaba
+   una banda gris y un corte plano. Ahora son tres capas. Un gradiente quieto
+   con paradas en curva (el papel aguanta hasta la mitad y el bistre se
+   asienta en el cuarto de abajo). Cuatro manchas de bistre con el borde
+   difuso (radial-gradient), ancladas con el centro en el borde de abajo, que
+   suben con el scroll cada una a su velocidad: translate por
+   (1 - --mezcla) * --vel; --mezcla la escribe puente() de guion.js, 0 abajo
+   de la pantalla y 1 en el quinto de arriba. Y el grano encima. Sin guion,
+   --mezcla vale 1 y la tinta ya subio. */
+.puente {
+  --mezcla: 1;
+  position: relative;
+  height: clamp(9rem, 26svh, 16rem);
+  overflow: clip;
+  background: linear-gradient(180deg,
+    var(--papel) 0%,
+    color-mix(in srgb, var(--papel) 90%, var(--tinta-parrafo)) 32%,
+    color-mix(in srgb, var(--papel) 60%, var(--tinta-parrafo)) 58%,
+    color-mix(in srgb, var(--papel) 22%, var(--tinta-parrafo)) 78%,
+    var(--tinta-parrafo) 96%);
+}
+.puente__manchas { position: absolute; inset: 0; }
+.puente__mancha {
+  position: absolute;
+  left: var(--l);
+  bottom: calc(var(--al) * -.5);
+  width: var(--an);
+  height: var(--al);
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    var(--tinta-parrafo) 28%,
+    color-mix(in srgb, var(--tinta-parrafo) 70%, transparent) 55%,
+    color-mix(in srgb, var(--tinta-parrafo) 25%, transparent) 80%,
+    transparent 100%);
+  translate: 0 calc((1 - var(--mezcla)) * var(--vel));
+  will-change: transform;
+}
+/* El grano: un SVG de ruido repetido sobre el puente y sobre el Universo.
+   feTurbulence sale en gris medio y con overlay o soft-light un gris medio no
+   cambia nada (se probo: invisible); por eso el feComponentTransfer le sube
+   el contraste (pendiente 3) y fija el alfa en 1, y overlay al 26 % lo
+   convierte en grano fino. Es una imagen quieta, no se anima nada. El data
+   URI no lleva '#' (va %23) para que la regla de cero hex fuera de :root
+   siga midiendo limpio. */
+.puente__grano, .universo::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  opacity: .26;
+  mix-blend-mode: overlay;
+}
+.universo::before { content: ""; }
+.puente__grano { mask-image: linear-gradient(180deg, transparent, var(--tinta) 45%); }
 
 /* --- El Universo Mavenz: seccion a sangre en bistre ----------------------- */
 .universo {

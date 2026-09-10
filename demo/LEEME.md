@@ -61,7 +61,7 @@ se ve.
 | `contenido/sitio.en.json` | la capa en inglés: sólo textos |
 | `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las doce páginas |
 | `estilos.css` | tokens en `:root` y todo lo demás. Siete hex, todos en `:root`; los tres que aparecen más abajo están en comentarios |
-| `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita, puente, trazo del método, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
+| `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita, puente, gotas de Somos, trazo del método, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
 | `consent.js` | el aviso de cookies, con su cola de eventos |
 | `auditar.sh` | el auditor de siete carriles sobre las doce URLs |
 | `../img/` | fotos en WebP, dos anchos cada una |
@@ -109,7 +109,7 @@ Cada bloque que depende de material de la clienta tiene una clave. Vacía, el ge
 
 | Clave | Qué prende |
 |---|---|
-| `quienes.circulos` con `fondo` y `frente` | la columna de los dos círculos de Somos Mavenz; sin ella el texto ocupa el ancho |
+| `quienes.gotas` con `fondo` y `frente` (cada una `video` o `foto`) | la columna de las dos gotas de Somos Mavenz; sin ella el texto ocupa el ancho |
 | `proyectos.otros_publicar` y `proyectos.otros` | la sección Otros proyectos de `proyectos.html` (hoy `false`) |
 | `proyectos.cardinal.sub_items[]`, con `foto` **y** `copy` | cada sub-item de la ficha; sin ninguno completo la sección `#detalles` no existe (hoy) |
 | `proyectos.cardinal.unidades.foto` | la columna de foto de Unidades |
@@ -239,15 +239,32 @@ IDs: la reabre. La tarjeta va abajo a la izquierda, con la palabra "Cookies" gig
 grados y cortada por el `overflow: clip`, y las dos acciones son `.barajar`: dos copias del
 rótulo partidas por letra (`letras()`), que se intercambian con un retraso de 30 ms por letra.
 
-**Somos Mavenz** (`quienes()`). Título y dos párrafos en una columna de 34ch y, a la derecha, dos
-fotos en círculo posicionadas por porcentaje dentro de una caja cuadrada: la de fondo al 58 %
-arriba a la derecha, la de frente al 50 % abajo a la izquierda, pisándola. En celular la columna
-va abajo. Sólo vive en Inicio.
+**Somos Mavenz** (`quienes()`; `gotas()` en guion.js). Título y dos párrafos en una columna de
+34ch y, a la derecha, dos gotas posicionadas por porcentaje dentro de una caja cuadrada de hasta
+45rem: la de fondo al 66 % arriba a la derecha, la de frente al 58 % abajo a la izquierda,
+pisándola. Cada gota es un `figure` con recorte orgánico (`border-radius` de ocho valores,
+distinto en cada una) y adentro un `<video>` diferido o una `<img>`, según lleve `video` o
+`foto` en el JSON. `gotas()` escribe `--mx`/`--my` (−1..1) en la caja con la posición del
+puntero dentro de la sección entera; el CSS los multiplica por `--prof` (la de frente el doble
+que la de fondo) y `--giro`, y una transición de .9 s hace de inercia: ni rAF en bucle ni
+animación infinita. El medio de adentro se corre un poco en contra, como el agua dentro de la
+gota. Sólo puntero fino; con menos movimiento quedan quietas. En celular la columna va abajo y
+los videos sí se reproducen (pesan 340 y 380 KB, no llevan `data-pesado`). Sólo vive en Inicio.
 
-**El puente** (`puente()` en los dos archivos). Un `div` decorativo entre Somos y el Universo:
-gradiente quieto de papel a bistre y, encima, una capa de bistre con `scale: 1 var(--mezcla)`
-que crece desde abajo con el scroll. Sin guion o con menos movimiento queda el gradiente. Lleva
-`data-decorativo` para que el auditor no le mida tinta.
+**El puente** (`puente()` en los dos archivos). Un `div` decorativo entre Somos y el Universo,
+rehecho el 10/09 como tinta que se filtra en el papel: un gradiente quieto con paradas en curva
+(el papel aguanta hasta la mitad y el bistre se asienta en el cuarto de abajo), cuatro manchas
+de bistre con el borde difuso (`radial-gradient`) ancladas con el centro en el borde de abajo,
+que suben con el scroll cada una a su velocidad (`translate` por `(1 − --mezcla) * --vel`;
+`--mezcla` la escribe `puente()` de guion.js, 0 abajo de la pantalla y 1 en el quinto de
+arriba), y el grano encima. Sin guion o con menos movimiento `--mezcla` vale 1 y la tinta ya
+subió. Lleva `data-decorativo` para que el auditor no le mida tinta.
+
+**El grano** (`.puente__grano` y `.universo::before`). Un SVG de ruido en data URI
+(`feTurbulence` con el contraste subido por `feComponentTransfer`, porque el gris medio que sale
+de fábrica no se ve con ningún blend) repetido en mosaicos de 240 px, `overlay` al 26 %. Imagen
+quieta, `pointer-events: none`, sin `#` en el URI. Hoy sólo en el puente y el Universo; para
+sumarlo a otro bloque oscuro alcanza con agregar el selector.
 
 **El Universo** (`orbita()`; `circular()`, `anillo()` y `carrilEsferas()`). Sección `.oscuro` en
 bistre. `orbita()` reparte las esferas sobre una circunferencia al 36 % del centro arrancando
@@ -381,6 +398,8 @@ Los videos, con póster y diferidos:
 | Video | Peso | Póster | Dónde |
 |---|---|---|---|
 | `hero.mp4` | 707 KB | 112 KB | el hero de Inicio: recorte de 2,9 s del post de Cardinal, en ida y vuelta, sin el subtítulo quemado. En celular sólo el póster |
+| `somos-territorio.mp4` | 344 KB | 71 KB | la gota de fondo de Somos: los cerros, 1,3 s del post (22,9 a 24,2 s) a 1,5× más lento, recorte cuadrado del tercio de arriba para dejar afuera el subtítulo, ida y vuelta. Se baja en todos los carriles |
+| `somos-vida.mp4` | 381 KB | 83 KB | la gota de frente de Somos: la pileta, 1,85 s del post (17,95 a 19,8 s), mismo recorte, ida y vuelta. Se baja en todos los carriles |
 | `cardinal.mp4` | 3,0 MB | 72 KB | la franja de la ficha. En celular sólo el póster |
 | `cardenal.mp4` | 22 KB | 4 KB | el cardenal, en la ficha. Se baja en todos los carriles |
 
@@ -452,7 +471,7 @@ Cada cosa tiene su clave y, mientras falta, el sitio se ve así.
 | Qué falta | Clave | Cómo queda mientras |
 |---|---|---|
 | Metraje de dron limpio, sin subtítulos | `hero.video` | el recorte de 2,9 s del post de Cardinal |
-| Las dos fotos en círculo de Somos Mavenz | `quienes.circulos` | dos aéreas reales, provisorias, para que se vea la composición |
+| Los dos videos (o fotos) de las gotas de Somos Mavenz | `quienes.gotas` | dos recortes del post de Cardinal (cerros y pileta), provisorios; el campo verde del post (13,7 a 15,2 s) queda como alternativa lista |
 | Proyectos confirmados para Otros proyectos (Porto y WA son de Grupo MDay y no los confirmó) | `proyectos.otros_publicar`, `proyectos.otros`, `mundos.lista[1].foto` | la sección no se emite; el panel de Inicio lleva al formulario, con una aérea provisoria |
 | Fotos y copy de jardines, cochera, SUM y espacios verdes; copy de la pileta | `proyectos.cardinal.sub_items` | los sub-items no se emiten |
 | Plano o foto de tipologías | `proyectos.cardinal.unidades.foto` | el render interior |

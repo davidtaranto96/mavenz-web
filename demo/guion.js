@@ -769,6 +769,39 @@
     medir();
   }
 
+  /* --- Las gotas de Somos: se corren con el puntero ----------------------- */
+  /* Escribe --mx/--my (-1..1) en la caja segun donde esta el puntero dentro
+     de la seccion entera, no solo sobre las gotas: asi se mueven apenas uno
+     entra a Somos. El CSS multiplica por --prof y la transicion larga hace
+     de inercia: no hay bucle de rAF, solo un frame por evento. Al salir de
+     la seccion vuelven al centro. Solo puntero fino, nunca con menos
+     movimiento. */
+  function gotas() {
+    var caja = $('[data-gotas]');
+    if (!caja || menos || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var zona = caja.closest('.quienes') || caja;
+    var pedido = false, x = 0, y = 0;
+    var pintar = function () {
+      pedido = false;
+      caja.style.setProperty('--mx', x.toFixed(3));
+      caja.style.setProperty('--my', y.toFixed(3));
+    };
+    var pedir = function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(pintar);
+    };
+    zona.addEventListener('pointermove', function (ev) {
+      if (ev.pointerType && ev.pointerType !== 'mouse') return;
+      var r = caja.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      x = Math.max(-1, Math.min(1, (ev.clientX - cx) / (r.width / 2)));
+      y = Math.max(-1, Math.min(1, (ev.clientY - cy) / (r.height / 2)));
+      pedir();
+    });
+    zona.addEventListener('pointerleave', function () { x = 0; y = 0; pedir(); });
+  }
+
   /* --- El carril de esferas en celular ------------------------------------ */
   /* Bajo 64rem las descripciones son un carril con scroll-snap: una tarjeta
      por vez, swipe o flechas. Se mantiene en sincronia con las esferas en
@@ -1018,6 +1051,7 @@
              'data-esfera', 'data-panel', null, null);
     anillo();
     puente();
+    gotas();
     carrilEsferas();
     trazoMetodo();
     tilt();

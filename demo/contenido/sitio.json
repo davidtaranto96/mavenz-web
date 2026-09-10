@@ -72,30 +72,24 @@
     "titulo": "Somos Mavenz",
     "copy": "Nacimos con una manera diferente de trabajar dentro del Real Estate: integral, estratégica y colaborativa.",
     "copy2": "Acompañamos a desarrolladores, inversores y propietarios de tierras, conectando estrategia, negocios, comunicación y comercialización para transformar oportunidades en proyectos que avanzan.",
-    "circulos": {
-      "_dt": "PROVISORIAS (SOM-4, 08/09): Vero pidio dos fotos en circulo, una de fondo y otra superpuesta, y no dijo cuales. Van dos aereas reales para que se vea la composicion; se cambian por las que mande. Si `circulos` queda vacio ({}), la columna no se emite y el texto ocupa el ancho.",
+    "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3).",
+    "gotas": {
+      "_dt": "Dos gotas con video adentro (10/09, pedido de David: que incluyan videos, que sean como gotas que se mueven con el mouse y un 50 % mas grandes). Cada una lleva `video` {src, poster, alt} o `foto` {src, anchos, alt, ancho, alto}. Los clips son recortes cuadrados del post de Cardinal sin el subtitulo quemado, en ida y vuelta: los cerros (22,9 a 24,2 s, a 1,5x mas lento) y la pileta (17,95 a 19,8 s). Alternativa lista si Vero prefiere otra: el campo verde del mismo post, 13,7 a 15,2 s. Las dos aereas provisorias de antes siguen en img/ (aerea-verde, aerea-dia) por si se vuelve a foto. Si `gotas` queda vacio ({}) la columna no se emite y el texto ocupa el ancho.",
       "fondo": {
-        "src": "img/aerea-verde",
-        "anchos": [
-          800,
-          1600
-        ],
-        "alt": "Vista aérea del valle de San Lorenzo",
-        "ancho": 1600,
-        "alto": 739
+        "video": {
+          "src": "video/somos-territorio.mp4",
+          "poster": "video/somos-territorio-poster.webp",
+          "alt": "San Lorenzo desde el aire, con los cerros al fondo"
+        }
       },
       "frente": {
-        "src": "img/aerea-dia",
-        "anchos": [
-          800,
-          1600
-        ],
-        "alt": "Vista aérea de un barrio en San Lorenzo",
-        "ancho": 1600,
-        "alto": 739
+        "video": {
+          "src": "video/somos-vida.mp4",
+          "poster": "video/somos-vida-poster.webp",
+          "alt": "La pileta de Cardinal, en render"
+        }
       }
-    },
-    "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3)."
+    }
   },
   "universo": {
     "titulo": "El Universo Mavenz",

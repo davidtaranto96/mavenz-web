@@ -226,39 +226,58 @@ def hero(d):
 
 
 def quienes(d):
-    """Somos Mavenz, como quedo el 08/09 (SOM-1..5): titulo, dos parrafos en
-    una columna angosta, y a la derecha dos fotos en circulo, una de fondo y
-    otra un poco superpuesta (SOM-4). Sin `circulos` la columna no se emite y
-    el texto ocupa el ancho: lo que falta se oculta por dato, no con
-    placeholder. Se fueron el rotulo lateral, la cita y la foto de 'Donde
-    trabajamos'. Solo vive en Inicio."""
+    """Somos Mavenz, como quedo el 08/09 (SOM-1..5) y se agrando el 10/09:
+    titulo y dos parrafos en una columna angosta y, a la derecha, dos gotas
+    (recortes organicos, una de fondo y otra superpuesta) con un video o una
+    foto adentro, que se corren con el puntero (gotas() en guion.js). Cada
+    gota es `{"video": {src, poster, alt}}` o `{"foto": {src, anchos, alt,
+    ancho, alto}}`; el video va diferido como los demas (sin src hasta que se
+    ve) y sin `data-pesado`: pesa menos de 400 KB y en el celular se ve. Sin
+    `gotas` la columna no se emite y el texto ocupa el ancho: lo que falta se
+    oculta por dato, no con placeholder. Solo vive en Inicio."""
     q = d["quienes"]
-    c = q.get("circulos") or {}
-    circulos = ""
-    if c.get("fondo") and c.get("frente"):
-        circulos = (f'<div class="circulos" aria-hidden="false">'
-                    f'<figure class="circulo circulo--fondo">{img(c["fondo"], "(min-width:64rem) 28vw, 60vw", clase="circulo__foto")}</figure>'
-                    f'<figure class="circulo circulo--frente">{img(c["frente"], "(min-width:64rem) 24vw, 52vw", clase="circulo__foto")}</figure>'
-                    f'</div>')
-    return f'''<section class="seccion quienes{" quienes--con-circulos" if circulos else ""}" id="quienes"{fx("quienes")}>
+    g = q.get("gotas") or {}
+    gotas = ""
+    if g.get("fondo") and g.get("frente"):
+        def gota(nombre, prof, giro, sizes):
+            x = g[nombre]
+            if x.get("video"):
+                v = x["video"]
+                adentro = (f'<video class="gota__medio" data-diferido data-src="{e(medio(v["src"]))}" '
+                           f'poster="{e(medio(v["poster"]))}" muted loop playsinline preload="none" '
+                           f'aria-label="{e(v["alt"])}"></video>')
+            else:
+                adentro = img(x.get("foto") or x, sizes, clase="gota__medio")
+            return f'<figure class="gota gota--{nombre}" style="--prof: {prof}; --giro: {giro}">{adentro}</figure>'
+        gotas = ('<div class="gotas" data-gotas>'
+                 + gota("fondo", ".45", "-2", "(min-width:64rem) 30vw, 66vw")
+                 + gota("frente", "1", "3", "(min-width:64rem) 26vw, 58vw")
+                 + '</div>')
+    return f'''<section class="seccion quienes{" quienes--con-gotas" if gotas else ""}" id="quienes"{fx("quienes")}>
   <div class="quienes__texto">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["copy"])}</p>
     <p class="bajada">{e(q["copy2"])}</p>
   </div>
-  {circulos}
+  {gotas}
 </section>'''
 
 
 def puente():
-    """El pliegue entre Somos y el Universo (SOM-6): el papel se difumina en
-    el bistre del Universo. Un gradiente quieto y, encima, una capa de bistre
-    que crece desde abajo con el scroll (`scale: 1 var(--mezcla)`, solo
-    transform, la escribe puente() de guion.js). Sin guion o con menos
-    movimiento queda el gradiente, que ya es la transicion. Decorativo: no
-    tiene texto y el auditor lo saltea."""
+    """El pliegue entre Somos y el Universo (SOM-6), rehecho el 10/09: la
+    tinta se filtra en el papel. Un gradiente quieto con paradas en curva y,
+    encima, cuatro manchas de bistre con el borde difuso que suben desde
+    abajo con el scroll, cada una a su velocidad (`--vel`; solo transform:
+    translate por (1 - --mezcla), y --mezcla la escribe puente() de
+    guion.js), y una capa de grano arriba de todo. Sin guion o con menos
+    movimiento las manchas ya estan arriba (--mezcla vale 1 por defecto).
+    Decorativo: no tiene texto y el auditor lo saltea."""
+    manchas = "".join(
+        f'<i class="puente__mancha" style="--l: {l}; --an: {an}; --al: {al}; --vel: {vel}"></i>'
+        for l, an, al, vel in (("-10%", "46%", "150%", "85%"), ("22%", "58%", "115%", "45%"),
+                               ("52%", "44%", "175%", "70%"), ("70%", "52%", "125%", "30%")))
     return ('<div class="puente" data-puente data-decorativo aria-hidden="true">'
-            '<div class="puente__tinta"></div></div>')
+            f'<div class="puente__manchas">{manchas}</div><div class="puente__grano"></div></div>')
 
 
 def orbita(d):
