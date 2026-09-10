@@ -232,52 +232,8 @@ p { text-wrap: pretty; }
   transition: color var(--hover) var(--curva);
 }
 
-.hamburguesa {
-  width: 44px; height: 44px;
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
-  gap: 5px;
-  margin-right: -10px;
-}
-.hamburguesa span {
-  display: block; width: 22px; height: 1.5px;
-  background: var(--tinta);
-  transition: transform var(--hover) var(--curva), opacity var(--hover) var(--curva);
-}
-.cabecera[data-menu] .hamburguesa span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.cabecera[data-menu] .hamburguesa span:nth-child(2) { opacity: 0; }
-.cabecera[data-menu] .hamburguesa span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-/* Panel de menú en celular */
-.panel {
-  position: fixed;
-  /* ocupa la pantalla entera debajo de la barra, no es un desplegable */
-  inset: var(--alto-nav) 0 0 0;
-  z-index: 19;
-  background: var(--papel);
-  padding: 2rem var(--margen-ext) 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  transform: translateY(-8px);
-  opacity: 0;
-  visibility: hidden;
-  transition: transform var(--cambio) var(--curva), opacity var(--cambio) var(--curva), visibility var(--cambio);
-}
-.panel[data-abierto] { transform: none; opacity: 1; visibility: visible; }
-.panel a {
-  display: flex;
-  align-items: center;
-  min-height: 56px;
-  font-size: var(--t-cita);
-  font-weight: var(--ui);
-  letter-spacing: -.01em;
-  color: var(--tinta);
-  border-bottom: 1px solid var(--linea);
-}
-.panel a:last-of-type { border-bottom: 0; }
-.panel .boton { margin-top: auto; }
+/* La hamburguesa y el panel de celular se fueron (09/09): el unico menu
+   desplegable es el flotante de abajo a la derecha. */
 
 /* mientras el menú está abierto el fondo no scrollea */
 body[data-menu-abierto] { overflow: hidden; }
@@ -319,21 +275,24 @@ body[data-menu-abierto] { overflow: hidden; }
 
 .cabecera .boton { display: none; }
 
-.panel .boton { width: 100%; margin-top: 1.25rem; }
 
 /* ==========================================================================
    Hero
    ========================================================================== */
 
+/* La primera pantalla es de alto completo con la cinta al pie, como la
+   referencia. El video es de fondo y esta diferido: en el celular no se baja
+   nunca (data-pesado), queda el poster. */
 .hero {
   position: relative;
   margin-top: calc(var(--alto-nav) * -1);
-  height: min(88svh, 55rem);
-  min-height: 30rem;
+  height: 100svh;
+  min-height: 34rem;
   overflow: hidden;
   isolation: isolate;
+  background: var(--tinta);
 }
-.hero__foto {
+.hero__fondo {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
@@ -344,27 +303,20 @@ body[data-menu-abierto] { overflow: hidden; }
   inset: 0;
   background: linear-gradient(180deg, var(--velo-1) 0%, var(--velo-2) 38%, var(--velo-3) 100%);
 }
-.hero__trazos {
-  position: absolute;
-  left: 0; right: 0;
-  /* Anclado al pie como el bloque de texto: así cruza siempre por detrás del
-     título, sea cual sea el alto del hero. */
-  bottom: 19.75rem;
-  height: 11.875rem;
-  pointer-events: none;
-}
-.hero__trazos svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero__trazos .eco { opacity: .5; }
-
+/* Titulo y bajada centrados (pedido del 08/09, con la referencia al lado):
+   una columna centrada, sin nada pegado a los bordes. El bloque vive en el
+   tercio medio y deja libre el pie para la cinta. */
 .hero__texto {
   position: absolute;
-  left: var(--margen-ext);
-  right: var(--margen-ext);
-  bottom: clamp(2.25rem, 1rem + 3.5vw, 6rem);
+  inset: var(--alto-nav) var(--margen-ext) clamp(5.5rem, 12svh, 8rem);
   z-index: 2;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
 }
 .hero__titulo {
-  max-width: 15ch;
+  max-width: 14ch;
   font-size: var(--t-hero);
   font-weight: var(--grueso);
   text-transform: uppercase;
@@ -374,68 +326,53 @@ body[data-menu-abierto] { overflow: hidden; }
 }
 .hero__bajada {
   margin-top: clamp(1.25rem, .8rem + 1.14vw, 1.875rem);
-  max-width: 26ch;
+  max-width: 34ch;
   font-size: var(--t-lead);
   font-weight: var(--fino);
   line-height: 1.45;
   color: var(--sobre-foto);
 }
-.hero__apoyo {
-  margin-top: .75rem;
-  max-width: 42ch;
-  font-size: var(--t-cuerpo);
-  font-weight: var(--fino);
-  line-height: 1.6;
-  color: var(--sobre-foto-2);
-}
 .hero__acciones {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   gap: .25rem;
   margin-top: clamp(1.625rem, 1rem + 1.6vw, 2.75rem);
 }
-.hero__acciones .boton { width: 100%; }
+.hero__acciones .boton { width: auto; }
 .hero__acciones .subrayado { align-self: center; }
 
-/* Botón flotante de WhatsApp: siempre disponible, que fue el pedido. */
-.wa {
-  position: fixed;
-  right: clamp(1rem, .5rem + 1.3vw, 2.5rem);
-  bottom: clamp(1rem, .5rem + 1.3vw, 2.5rem);
-  z-index: 15;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  height: 44px;
-  padding-inline: 1rem;
-  border-radius: 999px;
-  background: var(--papel-vidrio);
-  color: var(--tinta-bordo);
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  box-shadow: 0 8px 24px var(--sombra);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* La cinta del pie: los mundos del sitio corriendo sobre el video. Entran
+   difuminados y se afinan hacia el centro: la mascara resuelve la opacidad
+   (con el token de tinta como color opaco de la mascara) y el JS escribe el
+   desenfoque por pieza segun la distancia al centro, solo con puntero fino. */
+.hero__cinta {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding-block: clamp(.75rem, 2svh, 1.25rem);
+  background: linear-gradient(180deg, transparent, rgba(30, 30, 32, .45));
+  mask-image: linear-gradient(90deg, transparent, var(--tinta) 14%, var(--tinta) 86%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, var(--tinta) 14%, var(--tinta) 86%, transparent);
 }
-.wa__punto {
-  width: 7px; height: 7px;
-  border-radius: 999px;
-  background: var(--tinta-bordo);
+/* Dos clases a proposito: la base `.cinta` (papel, filete, padding) esta mas
+   abajo en la hoja y con una sola clase le ganaba a esta, dejando texto papel
+   sobre fondo papel: la cinta salia como una banda vacia. */
+.hero__cinta .cinta { padding: 0; border: 0; background: transparent; overflow: hidden; }
+.hero__cinta .cinta__riel { gap: clamp(2rem, 5vw, 5rem); align-items: baseline; }
+.hero__cinta .cinta__pieza {
+  /* 44px de caja: son enlaces y el toque vale en la cinta tambien (median 35 y 27). */
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.5rem);
+  font-weight: var(--grueso);
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  color: var(--sobre-foto);
+  filter: blur(var(--foco, 0px));
+  will-change: filter;
 }
 
-/* Un globo permanente es ruido: se esconde donde el visitante ya tiene el
-   WhatsApp a la vista (el hero y el cierre). Lo pone y lo saca el guion; si
-   el guion no corre, queda visible, que es el lado seguro. */
-.wa {
-  transition: opacity var(--cambio) var(--curva), transform var(--cambio) var(--curva),
-              scale var(--pulsado) var(--curva);
-}
-.wa[data-oculto] {
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-}
+/* El globo .wa se fue (09/09): lo reemplaza el flotante, al final de la hoja. */
 
 /* ==========================================================================
    El dossier: margen ancho y una sola línea vertical que lo cose todo
@@ -825,7 +762,10 @@ body[data-menu-abierto] { overflow: hidden; }
 .pie__iso { height: clamp(1.375rem, 1.2rem + .38vw, 1.625rem); width: auto; }
 .pie__redes { display: flex; align-items: center; gap: 1.25rem; font-size: var(--t-nota); font-weight: var(--ui); }
 .pie__redes a { color: var(--tinta-parrafo); min-height: 44px; display: inline-flex; align-items: center; }
-.pie__abajo { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+/* flex-wrap: en 390 la fila lleva lugar, paginas, idioma y el enlace de
+   cookies (cuando hay etiquetas); sin wrap el ultimo se salia de la pantalla
+   y el celular hacia zoom out (innerWidth 425 en vez de 390). */
+.pie__abajo { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1rem; }
 .pie__lugar { font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
 
 /* ==========================================================================
@@ -840,14 +780,9 @@ body[data-menu-abierto] { overflow: hidden; }
    gesto del visitante. --trazo se declara con @property para que se pueda
    animar; arranca en 1 (dibujado) para que sin JS y sin animación se vea. */
 @property --trazo { syntax: "<number>"; inherits: true; initial-value: 1; }
-@keyframes mvTrazo { from { --trazo: 0; } to { --trazo: .72; } }
 
-.trazo-vivo {
-  stroke-dasharray: 1;
-  stroke-dashoffset: calc(1 - var(--trazo));
-  animation: mvTrazo 1.9s var(--curva) .3s forwards;
-}
 
+/* .trazo-vivo se fue con el hero del 08/09; @property --trazo queda para el metodo. */
 /* ==========================================================================
    Carril 2 — tableta y notebook (≥ 64rem / 1024 px)
    Los selectores llevan la etiqueta: un @media no agrega especificidad.
@@ -872,10 +807,8 @@ body[data-menu-abierto] { overflow: hidden; }
     color: var(--tinta);
     transition: color var(--hover) var(--curva);
   }
-  header.cabecera .hamburguesa { display: none; }
   header.cabecera .boton { display: inline-flex; height: 42px; padding-inline: 1.5rem; font-size: var(--t-nota); }
   header.cabecera .cabecera__derecha { gap: clamp(1rem, -.5rem + 2.1vw, 1.625rem); }
-  div.panel { display: none; }
 
   section.seccion .seccion__margen { display: block; }
 
@@ -883,8 +816,6 @@ body[data-menu-abierto] { overflow: hidden; }
   section.seccion .seccion__cabeza .titulo { flex: 0 0 clamp(24rem, 4rem + 38vw, 40rem); }
   section.seccion .seccion__cabeza--pie { align-items: flex-end; }
 
-  .hero .hero__texto { left: calc(var(--margen-ext) + var(--margen-int)); right: var(--margen-der); }
-  .hero .hero__trazos { bottom: 7.375rem; height: 26.875rem; }
   .hero .hero__acciones { flex-direction: row; align-items: center; gap: clamp(1.25rem, -1rem + 3.4vw, 2.125rem); }
   .hero .hero__acciones .boton { width: auto; }
   .hero .hero__acciones .subrayado { align-self: auto; }
@@ -1015,12 +946,9 @@ body[data-menu-abierto] { overflow: hidden; }
 /* El hero es lo primero que se rompe: con 657 px de alto el título gigante se
    mete abajo del nav. Acá el cuerpo del hero se mide contra svh. */
 @media (min-width: 64rem) and (max-height: 50rem) {
-  .hero .hero__titulo  { font-size: min(var(--t-hero), 12svh); }
+  .hero .hero__titulo  { font-size: min(var(--t-hero), 11svh); }
   .hero .hero__bajada  { margin-top: 1rem; }
-  .hero .hero__apoyo   { margin-top: .5rem; }
   .hero .hero__acciones { margin-top: 1.5rem; }
-  .hero .hero__texto   { bottom: 2.5rem; }
-  .hero .hero__trazos  { bottom: 4rem; height: 20rem; }
 }
 
 /* ==========================================================================
@@ -1058,8 +986,6 @@ body[data-menu-abierto] { overflow: hidden; }
   .hero { height: auto; min-height: 0; margin-top: 0; padding-block: 2rem 2.5rem; }
   /* relative y no static: en estático el z-index no aplica y la foto lo tapa.
      inset:auto porque en relative un `bottom` no ancla, corre el bloque. */
-  .hero__texto { position: relative; inset: auto; padding-inline: var(--margen-ext); }
-  .hero__trazos { top: 1rem; bottom: auto; height: 9rem; }
   .hero__titulo { font-size: clamp(2.25rem, 1rem + 5vw, 3.5rem); }
   .rueda { width: min(60%, 20rem); }
 }
@@ -1072,7 +998,6 @@ body[data-menu-abierto] { overflow: hidden; }
   html { scroll-behavior: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .trazo-vivo { animation: none; --trazo: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   [data-letras] span { animation: none !important; opacity: 1 !important; }
@@ -1155,40 +1080,13 @@ body[data-menu-abierto] { overflow: hidden; }
 .cabecera[data-tema="oscuro"] .cabecera__enlaces a,
 .cabecera[data-tema="oscuro"] .idioma__on { color: var(--sobre-foto); }
 .cabecera[data-tema="oscuro"] .idioma__off { color: var(--sobre-foto-2); }
-.cabecera[data-tema="oscuro"] .hamburguesa span { background: var(--sobre-foto); }
 .cabecera[data-tema="oscuro"] .boton { background: var(--sobre-foto); color: var(--tinta-bordo); }
 
 /* ==========================================================================
    El pie de foto del hero: lámina catalogada, no banner de stock
    ========================================================================== */
 
-.hero__pie {
-  position: absolute;
-  left: var(--margen-ext);
-  right: var(--margen-ext);
-  top: calc(var(--alto-nav) + 1rem);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.hero__leyenda {
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  letter-spacing: .12em;
-  color: var(--sobre-foto-2);
-  max-width: 22ch;
-}
-.muestras { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.muestras li { width: 12px; height: 12px; border: 1px solid rgba(238, 236, 236, .35); }
-.muestras li:nth-child(1) { background: var(--tinta); }
-.muestras li:nth-child(2) { background: var(--tinta-bordo); }
-.muestras li:nth-child(3) { background: var(--tinta-parrafo); }
-.muestras li:nth-child(4) { background: var(--tinta-apoyo); }
-.muestras li:nth-child(5) { background: var(--linea-acento); }
-.muestras li:nth-child(6) { background: var(--linea); }
-.muestras li:nth-child(7) { background: var(--papel); }
+/* .hero__pie, .hero__leyenda y .muestras se fueron con el hero del 08/09. */
 
 /* ==========================================================================
    El método: cinco verbos que se abren y cuentan qué pasa
@@ -2153,8 +2051,7 @@ body[data-menu-abierto] { overflow: hidden; }
 /* Los enlaces de la cabecera medían 20 px de alto. El área táctil se agranda
    sin mover el diseño: el texto queda donde estaba. */
 .cabecera__enlaces a,
-.pie__paginas a,
-.panel > a {
+.pie__paginas a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -2764,3 +2661,616 @@ textarea.campo__entrada { resize: vertical; min-height: 6rem; }
     transition: none; translate: none; opacity: 1;
   }
 }
+
+/* =========================================================================
+   Fase 2a — Aviso de cookies (modulo consent.js)
+   ========================================================================= */
+/* ==========================================================================
+   Mavenz — aviso de cookies
+   Una tarjeta del mismo papel que la página, abajo a la izquierda, con la
+   palabra "Cookies" enorme y torcida cortándose contra los bordes. Las dos
+   acciones son texto subrayado que se baraja al pasar el puntero, no botones
+   con caja.
+
+   Cero hex: todo sale de los tokens de estilos.css. Los tiempos del efecto
+   .barajar (200 / 220 ms, sus curvas) y la entrada de la tarjeta (500 ms)
+   están medidos en la referencia, era-residence.com, y por eso viven acá como
+   valores locales y no como --hover / --cambio, que son de otro gesto.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   La tarjeta
+   -------------------------------------------------------------------------- */
+
+@keyframes cookiesEntrar   { from { opacity: 0; translate: 0 12px; } }
+@keyframes cookiesAparecer { from { opacity: 0; } }
+
+.cookies {
+  /* El mismo margen que el globo de WhatsApp: los dos flotantes a una altura. */
+  --cookies-borde: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+
+  position: fixed;
+  left: var(--cookies-borde);
+  bottom: var(--cookies-borde);
+  z-index: 25;                                 /* sobre el globo (15), bajo el "saltar" (50) */
+  width: min(21rem, calc(100vw - 2rem));
+  padding: 1.5rem 1.75rem 1.5rem;
+  background: var(--papel);
+  color: var(--tinta-bordo);
+  border-radius: 6px;
+  /* clip y no hidden: corta la palabra sin abrir un contexto de scroll. */
+  overflow: clip;
+  /* Papel sobre papel: sin sombra la tarjeta no tiene borde contra la página.
+     La misma que lleva el globo, para que sean de la misma familia. */
+  box-shadow: 0 8px 24px var(--sombra);
+  animation: cookiesEntrar 500ms cubic-bezier(.16, 1, .3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cookies { animation-name: cookiesAparecer; }   /* aparece, no sube */
+}
+
+/* El marco: una línea metida 8 px del borde. Va en un pseudo y no en un
+   border para que la palabra grande pase por encima de la línea y se corte
+   contra el borde de la tarjeta, no contra el marco. */
+.cookies::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: 0;
+  border: 1px solid var(--linea);
+  border-radius: 1px;                          /* concéntrico: 6 px afuera menos 8 px adentro da cero */
+  pointer-events: none;
+}
+
+/* La palabra. Es la mitad del gesto: desborda a los dos lados y overflow:
+   clip de la tarjeta la corta. Gira sobre su esquina de abajo a la izquierda
+   y no sobre el centro, para que suba hacia la derecha y nunca baje sobre la
+   línea legal que tiene debajo. */
+.cookies__titulo {
+  position: relative;
+  z-index: 1;                                  /* por encima del marco */
+  margin-block: 0 .25em;
+  margin-inline: -.5em;
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: var(--grueso);
+  line-height: .9;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+  rotate: -12deg;
+  transform-origin: 0 100%;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* La línea legal: 13-14 px en peso 400, no en el 300 del cuerpo, que a ese
+   tamaño sobre papel se deshace. */
+.cookies__texto {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 .875rem;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.cookies__acciones {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .625rem;
+  font-size: var(--t-chico);
+  font-weight: var(--medio);
+}
+.cookies__barra { color: var(--linea-acento); }
+
+/* Celular: sube para no pisar el globo de WhatsApp, que en pantalla angosta
+   comparte la esquina, y la palabra baja de tamaño para que se lea entera. */
+@media (max-width: 63.99rem) {
+  .cookies { bottom: 5.5rem; }
+  .cookies__titulo { font-size: clamp(3rem, 18vw, 4.5rem); }
+}
+
+/* Con el menú de celular abierto la tarjeta no tiene nada que hacer encima. */
+body[data-menu-abierto] .cookies { visibility: hidden; }
+
+/* El enlace del pie viene con hidden en el HTML y sólo consent.js se lo saca.
+   Se declara acá por si algún display del pie le gana al hidden del navegador. */
+[data-cookies-abrir][hidden] { display: none; }
+
+/* --------------------------------------------------------------------------
+   .barajar — la palabra que se baraja
+   Medido en era-residence.com. Dos copias de la misma palabra en la misma
+   celda: al entrar el puntero la copia 1 se apaga letra por letra hacia la
+   derecha mientras la copia 2 entra desde la izquierda, y el subrayado se
+   recoge hacia la derecha. Al salir, el mismo intercambio al revés y el
+   subrayado vuelve a crecer desde la izquierda.
+
+   Un solo interruptor, --vivo (0 en reposo, 1 con el puntero encima o con el
+   foco), y todo lo demás se calcula desde ahí. Así el :hover, que sólo existe
+   con puntero fino, y el :focus-visible, que existe siempre, prenden lo mismo
+   sin repetir las reglas dos veces.
+   -------------------------------------------------------------------------- */
+
+.barajar {
+  --vivo: 0;
+  --se-va: 200ms cubic-bezier(.55, 0, 1, .45);    /* la copia que se apaga: acelera y se va */
+  --llega: 220ms cubic-bezier(.16, 1, .3, 1);     /* la copia que entra: llega y frena */
+  /* En reposo (o sea, cuando el puntero acaba de salir) la copia 1 es la que
+     vuelve y la copia 2 la que se va. Prendido, al revés. */
+  --t-sale:  var(--llega);
+  --t-entra: var(--se-va);
+
+  position: relative;
+  /* Grilla y no absolute: las dos copias en la misma celda se pisan solas y
+     quedan centradas dentro del alto táctil sin calcular nada. */
+  display: inline-grid;
+  place-items: center;
+  min-height: 44px;                               /* área táctil; el aspecto no cambia */
+  padding-inline: .125rem;
+  color: var(--tinta-bordo);
+  line-height: 1.1;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.barajar:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* Los dos estados que prenden el efecto. Son las únicas tres líneas que se
+   repiten: el resto sale de --vivo. */
+.barajar:focus-visible { --vivo: 1; --t-sale: var(--se-va); --t-entra: var(--llega); }
+@media (hover: hover) and (pointer: fine) {
+  .barajar:hover      { --vivo: 1; --t-sale: var(--se-va); --t-entra: var(--llega); }
+}
+
+.barajar__copia {
+  grid-area: 1 / 1;
+  position: relative;                             /* las dos posicionadas: gana el orden del DOM, la 2 arriba */
+  display: inline-block;
+}
+
+/* El subrayado va en la copia 1, que es la que no se mueve. El origen no se
+   transiciona, así que es el del estado destino el que manda: 100 % (derecha)
+   cuando se prende, para que se recoja hacia la derecha; 0 % (izquierda) en
+   reposo, para que al soltar vuelva a crecer desde la izquierda. */
+.barajar__copia--sale::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1.5px;
+  background: currentColor;
+  scale: calc(1 - var(--vivo)) 1;
+  transform-origin: calc(var(--vivo) * 100%) 50%;
+  transition: scale 200ms var(--curva);
+}
+
+/* Las letras. El delay va después del shorthand a propósito: el shorthand lo
+   pone en cero y lo pisaría. 30 ms por letra: la ola va de izquierda a
+   derecha, en las dos direcciones. */
+.barajar__letra { display: inline-block; }
+
+.barajar__copia--sale .barajar__letra {
+  opacity: calc(1 - var(--vivo));
+  translate: calc(var(--vivo) * var(--i, 0) * 2px) 0;     /* abanico: cada letra corre un poco más que la anterior */
+  transition: opacity var(--t-sale), translate var(--t-sale);
+  transition-delay: calc(var(--i, 0) * 30ms);
+}
+.barajar__copia--entra .barajar__letra {
+  opacity: var(--vivo);
+  translate: calc((1 - var(--vivo)) * -8px) 0;            /* llega desde la izquierda */
+  transition: opacity var(--t-entra), translate var(--t-entra);
+  transition-delay: calc(var(--i, 0) * 30ms);
+}
+
+/* Menos movimiento: sólo cambia el subrayado. La palabra se queda quieta y la
+   segunda copia sobra. Misma especificidad que las reglas de arriba, si no
+   no les gana. */
+@media (prefers-reduced-motion: reduce) {
+  .barajar__copia--sale .barajar__letra { transition: none; opacity: 1; translate: none; }
+  .barajar__copia--entra { display: none; }
+}
+
+/* =========================================================================
+   Fase 2a — Flotante: menu + WhatsApp (modulo del 10/09)
+   ========================================================================= */
+/* ==========================================================================
+   Flotante — el menú y el WhatsApp viven juntos en la esquina de abajo a la
+   derecha. Reemplaza al globo .wa, a la .hamburguesa y al .panel de la
+   cabecera (sus bloques de estilos.css y de guion.js se van; queda
+   `body[data-menu-abierto] { overflow: hidden }`, que este módulo usa).
+
+   La mecánica está copiada de realevate.agency/bythesea, medida cuadro a
+   cuadro: el botón "se convierte" en el panel en dos tiempos (primero el
+   alto, después el ancho), el contenido entra escalonado desde abajo y cada
+   ítem rueda en vertical al pasar el puntero. La paleta y la tipografía son
+   las de Mavenz: cero hex, sólo las variables de :root.
+
+   Quién escribe qué:
+     body[data-lejos]              el guion, cuando la cabecera salió de la pantalla
+     .flotante[data-abierto]       el guion, al abrir el menú
+     .flotante[data-oculto]        el guion, sobre #contacto
+     .flotante[data-tema="oscuro"] mirarTema, según el bloque que hay detrás
+     style="--i: n"                el generador, en cada enlace del panel
+   ========================================================================== */
+
+.flotante {
+  /* Tokens locales: el par tinta/fondo se da vuelta con data-tema y todo el
+     módulo lo lee de acá, así la inversión es una regla y no diez. */
+  --flotante-tinta: var(--tinta-bordo);
+  --flotante-fondo: var(--papel);
+  /* La curva medida en la referencia: arranca fuerte y frena largo. No es
+     --curva porque ésta es más brusca a propósito: el panel tiene que saltar
+     del botón, no deslizarse. */
+  --flotante-curva: cubic-bezier(.16, 1, .3, 1);
+
+  position: fixed;
+  right: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  bottom: clamp(1rem, .5rem + 1.3vw, 2.5rem);
+  z-index: 30;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 5px;
+  color: var(--flotante-tinta);
+  transition: opacity 250ms var(--curva), translate 250ms var(--curva);
+}
+/* Sobre un bloque oscuro se invierte: --sobre-foto es papel, el token que el
+   sitio ya usa para lo que va encima de una foto. */
+.flotante[data-tema="oscuro"] {
+  --flotante-tinta: var(--sobre-foto);
+  --flotante-fondo: var(--tinta-bordo);
+}
+
+/* Escritorio: nace escondido y aparece cuando la cabecera salió de la
+   pantalla. Abajo de 64rem la cabecera no tiene enlaces, así que el
+   flotante es el único menú y está siempre. Abierto no se esconde nunca. */
+@media (min-width: 64rem) {
+  .flotante:not([data-abierto]) {
+    opacity: 0;
+    translate: 0 12px;
+    pointer-events: none;
+  }
+  body[data-lejos] .flotante {
+    opacity: 1;
+    translate: none;
+    pointer-events: auto;
+  }
+}
+/* Sobre #contacto se va entero, como hacía el globo: ahí el WhatsApp ya está
+   delante del visitante. */
+.flotante[data-oculto]:not([data-abierto]) {
+  opacity: 0;
+  translate: 0 12px;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flotante:not([data-abierto]),
+  .flotante[data-oculto]:not([data-abierto]) { translate: none; transition: opacity 250ms var(--curva); }
+}
+
+/* --------------------------------------------------------------------------
+   La píldora de WhatsApp
+   -------------------------------------------------------------------------- */
+
+.flotante__wa {
+  position: relative;
+  z-index: 2;               /* encima del panel, que viene después en el DOM */
+  isolation: isolate;       /* el ::before con z-index -1 no se escapa del enlace */
+  overflow: hidden;         /* el barrido respeta el radio */
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding-inline: 1.125rem;
+  border: 1px solid var(--flotante-tinta);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--flotante-tinta);
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  line-height: 1;
+  white-space: nowrap;
+  transition: color .3s var(--flotante-curva), border-color var(--hover) var(--curva),
+              opacity var(--hover) var(--curva), visibility 0s;
+}
+/* El relleno: una caja del color de la tinta que crece desde la izquierda.
+   Al salir se recoge hacia el mismo lado porque el origen no cambia. */
+.flotante__wa::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--flotante-tinta);
+  transform-origin: left;
+  scale: 0 1;
+  transition: scale .3s var(--flotante-curva);
+}
+@media (hover: hover) and (pointer: fine) {
+  .flotante__wa:hover { color: var(--flotante-fondo); }
+  .flotante__wa:hover::before { scale: 1 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flotante__wa { transition: color 0s, border-color var(--hover) var(--curva), opacity var(--hover) var(--curva), visibility 0s; }
+  .flotante__wa::before { transition: none; }
+}
+/* Abierto, la píldora se va: el panel ya trae el WhatsApp en el pie y encima
+   compartiría renglón con el selector de idioma. Vuelve al cerrar. */
+.flotante[data-abierto] .flotante__wa {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--hover) var(--curva), visibility 0s linear var(--hover);
+}
+
+/* --------------------------------------------------------------------------
+   El botón: dos rayas desiguales, alineadas a la izquierda
+   -------------------------------------------------------------------------- */
+
+.flotante__boton {
+  position: relative;
+  z-index: 2;
+  width: 46px;
+  height: 44px;
+  border-radius: 6px;
+  background: var(--flotante-tinta);
+  /* El color del texto no se ve (no hay texto): está para que el aro de
+     foco, que es currentColor, sea del color del botón y se vea sobre lo que
+     haya detrás. Papel sobre papel no se vería. */
+  color: var(--flotante-tinta);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding-left: 15px;       /* (46 − 16) / 2: la larga queda centrada, la corta arranca en el mismo borde */
+  transition: background-color var(--hover) var(--curva), color var(--hover) var(--curva);
+}
+.flotante__raya {
+  display: block;
+  height: 2px;
+  background: var(--flotante-fondo);
+  transform-origin: left;
+  transition: scale .2s var(--flotante-curva), background-color var(--hover) var(--curva);
+}
+.flotante__raya--larga { width: 16px; }
+.flotante__raya--corta { width: 7px; }
+/* Abierto: la larga se recoge hacia la izquierda y queda el guioncito solo,
+   en su lugar. Ese guión es el cerrar. No hay X: la referencia no la usa. */
+.flotante__boton[aria-expanded="true"] .flotante__raya--larga { scale: 0 1; }
+/* Abierto el botón está parado sobre el panel, que es papel siempre: se
+   pinta de bordó sea cual sea el tema de atrás. */
+.flotante[data-abierto] .flotante__boton { background: var(--tinta-bordo); color: var(--tinta-bordo); }
+.flotante[data-abierto] .flotante__raya { background: var(--papel); }
+@media (prefers-reduced-motion: reduce) {
+  .flotante__raya { transition: background-color var(--hover) var(--curva); }
+}
+
+/* --------------------------------------------------------------------------
+   El panel: anclado a la esquina del botón, crece desde ahí
+   -------------------------------------------------------------------------- */
+
+.flotante__panel {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;               /* debajo del botón, que es el que lo abre y lo cierra */
+  width: min(17rem, calc(100vw - 2rem));
+  /* Nunca más alto que la pantalla: el nav de adentro es el que cede. */
+  max-height: calc(100svh - 6rem);
+  /* El aire de arriba es a propósito: la mitad del efecto es que el panel
+     sea más grande que lo que contiene. */
+  padding: 5.5rem 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  color: var(--tinta-bordo);
+  /* Cerrado no existe para el teclado ni para el puntero. La visibilidad se
+     va recién cuando el fondo terminó de plegarse (.39s), por eso el retraso. */
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear .4s;
+}
+.flotante[data-abierto] .flotante__panel {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+/* Celular acostado: con 375px de alto el aire de arriba se come el menú. */
+@media (max-height: 30rem) {
+  .flotante__panel { padding-top: 2.5rem; }
+}
+
+/* El fondo son dos cajas sin texto, una adentro de la otra, que crecen desde
+   la esquina del botón. Sólo transform, nada de width o height: no
+   relayoutan y el contenido no se reacomoda mientras crecen.
+   Apertura: alto (0 → .12s) y después ancho (.10 → .25s).
+   Cierre: al revés, ancho (.12 → .27s) y después alto (.27 → .39s).
+   Como la transición que manda es la del estado al que se va, cada estado
+   lleva sus propios tiempos: los de abajo son los del cierre. */
+.flotante__fondo-y {
+  position: absolute;
+  inset: 0;
+  transform-origin: 100% 100%;
+  scale: 1 0;
+  transition: scale .12s var(--flotante-curva) .27s;
+}
+.flotante__fondo-x {
+  position: absolute;
+  inset: 0;
+  transform-origin: 100% 100%;
+  scale: 0 1;
+  background: var(--papel);
+  /* Papel sobre papel: sin sombra el panel no tiene borde contra la pagina.
+     La misma que llevan la tarjeta de cookies y el globo viejo. */
+  box-shadow: 0 12px 32px var(--sombra);
+  transition: scale .15s var(--flotante-curva) .12s;
+}
+.flotante[data-abierto] .flotante__fondo-y { scale: 1 1; transition: scale .12s var(--flotante-curva); }
+.flotante[data-abierto] .flotante__fondo-x { scale: 1 1; transition: scale .15s var(--flotante-curva) .10s; }
+@media (prefers-reduced-motion: reduce) {
+  .flotante__panel,
+  .flotante__fondo-y,
+  .flotante__fondo-x { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   El contenido: encima del fondo, entra escalonado
+   -------------------------------------------------------------------------- */
+
+/* relative y no static: lo absoluto (el fondo) pinta arriba de lo estático
+   aunque venga antes en el DOM. */
+.flotante__enlaces,
+.flotante__pie,
+.flotante .idioma { position: relative; }
+
+.flotante__enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  flex: 1 1 auto;
+  min-height: 0;            /* sin esto el flex no deja achicar al nav y nunca scrollea */
+}
+/* Donde el panel puede topar con la pantalla, el nav scrollea. No en
+   escritorio alto: ahí sobra lugar y un overflow: auto muestra una barra
+   fugaz mientras los ítems entran translateados. */
+@media (max-width: 63.99rem), (max-height: 40rem) {
+  .flotante__enlaces {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    /* El aro de foco sale 5px del enlace y el overflow lo recortaría: se le
+       hace lugar con padding y se lo devuelve con margen negativo. */
+    padding: .375rem;
+    margin: -.375rem;
+  }
+}
+
+/* Cada ítem es una ventana de una línea (1.12em) con la palabra dos veces
+   apilada; al pasar el puntero la pista sube media altura y aparece la
+   copia. Sin cambio de color ni subrayado: el movimiento es el hover.
+
+   El área de toque, que no es obvia: la ventana recorta con overflow, y
+   overflow recorta en el borde del PADDING, así que un padding agranda lo
+   tocable pero deja ver la segunda cara. El borde no: overflow no lo toca y
+   el borde sí cuenta para el clic. Van 44px de caja con un borde
+   transparente arriba y abajo, y la ventana de adentro queda de 1.12em. */
+.rodar {
+  display: block;
+  /* none y no el flex por defecto: es ítem de un flex en columna y con
+     overflow: hidden su mínimo automático es 0, así que cuando el nav queda
+     corto (celular acostado) los seis se aplastaban hasta quedar sin caja. */
+  flex: none;
+  height: max(44px, 1.12em);
+  border-block: solid transparent;
+  border-block-width: max(0px, calc((44px - 1.12em) / 2));
+  overflow: hidden;
+  line-height: 1.12;
+  font-size: var(--t-sub);
+  font-weight: var(--fino);
+  letter-spacing: -.01em;
+  color: var(--tinta-bordo);
+  text-decoration: none;
+  /* Entrada: abajo y apagado hasta que el fondo terminó de crecer. Estos
+     tiempos son los del cierre: se apaga en 120ms, todos juntos. */
+  opacity: 0;
+  translate: 0 25px;
+  transition: opacity .12s var(--flotante-curva), translate .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .rodar {
+  opacity: 1;
+  translate: none;
+  transition: opacity .15s var(--flotante-curva), translate .15s var(--flotante-curva);
+  /* .28s: el ancho terminó de crecer (.25s) y un respiro. --i lo pone el
+     generador, de 0 a 5. */
+  transition-delay: calc(.28s + var(--i, 0) * 55ms);
+}
+.rodar__pista {
+  display: grid;
+  transition: translate .2s var(--flotante-curva);
+}
+.rodar__cara { display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .rodar:hover .rodar__pista { translate: 0 -50%; }
+}
+.rodar:focus-visible .rodar__pista { translate: 0 -50%; }
+@media (prefers-reduced-motion: reduce) {
+  .rodar,
+  .flotante[data-abierto] .rodar { translate: none; transition: opacity .15s var(--flotante-curva); transition-delay: 0s; }
+  .rodar__pista { transition: none; }
+  .rodar:hover .rodar__pista,
+  .rodar:focus-visible .rodar__pista { translate: none; }
+}
+
+/* El pie llega último, con un fade, y el idioma después. .60s: el sexto
+   enlace arranca a .555s (.28 + 5 × 55ms); si cambia la cantidad de enlaces
+   cambian estos dos números. */
+.flotante__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1.25rem;
+  margin-top: 1.5rem;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .flotante__pie { opacity: 1; transition: opacity .15s var(--flotante-curva) .60s; }
+.flotante .idioma {
+  flex-shrink: 0;
+  margin-top: .25rem;
+  opacity: 0;
+  transition: opacity .12s var(--flotante-curva);
+}
+.flotante[data-abierto] .idioma { opacity: 1; transition: opacity .15s var(--flotante-curva) .68s; }
+@media (prefers-reduced-motion: reduce) {
+  .flotante__pie,
+  .flotante .idioma,
+  .flotante[data-abierto] .flotante__pie,
+  .flotante[data-abierto] .idioma { transition: opacity .15s var(--flotante-curva); }
+}
+
+.flotante__dato {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 44px;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  color: var(--tinta-bordo);
+  text-decoration: none;
+}
+.flotante__icono {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+/* Al pasar el puntero el ícono se pliega sobre su eje horizontal y vuelve:
+   una vuelta sola, no un bucle. El texto no se mueve. ease-in-out y no la
+   curva del panel: es un pliegue, no un salto. */
+@keyframes flotante-pliegue {
+  50% { scale: 1 0; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .flotante__dato:hover .flotante__icono { animation: flotante-pliegue .3s ease-in-out; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flotante__dato:hover .flotante__icono { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Foco: visible en todo, del color de lo que tiene el foco
+   -------------------------------------------------------------------------- */
+
+.flotante :is(a, button):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+/* El kit base pone border-radius: 2px al foco: deformaría la píldora y el botón. */
+.flotante__wa:focus-visible { border-radius: 999px; }
+.flotante__boton:focus-visible { border-radius: 6px; }

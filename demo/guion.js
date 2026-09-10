@@ -16,75 +16,9 @@
      reemplaza el flotante. Su tema lo escribe el generador, no una sonda. */
   var cabecera = document.querySelector('[data-cabecera]');
 
-  /* ---------------------------------------------------------------------- */
-  /* Menú de celular                                                         */
-  /* ---------------------------------------------------------------------- */
-
-  var boton = document.querySelector('[data-menu-boton]');
-  var panel = document.querySelector('[data-menu-panel]');
-
-  if (boton && panel && cabecera) {
-    var cerrar = function () {
-      cabecera.removeAttribute('data-menu');
-      panel.removeAttribute('data-abierto');
-      document.body.removeAttribute('data-menu-abierto');
-      boton.setAttribute('aria-expanded', 'false');
-    };
-    var abrir = function () {
-      cabecera.setAttribute('data-menu', '');
-      panel.setAttribute('data-abierto', '');
-      document.body.setAttribute('data-menu-abierto', '');
-      boton.setAttribute('aria-expanded', 'true');
-    };
-
-    boton.addEventListener('click', function () {
-      if (boton.getAttribute('aria-expanded') === 'true') cerrar();
-      else abrir();
-    });
-
-    panel.addEventListener('click', function (e) {
-      if (e.target.closest('a')) cerrar();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && boton.getAttribute('aria-expanded') === 'true') {
-        cerrar();
-        boton.focus();
-      }
-    });
-
-    var ancho = window.matchMedia('(min-width: 64rem)');
-    var alAncho = function (m) { if (m.matches) cerrar(); };
-    if (ancho.addEventListener) ancho.addEventListener('change', alAncho);
-    else ancho.addListener(alAncho);
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* El globo de WhatsApp, por contexto                                      */
-  /*                                                                         */
-  /* Se esconde donde el visitante ya tiene el WhatsApp delante: el hero y   */
-  /* el cierre. En el medio es el único camino a la conversión, y ahí está.  */
-  /* ---------------------------------------------------------------------- */
-
-  var globo = document.querySelector('[data-wa]');
-  var tapan = document.querySelectorAll('.hero, #contacto');
-
-  if (globo && tapan.length && 'IntersectionObserver' in window) {
-    /* Un conjunto y no un contador: en la primera llamada llegan todas las
-       secciones juntas, y con un contador la que no se ve le resta a la que
-       sí, con lo que el globo nunca se escondía. */
-    var tapando = [];
-    var ojo = new IntersectionObserver(function (entradas) {
-      entradas.forEach(function (en) {
-        var i = tapando.indexOf(en.target);
-        if (en.isIntersecting && i < 0) tapando.push(en.target);
-        if (!en.isIntersecting && i >= 0) tapando.splice(i, 1);
-      });
-      if (tapando.length) globo.setAttribute('data-oculto', '');
-      else globo.removeAttribute('data-oculto');
-    }, { threshold: .05 });
-    Array.prototype.forEach.call(tapan, function (s) { ojo.observe(s); });
-  }
+  /* El menu de celular y el globo de WhatsApp se fueron (09/09): los dos
+     viven ahora en el flotante de abajo a la derecha, modulo al final de
+     este archivo. */
 
   /* ---------------------------------------------------------------------- */
   /* La rueda del universo                                                   */
@@ -128,8 +62,6 @@
   });
 
 
-  /* ---------------------------------------------------------------------- */
-  /* El trazo de la marca se dibuja con el scroll                            */
   /* ---------------------------------------------------------------------- */
 
   var trazo = document.querySelector('.trazo-vivo');
@@ -602,6 +534,8 @@
     var sin = /[?&]sinlenis/.test(location.search);
     if (menos || sin || !window.Lenis || !window.gsap) return;
     lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true });
+    /* Expuesto: el flotante lo para con el menu abierto (lenis.stop/start). */
+    window.lenis = lenis;
     if (window.ScrollTrigger) {
       window.gsap.registerPlugin(window.ScrollTrigger);
       lenis.on('scroll', window.ScrollTrigger.update);
@@ -756,6 +690,28 @@
     lista.forEach(medir);
     window.addEventListener('resize', function () { lista.forEach(medir); });
     if (menos || !('IntersectionObserver' in window)) return;
+
+    /* El foco de la cinta del hero: cada pieza se desenfoca segun su distancia
+       al centro (hasta 3 px, cuantizado a medio pixel para no re-rasterizar
+       cada cuadro) y se afina en el medio. Solo con puntero fino: en tactil un
+       blur animado re-rasteriza y se lo paga en fps. */
+    var conFoco = lista.filter(function (c) { return c.classList.contains('cinta--hero'); });
+    if (conFoco.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      var enfocar = function () {
+        conFoco.forEach(function (c) {
+          if (!c.hasAttribute('data-vivo')) return;
+          var vw = window.innerWidth || 1;
+          $$('.cinta__pieza', c).forEach(function (p) {
+            var r = p.getBoundingClientRect();
+            var d = Math.abs((r.left + r.width / 2) / vw - .5) * 2;    /* 0 centro .. 1 borde */
+            var b = Math.round(Math.max(0, d - .35) / .65 * 6) / 2;   /* 0 .. 3 px, de a .5 */
+            p.style.setProperty('--foco', b + 'px');
+          });
+        });
+        requestAnimationFrame(enfocar);
+      };
+      requestAnimationFrame(enfocar);
+    }
     var obs = new IntersectionObserver(function (ent) {
       ent.forEach(function (x) {
         if (x.isIntersecting) x.target.setAttribute('data-vivo', '');
@@ -996,4 +952,159 @@
   } else {
     arrancar();
   }
+})();
+
+/* ==========================================================================
+   Flotante — guion
+   Abre y cierra el menú de la esquina, lo hace aparecer en escritorio cuando
+   la cabecera salió de la pantalla y lo esconde sobre #contacto. Reemplaza
+   al bloque "Menú de celular" y al del globo de WhatsApp de guion.js.
+
+   Lo que escribe:
+     body[data-lejos]          la cabecera salió de la pantalla
+     body[data-menu-abierto]   el sitio ya le pone overflow: hidden
+     .flotante[data-abierto]   el panel está abierto
+     .flotante[data-oculto]    hay que esconderlo (sobre #contacto)
+   Lo que NO escribe: data-tema. Eso lo hace mirarTema, en guion.js, igual
+   que con la cabecera y el índice.
+
+   Sin librerías. Para probar desde la consola: window.__flotante.abrir() y
+   window.__flotante.cerrar().
+   ========================================================================== */
+
+(function () {
+  'use strict';
+
+  /* Cuándo mandar el foco al primer enlace: cuando ya entró. El primero
+     arranca a los .28s y tarda .15s (flotante.css); antes de eso el aro de
+     foco aparecería sobre una palabra a medio llegar. */
+  var ESPERA_FOCO = 430;
+
+  function flotante() {
+    var raiz = document.querySelector('[data-flotante]');
+    if (!raiz) return;
+    var boton = raiz.querySelector('[data-menu-boton]');
+    var panel = raiz.querySelector('[data-menu-panel]');
+    if (!boton || !panel) return;
+
+    var menos = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cuerpo = document.body;
+    var temporizador = null;
+
+    /* Lenis mueve el scroll a mano, así que el overflow: hidden del body no
+       lo frena: hay que pararlo. Se le pide por su nombre y si no está (sin
+       librería, ?sinlenis, menos movimiento) no pasa nada. */
+    var lenis = function (orden) {
+      var l = window.lenis;
+      if (l && typeof l[orden] === 'function') l[orden]();
+    };
+
+    var abierto = function () {
+      return boton.getAttribute('aria-expanded') === 'true';
+    };
+
+    var abrir = function () {
+      if (abierto()) return;
+      boton.setAttribute('aria-expanded', 'true');
+      raiz.setAttribute('data-abierto', '');
+      cuerpo.setAttribute('data-menu-abierto', '');
+      lenis('stop');
+      clearTimeout(temporizador);
+      temporizador = setTimeout(function () {
+        var primero = panel.querySelector('a[href]');
+        /* preventScroll: el panel es fijo, no hay nada que scrollear, y sin
+           esto algún navegador intenta igual y mueve el fondo. */
+        if (primero && abierto()) primero.focus({ preventScroll: true });
+      }, menos ? 0 : ESPERA_FOCO);
+    };
+
+    /* devolverFoco: al cerrar por teclado o por clic afuera el foco vuelve
+       al botón. Por clic en un enlace no: la página se va a otro lado. */
+    var cerrar = function (devolverFoco) {
+      if (!abierto()) return;
+      clearTimeout(temporizador);
+      boton.setAttribute('aria-expanded', 'false');
+      raiz.removeAttribute('data-abierto');
+      cuerpo.removeAttribute('data-menu-abierto');
+      lenis('start');
+      if (devolverFoco) boton.focus({ preventScroll: true });
+    };
+
+    boton.addEventListener('click', function () {
+      if (abierto()) cerrar(true);
+      else abrir();
+    });
+
+    /* Clic en un enlace del panel: cierra. En CAPTURA, antes de que el enlace
+       haga lo suyo: guion.js intercepta los href="#ancla" y los manda a
+       lenis.scrollTo, y Lenis parado ignora el scrollTo. Primero se lo
+       arranca (acá), después el enlace scrollea (allá). */
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a[href]')) cerrar(false);
+    }, true);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && abierto()) cerrar(true);
+    });
+
+    /* Clic fuera del flotante: cierra. Lo de adentro (botón, píldora, panel)
+       no cuenta; el botón ya tiene su propio manejador. */
+    document.addEventListener('click', function (e) {
+      if (abierto() && !raiz.contains(e.target)) cerrar(true);
+    });
+
+    /* ------------------------------------------------------------------ */
+    /* Escritorio: aparece cuando la cabecera salió de la pantalla         */
+    /* ------------------------------------------------------------------ */
+
+    var cabecera = document.querySelector('[data-cabecera]');
+    if (cabecera && 'IntersectionObserver' in window) {
+      var blanco = cabecera;
+      /* Si la cabecera es sticky o fixed nunca "sale" de la pantalla y el
+         observer diría siempre que está. En ese caso se mira una sonda de su
+         misma altura clavada arriba del todo del documento, que sí se va. */
+      var pos = getComputedStyle(cabecera).position;
+      if (pos === 'sticky' || pos === 'fixed') {
+        blanco = document.createElement('span');
+        blanco.setAttribute('aria-hidden', 'true');
+        blanco.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:' +
+          cabecera.offsetHeight + 'px;pointer-events:none;visibility:hidden';
+        cuerpo.insertBefore(blanco, cuerpo.firstChild);
+      }
+      new IntersectionObserver(function (entradas) {
+        var en = entradas[entradas.length - 1];
+        if (en.isIntersecting) cuerpo.removeAttribute('data-lejos');
+        else cuerpo.setAttribute('data-lejos', '');
+      }, { threshold: 0 }).observe(blanco);
+    } else {
+      /* Sin observer, mejor que esté siempre a que no esté nunca. */
+      cuerpo.setAttribute('data-lejos', '');
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Sobre #contacto se esconde: ahí el WhatsApp ya está delante        */
+    /* ------------------------------------------------------------------ */
+
+    var contacto = document.getElementById('contacto');
+    if (contacto && 'IntersectionObserver' in window) {
+      /* Dos medidas y no una: "se ve el 30% de la sección" falla cuando la
+         sección es más alta que la pantalla (celular acostado: nunca llega al
+         30%), así que también vale "la sección ocupa el 30% de la pantalla".
+         Los umbrales de a diez para que el callback dispare a lo largo del
+         recorrido y no sólo al entrar y salir. */
+      new IntersectionObserver(function (entradas) {
+        var en = entradas[entradas.length - 1];
+        var altoPantalla = (en.rootBounds && en.rootBounds.height) || window.innerHeight || 1;
+        var tapa = en.isIntersecting &&
+          (en.intersectionRatio >= .3 || en.intersectionRect.height / altoPantalla >= .3);
+        if (tapa) raiz.setAttribute('data-oculto', '');
+        else raiz.removeAttribute('data-oculto');
+      }, { threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] }).observe(contacto);
+    }
+
+    window.__flotante = { abrir: abrir, cerrar: cerrar };
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', flotante);
+  else flotante();
 })();

@@ -21,16 +21,32 @@
   "hero": {
     "titulo": "Mavenz creates momentum",
     "bajada": "We are the strategic partner that moves real estate.",
-    "apoyo": "We connect vision, strategy, communication, business and people to turn opportunities into projects that move forward.",
     "cta1": {
       "rotulo": "Explore the Mavenz universe"
     },
     "cta2": {
       "rotulo": "Let us talk"
     },
-    "foto": {
+    "video": {
       "alt": "Aerial view of San Lorenzo, Salta"
-    }
+    },
+    "cinta": [
+      {
+        "rotulo": "Cardinal"
+      },
+      {
+        "rotulo": "Mavenz Universe"
+      },
+      {
+        "rotulo": "Espacio Mavenz"
+      },
+      {
+        "rotulo": "Mavenz Outlook"
+      },
+      {
+        "rotulo": "How we work"
+      }
+    ]
   },
   "quienes": {
     "margen": "Salta, Argentina",
@@ -303,9 +319,10 @@
     "abrir_foto": "View photo",
     "anterior": "Previous",
     "siguiente": "Next",
-    "indice": "Sections",
     "ver_video": "Play video",
-    "silenciar": "Mute"
+    "silenciar": "Mute",
+    "correo": "Email",
+    "menu": "Menu"
   },
   "equipo": {
     "margen": "Who is behind it",

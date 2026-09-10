@@ -131,11 +131,15 @@ def fx(seccion):
     return f' data-fx="reveal" data-fx-desde="{DIRECCION[seccion]}"'
 
 
-def enlaces_menu(d, aqui):
+def enlaces_menu(d, aqui, rodar=False):
     """El menu, desde `paginas`: es la unica fuente y la leen la barra, el pie y
     el flotante. Una entrada con `archivo` es una pagina; una con `ancla` es una
     seccion que vive en la pagina `en` (o en todas, si no dice). Lo que tiene
-    `en_menu: false` o `publicar: false` no entra."""
+    `en_menu: false` o `publicar: false` no entra.
+
+    Con `rodar` cada enlace sale con la palabra DOS veces apiladas (la segunda
+    aria-hidden) y su posicion en --i: es el item del flotante, que rueda en
+    vertical al pasar el puntero y entra escalonado por --i."""
     salida = []
     for k, p in d["paginas"].items():
         if p.get("en_menu") is False or p.get("publicar") is False:
@@ -148,7 +152,13 @@ def enlaces_menu(d, aqui):
             href = ("#" + p["ancla"] if vive in (None, aqui)
                     else d["paginas"][vive]["archivo"] + "#" + p["ancla"])
             actual = ""
-        salida.append(f'<a href="{e(href)}"{actual}>{e(p["rotulo"])}</a>')
+        if rodar:
+            i = len(salida)
+            salida.append(f'<a class="rodar" href="{e(href)}" style="--i: {i}"{actual}>'
+                          f'<span class="rodar__pista"><span class="rodar__cara">{e(p["rotulo"])}</span>'
+                          f'<span class="rodar__cara" aria-hidden="true">{e(p["rotulo"])}</span></span></a>')
+        else:
+            salida.append(f'<a href="{e(href)}"{actual}>{e(p["rotulo"])}</a>')
     return "".join(salida)
 
 
@@ -179,48 +189,38 @@ def cabecera(d, lang, aqui, tema="claro"):
     el video del hero, claro sobre la cinta de papel) y no una sonda."""
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
     enlaces = enlaces_menu(d, aqui)
+    # Sin hamburguesa ni panel (09/09): el unico menu desplegable es el
+    # flotante de abajo a la derecha, en todos los carriles. En celular la
+    # barra lleva solo el logo y el selector de idioma.
     return f'''<header class="cabecera" data-cabecera{' data-tema="oscuro"' if tema == "oscuro" else ""}>
   <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
     {selector_idioma(d, lang, aqui)}
     <a class="boton cabecera__contacto" href="#contacto">{e(c["cta_contacto"])}</a>
-    <button class="hamburguesa" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-celular" aria-label="{e(ui["menu"])}">
-      <span></span><span></span><span></span>
-    </button>
   </div>
-</header>
-<div class="panel" id="menu-celular" data-menu-panel>{enlaces}<a class="boton" href="#contacto">{e(c["cta_contacto"])}</a></div>'''
+</header>'''
 
 
 def hero(d):
-    h = d["hero"]
-    ecos = "".join(
-        f'<path d="{ONDA}" fill="none" stroke="var(--linea-acento)" stroke-width="1" '
-        f'vector-effect="non-scaling-stroke" opacity="{op}" transform="translate(0,{dy})"/>'
-        for op, dy in ((".45", 54), (".28", 104)))
-    return f'''<section class="hero cortina-fondo" data-tema="oscuro">
-  {img(h["foto"], "100vw", "hero__foto", lazy=False)}
+    """La primera pantalla: video aereo de fondo (diferido, solo poster en el
+    celular), titulo y bajada centrados como la referencia, y al pie la cinta
+    con los mundos del sitio corriendo. Sin el parrafo de relleno y sin el
+    trazo: los dos los saco el documento del 08/09."""
+    h, v = d["hero"], d["hero"]["video"]
+    return f'''<section class="hero" id="inicio" data-tema="oscuro">
+  <video class="hero__fondo" data-diferido data-pesado="1" data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
+         muted loop playsinline preload="none" aria-label="{e(v["alt"])}"></video>
   <div class="hero__velo"></div>
-  <div class="hero__trazos" aria-hidden="true">
-    <svg class="eco" viewBox="0 0 1200 400" preserveAspectRatio="none">{ecos}</svg>
-    <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
-      <path class="trazo-vivo" pathLength="1" d="{ONDA}" fill="none" stroke="var(--sobre-foto)" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-    </svg>
-  </div>
-  <div class="hero__pie">
-    <p class="hero__leyenda">{e(h["foto"]["alt"])}</p>
-    <ul class="muestras" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
-  </div>
   <div class="hero__texto">
     <h1 class="hero__titulo" data-letras>{e(h["titulo"])}</h1>
     <p class="hero__bajada">{e(h["bajada"])}</p>
-    <p class="hero__apoyo">{e(h["apoyo"])}</p>
     <div class="hero__acciones">
       <a class="boton boton--claro" href="{e(h["cta1"]["href"])}">{e(h["cta1"]["rotulo"])}</a>
       <a class="subrayado subrayado--claro" href="{e(h["cta2"]["href"])}">{e(h["cta2"]["rotulo"])}</a>
     </div>
   </div>
+  <div class="hero__cinta">{cinta(h["cinta"], tono="hero", continua=True, velocidad=70)}</div>
 </section>'''
 
 
@@ -585,7 +585,7 @@ def contacto(d):
     ]
     return f'''<section class="seccion--ancha contacto" id="contacto"{fx("contacto")}>
   <div class="contacto__caja">
-    {cinta([c["palabra"]], tono="marca", continua=True, vertical=True, velocidad=125)}
+    {cinta([c["palabra"]], tono="marca", continua=True, vertical=True, velocidad=125, decorativa=True)}
     <div class="contacto__datos">
       <p class="contacto__apertura">{e(c["apertura"])}</p>
       <h2 class="contacto__titulo" data-letras>{e(c["titulo"])}</h2>
@@ -659,10 +659,84 @@ def datos_estructurados(d):
 
 # --------------------------------------------------------------------------- #
 
+def flotante(d, lang, aqui):
+    """El menu y el WhatsApp juntos, abajo a la derecha (pedido del 08/09,
+    mecanica de realevate.agency medida cuadro a cuadro). Reemplaza al globo
+    `.wa` suelto, a la hamburguesa y al panel de celular: un solo menu
+    desplegable en todos los carriles. En escritorio aparece cuando la
+    cabecera salio de la pantalla; bajo 64rem esta siempre. Lo abre y cierra
+    el modulo "Flotante" de guion.js; el tema se lo escribe mirarTema.
+
+    Sin numero de WhatsApp el enlace va a #contacto y sin target=_blank: un
+    ancla en otra pestana es un error clasico."""
+    ui, cd = d["interfaz"], d["contacto_datos"]
+    href = wa(d, d["contacto"]["wa_general"])
+    afuera = ' target="_blank" rel="noopener"' if href.startswith("http") else ""
+    icono = lambda ruta: (f'<svg class="flotante__icono" viewBox="0 0 16 16" width="14" height="14" fill="none" '
+                          f'stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ruta}</svg>')
+    correo = (f'<a class="flotante__dato" href="mailto:{e(cd["correo"])}">'
+              f'{icono("<path d=\"M2 4.5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z\"/><path d=\"M2.5 5l5.5 4 5.5-4\"/>")}{e(ui["correo"])}</a>'
+              if cd.get("correo") else "")
+    return f'''<div class="flotante" data-flotante>
+  <a class="flotante__wa" href="{e(href)}"{afuera}><span class="flotante__wa-texto">{e(ui["whatsapp"])}</span></a>
+  <button class="flotante__boton" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-flotante" aria-label="{e(ui["menu"])}">
+    <span class="flotante__raya flotante__raya--larga" aria-hidden="true"></span><span class="flotante__raya flotante__raya--corta" aria-hidden="true"></span>
+  </button>
+  <div class="flotante__panel" id="menu-flotante" data-menu-panel data-lenis-prevent>
+    <div class="flotante__fondo-y" aria-hidden="true"><div class="flotante__fondo-x"></div></div>
+    <nav class="flotante__enlaces" aria-label="{e(ui["menu"])}">{enlaces_menu(d, aqui, rodar=True)}</nav>
+    <div class="flotante__pie">
+      <a class="flotante__dato" href="{e(href)}"{afuera}>{icono('<path d="M2.5 4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H7.5l-3 2.5v-2.5h-1a1 1 0 0 1-1-1z"/><path d="M5.5 7h5"/>')}{e(ui["whatsapp"])}</a>
+      {correo}
+    </div>
+    {selector_idioma(d, lang, aqui)}
+  </div>
+</div>'''
+
+
+def letras(palabra):
+    """Un <span> por caracter, con su posicion en --i y sin espacios entre
+    spans (un espacio entre spans es un hueco visible en la palabra). El
+    espacio del rotulo va como &nbsp; para que su span no se colapse. Lo usa
+    el efecto .barajar del aviso de cookies: la palabra se apaga y vuelve
+    letra por letra, y el CSS escalona cada una por su --i."""
+    return "".join(
+        f'<span class="barajar__letra" style="--i:{i}">{"&nbsp;" if c == " " else e(c)}</span>'
+        for i, c in enumerate(palabra))
+
+
+def cookies(d):
+    """El <template> del aviso de cookies. Es inerte: consent.js lo clona y lo
+    cuelga de <body> solo si hay un ID de GA4 o de pixel en `medicion` y
+    todavia no hay decision. Sin IDs no se muestra nada, que es la regla de
+    la casa. Dos acciones con el mismo peso, Aceptar / Rechazar, decision de
+    David del 10/09 para este proyecto (la regla general es un solo boton).
+    El rotulo va en aria-label porque un lector de pantalla deletrea los
+    spans inline-block, igual que pasa con los titulos [data-letras]."""
+    ck = d["cookies"]
+    def boton(clave):
+        return (f'<button type="button" class="barajar" data-cookies="{clave}" aria-label="{e(ck[clave])}">'
+                f'<span class="barajar__copia barajar__copia--sale">{letras(ck[clave])}</span>'
+                f'<span class="barajar__copia barajar__copia--entra" aria-hidden="true">{letras(ck[clave])}</span>'
+                f'</button>')
+    return f"""<template id="cookies">
+<div class="cookies" role="region" aria-labelledby="cookies-titulo" aria-live="polite">
+  <p class="cookies__titulo" id="cookies-titulo">{e(ck["titulo"])}</p>
+  <p class="cookies__texto">{e(ck["texto"])}</p>
+  <div class="cookies__acciones">
+    {boton("aceptar")}
+    <span class="cookies__barra" aria-hidden="true">/</span>
+    {boton("rechazar")}
+  </div>
+</div>
+</template>"""
+
+
 def cascara(d, lang, slug, cuerpo, tema="claro"):
     """El head, la cabecera y el pie son los mismos en todas las paginas. Se
     escriben una sola vez o se desincronizan: es el bug que mas caro sale."""
     m, ui, pg, idi = d["marca"], d["interfaz"], d["paginas"][slug], d["idiomas"][lang]
+    md = d.get("medicion", {})
     titulo = f'{pg["titulo"]} — {m["nombre"]}' if slug != "inicio" else f'{m["nombre"]} — {m["mensaje"]}'
     archivo = "" if slug == "inicio" else pg["archivo"]
     canonica = URL + idi["carpeta"] + archivo
@@ -686,7 +760,7 @@ def cascara(d, lang, slug, cuerpo, tema="claro"):
 <meta property="og:locale" content="{e(idi["og"])}">
 <meta property="og:title" content="{e(titulo)}">
 <meta property="og:description" content="{e(m["definicion"])}">
-<meta property="og:image" content="{RAIZ}img/aerea-dia-1600.webp">
+<meta property="og:image" content="{RAIZ}video/hero-poster.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{R.demo}favicon.png">
 <link rel="preload" href="{R.raiz}fuente/urbanist.woff2" as="font" type="font/woff2" crossorigin>
@@ -694,16 +768,16 @@ def cascara(d, lang, slug, cuerpo, tema="claro"):
 <link rel="stylesheet" href="{R.demo}estilos.css?v={version("estilos.css")}">
 <script type="application/ld+json">{json.dumps(datos_estructurados(d), ensure_ascii=False)}</script>
 </head>
-<body data-pagina="{slug}" data-lang="{e(lang)}">
+<body data-pagina="{slug}" data-lang="{e(lang)}" data-ga4="{e(md.get("ga4", ""))}" data-pixel="{e(md.get("pixel", ""))}">
 <a class="saltar" href="#contenido">{e(ui["saltar"])}</a>
 {cms("cabecera", cabecera(d, lang, slug, tema))}
 <main class="contenido" id="contenido">
 {cuerpo}
 </main>
 {cms("pie", pie(d, lang, slug))}
-<a class="wa" data-wa href="{e(wa(d, d["contacto"]["wa_general"]))}" target="_blank" rel="noopener" aria-label="{e(ui["whatsapp"])}">
-  <span class="wa__punto" aria-hidden="true"></span>{e(ui["whatsapp"])}
-</a>
+{flotante(d, lang, slug)}
+{cookies(d)}
+<script src="{R.demo}consent.js?v={version("consent.js")}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
@@ -770,7 +844,7 @@ def pagina_proyectos(d, lang):
 
 
 def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
-          velocidad=120, imagen=False):
+          velocidad=120, imagen=False, decorativa=False):
     """Una cinta de piezas repetidas. Dos motores:
 
     - Por SCROLL (la de siempre): el JS escribe --corrida y sin JS queda quieta
@@ -784,6 +858,9 @@ def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
 
     `piezas` es un texto, o una lista de textos, o una lista de dicts con
     `rotulo` y `href` (enlaces). Con `imagen` son rutas de imagen (el isotipo).
+    Con `decorativa` TODAS las copias van aria-hidden: es una marca de agua, el
+    texto real esta en otro lado (el h2 del contacto) y el lector de pantalla
+    no tiene por que leerla ni el auditor medirle el contraste.
     Con titulo=True la primera pieza es un h2: sin eso un mundo entero queda
     sin encabezado y el lector de pantalla no tiene por donde entrar."""
     if isinstance(piezas, str):
@@ -797,7 +874,9 @@ def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
         et = "h2" if (titulo and not oculta) else "span"
         return f'<{et} class="cinta__pieza"{oc}>{e(p)}</{et}>'
     if continua:
-        copias = [pieza(p, i > 0) for i, p in enumerate(piezas)]
+        # La primera secuencia es la real entera (cinco enlaces distintos en el
+        # hero); solo la segunda, que existe para cerrar el loop, va oculta.
+        copias = [pieza(p, decorativa) for p in piezas]
         copias += [pieza(p, True) for p in piezas]
         clases = f'cinta cinta--{tono} cinta--continua{" cinta--vertical" if vertical else ""}'
         attrs = f'data-cinta-continua data-fx="marquee" data-velocidad="{velocidad}" data-sangra'

@@ -30,7 +30,6 @@
   "hero": {
     "titulo": "Mavenz genera movimiento",
     "bajada": "Somos el partner estratégico que mueve el real estate.",
-    "apoyo": "Conectamos visión, estrategia, comunicación, negocios y personas para transformar oportunidades en proyectos que avanzan.",
     "cta1": {
       "rotulo": "Conocé el Universo Mavenz",
       "href": "#universo"
@@ -39,16 +38,35 @@
       "rotulo": "Hablemos",
       "href": "#contacto"
     },
-    "foto": {
-      "src": "img/aerea-dia",
-      "anchos": [
-        800,
-        1600
-      ],
+    "video": {
+      "src": "video/hero.mp4",
+      "poster": "video/hero-poster.webp",
       "alt": "Vista aérea de San Lorenzo, Salta",
-      "ancho": 1600,
-      "alto": 739
-    }
+      "_dt": "Recorte de 2,9 s del post de Cardinal (25,0-27,9 s), en ida y vuelta, sin el subtitulo quemado. Es un reemplazo: el clip de dron limpio lo debe Vero. En celular solo se ve el poster."
+    },
+    "cinta": [
+      {
+        "rotulo": "Cardinal",
+        "href": "proyectos.html#cardinal"
+      },
+      {
+        "rotulo": "Universo Mavenz",
+        "href": "#universo"
+      },
+      {
+        "rotulo": "Espacio Mavenz",
+        "href": "proyectos.html#espacio"
+      },
+      {
+        "rotulo": "Mirada Mavenz",
+        "href": "nosotros.html#mirada"
+      },
+      {
+        "rotulo": "Cómo trabajamos",
+        "href": "#metodo"
+      }
+    ],
+    "_dt": "Los destinos de la cinta se actualizan cuando existan cardinal.html, espacio.html y la seccion #mirada en Inicio (fases 4 y 5)."
   },
   "quienes": {
     "margen": "Salta, Argentina",
@@ -574,12 +592,12 @@
     "cerrar": "Cerrar",
     "saltar": "Saltar al contenido",
     "whatsapp": "WhatsApp",
+    "correo": "Correo",
     "idioma": "Idioma",
     "_dt": "Rótulos de interfaz, no copy de marca.",
     "abrir_foto": "Ver la foto",
     "anterior": "Anterior",
     "siguiente": "Siguiente",
-    "indice": "Secciones",
     "ver_video": "Ver el video",
     "silenciar": "Silenciar",
     "idioma_pronto": "Próximamente"
