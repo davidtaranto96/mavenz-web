@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-armar.py — genera index.html (castellano) y en.html (inglés) desde contenido/.
+armar.py — genera las paginas del sitio, en cada idioma, desde contenido/.
 
-    python3 armar.py
+    python3 armar.py                 arma todo (ES en demo/, EN en demo/en/)
+    python3 armar.py --plantilla en  vuelca la estructura de textos para traducir
 
 La regla de la casa: un dato vive en un solo lugar. Los HTML que quedan en el
 repo son los HTML finales —se abren y se ve lo que ve la persona—, pero nunca se
@@ -10,20 +11,42 @@ editan a mano: se toca el JSON y se vuelve a correr esto. Cada región que sale
 del JSON queda envuelta en <!--cms:nombre--> ... <!--/cms:nombre--> para que el
 panel de edición de web-editable la pueda regenerar sola más adelante.
 
-`sitio.en.json` es una capa sobre `sitio.json`: sólo lleva lo que cambia. Las
-listas se reemplazan enteras, porque un menú traducido es un menú entero.
+`sitio.en.json` es una capa sobre `sitio.json`: sólo lleva lo que cambia. Una
+lista de fichas se funde posicion por posicion (la capa trae solo los textos, no
+repite fotos ni ids); una lista de textos sueltos se reemplaza entera.
 
 Sin dependencias. Python 3.8+.
 """
 import hashlib
 import json
+import sys
 import html as H
 from pathlib import Path
 from urllib.parse import quote
 
 AQUI = Path(__file__).parent
 ES = json.loads((AQUI / "contenido/sitio.json").read_text(encoding="utf-8"))
-EN_CAPA = json.loads((AQUI / "contenido/sitio.en.json").read_text(encoding="utf-8"))
+CAPAS = {"en": json.loads((AQUI / "contenido/sitio.en.json").read_text(encoding="utf-8"))}
+
+
+class Rutas:
+    """Los prefijos relativos de la pagina que se esta armando. El castellano
+    vive en demo/ y el ingles en demo/en/: los assets (img/, video/, fuente/)
+    estan un nivel arriba de demo/, y el CSS y el JS en demo/ mismo. Las
+    paginas de un mismo idioma se enlazan entre si sin prefijo, porque estan
+    en la misma carpeta."""
+    def __init__(self):
+        self.poner("")
+
+    def poner(self, carpeta):
+        n = carpeta.count("/")
+        self.carpeta = carpeta
+        self.demo = "../" * n          # estilos.css, guion.js, favicon.png
+        self.raiz = "../" * (n + 1)    # img/, video/, fuente/
+
+
+R = Rutas()
+
 
 def version(archivo):
     """Ocho caracteres del hash del archivo. Van como `?v=` en el enlace: sin
@@ -33,11 +56,14 @@ def version(archivo):
 
 def medio(ruta):
     """Lo mismo para los videos y sus posters: si se recorta un video y la URL
-    no cambia, el navegador sigue mostrando el de antes."""
+    no cambia, el navegador sigue mostrando el de antes. La ruta del JSON es
+    relativa a la raiz del repo (`video/x.mp4`); el hash se calcula contra el
+    disco y el enlace sale con el prefijo de la pagina."""
     try:
-        return f"{ruta}?v={version(ruta)}"
+        v = hashlib.sha1((AQUI.parent / ruta).read_bytes()).hexdigest()[:8]
+        return f"{R.raiz}{ruta}?v={v}"
     except OSError:
-        return ruta
+        return R.raiz + ruta
 
 
 URL = "https://davidtaranto96.github.io/mavenz-web/demo/"
@@ -46,12 +72,18 @@ RAIZ = "https://davidtaranto96.github.io/mavenz-web/"
 
 def fundir(base, encima):
     """Mezcla profunda: lo de `encima` pisa a lo de `base`, clave por clave.
-    Las listas se reemplazan enteras."""
+    Una lista de diccionarios del mismo largo se funde posicion por posicion,
+    asi la capa de idioma lleva solo los textos y no repite fotos, ids ni
+    tintas (repetirlos fue lo que pudrio la capa inglesa: se desincronizaba en
+    silencio). Cualquier otra lista se reemplaza entera."""
     if isinstance(base, dict) and isinstance(encima, dict):
         salida = dict(base)
         for k, v in encima.items():
             salida[k] = fundir(base.get(k), v) if k in base else v
         return salida
+    if (isinstance(base, list) and isinstance(encima, list) and len(base) == len(encima)
+            and all(isinstance(x, dict) for x in base + encima)):
+        return [fundir(b, c) for b, c in zip(base, encima)]
     return encima if encima is not None else base
 
 
@@ -68,11 +100,11 @@ def img(foto, sizes, clase="", lazy=True):
     reales van en los atributos para que el navegador reserve el lugar y la
     página no salte cuando carga la foto."""
     anchos = foto["anchos"]
-    srcset = ", ".join(f'{foto["src"]}-{w}.webp {w}w' for w in anchos)
+    srcset = ", ".join(f'{R.raiz}{foto["src"]}-{w}.webp {w}w' for w in anchos)
     carga = (' loading="lazy" decoding="async"' if lazy
              else ' fetchpriority="high" decoding="async"')
     c = f' class="{clase}"' if clase else ""
-    return (f'<img{c} src="{foto["src"]}-{anchos[-1]}.webp" srcset="{srcset}" '
+    return (f'<img{c} src="{R.raiz}{foto["src"]}-{anchos[-1]}.webp" srcset="{srcset}" '
             f'sizes="{sizes}" alt="{e(foto["alt"])}" '
             f'width="{foto["ancho"]}" height="{foto["alto"]}"{carga}>')
 
@@ -107,16 +139,56 @@ def indice(d, puntos):
             f'{rayas}</nav>')
 
 
+def enlaces_menu(d, aqui):
+    """El menu, desde `paginas`: es la unica fuente y la leen la barra, el pie y
+    el flotante. Una entrada con `archivo` es una pagina; una con `ancla` es una
+    seccion que vive en la pagina `en` (o en todas, si no dice). Lo que tiene
+    `en_menu: false` o `publicar: false` no entra."""
+    salida = []
+    for k, p in d["paginas"].items():
+        if p.get("en_menu") is False or p.get("publicar") is False:
+            continue
+        if "archivo" in p:
+            href = p["archivo"]
+            actual = ' aria-current="page"' if k == aqui else ""
+        else:
+            vive = p.get("en")
+            href = ("#" + p["ancla"] if vive in (None, aqui)
+                    else d["paginas"][vive]["archivo"] + "#" + p["ancla"])
+            actual = ""
+        salida.append(f'<a href="{e(href)}"{actual}>{e(p["rotulo"])}</a>')
+    return "".join(salida)
+
+
+def selector_idioma(d, lang, slug):
+    """ES · EN · PT. Cada enlace lleva a LA MISMA pagina en el otro idioma. Un
+    idioma sin `genera` (el portugues, hasta que llegue el copy) queda como
+    texto deshabilitado, no como enlace a una pagina que no existe."""
+    ui, archivo = d["interfaz"], d["paginas"][slug]["archivo"]
+    piezas = []
+    for k, idi in d["idiomas"].items():
+        if k.startswith("_"):
+            continue
+        if k == lang:
+            piezas.append(f'<span class="idioma__on" aria-current="true">{e(idi["rotulo"])}</span>')
+        elif idi.get("genera"):
+            piezas.append(f'<a class="idioma__off" href="{e(R.demo + idi["carpeta"] + archivo)}" '
+                          f'lang="{e(idi["lang"])}" hreflang="{e(idi["lang"])}">{e(idi["rotulo"])}</a>')
+        else:
+            piezas.append(f'<span class="idioma__off idioma__off--pronto" aria-disabled="true" '
+                          f'title="{e(ui["idioma_pronto"])}">{e(idi["rotulo"])}</span>')
+    sep = '<span class="idioma__sep" aria-hidden="true">·</span>'
+    return f'<nav class="idioma" aria-label="{e(ui["idioma"])}">{sep.join(piezas)}</nav>'
+
+
 def cabecera(d, lang, aqui):
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
-    enlaces = "".join(
-        f'<a href="{e(p["archivo"])}"{" aria-current=\"page\"" if k == aqui else ""}>'
-        f'{e(p["rotulo"])}</a>'
-        for k, p in d["paginas"].items())
+    enlaces = enlaces_menu(d, aqui)
     return f'''<header class="cabecera" data-cabecera>
-  <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="../img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="../img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
+  <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
+    {selector_idioma(d, lang, aqui)}
     <a class="boton cabecera__reunion" href="{e(wa(d, c["wa_reunion"]))}" target="_blank" rel="noopener">{e(c["cta_reunion"])}</a>
     <button class="hamburguesa" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-celular" aria-label="{e(ui["menu"])}">
       <span></span><span></span><span></span>
@@ -528,14 +600,13 @@ def contacto(d):
 
 def pie(d, lang):
     m = d["marca"]
-    paginas = "".join(f'<a href="{e(p["archivo"])}">{e(p["rotulo"])}</a>'
-                      for p in d["paginas"].values())
+    paginas = enlaces_menu(d, None)
     redes = "".join(
         (f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["nombre"])}</a>'
          if r["href"] else f'<span>{e(r["nombre"])}</span>')
         for r in d["redes"])
     return f'''<footer class="pie" data-tema="claro">
-  <img class="pie__iso" src="../img/isotipo.webp" alt="{e(m["nombre"])}" width="600" height="381" loading="lazy" decoding="async">
+  <img class="pie__iso" src="{R.raiz}img/isotipo.webp" alt="{e(m["nombre"])}" width="600" height="381" loading="lazy" decoding="async">
   <nav class="pie__redes" aria-label="{e(m["nombre"])}">{redes}</nav>
   <div class="pie__abajo">
     <p class="pie__lugar">{e(m["lugar"])}</p>
@@ -552,7 +623,7 @@ def datos_estructurados(d):
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": m["nombre"],
-        "url": URL,
+        "url": URL + R.carpeta,
         "description": m["definicion"],
         "logo": f"{RAIZ}img/logo-horizontal.webp",
         "address": {"@type": "PostalAddress", "addressLocality": "Salta",
@@ -564,33 +635,41 @@ def datos_estructurados(d):
 # --------------------------------------------------------------------------- #
 
 def cascara(d, lang, slug, cuerpo, puntos):
-    """El head, la cabecera y el pie son los mismos en las tres paginas. Se
+    """El head, la cabecera y el pie son los mismos en todas las paginas. Se
     escriben una sola vez o se desincronizan: es el bug que mas caro sale."""
-    m, ui, pg = d["marca"], d["interfaz"], d["paginas"][slug]
+    m, ui, pg, idi = d["marca"], d["interfaz"], d["paginas"][slug], d["idiomas"][lang]
     titulo = f'{pg["titulo"]} — {m["nombre"]}' if slug != "inicio" else f'{m["nombre"]} — {m["mensaje"]}'
-    canonica = URL + ("" if slug == "inicio" else pg["archivo"])
+    archivo = "" if slug == "inicio" else pg["archivo"]
+    canonica = URL + idi["carpeta"] + archivo
+    # Cada idioma apunta a los otros y x-default al castellano: asi Google no
+    # toma las dos versiones como contenido duplicado.
+    alternas = "".join(
+        f'<link rel="alternate" hreflang="{e(x["lang"])}" href="{URL}{x["carpeta"]}{archivo}">\n'
+        for k, x in d["idiomas"].items() if not k.startswith("_") and x.get("genera"))
+    alternas += f'<link rel="alternate" hreflang="x-default" href="{URL}{archivo}">\n'
+    robots = '<meta name="robots" content="noindex">\n' if pg.get("publicar") is False else ""
     return f'''<!DOCTYPE html>
-<html lang="es-AR">
+<html lang="{e(idi["lang"])}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(titulo)}</title>
-<meta name="description" content="{e(m["definicion"])} {e(d["hero"]["apoyo"])}">
+<meta name="description" content="{e(m["definicion"])}">
 <meta name="theme-color" content="#eeecec">
-<link rel="canonical" href="{canonica}">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="es_AR">
+{robots}<link rel="canonical" href="{canonica}">
+{alternas}<meta property="og:type" content="website">
+<meta property="og:locale" content="{e(idi["og"])}">
 <meta property="og:title" content="{e(titulo)}">
 <meta property="og:description" content="{e(m["definicion"])}">
 <meta property="og:image" content="{RAIZ}img/aerea-dia-1600.webp">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="favicon.png">
-<link rel="preload" href="../fuente/urbanist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../img/logo-horizontal-claro.webp" as="image" type="image/webp">
-<link rel="stylesheet" href="estilos.css?v={version("estilos.css")}">
+<link rel="icon" href="{R.demo}favicon.png">
+<link rel="preload" href="{R.raiz}fuente/urbanist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{R.raiz}img/logo-horizontal-claro.webp" as="image" type="image/webp">
+<link rel="stylesheet" href="{R.demo}estilos.css?v={version("estilos.css")}">
 <script type="application/ld+json">{json.dumps(datos_estructurados(d), ensure_ascii=False)}</script>
 </head>
-<body data-pagina="{slug}">
+<body data-pagina="{slug}" data-lang="{e(lang)}">
 <a class="saltar" href="#contenido">{e(ui["saltar"])}</a>
 {cms("cabecera", cabecera(d, lang, slug))}
 <main class="contenido" id="contenido">
@@ -604,13 +683,13 @@ def cascara(d, lang, slug, cuerpo, puntos):
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
-<script src="guion.js?v={version("guion.js")}" defer></script>
+<script src="{R.demo}guion.js?v={version("guion.js")}" defer></script>
 </body>
 </html>
 '''
 
 
-def pagina_inicio(d):
+def pagina_inicio(d, lang):
     """El relato. El trazo se dibuja, se cierra en orbita, se aprieta en ciclo
     y se abre en los cuatro mundos."""
     cuerpo = f'''{cms("hero", hero(d))}
@@ -627,12 +706,12 @@ def pagina_inicio(d):
     puntos = [("quienes", d["quienes"]["titulo"]), ("universo", d["universo"]["titulo"]),
               ("metodo", d["metodo"]["titulo"]), ("mundos", d["mundos"]["rotulo"]),
               ("contacto", d["contacto"]["titulo"])]
-    return cascara(d, "es", "inicio", cuerpo, puntos)
+    return cascara(d, lang, "inicio", cuerpo, puntos)
 
 
-def pagina_about(d):
+def pagina_nosotros(d, lang):
     """Quienes son. Lo que falta se muestra como hueco, no se disimula."""
-    pg = d["paginas"]["about"]
+    pg = d["paginas"]["nosotros"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("quienes", quienes(d))}
@@ -646,10 +725,10 @@ def pagina_about(d):
     puntos = [("quienes", d["quienes"]["titulo"]), ("equipo", d["equipo"]["titulo"]),
               ("mirada", d["mirada"]["titulo"]), ("red", d["red"]["titulo"]),
               ("contacto", d["contacto"]["titulo"])]
-    return cascara(d, "es", "about", cuerpo, puntos)
+    return cascara(d, lang, "nosotros", cuerpo, puntos)
 
 
-def pagina_proyectos(d):
+def pagina_proyectos(d, lang):
     """Cada proyecto es un mundo de color entero, y del ultimo se vuelve al
     primero. Es literal lo que pidio Vero: que sea un loop."""
     pg, lista = d["paginas"]["proyectos"], d["mundos"]["lista"]
@@ -670,7 +749,7 @@ def pagina_proyectos(d):
 </div></div>
 {visor(d)}'''
     puntos = [(w["id"], w["nombre"]) for w in lista] + [("contacto", d["contacto"]["titulo"])]
-    return cascara(d, "es", "proyectos", cuerpo, puntos)
+    return cascara(d, lang, "proyectos", cuerpo, puntos)
 
 
 def cinta(texto, tono="tinta", titulo=False):
@@ -727,17 +806,125 @@ def mundo_pleno(w, i, total, cuerpo, siguiente):
 </section>'''
 
 
-def main():
-    # Solo castellano por ahora: el copy en ingles lo debe la clienta.
-    # fundir() y sitio.en.json siguen en pie para cuando llegue.
-    for slug, armar in (("inicio", pagina_inicio), ("about", pagina_about),
-                        ("proyectos", pagina_proyectos)):
-        archivo = ES["paginas"][slug]["archivo"]
-        (AQUI / archivo).write_text(armar(ES), encoding="utf-8")
-        print(f"{archivo} armado")
+PAGINAS = {"inicio": pagina_inicio, "nosotros": pagina_nosotros, "proyectos": pagina_proyectos}
+
+# Claves que no son texto para leer: no se traducen y no se reclaman.
+TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "carpeta", "ancla",
+            "en", "whatsapp", "correo", "sitio_espacio", "proporcion", "numero", "n", "x", "y",
+            "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
+            "genera", "publicar", "en_menu", "clave", "ga4", "pixel"}
+
+
+def hojas(o, ruta=(), vacias=False):
+    """Todas las hojas de texto de un JSON, con su ruta, salteando lo tecnico.
+    Con `vacias` tambien devuelve las claves en blanco: existen como ruta
+    aunque no haya nada que traducir."""
+    if isinstance(o, dict):
+        for k, v in o.items():
+            if k.startswith("_") or k in TECNICAS:
+                continue
+            yield from hojas(v, ruta + (k,), vacias)
+    elif isinstance(o, list):
+        for i, v in enumerate(o):
+            yield from hojas(v, ruta + (i,), vacias)
+    elif isinstance(o, str) and (vacias or o.strip()):
+        yield ruta, o
+
+
+def chequear_capas(base, capa, nombre):
+    """Antes de generar un idioma: la capa no puede apuntar a una ruta que ya no
+    existe en el castellano (eso es lo que pudrio la capa inglesa), y se avisa
+    de cada texto del castellano que la capa no traduce. Corta solo en el primer
+    caso; el segundo es deuda, no error."""
+    rutas_base = {r for r, _ in hojas(base, vacias=True)}
+    textos_base = dict(hojas(base))
+    huerfanas = [r for r, _ in hojas(capa, vacias=True) if r not in rutas_base]
+    if huerfanas:
+        for r in huerfanas[:12]:
+            print(f"  ERROR capa {nombre}: la ruta {'.'.join(map(str, r))} no existe en el castellano")
+        raise SystemExit(f"capa {nombre}: {len(huerfanas)} rutas huerfanas. Se corrige la capa o se corre --plantilla {nombre}.")
+    traducidas = dict(hojas(capa))
+    # Un nombre propio queda igual en los dos idiomas a proposito: la capa lo
+    # declara en `_iguales` y deja de figurar como deuda.
+    iguales = set(capa.get("_iguales", []))
+    faltan = [r for r in textos_base
+              if (r not in traducidas or traducidas[r] == textos_base[r])
+              and ".".join(map(str, r)) not in iguales]
+    if faltan:
+        print(f"  capa {nombre}: {len(faltan)} textos sin traducir de {len(textos_base)}"
+              f" (los primeros: {', '.join('.'.join(map(str, r)) for r in faltan[:6])})")
+
+
+def plantilla(base, nombre):
+    """La estructura del castellano con solo las hojas de texto, para rellenar."""
+    salida = {}
+    for ruta, texto in hojas(base):
+        nodo = salida
+        for i, k in enumerate(ruta[:-1]):
+            sig = ruta[i + 1]
+            if isinstance(k, int):
+                while len(nodo) <= k:
+                    nodo.append({} if isinstance(sig, str) else [])
+                nodo = nodo[k]
+            else:
+                nodo = nodo.setdefault(k, {} if isinstance(sig, str) else [])
+        k = ruta[-1]
+        if isinstance(k, int):
+            while len(nodo) <= k:
+                nodo.append("")
+            nodo[k] = texto
+        else:
+            nodo[k] = texto
+    return json.dumps(salida, ensure_ascii=False, indent=2)
+
+
+def comprobar_rutas(html, carpeta):
+    """Cada src= y href= relativo tiene que existir en disco, resuelto desde la
+    carpeta donde queda el HTML. Es lo que atrapa un `../` de mas o de menos
+    cuando el ingles baja a en/."""
+    import re
+    avisos = 0
+    for m in re.finditer(r'(?:src|href)="([^"#?]+)', html):
+        ruta = m.group(1)
+        if ruta.startswith(("http", "mailto:", "tel:", "data:")):
+            continue
+        if not (carpeta / ruta).exists():
+            avisos += 1
+            print(f"  RUTA ROTA en {carpeta.name or 'demo'}/: {ruta}")
+    return avisos
+
+
+def main(args):
+    if "--plantilla" in args:
+        print(plantilla(ES, args[args.index("--plantilla") + 1]))
+        return
+    escritos = []
+    for lang, idi in ES["idiomas"].items():
+        if lang.startswith("_") or not idi.get("genera"):
+            continue
+        if lang == "es":
+            d = ES
+        else:
+            chequear_capas(ES, CAPAS[lang], lang)
+            d = fundir(ES, CAPAS[lang])
+        R.poner(idi["carpeta"])
+        carpeta = AQUI / idi["carpeta"]
+        carpeta.mkdir(exist_ok=True)
+        for slug, armar in PAGINAS.items():
+            pg = d["paginas"][slug]
+            if "archivo" not in pg:
+                continue
+            html = armar(d, lang)
+            (carpeta / pg["archivo"]).write_text(html, encoding="utf-8")
+            escritos.append((html, carpeta))
+            print(f"{idi['carpeta']}{pg['archivo']} armado")
+    # Las rutas se comprueban al final, cuando todas las paginas de todos los
+    # idiomas ya existen: si no, index.html reclama nosotros.html por orden.
+    rotas = sum(comprobar_rutas(h, c) for h, c in escritos)
+    print("rutas: todas existen" if not rotas else f"rutas rotas: {rotas}")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
 
 

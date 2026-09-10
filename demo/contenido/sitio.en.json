@@ -1,5 +1,5 @@
 {
-  "_fuente": "English version. Vero marcó en el tablero que quiere las dos versiones completas. Este archivo es una capa sobre sitio.json: cada clave que esté acá reemplaza a la misma clave del castellano, y lo que no esté (fotos, coordenadas, datos de contacto) sale de allá. Las listas se reemplazan enteras, por eso van completas.",
+  "_fuente": "English layer over sitio.json: only the texts that change. Photos, ids, tints and paths never go here: they come from the Spanish file. Lists of records are merged position by position, so they must have the same length as in Spanish.",
   "_revisar": "El copy en inglés lo tradujo DT System del castellano de Vero. Mavenz tiene que revisarlo, y sobre todo confirmar el claim del hero: 'Mavenz creates momentum' es la traducción fiel de 'Mavenz genera movimiento', pero un claim de marca lo decide la marca. La alternativa que ya usaba el kit es 'Moving things forward'.",
   "marca": {
     "nombre": "Mavenz",
@@ -9,42 +9,13 @@
   },
   "redes": [
     {
-      "nombre": "Instagram",
-      "href": ""
+      "nombre": "Instagram"
     },
     {
-      "nombre": "LinkedIn",
-      "href": ""
+      "nombre": "LinkedIn"
     },
     {
-      "nombre": "Facebook",
-      "href": ""
-    }
-  ],
-  "menu": [
-    {
-      "id": "universo",
-      "rotulo": "Universe"
-    },
-    {
-      "id": "metodo",
-      "rotulo": "How we work"
-    },
-    {
-      "id": "espacio",
-      "rotulo": "Espacio Mavenz"
-    },
-    {
-      "id": "proyectos",
-      "rotulo": "Projects"
-    },
-    {
-      "id": "red",
-      "rotulo": "Network"
-    },
-    {
-      "id": "mirada",
-      "rotulo": "Insights"
+      "nombre": "Facebook"
     }
   ],
   "hero": {
@@ -52,12 +23,10 @@
     "bajada": "We are the strategic partner that moves real estate.",
     "apoyo": "We connect vision, strategy, communication, business and people to turn opportunities into projects that move forward.",
     "cta1": {
-      "rotulo": "Explore the Mavenz universe",
-      "href": "#universo"
+      "rotulo": "Explore the Mavenz universe"
     },
     "cta2": {
-      "rotulo": "Let us talk",
-      "href": "#contacto"
+      "rotulo": "Let us talk"
     },
     "foto": {
       "alt": "Aerial view of San Lorenzo, Salta"
@@ -68,126 +37,48 @@
     "titulo": "We are Mavenz",
     "copy": "We were born in Salta with a different way of looking at real estate. We read opportunities, connect the right people and build the strategy each project needs to move forward.",
     "cierre": "It is not only about selling. It is about understanding what to move, how to move it and with whom.",
-    "piezas_rotulo": "The identity, applied",
-    "piezas": [
-      {
-        "epigrafe": "Notebook",
-        "foto": {
-          "src": "../img/agenda",
-          "anchos": [
-            800,
-            1400
-          ],
-          "alt": "Mavenz notebook with the blind-embossed mark",
-          "ancho": 1400,
-          "alto": 933
-        }
-      },
-      {
-        "epigrafe": "Folder",
-        "foto": {
-          "src": "../img/carpeta",
-          "anchos": [
-            800,
-            1400
-          ],
-          "alt": "Mavenz institutional folder",
-          "ancho": 1400,
-          "alto": 1135
-        }
-      }
-    ]
+    "piezas_rotulo": "The identity, applied"
   },
   "universo": {
     "titulo": "The Mavenz universe",
     "intro": "Mavenz works as a universe of connected capabilities. Each project activates a different combination.",
     "ayuda": "Tap each capability to see it.",
-    "esferas": [
-      {
-        "id": "estrategia",
-        "nombre": "Strategy and consulting",
-        "destacada": true,
-        "copy": "We read the business before moving a single piece."
-      },
-      {
-        "id": "marca",
-        "nombre": "Brand and communication",
-        "destacada": true,
-        "copy": "We build the story the project introduces itself with."
-      },
-      {
-        "id": "marketing",
-        "nombre": "Marketing and activation",
-        "destacada": true,
-        "copy": "We put the project in motion where it needs to be seen."
-      },
-      {
-        "id": "comercial",
-        "nombre": "Sales and projects",
-        "destacada": false,
-        "copy": "Sales handled with judgement, from first contact to closing."
-      },
-      {
-        "id": "inversion",
-        "nombre": "Investment and opportunity",
-        "destacada": false,
-        "copy": "We find where it makes sense to enter, and with whom."
-      },
-      {
-        "id": "alianzas",
-        "nombre": "New business and alliances",
-        "destacada": true,
-        "copy": "We open conversations that do not exist yet."
-      },
-      {
-        "id": "espacio",
-        "nombre": "Espacio Mavenz",
-        "destacada": true,
-        "copy": "The place where projects live and are presented."
-      }
-    ],
     "mapa": {
       "titulo": "The Mavenz map",
       "intro": "Six territories in Salta, and what is changing in each one.",
       "rotulo_quien": "Who buys there",
       "territorios": [
         {
-          "id": "micro",
           "nombre": "Downtown and city centre",
           "bajada": "Where heritage begins to change hands",
           "cambia": "The centre stopped growing outwards and grew by transformation. Companies, studios and offices now sit next to cafés and shops, and the colonial houses have left the traditional residential market.",
           "quien": "Companies, professional practices, entrepreneurs, tourism and people who want urban, connected living."
         },
         {
-          "id": "norte",
           "nombre": "North side",
           "bajada": "The city grows towards nature",
           "cambia": "One of the main expansion corridors in Salta. Every new development consolidates a residential ecosystem that keeps growing.",
           "quien": "Young families, professionals and anyone planning a long-term home without giving up the city."
         },
         {
-          "id": "sanlorenzo",
           "nombre": "San Lorenzo",
           "bajada": "Two territories, two ways of living",
           "cambia": "San Lorenzo Viejo is a consolidated market with a stable setting. San Lorenzo Chico is no longer only residential: schools, offices, gyms and restaurants let people live and work in the same place.",
           "quien": "Established families in Viejo. In Chico, young families, professionals and entrepreneurs who blend home, work and quality of life."
         },
         {
-          "id": "aeropuerto",
           "nombre": "Airport area and San Luis",
           "bajada": "Connectivity that drives growth",
           "cambia": "The expansion southwards finds its engine here. Being close to the airport and the main access roads sustains steady demand, alongside new neighbourhoods, services and shops.",
           "quien": "Working families, professionals and people tied to commerce and logistics who value access."
         },
         {
-          "id": "cafayate",
           "nombre": "Cafayate and Cachi",
           "bajada": "Investing is also choosing a way to live",
           "cambia": "The Calchaquí Valleys are a different market: the purchase decision mixes heritage, enjoyment and yield. Demand for second homes and tourism-linked investment keeps growing.",
           "quien": "People looking for a second home, heritage investors, tourism entrepreneurs and families who put experience and nature first."
         },
         {
-          "id": "vaqueros",
           "nombre": "Vaqueros",
           "bajada": "An eco-cultural answer",
           "cambia": "Vaqueros is emerging as an eco-cultural answer, more bohemian and open, with a strong sense of community. The new urban and environmental planning code and the widened access road reinforce the area.",
@@ -202,37 +93,22 @@
     "pasos": [
       {
         "nombre": "We read",
-        "x": 12.5,
-        "y": 34.5,
-        "arriba": true,
         "copy": "We understand the context, the business, the project and the opportunity."
       },
       {
         "nombre": "We define",
-        "x": 27.5,
-        "y": 76.0,
-        "arriba": false,
         "copy": "We choose a direction and put priorities, goals and scenarios in order."
       },
       {
         "nombre": "We connect",
-        "x": 50.0,
-        "y": 68.0,
-        "arriba": false,
         "copy": "We bring in the people and capabilities that challenge needs."
       },
       {
         "nombre": "We activate",
-        "x": 69.3,
-        "y": 39.5,
-        "arriba": true,
         "copy": "We turn strategy into communication, management, sales and concrete action."
       },
       {
         "nombre": "We stay",
-        "x": 91.0,
-        "y": 76.0,
-        "arriba": false,
         "copy": "We measure, adjust and sustain the movement until the goal is reached."
       }
     ]
@@ -243,22 +119,14 @@
     "copy": "Espacio Mavenz is not an office: it is where the projects live. The part of the site where the developments Mavenz sells are shown, presented and launched.",
     "nota": "Presentations and launches.",
     "cta": {
-      "rotulo": "Enter Espacio Mavenz",
-      "href": "https://espaciomavenz.com.ar"
+      "rotulo": "Enter Espacio Mavenz"
     },
     "hueco": {
       "rotulo": "Photo of the space",
       "texto": "Reserved for a photo of the place. No material yet."
     },
     "fondo": {
-      "src": "../img/aerea-amplia",
-      "anchos": [
-        800,
-        1600
-      ],
-      "alt": "Aerial view of the Lerma valley",
-      "ancho": 1600,
-      "alto": 739
+      "alt": "Aerial view of the Lerma valley"
     }
   },
   "proyectos": {
@@ -269,7 +137,6 @@
       "nombre": "Cardinal",
       "meta": "San Lorenzo Chico, Salta — currently selling",
       "cta": "See the project",
-      "href": "#contacto",
       "rotulo_foto": "Render image",
       "foto": {
         "alt": "Tree-lined street in Cardinal with families walking"
@@ -283,141 +150,57 @@
     "estante": [
       {
         "epigrafe": "Amenities — pool and clubhouse",
-        "columnas": 7,
-        "proporcion": "3 / 2",
         "foto": {
-          "src": "../img/amenities",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pool and clubhouse at Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
+          "alt": "Pool and clubhouse at Cardinal"
+        }
       },
       {
         "epigrafe": "Inner street",
-        "bn": true,
-        "columnas": 5,
-        "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/calle-casas",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Inner street at Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": false
+          "alt": "Inner street at Cardinal"
+        }
       },
       {
         "epigrafe": "Houses — the gallery",
         "velo": "The gallery, the fire and the garden",
-        "columnas": 5,
-        "proporcion": "1 / 1",
         "foto": {
-          "src": "../img/galeria",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Gallery of a house at Cardinal",
-          "ancho": 1600,
-          "alto": 901
-        },
-        "solo_visor": false
+          "alt": "Gallery of a house at Cardinal"
+        }
       },
       {
         "epigrafe": "The commercial corner",
-        "columnas": 4,
-        "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/render-comercial",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Commercial corner at Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
+          "alt": "Commercial corner at Cardinal"
+        }
       },
       {
         "epigrafe": "Interior",
-        "columnas": 4,
-        "proporcion": "1 / 1",
         "foto": {
-          "src": "../img/render-interior",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Interior of a house at Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
+          "alt": "Interior of a house at Cardinal"
+        }
       },
       {
         "epigrafe": "Sunset over the neighbourhood",
-        "bn": true,
-        "columnas": 4,
-        "proporcion": "3 / 2",
         "foto": {
-          "src": "../img/atardecer",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Sunset over Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
+          "alt": "Sunset over Cardinal"
+        }
       },
       {
         "epigrafe": "San Lorenzo from above",
-        "columnas": 7,
-        "proporcion": "16 / 9",
         "foto": {
-          "src": "../img/sanlorenzo",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Aerial view of San Lorenzo",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
+          "alt": "Aerial view of San Lorenzo"
+        }
       },
       {
         "epigrafe": "The pool, on a Sunday",
-        "columnas": 5,
-        "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/pileta-gente",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pool at Cardinal with people",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
+          "alt": "Pool at Cardinal with people"
+        }
       }
     ],
     "hueco": {
       "epigrafe": "Available slot",
-      "texto": "The next projects and opportunities go here",
-      "columnas": 4,
-      "proporcion": "1 / 1"
+      "texto": "The next projects and opportunities go here"
     },
     "otros_rotulo": "Also in movement",
     "otros": [
@@ -426,14 +209,7 @@
         "meta": "Salta — currently selling",
         "copy": "Apartments and units in the northern corridor.",
         "foto": {
-          "src": "../img/porto-01",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Render of Porto",
-          "ancho": 1400,
-          "alto": 787
+          "alt": "Render of Porto"
         }
       },
       {
@@ -441,13 +217,7 @@
         "meta": "Salta — parking and storage",
         "copy": "Parking spaces and storage units, with an availability plan.",
         "foto": {
-          "src": "../img/wa-storages",
-          "anchos": [
-            697
-          ],
-          "alt": "WA storage units",
-          "ancho": 697,
-          "alto": 733
+          "alt": "WA storage units"
         }
       }
     ]
@@ -458,39 +228,19 @@
     "cierre": "This is not a directory of logos. It is who steps into each movement.",
     "nodos": [
       {
-        "nombre": "Team",
-        "peso": 1,
-        "x": 0.0,
-        "y": 14.7,
-        "sangria": 0
+        "nombre": "Team"
       },
       {
-        "nombre": "Partners",
-        "peso": 3,
-        "x": 27.2,
-        "y": 0.0,
-        "sangria": 56
+        "nombre": "Partners"
       },
       {
-        "nombre": "Specialists",
-        "peso": 2,
-        "x": 21.4,
-        "y": 37.3,
-        "sangria": 24
+        "nombre": "Specialists"
       },
       {
-        "nombre": "Developers",
-        "peso": 1,
-        "x": 54.0,
-        "y": 22.0,
-        "sangria": 0
+        "nombre": "Developers"
       },
       {
-        "nombre": "Allies",
-        "peso": 3,
-        "x": 47.1,
-        "y": 62.0,
-        "sangria": 80
+        "nombre": "Allies"
       }
     ]
   },
@@ -507,22 +257,18 @@
     "rotulo_motivos": "What do you want to move",
     "motivos": [
       {
-        "id": "proyecto",
         "rotulo": "Present a project",
         "wa": "Hi Mavenz, I would like to present a project."
       },
       {
-        "id": "oportunidad",
         "rotulo": "Look for an opportunity",
         "wa": "Hi Mavenz, I am looking for an investment opportunity."
       },
       {
-        "id": "alianza",
         "rotulo": "Propose an alliance",
         "wa": "Hi Mavenz, I would like to propose an alliance."
       },
       {
-        "id": "espacio",
         "rotulo": "Visit Espacio Mavenz",
         "wa": "Hi Mavenz, I would like to know Espacio Mavenz."
       }
@@ -531,10 +277,8 @@
     "wa_general": "Hi Mavenz, I saw your site and I have a question."
   },
   "interfaz": {
-    "menu": "Menu",
     "cerrar": "Close",
     "saltar": "Skip to content",
-    "whatsapp": "WhatsApp",
     "idioma": "Language",
     "abrir_foto": "View photo",
     "anterior": "Previous",
@@ -546,23 +290,31 @@
   "equipo": {
     "margen": "Who is behind it",
     "titulo": "The two who move Mavenz",
-    "intro": "Mavenz is not a faceless brand. Behind it there are two people who decide together what moves and how.",
-    "personas": [
-      {
-        "nombre": "Verónica Burs",
-        "rol": "Direction",
-        "linea": "",
-        "hueco": "Portrait of Vero"
-      },
-      {
-        "nombre": "Luchi",
-        "rol": "Direction",
-        "linea": "",
-        "hueco": "Portrait of Luchi"
-      }
-    ]
+    "intro": "Mavenz is not a faceless brand. Behind it there are two people who decide together what moves and how."
   },
   "banda": {
     "alt": "Aerial band over the valley"
-  }
+  },
+  "paginas": {
+    "nosotros": {
+      "rotulo": "The team",
+      "titulo": "The team",
+      "cinta": "The team"
+    },
+    "proyectos": {
+      "titulo": "Projects and opportunities",
+      "cinta": "Projects"
+    },
+    "inicio": {
+      "titulo": "Mavenz creates momentum"
+    }
+  },
+  "_iguales": [
+    "marca.nombre",
+    "marca.lugar",
+    "redes.0.nombre",
+    "redes.1.nombre",
+    "redes.2.nombre",
+    "interfaz.whatsapp"
+  ]
 }

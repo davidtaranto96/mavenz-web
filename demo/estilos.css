@@ -214,12 +214,17 @@ p { text-wrap: pretty; }
 
 .idioma { display: flex; align-items: center; gap: .1875rem; font-size: var(--t-nota); }
 .idioma__on  { font-weight: var(--medio); color: var(--tinta); }
+/* El idioma que todavia no tiene copy se ve, pero no es un enlace. */
+.idioma__off--pronto { opacity: .55; cursor: default; }
 .idioma__sep { color: var(--linea-acento); }
-.idioma__off {
+.idioma__off,
+.idioma__on {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
-  padding-inline: .375rem;
+  min-width: 44px;          /* medido: 27 px de ancho; el toque vale en los dos ejes */
+  padding-inline: .25rem;
   font-weight: var(--ui);
   color: var(--tinta-apoyo);
   transition: color var(--hover) var(--curva);

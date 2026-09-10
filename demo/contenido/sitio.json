@@ -27,32 +27,6 @@
       "href": ""
     }
   ],
-  "menu": [
-    {
-      "id": "universo",
-      "rotulo": "Universo"
-    },
-    {
-      "id": "metodo",
-      "rotulo": "Cómo trabajamos"
-    },
-    {
-      "id": "espacio",
-      "rotulo": "Espacio Mavenz"
-    },
-    {
-      "id": "proyectos",
-      "rotulo": "Proyectos"
-    },
-    {
-      "id": "red",
-      "rotulo": "Red"
-    },
-    {
-      "id": "mirada",
-      "rotulo": "Contenido"
-    }
-  ],
   "hero": {
     "titulo": "Mavenz genera movimiento",
     "bajada": "Somos el partner estratégico que mueve el real estate.",
@@ -66,7 +40,7 @@
       "href": "#contacto"
     },
     "foto": {
-      "src": "../img/aerea-dia",
+      "src": "img/aerea-dia",
       "anchos": [
         800,
         1600
@@ -86,7 +60,7 @@
       {
         "epigrafe": "San Lorenzo, Salta",
         "foto": {
-          "src": "../img/sanlorenzo",
+          "src": "img/sanlorenzo",
           "anchos": [
             800,
             1600
@@ -232,7 +206,7 @@
       "texto": "Reservado para una foto del lugar. Todavía no hay material."
     },
     "fondo": {
-      "src": "../img/aerea-amplia",
+      "src": "img/aerea-amplia",
       "anchos": [
         800,
         1600
@@ -254,7 +228,7 @@
       "href": "#contacto",
       "rotulo_foto": "Imagen de render",
       "foto": {
-        "src": "../img/casas",
+        "src": "img/casas",
         "anchos": [
           800,
           1600
@@ -264,16 +238,16 @@
         "alto": 739
       },
       "video": {
-        "src": "../video/cardenal.mp4",
-        "poster": "../video/cardenal-poster.webp",
+        "src": "video/cardenal.mp4",
+        "poster": "video/cardenal-poster.webp",
         "rotulo": "El cardenal de CARDINAL",
         "copy": "¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia, movimiento e identidad.",
         "cierre": "Y esto recién se pone en movimiento.",
         "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
       },
       "fondo": {
-        "src": "../video/cardinal.mp4",
-        "poster": "../video/cardinal-poster.webp",
+        "src": "video/cardinal.mp4",
+        "poster": "video/cardinal-poster.webp",
         "_dt": "cardinal-film.mp4 recomprimido de 17 MB a 3 MB. Va de fondo con el póster primero y el video diferido."
       }
     },
@@ -283,7 +257,7 @@
         "columnas": 7,
         "proporcion": "3 / 2",
         "foto": {
-          "src": "../img/amenities",
+          "src": "img/amenities",
           "anchos": [
             800,
             1600
@@ -300,7 +274,7 @@
         "columnas": 5,
         "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/calle-casas",
+          "src": "img/calle-casas",
           "anchos": [
             800,
             1600
@@ -317,7 +291,7 @@
         "columnas": 5,
         "proporcion": "1 / 1",
         "foto": {
-          "src": "../img/galeria",
+          "src": "img/galeria",
           "anchos": [
             800,
             1600
@@ -333,7 +307,7 @@
         "columnas": 4,
         "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/render-comercial",
+          "src": "img/render-comercial",
           "anchos": [
             800,
             1600
@@ -349,7 +323,7 @@
         "columnas": 4,
         "proporcion": "1 / 1",
         "foto": {
-          "src": "../img/render-interior",
+          "src": "img/render-interior",
           "anchos": [
             800,
             1600
@@ -366,7 +340,7 @@
         "columnas": 4,
         "proporcion": "3 / 2",
         "foto": {
-          "src": "../img/atardecer",
+          "src": "img/atardecer",
           "anchos": [
             800,
             1600
@@ -382,7 +356,7 @@
         "columnas": 7,
         "proporcion": "16 / 9",
         "foto": {
-          "src": "../img/sanlorenzo",
+          "src": "img/sanlorenzo",
           "anchos": [
             800,
             1600
@@ -398,7 +372,7 @@
         "columnas": 5,
         "proporcion": "4 / 5",
         "foto": {
-          "src": "../img/pileta-gente",
+          "src": "img/pileta-gente",
           "anchos": [
             800,
             1600
@@ -423,7 +397,7 @@
         "meta": "Salta — en comercialización",
         "copy": "Departamentos y unidades en el corredor norte.",
         "foto": {
-          "src": "../img/porto-01",
+          "src": "img/porto-01",
           "anchos": [
             800,
             1600
@@ -438,7 +412,7 @@
         "meta": "Salta — cocheras y storages",
         "copy": "Inventario de cocheras y storages, con plano de disponibilidad.",
         "foto": {
-          "src": "../img/wa-storages",
+          "src": "img/wa-storages",
           "anchos": [
             697
           ],
@@ -561,18 +535,27 @@
     "bloque_datos": "Dónde encontrarnos"
   },
   "idiomas": {
-    "_dt": "Las dos versiones están completas. El copy en inglés lo escribió DT System traduciendo el de Vero: Mavenz tiene que revisarlo, sobre todo el claim del hero.",
+    "_dt": "Cada idioma es una carpeta: el castellano en demo/, el ingles en demo/en/. `genera: false` deja el idioma en el selector como texto deshabilitado hasta que exista el copy. El ingles lo tradujo DT System del castellano de Vero: Mavenz tiene que revisarlo.",
     "es": {
       "rotulo": "ES",
-      "href": "index.html",
+      "carpeta": "",
       "lang": "es-AR",
-      "og": "es_AR"
+      "og": "es_AR",
+      "genera": true
     },
     "en": {
       "rotulo": "EN",
-      "href": "en.html",
+      "carpeta": "en/",
       "lang": "en",
-      "og": "en"
+      "og": "en_US",
+      "genera": true
+    },
+    "pt": {
+      "rotulo": "PT",
+      "carpeta": "pt/",
+      "lang": "pt-BR",
+      "og": "pt_BR",
+      "genera": false
     }
   },
   "interfaz": {
@@ -587,7 +570,8 @@
     "siguiente": "Siguiente",
     "indice": "Secciones",
     "ver_video": "Ver el video",
-    "silenciar": "Silenciar"
+    "silenciar": "Silenciar",
+    "idioma_pronto": "Próximamente"
   },
   "equipo": {
     "margen": "Quiénes están detrás",
@@ -616,8 +600,8 @@
     ]
   },
   "banda": {
-    "src": "../video/banda.mp4",
-    "poster": "../video/banda-poster.webp",
+    "src": "video/banda.mp4",
+    "poster": "video/banda-poster.webp",
     "alt": "Banda aérea del valle",
     "_dt": "banda-aerea-1.mp4 recomprimido de 1,4 MB a 119 KB. Corta el ritmo entre el método y Espacio Mavenz sin agregar una sección."
   },
@@ -627,8 +611,8 @@
       "rotulo": "Inicio",
       "titulo": "Mavenz genera movimiento"
     },
-    "about": {
-      "archivo": "about.html",
+    "nosotros": {
+      "archivo": "nosotros.html",
       "rotulo": "El equipo",
       "titulo": "El equipo",
       "cinta": "El equipo"
