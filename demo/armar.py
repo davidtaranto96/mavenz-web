@@ -346,42 +346,74 @@ def mapa(d):
   </div>'''
 
 
-def ciclo(d):
-    import math
+def puntos_onda(fracciones, pasos=120):
+    """Puntos sobre ONDA a ciertas fracciones de su LONGITUD (no del parametro
+    t de cada curva, que no es uniforme). Aplana las seis cubicas en
+    segmentos, arma la tabla de longitud de arco y busca ahi. Devuelve
+    (x%, y%) sobre la caja 1200x400 del trazo."""
+    import re
+    nums = [float(v) for v in re.findall(r"-?\d+(?:\.\d+)?", ONDA)]
+    p0 = (nums[0], nums[1])
+    puntos, largo = [p0], [0.0]
+    i = 2
+    while i + 5 < len(nums):
+        c1, c2, p3 = (nums[i], nums[i + 1]), (nums[i + 2], nums[i + 3]), (nums[i + 4], nums[i + 5])
+        for k in range(1, pasos + 1):
+            t = k / pasos
+            u = 1 - t
+            x = u**3 * p0[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t**3 * p3[0]
+            y = u**3 * p0[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t**3 * p3[1]
+            ax, ay = puntos[-1]
+            largo.append(largo[-1] + ((x - ax) ** 2 + (y - ay) ** 2) ** .5)
+            puntos.append((x, y))
+        p0 = p3
+        i += 6
+    total = largo[-1]
+    salida = []
+    for f in fracciones:
+        objetivo = f * total
+        j = next(k for k, l in enumerate(largo) if l >= objetivo)
+        x, y = puntos[j]
+        salida.append((x / 12, y / 4))     # a porcentaje de 1200 x 400
+    return salida
+
+
+def metodo(d):
+    """Como trabajamos (MET-1..4, 08/09): el trazo de la M se dibuja con el
+    scroll y los cinco pasos se despliegan desde su cola, uno tras otro, a
+    medida que se baja. Sin pin: la seccion mide lo que mide y el trazo se
+    completa en una pantalla de scroll. Fondo papel, trazo y palabras en
+    bordo. El isotipo arranca el trazo. Sin guion: trazo entero y pasos a la
+    vista; con menos movimiento, igual. En celular el trazo queda de adorno
+    arriba y los pasos son una lista con filete, cada uno entra al verse.
+    Los pasos se muestrean sobre la longitud del trazo (puntos_onda)."""
     m = d["metodo"]
-    n = len(m["pasos"])
-    nodos, cartas = [], []
-    for i, p in enumerate(m["pasos"]):
-        ang = -math.pi / 2 + i * 2 * math.pi / n
-        x, y = 50 + 36 * math.cos(ang), 50 + 36 * math.sin(ang)
+    fr = [.14, .32, .52, .72, .92][:len(m["pasos"])]
+    nodos = []
+    for i, (p, (x, y)) in enumerate(zip(m["pasos"], puntos_onda(fr))):
+        arriba = ' data-arriba' if i % 2 == 0 else ''
         nodos.append(
-            f'<button class="ciclo__nodo" type="button" data-paso="{i}" '
-            f'style="--x:{x:.2f}%;--y:{y:.2f}%" '
-            f'aria-pressed="{"true" if i == 0 else "false"}">'
-            f'<span class="ciclo__punto" aria-hidden="true"></span>'
-            f'<span class="ciclo__rotulo">{e(p["nombre"])}</span></button>')
-        cartas.append(
-            f'<article class="ciclo__carta" data-carta="{i}" '
-            f'aria-hidden="{"false" if i == 0 else "true"}">'
-            f'<span class="ciclo__n">{e(p["numero"])}</span>'
-            f'<h3>{e(p["nombre"])}</h3><p>{e(p["copy"])}</p></article>')
-    return f'''<section class="seccion ciclo-seccion" id="metodo"{fx("metodo")}>
+            f'<li class="trazo__nodo" data-t="{fr[i]}" style="--x:{x:.2f}%;--y:{y:.2f}%"{arriba}>'
+            f'<span class="trazo__punto" aria-hidden="true"></span>'
+            f'<span class="trazo__rotulo"><span class="trazo__n" aria-hidden="true">{e(p["numero"])}</span>'
+            f'<strong class="trazo__nombre">{e(p["nombre"])}</strong> '
+            f'<span class="trazo__copy">{e(p["copy"])}</span></span></li>')
+    return f'''<section class="seccion metodo" id="metodo"{fx("metodo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
     <p class="bajada">{e(m["intro"])}</p>
   </div>
-  <div class="ciclo" data-ciclo style="--pasos:{n}">
-    <svg class="ciclo__dibujo" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="36" fill="none" stroke="var(--linea)"
-              stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle class="ciclo__avance" data-avance cx="50" cy="50" r="36" fill="none"
-              stroke="var(--tinta-bordo)" stroke-width="1.6" stroke-linecap="round"
-              vector-effect="non-scaling-stroke" transform="rotate(-90 50 50)"/>
-    </svg>
-    <div class="ciclo__centro">{"".join(cartas)}</div>
-    {"".join(nodos)}
+  <div class="trazo" data-trazo>
+    <div class="trazo__caja">
+      <img class="trazo__iso" src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async">
+      <svg class="trazo__dibujo" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+        <path class="trazo__onda" pathLength="1" d="{ONDA}" fill="none" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <ol class="trazo__nodos">{"".join(nodos)}</ol>
+    </div>
   </div>
-  <p class="ciclo__cierre">{e(m["cierre"])}</p>
+  <p class="metodo__cierre">{e(m["cierre"])}</p>
 </section>'''
 
 
@@ -528,6 +560,9 @@ def red(d):
 
 
 def mirada(d):
+    """Mirada Mavenz (documento del 08/09): la seccion editorial que reemplaza
+    a Territorio, con las cinco categorias y el mapa como contenido editorial.
+    Vive en Inicio, entre Proyectos en movimiento y Contacto."""
     m = d["mirada"]
     temas = "".join(
         f'<li class="tema" style="--i:{i}">'
@@ -535,14 +570,12 @@ def mirada(d):
         f'<span class="tema__rotulo">{e(t["rotulo"])}</span></li>'
         for i, t in enumerate(m["temas"]))
     return f'''<section class="seccion mirada-seccion" id="mirada"{fx("mirada")}>
-  <p class="margen seccion__margen">{e(m["margen"])}</p>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
     <p class="bajada">{e(m["intro"])}</p>
   </div>
-  <p class="cita mirada__cita" data-formar>{e(m["cita"])}</p>
   <ul class="temas">{temas}</ul>
-  <p class="mirada__nota">{e(m["hueco"])}</p>
+  {mapa(d)}
 </section>'''
 
 
@@ -826,10 +859,9 @@ def pagina_inicio(d, lang):
 {puente()}
 {cms("universo", orbita(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
-{cms("metodo", ciclo(d))}
-</div></div>
+{cms("metodo", metodo(d))}
 {cms("mundos", mundos(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("mirada", mirada(d))}
 {cms("contacto", contacto(d))}
 </div></div>'''
     return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
@@ -841,7 +873,6 @@ def pagina_nosotros(d, lang):
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("equipo", equipo(d))}
-{cms("mirada", mirada(d))}
 </div></div>
 {cms("red", red(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
@@ -856,10 +887,11 @@ def pagina_proyectos(d, lang):
     pg, lista = d["paginas"]["proyectos"], d["mundos"]["lista"]
     # Lo que va adentro de cada mundo. Son las secciones que ya existian: no se
     # reescribe contenido, se lo mete en su color.
-    dentro = {"cardinal":    proyectos(d) + cardenal(d),
-              "desarrollos": otros(d),
-              "espacio":     espacio(d),
-              "territorio":  mapa(d)}
+    # PROVISORIO hasta la Fase 5 (proyectos.html se rehace como indice liviano):
+    # la lista ya es la del 08/09 (cardinal / otros / oportunidades).
+    dentro = {"cardinal":      proyectos(d) + cardenal(d),
+              "otros":         otros(d),
+              "oportunidades": ""}
     n = len(lista)
     bloques = "".join(
         mundo_pleno(w, i, n, dentro[w["id"]], lista[(i + 1) % n]["id"])
@@ -919,20 +951,32 @@ def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
 
 
 def mundos(d):
+    """Proyectos en movimiento (PROY-1, 3, 4, 5): tres paneles con aire entre
+    si, cada uno con su tinta, la foto en el tercio de abajo y el nombre en
+    vertical (la mecanica de realevate que pidio el documento). Tilt al pasar
+    el puntero fino (data-fx="tilt" en la tarjeta y NUNCA en una seccion de
+    reveal: el motor propio compara data-fx="reveal" por igualdad exacta).
+    Un panel con `motivo` lleva al contacto con esa opcion preseleccionada."""
     w = d["mundos"]
-    paneles = "".join(
-        f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" '
-        f'style="--i:{i}">'
-        f'<span class="mundo__marca" aria-hidden="true">M</span>'
+    def panel(i, x):
+        motivo = f' data-motivo="{e(x["motivo"])}"' if x.get("motivo") else ""
+        return (f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" data-fx="tilt" data-fx-grados="5" '
+        f'style="--i:{i}"{motivo}>'
+        f'<span class="mundo__cuerpo">'
+        f'<span class="mundo__marca" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></span>'
         f'<span class="mundo__nombre">{e(x["nombre"])}</span>'
         f'<span class="mundo__bajada">{e(x["bajada"])}</span>'
         f'<span class="mundo__cierre">{e(x["cierre"])}<span aria-hidden="true"> &#8594;</span></span>'
-        f'</a>'
-        for i, x in enumerate(w["lista"]))
-    return f'''<section class="seccion seccion--ancha mundos-seccion" id="mundos"{fx("proyectos")}>
-  <p class="margen">{e(w["rotulo"])}</p>
+        f'</span>'
+        f'{img(x["foto"], "(min-width:64rem) 30vw, 100vw", clase="mundo__foto") if x.get("foto") else ""}'
+        f'</a>')
+    paneles = "".join(panel(i, x) for i, x in enumerate(w["lista"]))
+    return f'''<section class="seccion mundos-seccion" id="mundos"{fx("proyectos")}>
+  <div class="seccion__cabeza">
+    <h2 class="titulo" data-letras>{e(w["rotulo"])}</h2>
+    <p class="bajada">{e(w["intro"])}</p>
+  </div>
   <div class="mundos">{paneles}</div>
-  <p class="mundos__ayuda">{e(w["ayuda"])}</p>
 </section>'''
 
 

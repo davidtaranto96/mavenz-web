@@ -87,30 +87,31 @@
     "cierre": "At Mavenz we do not work in isolated areas. We connect different capabilities according to what each opportunity needs to move forward."
   },
   "metodo": {
-    "titulo": "Every project activates a different movement",
-    "intro": "Mavenz does not apply a closed formula. First it understands what needs to move, then it builds the right combination of strategy, team, network and execution.",
+    "titulo": "How we work",
+    "intro": "Every project needs its own perspective. That is why we work with a flexible, strategic and collaborative methodology, connecting capabilities to each challenge.",
     "pasos": [
       {
-        "nombre": "We read",
-        "copy": "We understand the context, the business, the project and the opportunity."
-      },
-      {
-        "nombre": "We define",
-        "copy": "We choose a direction and put priorities, goals and scenarios in order."
+        "nombre": "We discover",
+        "copy": "We detect opportunities with potential."
       },
       {
         "nombre": "We connect",
-        "copy": "We bring in the people and capabilities that challenge needs."
+        "copy": "We bring in the right people and players."
       },
       {
-        "nombre": "We activate",
-        "copy": "We turn strategy into communication, management, sales and concrete action."
+        "nombre": "We structure",
+        "copy": "We put the strategy, the business and the opportunity in order."
       },
       {
-        "nombre": "We stay",
-        "copy": "We measure, adjust and sustain the movement until the goal is reached."
+        "nombre": "We strengthen",
+        "copy": "We develop the project's value."
+      },
+      {
+        "nombre": "We move",
+        "copy": "We turn the opportunity into concrete action."
       }
-    ]
+    ],
+    "cierre": "Every move opens a new opportunity."
   },
   "espacio": {
     "margen": "Presentations and launches",
@@ -244,13 +245,29 @@
     ]
   },
   "mirada": {
-    "titulo": "What we see before it moves",
-    "intro": "Analysis, ideas, trends and readings of the market. Our way of looking, written down.",
-    "hueco": "The first pieces will be published at launch.",
+    "titulo": "Mavenz Outlook",
+    "intro": "We analyse the market, the trends and the territories to anticipate opportunities and make better decisions.",
+    "temas": [
+      {
+        "rotulo": "Market and trends"
+      },
+      {
+        "rotulo": "Urban development"
+      },
+      {
+        "rotulo": "Investment"
+      },
+      {
+        "rotulo": "Business"
+      },
+      {
+        "rotulo": "Brand and communication"
+      }
+    ],
     "mapa": {
-      "titulo": "The Mavenz map",
-      "intro": "Six territories in Salta, and what is changing in each one.",
-      "rotulo_quien": "Who buys there",
+      "titulo": "Where Salta is growing, and why",
+      "intro": "Six territories, and what is happening in each.",
+      "rotulo_quien": "Profile and opportunities of the area",
       "territorios": [
         {
           "nombre": "Downtown and city centre",
@@ -397,5 +414,35 @@
     "aceptar": "Accept",
     "rechazar": "Decline",
     "enlace_pie": "Cookies"
+  },
+  "mundos": {
+    "rotulo": "Projects in motion",
+    "intro": "Projects and opportunities in which Mavenz takes part through strategy, positioning, business development or sales.",
+    "lista": [
+      {
+        "nombre": "Cardinal",
+        "bajada": "San Lorenzo Chico, now selling",
+        "cierre": "Discover Cardinal",
+        "foto": {
+          "alt": "Pool and grill area at Cardinal"
+        }
+      },
+      {
+        "nombre": "Other projects",
+        "bajada": "If you have a development, a plot or a brand to move, we start by listening.",
+        "cierre": "Tell us about your project",
+        "foto": {
+          "alt": "Wide aerial view of the Lerma valley"
+        }
+      },
+      {
+        "nombre": "Investment opportunities",
+        "bajada": "Tell us what kind of opportunity you are looking for.",
+        "cierre": "I am looking for an opportunity",
+        "foto": {
+          "alt": "Sunset over San Lorenzo"
+        }
+      }
+    ]
   }
 }

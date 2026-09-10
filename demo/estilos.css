@@ -528,29 +528,7 @@ body[data-menu-abierto] { overflow: hidden; }
    Cómo trabajamos: el trazo con sus cinco nodos
    ========================================================================== */
 
-.metodo__trazo { position: relative; margin-top: clamp(2rem, 1.4rem + 2.4vw, 4rem); }
-.metodo__trazo svg { width: 100%; height: clamp(6.875rem, 3rem + 9.9vw, 17.5rem); }
-
-.metodo__nodo { display: none; }
-
-.metodo__lista {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .625rem .875rem;
-  margin-top: 1.5rem;
-}
-.metodo__paso {
-  font-size: clamp(1.3125rem, 1.1rem + .87vw, 1.625rem);
-  font-weight: var(--medio);
-  letter-spacing: -.01em;
-  color: var(--tinta);
-}
-.metodo__punto {
-  width: 6px; height: 6px;
-  border-radius: 999px;
-  background: var(--tinta-bordo);
-}
+/* El metodo del 09/09 (trazo con nodos) esta en el bloque "Fase 4". */
 
 /* ==========================================================================
    Huecos: lo que espera material de la clienta, a la vista
@@ -704,17 +682,6 @@ body[data-menu-abierto] { overflow: hidden; }
    Contenido y mirada
    ========================================================================== */
 
-.mirada__hueco {
-  display: flex;
-  align-items: center;
-  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3rem);
-  height: clamp(7.5rem, 3rem + 11vw, 12.5rem);
-  border-top: 1px solid var(--linea-acento);
-  border-bottom: 1px solid var(--linea-acento);
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  color: var(--tinta-apoyo);
-}
 
 /* ==========================================================================
    Cierre
@@ -848,36 +815,6 @@ body[data-menu-abierto] { overflow: hidden; }
   div.rueda .rueda__nodo[aria-pressed="true"] .rueda__nombre { color: var(--sobre-foto); font-weight: var(--medio); }
   div.rueda + .rueda__ayuda { display: none; }
 
-  /* El método: los nodos se paran sobre el trazo. */
-  div.metodo__trazo { aspect-ratio: 1104 / 280; height: auto; }
-  div.metodo__trazo svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  div.metodo__trazo .metodo__nodo {
-    display: block;
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-  }
-  div.metodo__trazo .metodo__nodo::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 0;
-    translate: -50% -50%;
-    width: 9px; height: 9px;
-    border-radius: 999px;
-    background: var(--tinta-bordo);
-  }
-  div.metodo__trazo .metodo__nodo span {
-    position: absolute;
-    left: 0; top: 0;
-    translate: -50% 90%;
-    font-size: clamp(1.375rem, .8rem + .9vw, 1.625rem);
-    font-weight: var(--medio);
-    letter-spacing: -.01em;
-    white-space: nowrap;
-    color: var(--tinta);
-  }
-  div.metodo__trazo .metodo__nodo[data-arriba] span { translate: -50% -190%; }
-  div.metodo__trazo + .metodo__lista { display: none; }
 
   /* La red: de listado a nube. */
   div.red__nube {
@@ -934,9 +871,7 @@ body[data-menu-abierto] { overflow: hidden; }
 
   div.rueda { width: min(100%, 44rem, 76svh); }
   article.proyecto { height: min(clamp(26.25rem, 15rem + 25vw, 35rem), 76svh); }
-  div.metodo__trazo { max-height: 40svh; }
   div.red__nube { max-height: 42svh; }
-  div.mirada__hueco { height: min(clamp(7.5rem, 3rem + 11vw, 12.5rem), 26svh); }
 }
 
 /* El hero es lo primero que se rompe: con 657 px de alto el título gigante se
@@ -1083,7 +1018,6 @@ body[data-menu-abierto] { overflow: hidden; }
    El método: cinco verbos que se abren y cuentan qué pasa
    ========================================================================== */
 
-.metodo__pasos { margin-top: clamp(1.5rem, 1rem + 1.3vw, 2.25rem); }
 
 .paso, .territorio { border-top: 1px solid var(--linea); }
 .paso:last-of-type, .territorio:last-of-type { border-bottom: 1px solid var(--linea); }
@@ -1631,137 +1565,9 @@ body[data-menu-abierto] { overflow: hidden; }
 /* La orbita se reescribio el 09/09 (tres esferas, MAVENZ al centro, fondo
    bistre): esta en el bloque "Fase 3" al final de la hoja. */
 
-/* --- El ciclo: cinco pasos en círculo, y del quinto se vuelve al primero -- */
-.ciclo {
-  position: relative;
-  width: min(100%, 34rem);
-  aspect-ratio: 1;
-  margin-inline: auto;
-  margin-block: clamp(2rem, 6svh, 4rem);
-}
-.ciclo__dibujo { position: absolute; inset: 0; width: 100%; height: 100% }
-.ciclo__avance {
-  stroke-dasharray: var(--vuelta, 226);
-  stroke-dashoffset: calc(var(--vuelta, 226) * (1 - var(--avance, 0)));
-}
-.ciclo__nodo {
-  position: absolute;
-  inset-block-start: var(--y);
-  inset-inline-start: var(--x);
-  translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  gap: .3rem;
-  min-width: 44px; min-height: 44px;
-  padding: .4rem;
-  border: 0; background: none; cursor: pointer;
-  color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva);
-}
-.ciclo__punto {
-  width: 10px; height: 10px;
-  border: 1.4px solid currentColor;
-  border-radius: 50%;
-  background: var(--papel);
-  transition: scale var(--cambio) var(--curva), background var(--cambio) var(--curva);
-}
-.ciclo__rotulo {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  max-width: 7rem;
-  text-align: center;
-  text-wrap: balance;
-  line-height: 1.15;
-}
-.ciclo__nodo[aria-pressed="true"] { color: var(--tinta-bordo) }
-.ciclo__nodo[aria-pressed="true"] .ciclo__punto { scale: 1.5; background: var(--tinta-bordo) }
+/* El ciclo se fue el 09/09: lo reemplaza el trazo de Como trabajamos (Fase 4). */
 
-.ciclo__centro {
-  position: absolute;
-  inset: 24%;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-.ciclo__carta {
-  grid-area: 1 / 1;
-  display: grid;
-  gap: .4rem;
-  opacity: 0; visibility: hidden;
-  transition: opacity var(--cambio) var(--curva);
-}
-.ciclo__carta[aria-hidden="false"] { opacity: 1; visibility: visible }
-.ciclo__n {
-  font-size: var(--t-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--tinta-bordo);
-}
-.ciclo__carta h3 { font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1 }
-.ciclo__carta p { font-size: var(--t-nota); color: var(--tinta-apoyo); text-wrap: pretty }
-.ciclo__cierre {
-  text-align: center;
-  font-size: var(--t-cita);
-  font-weight: var(--fino);
-  color: var(--tinta-bordo);
-  text-wrap: balance;
-}
-
-/* --- Los mundos: cuatro paneles verticales, cada uno con su tinta --------- */
-/* En celular se apilan y el título va horizontal; recién desde 64rem rota a
-   vertical, que es donde la pieza tiene alto para lucirse. */
-.mundos {
-  display: grid;
-  gap: 2px;
-  margin-block: clamp(1.5rem, 5svh, 3rem);
-  background: var(--linea);
-  border: 1px solid var(--linea);
-}
-.mundo {
-  position: relative;
-  display: grid;
-  align-content: space-between;
-  gap: 1rem;
-  min-height: clamp(11rem, 26svh, 16rem);
-  padding: clamp(1.1rem, 3vw, 1.75rem);
-  text-decoration: none;
-  color: var(--sobre-foto);
-  overflow: hidden;
-  transition: filter var(--cambio) var(--curva);
-}
-/* Las cuatro tintas son las del manual de Fractura. No hay un hex nuevo acá. */
-.mundo[data-tinta="bordo"]  { background: var(--tinta-bordo) }
-.mundo[data-tinta="bistre"] { background: var(--tinta-parrafo) }
-.mundo[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
-.mundo[data-tinta="tinta"]  { background: var(--tinta) }
-
-.mundo__marca {
-  font-size: var(--t-sub);
-  font-weight: var(--grueso);
-  line-height: 1;
-  opacity: .55;
-}
-.mundo__nombre {
-  font-size: clamp(1.5rem, 5vw, 2.25rem);
-  font-weight: var(--medio);
-  line-height: 1;
-  letter-spacing: -.02em;
-}
-.mundo__bajada {
-  font-size: var(--t-nota);
-  opacity: .8;
-  max-width: 26ch;
-  text-wrap: pretty;
-}
-.mundo__cierre {
-  font-size: var(--t-nota);
-  font-weight: var(--medio);
-  padding-block-start: .6rem;
-  border-block-start: 1px solid currentColor;
-}
-.mundos__ayuda {
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
+/* Los paneles de Proyectos en movimiento (09/09) estan en el bloque "Fase 4". */
 
 /* --- Un mundo pleno: la tinta se apodera de la pantalla entera ------------ */
 .mundo-pleno {
@@ -1872,16 +1678,6 @@ body[data-menu-abierto] { overflow: hidden; }
 /* Notebook 1366×657: ancho de sobra, alto que no alcanza. La órbita y el ciclo
    se miden contra svh o no entran con la barra puesta. */
 @media (min-width: 64rem) {
-  .ciclo { width: min(34rem, 62svh) }
-  .mundos { grid-template-columns: repeat(4, 1fr) }
-  .mundo { min-height: min(30rem, 64svh) }
-  /* Recién acá el título rota: es donde hay alto para que se lea. */
-  .mundo__nombre {
-    writing-mode: vertical-rl;
-    rotate: 180deg;
-    justify-self: start;
-    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
-  }
   .contacto__caja { grid-template-columns: 4fr 6fr; gap: clamp(2rem, 5vw, 5rem) }
   .contacto__datos { align-self: start }
   .mundo-pleno__interior { padding-inline: var(--margen-int) }
@@ -1889,13 +1685,11 @@ body[data-menu-abierto] { overflow: hidden; }
 
 /* Escritorio grande: la órbita a tamaño completo. */
 @media (min-width: 94.5rem) {
-  .ciclo { width: min(38rem, 66svh) }
 }
 
 /* Celular acostado (812×375). Cae acá por consulta de ALTO con tope de ancho,
    para no atrapar el notebook, que también es bajo pero mide 1366. */
 @media (max-height: 46rem) and (max-width: 63.99rem) {
-  .ciclo { width: min(100%, 74svh) }
   .cinta__pieza { font-size: clamp(2.25rem, 9vw, 4rem) }
 }
 
@@ -1909,8 +1703,6 @@ body[data-menu-abierto] { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .cinta__riel { translate: none }
   .orbita__anillo { stroke-dashoffset: 0 }
-  .ciclo__avance { stroke-dashoffset: 0 }
-  .orbita__punto, .ciclo__punto { transition: none }
 }
 
 /* --- Correcciones de la primera medición --------------------------------- */
@@ -1973,63 +1765,6 @@ body[data-menu-abierto] { overflow: hidden; }
 @media (min-width: 64rem) { .fijado { overflow: clip } }
 
 /* --- Celular: el círculo se despliega en vertical -------------------------- */
-/* Cuatro rótulos a radio 38 % más un panel al centro no entran en 390 px:
-   medido, "Gestión & Evolución" se cruzaba con el texto del panel y el anillo
-   pasaba por encima del rótulo activo. Acá el arco se desenrolla y queda una
-   lista: se ve todo junto, sin tocar nada. */
-@media (max-width: 63.99rem) {
-  .ciclo {
-    width: auto;
-    aspect-ratio: auto;
-    display: grid;
-    gap: 0;
-    padding-inline-start: 1.35rem;
-    /* La línea de la izquierda ES el arco desplegado. */
-    border-inline-start: 1.4px solid var(--tinta-bordo);
-  }
-  .ciclo__dibujo, .ciclo__nodo { display: none }
-
-  .ciclo__centro {
-    position: static;
-    inset: auto;
-    display: grid;
-    gap: 0;
-    text-align: start;
-  }
-  /* Todos los paneles visibles y apilados: en el teléfono no se esconde
-     contenido detrás de un toque que nadie sabe que hay. */
-  .ciclo__carta {
-    grid-area: auto;
-    position: relative;
-    opacity: 1;
-    visibility: visible;
-    gap: .35rem;
-    padding-block: 1.1rem;
-    border-block-start: 1px solid var(--linea);
-  }
-  .ciclo__carta:first-child { border-block-start: 0 }
-  .ciclo__carta[aria-hidden="true"] {
-    opacity: 1;
-    visibility: visible;
-  }
-  /* El punto sobre la línea marca cada paso. */
-  .ciclo__carta::before {
-    content: "";
-    position: absolute;
-    inset-block-start: 1.45rem;
-    inset-inline-start: -1.35rem;
-    translate: -50% 0;
-    width: 9px; height: 9px;
-    border: 1.4px solid var(--tinta-bordo);
-    border-radius: 50%;
-    background: var(--papel);
-  }
-  .ciclo__carta h3 { font-size: var(--t-cuerpo) }
-  .ciclo__carta p { font-size: var(--t-chico) }
-  .ciclo__cierre { text-align: start }
-}
-
-
 /* --- Legibilidad sobre un bloque oscuro: .oscuro ------------------------- */
 /* Un solo bloque para todo lo que va sobre tinta: el Universo (bistre),
    Espacio (wenge), las franjas de la ficha y, hasta la Fase 5, los mundos
@@ -2168,11 +1903,6 @@ html { scroll-padding-top: 1rem }
 }
 
 /* --- 3. La mirada deja de ser una caja gris ------------------------------- */
-.mirada__cita {
-  max-width: 22ch;
-  margin-block: clamp(2rem, 6svh, 3.5rem) 0;
-  color: var(--tinta-bordo);
-}
 .temas {
   list-style: none;
   margin: clamp(2rem, 6svh, 3rem) 0 0;
@@ -2198,11 +1928,6 @@ html { scroll-padding-top: 1rem }
   line-height: 1.05;
   letter-spacing: -.02em;
 }
-.mirada__nota {
-  margin-block-start: 1.25rem;
-  font-size: var(--t-nota);
-  color: var(--tinta-apoyo);
-}
 
 @media (min-width: 64rem) {
   /* 7 columnas para el principal, 5 para los otros dos apilados: proporciones
@@ -2213,7 +1938,6 @@ html { scroll-padding-top: 1rem }
   }
   .persona--principal { grid-row: span 2 }
   .persona:not(.persona--principal) .persona__hueco { aspect-ratio: 16 / 10 }
-  .mirada__cita { font-size: clamp(2rem, 3.4vw, 3.25rem); max-width: 18ch }
   .temas { max-width: 46rem }
 }
 
@@ -3397,4 +3121,230 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
     translate: none;
   }
   .orbita__flechas { display: flex; }
+}
+
+/* =========================================================================
+   Fase 4 (09/09) — Como trabajamos, Proyectos en movimiento, Mirada Mavenz
+   ========================================================================= */
+
+/* --- Como trabajamos: el trazo de la M con los cinco pasos ---------------- */
+/* Fondo papel (no blanco puro: es el papel de todo el sitio), trazo y
+   palabras en bordo (MET-4). El trazo se dibuja con --trazo (0..1), que
+   escribe trazoMetodo() en guion.js con el scroll; sin guion vale 1 y se ve
+   entero. Cada paso aparece cuando el trazo llega a su punto
+   ([data-visto], acumulativo: no se esconde al subir). */
+.metodo { color: var(--tinta-bordo); }
+.trazo {
+  position: relative;
+  width: min(100%, calc(40svh * 3));
+  /* Aire para los rotulos de arriba y de abajo, que salen de la caja. */
+  margin: clamp(4rem, 10svh, 6rem) auto;
+}
+/* La caja del dibujo: 3:1 como el viewBox. El SVG, el isotipo y (en
+   escritorio) los nodos se posicionan contra ella en porcentaje. */
+.trazo__caja { position: relative; aspect-ratio: 3 / 1; }
+.trazo__dibujo { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.trazo__onda {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--trazo, 1));
+  transition: stroke-dashoffset 120ms linear;
+}
+/* El isotipo arranca el trazo: chico, sobre el comienzo del path (que
+   empieza abajo a la izquierda, en 3 % / 74 %). */
+.trazo__iso {
+  position: absolute;
+  left: 0;
+  top: 74%;
+  translate: -10% -50%;
+  width: clamp(3.5rem, 7vw, 6rem);
+  height: auto;
+  opacity: .9;
+}
+.trazo__nodos { position: absolute; inset: 0; list-style: none; margin: 0; padding: 0; }
+.trazo__nodo {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0;
+  height: 0;
+}
+.trazo__punto {
+  position: absolute;
+  left: 0; top: 0;
+  translate: -50% -50%;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--tinta-bordo);
+  box-shadow: 0 0 0 4px var(--papel);
+}
+.trazo__rotulo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% 1rem;
+  width: max-content;
+  max-width: clamp(11rem, 15vw, 15rem);
+  text-align: center;
+  font-size: var(--t-nota);
+  line-height: 1.4;
+  color: var(--tinta-parrafo);
+  text-wrap: pretty;
+}
+.trazo__nodo[data-arriba] .trazo__rotulo { translate: -50% calc(-100% - 1rem); }
+.trazo__n { display: block; font-size: var(--t-micro); font-variant-numeric: tabular-nums; color: var(--tinta-apoyo); }
+.trazo__nombre {
+  display: block;
+  font-size: clamp(1.125rem, .9rem + .8vw, 1.5rem);
+  font-weight: var(--medio);
+  letter-spacing: -.01em;
+  line-height: 1.15;
+  color: var(--tinta-bordo);
+}
+/* Progresivo: lo pone el guion. Sin guion no existe y todo esta a la vista. */
+[data-progresivo] .trazo__nodo {
+  opacity: 0;
+  translate: 0 8px;
+  transition: opacity var(--cambio) var(--curva), translate var(--cambio) var(--curva);
+}
+[data-progresivo] .trazo__nodo[data-visto] { opacity: 1; translate: none; }
+@media (prefers-reduced-motion: reduce) {
+  .trazo__onda { transition: none; }
+  [data-progresivo] .trazo__nodo { opacity: 1; translate: none; transition: none; }
+}
+.metodo__cierre {
+  max-width: 30ch;
+  margin: clamp(1.5rem, 5svh, 3rem) 0 0;
+  font-size: var(--t-cita);
+  font-weight: var(--fino);
+  line-height: 1.3;
+  color: var(--tinta-bordo);
+  text-wrap: balance;
+}
+/* Celular: el trazo queda de adorno arriba (sin nodos encima, no entran) y
+   los pasos son una lista con filete; cada uno entra cuando se ve. */
+@media (max-width: 63.99rem) {
+  .trazo { width: 100%; margin-block: clamp(1.5rem, 4svh, 2.5rem) 0; }
+  .trazo__caja { aspect-ratio: auto; }
+  /* El dibujo queda arriba, a 3:1, y la lista debajo. */
+  .trazo__dibujo { position: relative; aspect-ratio: 3 / 1; height: auto; }
+  .trazo__iso { top: 24.7%; }   /* 74 % del alto del dibujo, que es un tercio del ancho */
+  .trazo__nodos {
+    position: relative;
+    inset: auto;
+    margin-top: clamp(1.5rem, 4svh, 2.5rem);
+    padding-inline-start: 1.35rem;
+    border-inline-start: 1.4px solid var(--tinta-bordo);
+  }
+  .trazo__nodo { position: relative; left: auto; top: auto; width: auto; height: auto; padding-block: .9rem; border-block-end: 1px solid var(--linea); }
+  .trazo__nodo:last-child { border-block-end: 0; }
+  .trazo__punto { left: -1.35rem; top: 1.45rem; translate: -50% 0; width: 9px; height: 9px; box-shadow: none; }
+  .trazo__rotulo,
+  .trazo__nodo[data-arriba] .trazo__rotulo { position: static; translate: none; width: auto; max-width: 40ch; text-align: start; display: block; }
+}
+
+/* --- Proyectos en movimiento: tres paneles con aire y foto abajo ---------- */
+.mundos {
+  display: grid;
+  gap: clamp(.75rem, 1.2vw, 1.25rem);
+  margin-block: clamp(1.5rem, 5svh, 3rem) 0;
+}
+.mundo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(18rem, 60svh, 26rem);
+  text-decoration: none;
+  color: var(--sobre-foto);
+  overflow: hidden;
+  border-radius: 4px;
+  /* El tilt lo escribe el guion en --fx-rx / --fx-ry; solo con puntero fino. */
+  transform: perspective(900px) rotateX(var(--fx-rx, 0deg)) rotateY(var(--fx-ry, 0deg));
+  transition: transform .35s var(--curva);
+  will-change: transform;
+}
+.mundo[data-tinta="bordo"]  { background: var(--tinta-bordo) }
+.mundo[data-tinta="bistre"] { background: var(--tinta-parrafo) }
+.mundo[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
+.mundo[data-tinta="tinta"]  { background: var(--tinta) }
+.mundo__cuerpo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+.mundo__marca { display: block; width: clamp(2rem, 3vw, 2.75rem); opacity: .7; }
+.mundo__marca img { display: block; width: 100%; height: auto; filter: brightness(0) invert(1); opacity: .9; }
+.mundo__nombre {
+  align-self: end;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  font-weight: var(--medio);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.mundo__bajada { font-size: var(--t-nota); opacity: .85; max-width: 28ch; text-wrap: pretty; }
+.mundo__cierre {
+  font-size: var(--t-nota);
+  font-weight: var(--medio);
+  padding-block-start: .6rem;
+  border-block-start: 1px solid currentColor;
+}
+.mundo__foto {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  height: clamp(7rem, 22svh, 11rem);
+  object-fit: cover;
+}
+@media (min-width: 64rem) {
+  .mundos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Retrato 5:7 (el alto sale del ancho de la columna: un tercio del
+     contenedor menos los dos gaps), con tope para el notebook bajo. Foto en
+     el tercio de abajo; arriba, el bloque de tinta con el nombre en vertical
+     pegado al borde derecho y la bajada abajo a la izquierda. */
+  .mundos { --mundos-gap: clamp(.75rem, 1.2vw, 1.25rem); gap: var(--mundos-gap); }
+  .mundo { min-height: 0; height: min(calc((100cqi - 2 * var(--mundos-gap)) / 3 * 1.4), 78svh); }
+  .mundos { container-type: inline-size; }
+  .mundo__foto { flex-basis: 30%; height: 30%; }
+  .mundo__cuerpo {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "marca nombre" ". nombre" "bajada nombre" "cierre nombre";
+    grid-template-rows: auto 1fr auto auto;
+  }
+  .mundo__marca { grid-area: marca; }
+  .mundo__nombre {
+    grid-area: nombre;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    justify-self: end;
+    align-self: start;
+    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  }
+  .mundo__bajada { grid-area: bajada; align-self: end; }
+  .mundo__cierre { grid-area: cierre; }
+}
+/* Tilt: 5 grados con puntero fino; el resto no lo ve. */
+@media (hover: hover) and (pointer: fine) {
+  .mundo.fx-activo { transition: transform .08s linear; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mundo, .mundo.fx-activo { transform: none; transition: none; }
+}
+
+/* --- Mirada Mavenz: cinco categorias y el mapa como contenido editorial --- */
+.mirada-seccion .temas { margin-top: clamp(2rem, 6svh, 3rem); }
+.mirada-seccion .mapa { margin-top: clamp(2.5rem, 8svh, 5rem); }
+/* El mapa venia del mundo oscuro: sus numeros en Grullo sobre papel daban
+   2.09:1 (medido). En wenge llegan a 4.5. */
+.mirada-seccion .territorio__n { color: var(--tinta-apoyo); }
+
+/* Tablet y celular acostado: tres columnas con el nombre horizontal, si no
+   cada panel apilado era una pantalla entera de tinta con tres renglones. */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .mundos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mundo { min-height: clamp(16rem, 70svh, 22rem); }
+  .mundo__foto { height: clamp(5rem, 20svh, 8rem); }
+  .mundo__nombre { font-size: clamp(1.25rem, 2.4vw, 1.75rem); }
 }

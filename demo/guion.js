@@ -64,27 +64,8 @@
 
   /* ---------------------------------------------------------------------- */
 
-  var trazo = document.querySelector('.trazo-vivo');
-  var heroCaja = document.querySelector('.hero');
-
-  if (trazo && heroCaja && !menosMovimiento) {
-    var pendienteTrazo = false;
-    var dibujar = function () {
-      pendienteTrazo = false;
-      var y = window.scrollY;
-      if (y <= 4) { trazo.style.removeProperty('--trazo'); return; }
-      /* al cargar ya está casi entero (.72): un trazo a medio dibujar en el
-         hero se lee cortado, no en progreso. El scroll lo termina. */
-      var largo = heroCaja.offsetHeight * .55 || 1;
-      var p = .72 + .28 * Math.min(1, y / largo);
-      trazo.style.setProperty('--trazo', p.toFixed(3));
-    };
-    window.addEventListener('scroll', function () {
-      if (pendienteTrazo) return;
-      pendienteTrazo = true;
-      requestAnimationFrame(dibujar);
-    }, { passive: true });
-  }
+  /* El trazo del hero (.trazo-vivo) se fue el 08/09; el del metodo vive en
+     trazoMetodo(), en el segundo bloque. */
 
   /* ---------------------------------------------------------------------- */
   /* Cada sección entra con su propio gesto                                  */
@@ -793,9 +774,19 @@
     });
 
     /* ?motivo=oportunidad preselecciona: lo usan los paneles de proyectos. */
+    var porId = function (id) {
+      return solapas.filter(function (b) { return b.getAttribute('data-solapa') === id; })[0];
+    };
     var q = /[?&]motivo=([a-z]+)/.exec(window.location.search);
-    var inicial = q && solapas.filter(function (b) { return b.getAttribute('data-solapa') === q[1]; })[0];
-    aplicar(inicial || solapas[0]);
+    aplicar((q && porId(q[1])) || solapas[0]);
+    /* Un enlace a #contacto con data-motivo (los paneles de Proyectos en
+       movimiento) elige esa opcion sin recargar la pagina. */
+    document.addEventListener('click', function (ev) {
+      var a = ev.target.closest('a[data-motivo]');
+      if (!a) return;
+      var b = porId(a.getAttribute('data-motivo'));
+      if (b) elegir(b, true);
+    });
 
     /* Validacion propia: `novalidate` para que el aviso sea el nuestro y vaya
        al lector de pantalla por aria-live. */
@@ -1030,6 +1021,84 @@
     if (sig) sig.addEventListener('click', function () { saltar(1); });
   }
 
+  /* --- Como trabajamos: el trazo se dibuja y los pasos salen de su cola --- */
+  /* Escritorio: --trazo es el avance de la caja del trazo por la pantalla
+     (0 cuando asoma por abajo, 1 cuando su base llega al 40 % de la
+     pantalla) y cada paso se marca visto cuando el trazo paso por su punto.
+     Los dos son acumulativos: al subir no se deshacen. Celular: los pasos son
+     una lista y cada uno entra al verse (IO). Sin guion o con menos
+     movimiento no se marca data-progresivo y todo esta a la vista. */
+  function trazoMetodo() {
+    var caja = $('[data-trazo]');
+    if (!caja || menos) return;
+    var nodos = $$('.trazo__nodo', caja);
+    caja.setAttribute('data-progresivo', '');
+    var celular = window.matchMedia('(max-width: 63.99rem)');
+
+    if (celular.matches && 'IntersectionObserver' in window) {
+      caja.style.setProperty('--trazo', '1');
+      var ojo = new IntersectionObserver(function (ent) {
+        ent.forEach(function (x) {
+          if (!x.isIntersecting) return;
+          x.target.setAttribute('data-visto', '');
+          ojo.unobserve(x.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      nodos.forEach(function (n) { ojo.observe(n); });
+      return;
+    }
+
+    var tope = 0, pedido = false;
+    var medir = function () {
+      pedido = false;
+      var r = caja.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      if (r.bottom < -vh || r.top > vh * 1.5) return;
+      var t = (vh - r.top) / (vh * .6 + r.height);
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      if (t <= tope) return;
+      tope = t;
+      caja.style.setProperty('--trazo', t.toFixed(3));
+      nodos.forEach(function (n) {
+        if (!n.hasAttribute('data-visto') && parseFloat(n.getAttribute('data-t')) <= t) n.setAttribute('data-visto', '');
+      });
+    };
+    window.addEventListener('scroll', function () {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    window.addEventListener('resize', medir);
+    caja.style.setProperty('--trazo', '0');
+    medir();
+  }
+
+  /* --- Tilt: la tarjeta se inclina hacia el puntero ------------------------ */
+  /* Portado de dt-efectos (~20 lineas). Escribe --fx-rx / --fx-ry en la
+     tarjeta y el CSS los aplica con perspective(). Solo con puntero fino y
+     sin reduced-motion. Va en la tarjeta (data-fx="tilt"), nunca en una
+     seccion de reveal: el motor propio compara data-fx="reveal" exacto. */
+  function tilt() {
+    if (menos || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    $$('[data-fx~="tilt"]').forEach(function (el) {
+      var max = parseFloat(el.getAttribute('data-fx-grados')) || 5;
+      el.addEventListener('pointermove', function (ev) {
+        if (ev.pointerType && ev.pointerType !== 'mouse') return;
+        var r = el.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - .5;
+        var py = (ev.clientY - r.top) / r.height - .5;
+        el.style.setProperty('--fx-ry', (px * max * 2).toFixed(2) + 'deg');
+        el.style.setProperty('--fx-rx', (-py * max * 2).toFixed(2) + 'deg');
+        el.classList.add('fx-activo');
+      });
+      el.addEventListener('pointerleave', function () {
+        el.classList.remove('fx-activo');
+        el.style.removeProperty('--fx-rx');
+        el.style.removeProperty('--fx-ry');
+      });
+    });
+  }
+
   function arrancar() {
     arrancarScroll();
     nubeRed();
@@ -1037,11 +1106,11 @@
     cintas();
     circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
              'data-esfera', 'data-panel', null, null);
-    circular($('[data-ciclo]'), '.ciclo__nodo', '.ciclo__carta',
-             'data-paso', 'data-carta', '[data-avance]', '--avance');
     anillo();
     puente();
     carrilEsferas();
+    trazoMetodo();
+    tilt();
     cintasContinuas();
     formulario();
   }
