@@ -12,25 +12,9 @@
 
   var menosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------------------------------------------------------------------- */
-  /* Cabecera: una línea aparece cuando la página se despegó de arriba       */
-  /* ---------------------------------------------------------------------- */
-
+  /* La cabecera ya no acompana el scroll (09/09): se va con la pagina y la
+     reemplaza el flotante. Su tema lo escribe el generador, no una sonda. */
   var cabecera = document.querySelector('[data-cabecera]');
-  if (cabecera) {
-    var pendiente = false;
-    var mirar = function () {
-      pendiente = false;
-      if (window.scrollY > 8) cabecera.setAttribute('data-scroll', '');
-      else cabecera.removeAttribute('data-scroll');
-    };
-    window.addEventListener('scroll', function () {
-      if (pendiente) return;
-      pendiente = true;
-      requestAnimationFrame(mirar);
-    }, { passive: true });
-    mirar();
-  }
 
   /* ---------------------------------------------------------------------- */
   /* Menú de celular                                                         */
@@ -256,12 +240,12 @@
 
   var conTema = Array.prototype.slice.call(document.querySelectorAll('main [data-tema], footer[data-tema]'));
 
-  if (cabecera && conTema.length) {
-    var temaActual = '', temaIndice = '';
-    var alturaNav = function () { return cabecera.offsetHeight / 2; };
-    /* Dos sondas, no una: la barra vive arriba y el indice lateral en el medio
-       de la pantalla. Con una sola sonda el indice se pintaba con el tema del
-       encabezado y quedaba tinta sobre tinta adentro de los mundos oscuros. */
+  var flotante = document.querySelector('[data-flotante]');
+
+  if (flotante && conTema.length) {
+    var temaFlotante = '';
+    /* Una sola sonda, a la altura del flotante (abajo): la barra ya no se
+       invierte porque no se mueve. */
     var temaEn = function (y) {
       var tema = 'claro';
       for (var i = 0; i < conTema.length; i++) {
@@ -272,19 +256,11 @@
       return tema;
     };
     var mirarTema = function () {
-      var tema = temaEn(window.scrollY + alturaNav());
-      if (tema !== temaActual) {
-        temaActual = tema;
-        if (tema === 'oscuro') cabecera.setAttribute('data-tema', 'oscuro');
-        else cabecera.removeAttribute('data-tema');
-      }
-      var ind = document.querySelector('[data-indice]');
-      if (!ind) return;
-      var t2 = temaEn(window.scrollY + (window.innerHeight || 0) / 2);
-      if (t2 === temaIndice) return;
-      temaIndice = t2;
-      if (t2 === 'oscuro') ind.setAttribute('data-tema', 'oscuro');
-      else ind.removeAttribute('data-tema');
+      var t = temaEn(window.scrollY + (window.innerHeight || 0) - 60);
+      if (t === temaFlotante) return;
+      temaFlotante = t;
+      if (t === 'oscuro') flotante.setAttribute('data-tema', 'oscuro');
+      else flotante.removeAttribute('data-tema');
     };
     var pendienteTema = false;
     window.addEventListener('scroll', function () {
@@ -294,35 +270,6 @@
     }, { passive: true });
     window.addEventListener('resize', mirarTema);
     mirarTema();
-  }
-
-  /* ---------------------------------------------------------------------- */
-  /* Índice lateral de rayas                                                 */
-  /* ---------------------------------------------------------------------- */
-
-  var indice = document.querySelector('[data-indice]');
-
-  if (indice) {
-    var rayas = Array.prototype.slice.call(indice.querySelectorAll('a'));
-    var destinos = rayas.map(function (a) {
-      return document.querySelector(a.getAttribute('href'));
-    });
-    var mirarIndice = function () {
-      var y = window.scrollY + (window.innerHeight || 0) * .35;
-      var activo = 0;
-      destinos.forEach(function (el, i) { if (el && y >= el.offsetTop) activo = i; });
-      rayas.forEach(function (a, i) {
-        if (i === activo) a.setAttribute('aria-current', 'true');
-        else a.removeAttribute('aria-current');
-      });
-    };
-    var pendienteIndice = false;
-    window.addEventListener('scroll', function () {
-      if (pendienteIndice) return;
-      pendienteIndice = true;
-      requestAnimationFrame(function () { pendienteIndice = false; mirarIndice(); });
-    }, { passive: true });
-    mirarIndice();
   }
 
   /* ---------------------------------------------------------------------- */
@@ -666,7 +613,7 @@
         var el = document.getElementById(a.getAttribute('href').slice(1));
         if (!el) return;
         ev.preventDefault();
-        lenis.scrollTo(el, { offset: -92 });
+        lenis.scrollTo(el, { offset: -16 });   /* sin barra fija: un respiro y nada mas */
       });
     });
   }
@@ -699,7 +646,8 @@
         var p = (vh - r.top) / (vh + r.height);
         p = p < 0 ? 0 : p > 1 ? 1 : p;
         /* Una sola copia de recorrido: nunca se ve el hueco del final. */
-        c.style.setProperty('--corrida', (p * riel.scrollWidth / 4).toFixed(1));
+        var copias = parseInt(c.getAttribute('data-copias'), 10) || 4;
+        c.style.setProperty('--corrida', (p * riel.scrollWidth / copias).toFixed(1));
       });
     }
     function pedir() { if (!pedido) { pedido = true; requestAnimationFrame(pintar); } }
@@ -789,41 +737,155 @@
   }
 
   /* --- Las solapas de la ventana de contacto ----------------------------- */
-  function solapas() {
-    $$('.solapas').forEach(function (grupo) {
-      var caja = grupo.parentNode;
-      var botones = $$('[data-solapa]', grupo);
-      botones.forEach(function (b) {
-        b.addEventListener('click', function () {
-          botones.forEach(function (o) {
-            o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
-          });
-          $$('[data-cuerpo]', caja).forEach(function (c) {
-            c.setAttribute('aria-hidden',
-              c.getAttribute('data-cuerpo') === b.getAttribute('data-solapa') ? 'false' : 'true');
-          });
-        });
+  /* --- La cinta continua: infinita, pero solo mientras se la ve ------------ */
+  /* El observer mira la CINTA (quieta), nunca el riel que se mueve: un riel
+     en movimiento entra y sale del umbral solo y apaga lo que tiene que
+     prender. La duracion sale del largo real para que la velocidad sea
+     constante en px/s aunque cambie el cuerpo tipografico. */
+  function cintasContinuas() {
+    var lista = $$('[data-cinta-continua]');
+    if (!lista.length) return;
+    var medir = function (c) {
+      var riel = $('[data-cinta-riel]', c);
+      if (!riel) return;
+      var vertical = c.classList.contains('cinta--vertical');
+      var largo = (vertical ? riel.scrollHeight : riel.scrollWidth) / 2;
+      var vel = parseFloat(c.getAttribute('data-velocidad')) || 120;
+      c.style.setProperty('--cinta-dur', (largo / vel).toFixed(2) + 's');
+    };
+    lista.forEach(medir);
+    window.addEventListener('resize', function () { lista.forEach(medir); });
+    if (menos || !('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (x.isIntersecting) x.target.setAttribute('data-vivo', '');
+        else x.target.removeAttribute('data-vivo');
       });
-    });
+    }, { rootMargin: '80px 0px' });
+    lista.forEach(function (c) { obs.observe(c); });
   }
 
-  /* --- La palabra gigante de contacto deriva apenas con el scroll -------- */
-  function palabra() {
-    var p = $('[data-palabra]');
-    if (!p || menos) return;
-    var pedido = false;
-    function pintar() {
-      pedido = false;
-      var r = p.getBoundingClientRect();
-      var vh = window.innerHeight || 1;
-      if (r.bottom < -200 || r.top > vh + 200) return;
-      var t = (vh - r.top) / (vh + r.height);
-      p.style.setProperty('--deriva', ((t - .5) * 8).toFixed(2));
-    }
-    window.addEventListener('scroll', function () {
-      if (!pedido) { pedido = true; requestAnimationFrame(pintar); }
-    }, { passive: true });
-    pintar();
+  /* --- Contacto: cuatro opciones, un formulario, tres tiempos ------------- */
+  /* Al elegir una opcion cambia la linea de arriba y el motivo oculto. El
+     cambio es el medido en la referencia: fade-out del bloque (170 ms) ->
+     panel vacio (150 ms) -> filas entrando de arriba hacia abajo. El envio
+     va a Web3Forms si hay clave; si no, arma el mensaje y abre WhatsApp, asi
+     el sitio nunca queda con un boton que no hace nada. */
+  function formulario() {
+    var panel = $('[data-panel-contacto]');
+    if (!panel) return;
+    var solapas = $$('[data-solapa]', panel);
+    var copia = $('[data-copia-motivo]', panel);
+    var form = $('[data-formulario]', panel);
+    if (!form || !solapas.length) return;
+    var motivo = $('input[name="motivo"]', form);
+    var estado = $('.formulario__estado', form);
+    var enviar = $('.formulario__enviar', form);
+    var cambiando = false;
+
+    var aplicar = function (b) {
+      solapas.forEach(function (o) {
+        var es = o === b;
+        o.setAttribute('aria-selected', es ? 'true' : 'false');
+        o.setAttribute('tabindex', es ? '0' : '-1');
+      });
+      if (copia) copia.textContent = b.getAttribute('data-copia') || '';
+      if (motivo) motivo.value = b.querySelector('.solapa__texto').textContent;
+      form.setAttribute('data-wa', b.getAttribute('data-wa') || '');
+    };
+
+    var elegir = function (b, animar) {
+      if (b.getAttribute('aria-selected') === 'true' || cambiando) return;
+      if (!animar || menos) { aplicar(b); return; }
+      cambiando = true;
+      panel.setAttribute('data-saliendo', '');
+      setTimeout(function () {
+        aplicar(b);
+        panel.removeAttribute('data-saliendo');
+        panel.setAttribute('data-entrando', '');
+        void panel.offsetWidth;                 /* que el estado "entrando" se pinte */
+        setTimeout(function () {
+          panel.removeAttribute('data-entrando');
+          cambiando = false;
+        }, 150);
+      }, 170);
+    };
+
+    solapas.forEach(function (b, i) {
+      b.addEventListener('click', function () { elegir(b, true); });
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var sig = solapas[(i + d + solapas.length) % solapas.length];
+        sig.focus();
+        elegir(sig, true);
+      });
+    });
+
+    /* ?motivo=oportunidad preselecciona: lo usan los paneles de proyectos. */
+    var q = /[?&]motivo=([a-z]+)/.exec(window.location.search);
+    var inicial = q && solapas.filter(function (b) { return b.getAttribute('data-solapa') === q[1]; })[0];
+    aplicar(inicial || solapas[0]);
+
+    /* Validacion propia: `novalidate` para que el aviso sea el nuestro y vaya
+       al lector de pantalla por aria-live. */
+    var validar = function () {
+      var ok = true;
+      $$('[required]', form).forEach(function (campo) {
+        var fila = campo.closest('.campo');
+        var viejo = fila && fila.querySelector('.campo__error');
+        if (viejo) viejo.remove();
+        var falta = !campo.value.trim();
+        var mal = campo.type === 'email' && campo.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(campo.value);
+        campo.setAttribute('aria-invalid', (falta || mal) ? 'true' : 'false');
+        if (falta || mal) {
+          ok = false;
+          var p = document.createElement('p');
+          p.className = 'campo__error';
+          p.textContent = falta ? form.getAttribute('data-falta') : form.getAttribute('data-correo-invalido');
+          fila.appendChild(p);
+        }
+      });
+      return ok;
+    };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validar()) { var primero = $('[aria-invalid="true"]', form); if (primero) primero.focus(); return; }
+      var datos = {};
+      $$('input, textarea', form).forEach(function (c) { if (c.name && c.type !== 'checkbox') datos[c.name] = c.value.trim(); });
+      var clave = form.getAttribute('data-clave');
+      if (!clave) {
+        /* Sin servicio configurado: el mensaje viaja por WhatsApp, armado. */
+        var texto = datos.motivo + '. ' + datos.nombre + (datos.telefono ? ' (' + datos.telefono + ')' : '') +
+                    ' — ' + datos.email + '. ' + datos.mensaje;
+        var base = form.getAttribute('data-wa') || form.getAttribute('data-wa-base');
+        window.open(base.split('?')[0] + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+        return;
+      }
+      if ($('[name="botcheck"]', form).checked) return;   /* un bot lo marco */
+      enviar.disabled = true;
+      var rotulo = enviar.textContent;
+      enviar.textContent = form.getAttribute('data-enviando');
+      estado.textContent = '';
+      var cuerpo = { access_key: clave, subject: form.getAttribute('data-asunto') + ' — ' + datos.motivo,
+                     from_name: datos.nombre, motivo: datos.motivo, name: datos.nombre, email: datos.email,
+                     telefono: datos.telefono, message: datos.mensaje };
+      fetch(form.getAttribute('action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(cuerpo)
+      }).then(function (r) { return r.json(); }).then(function (r) {
+        if (!r.success) throw new Error(r.message || 'sin exito');
+        $$('.formulario__fila', form).forEach(function (f) { f.hidden = true; });
+        estado.textContent = form.getAttribute('data-gracias');
+      }).catch(function () {
+        estado.textContent = form.getAttribute('data-error');
+        enviar.disabled = false;
+        enviar.textContent = rotulo;
+      });
+    });
   }
 
   /* --- El estante recorre en horizontal con la pantalla fijada ----------- */
@@ -923,8 +985,8 @@
     circular($('[data-ciclo]'), '.ciclo__nodo', '.ciclo__carta',
              'data-paso', 'data-carta', '[data-avance]', '--avance');
     anillo();
-    solapas();
-    palabra();
+    cintasContinuas();
+    formulario();
   }
 
   /* Los scripts van con defer, así que el DOM ya está: pero si esto llegara a

@@ -131,14 +131,6 @@ def fx(seccion):
     return f' data-fx="reveal" data-fx-desde="{DIRECCION[seccion]}"'
 
 
-def indice(d, puntos):
-    """Una raya por seccion de ESTA pagina. El rotulo sale de aria-label, asi la
-    version visual y la accesible son el mismo dato."""
-    rayas = "".join(f'<a href="#{i}" aria-label="{e(t)}"></a>' for i, t in puntos)
-    return (f'<nav class="indice" data-indice aria-label="{e(d["interfaz"]["indice"])}">'
-            f'{rayas}</nav>')
-
-
 def enlaces_menu(d, aqui):
     """El menu, desde `paginas`: es la unica fuente y la leen la barra, el pie y
     el flotante. Una entrada con `archivo` es una pagina; una con `ancla` es una
@@ -181,21 +173,24 @@ def selector_idioma(d, lang, slug):
     return f'<nav class="idioma" aria-label="{e(ui["idioma"])}">{sep.join(piezas)}</nav>'
 
 
-def cabecera(d, lang, aqui):
+def cabecera(d, lang, aqui, tema="claro"):
+    """La barra ya no acompana el scroll: queda arriba, casi transparente, y
+    se va con la pagina. Por eso su tema es un dato de la pagina (oscuro sobre
+    el video del hero, claro sobre la cinta de papel) y no una sonda."""
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
     enlaces = enlaces_menu(d, aqui)
-    return f'''<header class="cabecera" data-cabecera>
+    return f'''<header class="cabecera" data-cabecera{' data-tema="oscuro"' if tema == "oscuro" else ""}>
   <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
     {selector_idioma(d, lang, aqui)}
-    <a class="boton cabecera__reunion" href="{e(wa(d, c["wa_reunion"]))}" target="_blank" rel="noopener">{e(c["cta_reunion"])}</a>
+    <a class="boton cabecera__contacto" href="#contacto">{e(c["cta_contacto"])}</a>
     <button class="hamburguesa" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-celular" aria-label="{e(ui["menu"])}">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
-<div class="panel" id="menu-celular" data-menu-panel>{enlaces}<a class="boton" href="{e(wa(d, c["wa_reunion"]))}" target="_blank" rel="noopener">{e(c["cta_reunion"])}</a></div>'''
+<div class="panel" id="menu-celular" data-menu-panel>{enlaces}<a class="boton" href="#contacto">{e(c["cta_contacto"])}</a></div>'''
 
 
 def hero(d):
@@ -556,27 +551,41 @@ def banda(d):
 
 
 def contacto(d):
-    c, cd = d["contacto"], d["contacto_datos"]
+    """Movamos algo juntos, con las cuatro opciones del documento del 08/09.
+    Un solo formulario: al elegir una opcion cambian la linea de arriba y el
+    motivo oculto, no el formulario entero (es lo que hace la referencia y lo
+    que mantiene el alto estable). La primera opcion viene activa con el
+    formulario a la vista. `?motivo=x` en la URL preselecciona: lo usan los
+    paneles de proyectos. Sin clave del servicio, el envio abre WhatsApp."""
+    c, cd, f, ui = d["contacto"], d["contacto_datos"], d["contacto"]["formulario"], d["interfaz"]
     correo = (f'<a class="subrayado subrayado--tenue" href="mailto:{e(cd["correo"])}">'
               f'{e(cd["correo"])}</a>' if cd["correo"] else "")
+    motivos = c["motivos"]
     solapas = "".join(
-        f'<button class="solapa" type="button" data-solapa="{s_["id"]}" '
-        f'aria-pressed="{"true" if i == 0 else "false"}">{e(s_["rotulo"])}</button>'
-        for i, s_ in enumerate(c["solapas"]))
-    cuerpos = "".join(
-        f'<div class="solapa__cuerpo" data-cuerpo="{s_["id"]}" '
-        f'aria-hidden="{"false" if i == 0 else "true"}">'
-        f'<p>{e(s_["copy"])}</p>'
-        f'<a class="boton" href="{e(wa(d, s_["rotulo"] + ". "))}" target="_blank" '
-        f'rel="noopener">{e(c["cta_wa"])}</a></div>'
-        for i, s_ in enumerate(c["solapas"]))
-    motivos = "".join(
-        f'<li><a class="subrayado subrayado--bordo" href="{e(wa(d, m["wa"]))}" '
-        f'target="_blank" rel="noopener">{e(m["rotulo"])}</a></li>'
-        for m in c["motivos"])
+        f'<button class="solapa" type="button" role="tab" id="solapa-{m["id"]}" data-solapa="{m["id"]}" '
+        f'data-copia="{e(m.get("copy", ""))}" data-wa="{e(wa(d, m["wa"]))}" '
+        f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">'
+        f'<span class="solapa__texto">{e(m["rotulo"])}</span></button>'
+        for i, m in enumerate(motivos))
+    primera = motivos[0]
+    campos = f["campos"]
+    def fila(i, html):
+        return f'<div class="formulario__fila" style="--i:{i}">{html}</div>'
+    filas = [
+        fila(0, f'<label class="campo"><span class="campo__rotulo">{e(campos["nombre"])}</span>'
+                f'<input class="campo__entrada" type="text" name="nombre" autocomplete="name" required></label>'),
+        fila(1, f'<label class="campo"><span class="campo__rotulo">{e(campos["correo"])}</span>'
+                f'<input class="campo__entrada" type="email" name="email" autocomplete="email" required></label>'),
+        fila(2, f'<label class="campo"><span class="campo__rotulo">{e(campos["telefono"])}</span>'
+                f'<input class="campo__entrada" type="tel" name="telefono" autocomplete="tel"></label>'),
+        fila(3, f'<label class="campo"><span class="campo__rotulo">{e(campos["mensaje"])}</span>'
+                f'<textarea class="campo__entrada" name="mensaje" rows="4" required></textarea></label>'),
+        fila(4, f'<p class="formulario__nota">{e(f["privacidad"])}</p>'),
+        fila(5, f'<button class="boton formulario__enviar" type="submit">{e(f["enviar"])}</button>'),
+    ]
     return f'''<section class="seccion--ancha contacto" id="contacto"{fx("contacto")}>
-  <p class="contacto__palabra" aria-hidden="true" data-palabra>{e(c["palabra"])}</p>
   <div class="contacto__caja">
+    {cinta([c["palabra"]], tono="marca", continua=True, vertical=True, velocidad=125)}
     <div class="contacto__datos">
       <p class="contacto__apertura">{e(c["apertura"])}</p>
       <h2 class="contacto__titulo" data-letras>{e(c["titulo"])}</h2>
@@ -586,21 +595,34 @@ def contacto(d):
         <li>{correo}</li>
       </ul>
     </div>
-    <div class="contacto__panel">
-      <div class="solapas" role="group">{solapas}</div>
-      {cuerpos}
-      <div class="motivos">
-        <p class="margen motivos__rotulo">{e(c["rotulo_motivos"])}</p>
-        <ul class="motivos__lista">{motivos}</ul>
-      </div>
+    <div class="contacto__panel" data-panel-contacto>
+      <p class="margen">{e(c["rotulo_motivos"])}</p>
+      <div class="solapas" role="tablist" aria-label="{e(c["rotulo_motivos"])}">{solapas}</div>
+      <p class="contacto__copia" data-copia-motivo style="--i:0">{e(primera.get("copy", ""))}</p>
+      <form class="formulario" data-formulario novalidate action="https://api.web3forms.com/submit" method="post"
+            data-clave="{e(f["clave"])}" data-asunto="{e(f["asunto"])}" data-wa-base="{e(wa(d, ""))}"
+            data-enviando="{e(f["enviando"])}" data-gracias="{e(f["gracias"])}" data-error="{e(f["error"])}"
+            data-falta="{e(f["falta"])}" data-correo-invalido="{e(f["correo_invalido"])}" data-enviar="{e(f["enviar"])}">
+        <input type="hidden" name="motivo" value="{e(primera["rotulo"])}">
+        <input type="checkbox" name="botcheck" class="formulario__trampa" tabindex="-1" autocomplete="off" aria-hidden="true">
+        {"".join(filas)}
+        <p class="formulario__estado" aria-live="polite"></p>
+      </form>
+      <p class="contacto__alternativa">{e(c["alternativa"])} <a class="subrayado subrayado--bordo" href="{e(wa(d, c["wa_general"]))}" target="_blank" rel="noopener">WhatsApp</a>.</p>
     </div>
   </div>
 </section>'''
 
 
-def pie(d, lang):
-    m = d["marca"]
+def pie(d, lang, slug):
+    """El pie repite el menu definitivo y deja el WhatsApp y el correo a la
+    vista (pedido del 08/09). El enlace de cookies nace oculto: consent.js le
+    saca el `hidden` solo si hay etiquetas de medicion que consentir."""
+    m, cd, c, ck = d["marca"], d["contacto_datos"], d["contacto"], d["cookies"]
     paginas = enlaces_menu(d, None)
+    correo = (f'<a href="mailto:{e(cd["correo"])}">{e(cd["correo"])}</a>' if cd["correo"] else "")
+    contacto_pie = (f'<a href="{e(wa(d, c["wa_general"]))}" target="_blank" rel="noopener">WhatsApp</a>'
+                    f'{correo}')
     redes = "".join(
         (f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["nombre"])}</a>'
          if r["href"] else f'<span>{e(r["nombre"])}</span>')
@@ -608,9 +630,12 @@ def pie(d, lang):
     return f'''<footer class="pie" data-tema="claro">
   <img class="pie__iso" src="{R.raiz}img/isotipo.webp" alt="{e(m["nombre"])}" width="600" height="381" loading="lazy" decoding="async">
   <nav class="pie__redes" aria-label="{e(m["nombre"])}">{redes}</nav>
+  <p class="pie__contacto">{contacto_pie}</p>
   <div class="pie__abajo">
     <p class="pie__lugar">{e(m["lugar"])}</p>
     <nav class="pie__paginas" aria-label="{e(d["interfaz"]["menu"])}">{paginas}</nav>
+    {selector_idioma(d, lang, slug)}
+    <button class="pie__cookies" type="button" data-cookies-abrir hidden>{e(ck["enlace_pie"])}</button>
   </div>
 </footer>'''
 
@@ -634,7 +659,7 @@ def datos_estructurados(d):
 
 # --------------------------------------------------------------------------- #
 
-def cascara(d, lang, slug, cuerpo, puntos):
+def cascara(d, lang, slug, cuerpo, tema="claro"):
     """El head, la cabecera y el pie son los mismos en todas las paginas. Se
     escriben una sola vez o se desincronizan: es el bug que mas caro sale."""
     m, ui, pg, idi = d["marca"], d["interfaz"], d["paginas"][slug], d["idiomas"][lang]
@@ -671,12 +696,11 @@ def cascara(d, lang, slug, cuerpo, puntos):
 </head>
 <body data-pagina="{slug}" data-lang="{e(lang)}">
 <a class="saltar" href="#contenido">{e(ui["saltar"])}</a>
-{cms("cabecera", cabecera(d, lang, slug))}
+{cms("cabecera", cabecera(d, lang, slug, tema))}
 <main class="contenido" id="contenido">
 {cuerpo}
 </main>
-{cms("pie", pie(d, lang))}
-{indice(d, puntos)}
+{cms("pie", pie(d, lang, slug))}
 <a class="wa" data-wa href="{e(wa(d, d["contacto"]["wa_general"]))}" target="_blank" rel="noopener" aria-label="{e(ui["whatsapp"])}">
   <span class="wa__punto" aria-hidden="true"></span>{e(ui["whatsapp"])}
 </a>
@@ -703,10 +727,7 @@ def pagina_inicio(d, lang):
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("contacto", contacto(d))}
 </div></div>'''
-    puntos = [("quienes", d["quienes"]["titulo"]), ("universo", d["universo"]["titulo"]),
-              ("metodo", d["metodo"]["titulo"]), ("mundos", d["mundos"]["rotulo"]),
-              ("contacto", d["contacto"]["titulo"])]
-    return cascara(d, lang, "inicio", cuerpo, puntos)
+    return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
 
 
 def pagina_nosotros(d, lang):
@@ -722,10 +743,7 @@ def pagina_nosotros(d, lang):
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("contacto", contacto(d))}
 </div></div>'''
-    puntos = [("quienes", d["quienes"]["titulo"]), ("equipo", d["equipo"]["titulo"]),
-              ("mirada", d["mirada"]["titulo"]), ("red", d["red"]["titulo"]),
-              ("contacto", d["contacto"]["titulo"])]
-    return cascara(d, lang, "nosotros", cuerpo, puntos)
+    return cascara(d, lang, "nosotros", cuerpo)
 
 
 def pagina_proyectos(d, lang):
@@ -748,23 +766,47 @@ def pagina_proyectos(d, lang):
 {cms("contacto", contacto(d))}
 </div></div>
 {visor(d)}'''
-    puntos = [(w["id"], w["nombre"]) for w in lista] + [("contacto", d["contacto"]["titulo"])]
-    return cascara(d, lang, "proyectos", cuerpo, puntos)
+    return cascara(d, lang, "proyectos", cuerpo)
 
 
-def cinta(texto, tono="tinta", titulo=False):
-    """El nombre de la seccion en cinta gigante. La repeticion es decorativa:
-    la primera copia es el texto de verdad, el resto va aria-hidden.
+def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
+          velocidad=120, imagen=False):
+    """Una cinta de piezas repetidas. Dos motores:
 
-    Con titulo=True la cinta ES el encabezado de la seccion. Sin esto un mundo
-    entero queda sin h2: se rompe el indice del documento y el lector de
-    pantalla no tiene por donde entrar."""
-    et = "h2" if titulo else "span"
-    copias = f'<{et} class="cinta__pieza">{e(texto)}</{et}>' + "".join(
-        f'<span class="cinta__pieza" aria-hidden="true">{e(texto)}</span>'
-        for _ in range(3))
-    return (f'<div class="cinta cinta--{tono}" data-cinta data-sangra>'
-            f'<div class="cinta__riel" data-cinta-riel>{copias}</div></div>')
+    - Por SCROLL (la de siempre): el JS escribe --corrida y sin JS queda quieta
+      y legible. Cuatro copias, la primera es el texto real.
+    - CONTINUA (pedido del 08/09, `data-fx="marquee"`): corre sola con un
+      keyframe infinito, pausado fuera de pantalla y apagado con
+      reduced-motion. Es la unica excepcion documentada a "cero infinitas".
+      Emite la secuencia DOS veces para que `translate: -50%` cierre el loop
+      sin salto, y el JS calcula la duracion para que la velocidad (px/s) sea
+      constante sin importar el cuerpo tipografico.
+
+    `piezas` es un texto, o una lista de textos, o una lista de dicts con
+    `rotulo` y `href` (enlaces). Con `imagen` son rutas de imagen (el isotipo).
+    Con titulo=True la primera pieza es un h2: sin eso un mundo entero queda
+    sin encabezado y el lector de pantalla no tiene por donde entrar."""
+    if isinstance(piezas, str):
+        piezas = [piezas]
+    def pieza(p, oculta):
+        oc = ' aria-hidden="true"' if oculta else ""
+        if imagen:
+            return f'<img class="cinta__pieza cinta__pieza--img" src="{R.raiz}{p}" alt=""{oc} loading="lazy" decoding="async">'
+        if isinstance(p, dict):
+            return f'<a class="cinta__pieza cinta__pieza--enlace" href="{e(p["href"])}"{" tabindex=-1" if oculta else ""}{oc}>{e(p["rotulo"])}</a>'
+        et = "h2" if (titulo and not oculta) else "span"
+        return f'<{et} class="cinta__pieza"{oc}>{e(p)}</{et}>'
+    if continua:
+        copias = [pieza(p, i > 0) for i, p in enumerate(piezas)]
+        copias += [pieza(p, True) for p in piezas]
+        clases = f'cinta cinta--{tono} cinta--continua{" cinta--vertical" if vertical else ""}'
+        attrs = f'data-cinta-continua data-fx="marquee" data-velocidad="{velocidad}" data-sangra'
+    else:
+        copias = [pieza(p, i > 0) for i, p in enumerate(piezas * 4)]
+        clases = f'cinta cinta--{tono}'
+        attrs = f'data-cinta data-copias="4" data-sangra'
+    return (f'<div class="{clases}" {attrs}>'
+            f'<div class="cinta__riel" data-cinta-riel>{"".join(copias)}</div></div>')
 
 
 def mundos(d):
@@ -894,6 +936,28 @@ def comprobar_rutas(html, carpeta):
     return avisos
 
 
+def auditar_enlaces(html, nombre):
+    """FOOT-4: ningun enlace con etiqueta enganosa. Un `wa.me` tiene que decir
+    que es WhatsApp o una consulta; un `#ancla` tiene que existir en la misma
+    pagina. Devuelve la cantidad de avisos."""
+    import re
+    avisos = 0
+    ids = set(re.findall(r'\sid="([^"]+)"', html))
+    for m in re.finditer(r'<a\b([^>]*)>(.*?)</a>', html, re.S):
+        attrs, texto = m.group(1), re.sub(r"<[^>]+>", "", m.group(2)).strip()
+        h = re.search(r'href="([^"]*)"', attrs)
+        if not h:
+            continue
+        href = h.group(1)
+        if "wa.me" in href and not re.search(r"whatsapp|consult|escrib", texto, re.I):
+            avisos += 1
+            print(f'  ENLACE ENGANOSO en {nombre}: "{texto[:40]}" abre WhatsApp')
+        if href.startswith("#") and len(href) > 1 and href[1:] not in ids:
+            avisos += 1
+            print(f'  ANCLA ROTA en {nombre}: "{texto[:40]}" -> {href}')
+    return avisos
+
+
 def main(args):
     if "--plantilla" in args:
         print(plantilla(ES, args[args.index("--plantilla") + 1]))
@@ -910,13 +974,16 @@ def main(args):
         R.poner(idi["carpeta"])
         carpeta = AQUI / idi["carpeta"]
         carpeta.mkdir(exist_ok=True)
-        for slug, armar in PAGINAS.items():
-            pg = d["paginas"][slug]
+        for slug, pg in d["paginas"].items():
             if "archivo" not in pg:
                 continue
-            html = armar(d, lang)
+            if slug not in PAGINAS:
+                print(f"  (todavia sin funcion: {slug}, no se genera)")
+                continue
+            html = PAGINAS[slug](d, lang)
             (carpeta / pg["archivo"]).write_text(html, encoding="utf-8")
             escritos.append((html, carpeta))
+            auditar_enlaces(html, f"{idi['carpeta']}{pg['archivo']}")
             print(f"{idi['carpeta']}{pg['archivo']} armado")
     # Las rutas se comprueban al final, cuando todas las paginas de todos los
     # idiomas ya existen: si no, index.html reclama nosotros.html por orden.

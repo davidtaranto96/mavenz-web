@@ -250,31 +250,51 @@
     "hueco": "The first pieces will be published at launch."
   },
   "contacto": {
-    "apertura": "There are projects, ideas and opportunities that need the right movement.",
+    "apertura": "If you have a project, an investment opportunity or a proposal to develop, we want to hear about it.",
     "titulo": "Let us move something together",
-    "cta_reunion": "Request a meeting",
     "cta_wa": "Message us on WhatsApp",
     "rotulo_motivos": "What do you want to move",
     "motivos": [
       {
-        "rotulo": "Present a project",
+        "rotulo": "I have a project",
+        "copy": "If you have a development, a piece of land or a brand to move, we start by listening.",
         "wa": "Hi Mavenz, I would like to present a project."
       },
       {
-        "rotulo": "Look for an opportunity",
+        "rotulo": "I am looking for an investment opportunity",
+        "copy": "Tell us what kind of opportunity you are looking for and we will advise you personally.",
         "wa": "Hi Mavenz, I am looking for an investment opportunity."
       },
       {
-        "rotulo": "Propose an alliance",
-        "wa": "Hi Mavenz, I would like to propose an alliance."
+        "rotulo": "I want to build a partnership",
+        "copy": "",
+        "wa": "Hi Mavenz, I would like to propose a partnership."
       },
       {
-        "rotulo": "Visit Espacio Mavenz",
-        "wa": "Hi Mavenz, I would like to know Espacio Mavenz."
+        "rotulo": "I want to visit Espacio Mavenz",
+        "copy": "",
+        "wa": "Hi Mavenz, I would like to visit Espacio Mavenz."
       }
     ],
-    "wa_reunion": "Hi Mavenz, I would like to arrange a meeting.",
-    "wa_general": "Hi Mavenz, I saw your site and I have a question."
+    "wa_general": "Hi Mavenz, I was browsing the website and would like to get in touch.",
+    "cta_contacto": "Contact us",
+    "alternativa": "Or write to us directly on",
+    "formulario": {
+      "asunto": "Enquiry from the Mavenz website",
+      "campos": {
+        "nombre": "Name",
+        "correo": "Email",
+        "telefono": "Phone (optional)",
+        "mensaje": "Message"
+      },
+      "privacidad": "We only use your details to reply to you.",
+      "enviar": "Send",
+      "enviando": "Sending…",
+      "gracias": "We received your message. We will get back to you shortly.",
+      "error": "We could not send your message. Try again or write to us on WhatsApp.",
+      "falta": "Please fill in this field.",
+      "correo_invalido": "Check the email address."
+    }
   },
   "interfaz": {
     "cerrar": "Close",
@@ -296,17 +316,31 @@
     "alt": "Aerial band over the valley"
   },
   "paginas": {
-    "nosotros": {
-      "rotulo": "The team",
-      "titulo": "The team",
-      "cinta": "The team"
+    "inicio": {
+      "titulo": "Mavenz creates momentum"
+    },
+    "universo": {
+      "rotulo": "Mavenz Universe"
     },
     "proyectos": {
       "titulo": "Projects and opportunities",
       "cinta": "Projects"
     },
-    "inicio": {
-      "titulo": "Mavenz creates momentum"
+    "espacio": {
+      "rotulo": "Espacio Mavenz",
+      "titulo": "Espacio Mavenz",
+      "cinta": "Espacio Mavenz"
+    },
+    "nosotros": {
+      "rotulo": "About us",
+      "titulo": "The people behind Mavenz",
+      "cinta": "About us"
+    },
+    "contacto": {
+      "rotulo": "Contact us"
+    },
+    "cardinal": {
+      "titulo": "Cardinal"
     }
   },
   "_iguales": [
@@ -316,5 +350,12 @@
     "redes.1.nombre",
     "redes.2.nombre",
     "interfaz.whatsapp"
-  ]
+  ],
+  "cookies": {
+    "titulo": "Cookies",
+    "texto": "We use analytics cookies to understand how the site is used.",
+    "aceptar": "Accept",
+    "rechazar": "Decline",
+    "enlace_pie": "Cookies"
+  }
 }

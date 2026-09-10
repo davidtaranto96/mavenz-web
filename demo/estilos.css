@@ -68,7 +68,7 @@
   --margen-int: clamp(1.25rem, 8vw - .7rem, 6.5rem);           /*  20 → 104 */
   --margen-der: clamp(1.5rem, 10.667vw - 1.1rem, 8.5rem);      /*  24 → 136 */
   --ritmo:      clamp(4rem, 2.7rem + 5.333vw, 7.5rem);         /*  64 → 120 */
-  --alto-nav:   clamp(3.75rem, 3.193rem + 2.286vw, 5.25rem);   /*  60 → 84  */
+  --alto-nav:   clamp(4rem, 3.4rem + 2.4vw, 5.75rem);           /*  64 → 92, el logo al 40 % necesita aire */
 
   /* ---- el solape de la cortina: un solo token para el margen y el padding ---- */
   --solape: clamp(80px, 12vh, 140px);
@@ -129,7 +129,8 @@ h1, h2, h3, p, figure, figcaption { margin: 0; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 
-[id] { scroll-margin-top: calc(var(--alto-nav) + 1.5rem); }
+/* Sin barra fija arriba, el ancla frena a un respiro del borde, no debajo de nada. */
+[id] { scroll-margin-top: 1.5rem; }
 
 .saltar {
   position: absolute;
@@ -184,29 +185,30 @@ p { text-wrap: pretty; }
 }
 
 /* ==========================================================================
-   Cabecera — siempre a la vista
+   Cabecera — arriba, casi transparente, y se va con la pagina
    ========================================================================== */
-
+/* Pedido del 08/09: la barra no es pegajosa (se pierde al scrollear y la
+   reemplaza el flotante), y es casi transparente como la referencia (rogo:
+   0-6 puntos de diferencia entre la barra y lo que hay debajo). El velo es
+   un alfa de .10 sobre un RGB de la paleta, sin blur: el blur de 18 px era lo
+   que la convertia en placa. `relative` y no `static` porque el hero se mete
+   debajo con margen negativo y sin z-index la barra queda tapada. */
 .cabecera {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  position: relative;
+  z-index: 21;
   height: var(--alto-nav);
   padding-inline: var(--margen-ext);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--papel-vidrio);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--hover) var(--curva);
+  background: rgba(238, 236, 236, .10);
 }
-.cabecera[data-scroll] { border-bottom-color: var(--linea); }
 
 .cabecera__marca { display: inline-flex; align-items: center; min-height: 44px; }
-.cabecera__logo { height: clamp(1.125rem, .98rem + .38vw, 1.4375rem); width: auto; }
+/* El logo mide el 40 % del alto de la barra, la proporcion de la referencia
+   (34 px en 82). Antes: 18-23 px en 60-84, un puntito. */
+.cabecera__logo { height: calc(var(--alto-nav) * .4); width: auto; }
 
 .cabecera__derecha { display: flex; align-items: center; gap: 1.125rem; }
 
@@ -805,21 +807,6 @@ body[data-menu-abierto] { overflow: hidden; }
 .contacto__acciones .boton { width: 100%; }
 .contacto__acciones .subrayado { align-self: flex-start; }
 
-.motivos {
-  margin-top: clamp(2.25rem, 1.6rem + 1.7vw, 3.25rem);
-  border-top: 1px solid var(--linea-acento);
-  padding-top: clamp(1.125rem, .9rem + .76vw, 1.5rem);
-}
-.motivos__rotulo { margin-bottom: .75rem; }
-.motivos__lista {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: .125rem;
-}
-.motivos__lista .subrayado { align-self: flex-start; }
 
 /* ==========================================================================
    Pie
@@ -1162,7 +1149,7 @@ body[data-menu-abierto] { overflow: hidden; }
    ========================================================================== */
 
 .cabecera__logo--papel { display: none; }
-.cabecera[data-tema="oscuro"] { background: rgba(30, 30, 32, .42); }
+.cabecera[data-tema="oscuro"] { background: rgba(30, 30, 32, .10); }
 .cabecera[data-tema="oscuro"] .cabecera__logo--tinta { display: none; }
 .cabecera[data-tema="oscuro"] .cabecera__logo--papel { display: block; }
 .cabecera[data-tema="oscuro"] .cabecera__enlaces a,
@@ -1170,7 +1157,6 @@ body[data-menu-abierto] { overflow: hidden; }
 .cabecera[data-tema="oscuro"] .idioma__off { color: var(--sobre-foto-2); }
 .cabecera[data-tema="oscuro"] .hamburguesa span { background: var(--sobre-foto); }
 .cabecera[data-tema="oscuro"] .boton { background: var(--sobre-foto); color: var(--tinta-bordo); }
-.cabecera[data-tema="oscuro"][data-scroll] { border-bottom-color: rgba(238, 236, 236, .22); }
 
 /* ==========================================================================
    El pie de foto del hero: lámina catalogada, no banner de stock
@@ -1413,62 +1399,7 @@ body[data-menu-abierto] { overflow: hidden; }
    Índice lateral de rayas — sólo desde 1180 px
    ========================================================================== */
 
-.indice { display: none; }
-
-@media (min-width: 73.75rem) {
-  nav.indice {
-    position: fixed;
-    left: clamp(1.25rem, -1rem + 2.4vw, 2rem);
-    top: 50%;
-    translate: 0 -50%;
-    z-index: 14;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  /* El enlace ES la caja de 44: la raya se dibuja con el ::before. Antes el
-     enlace medía 34x2 y el area la ponía un ::before estirado, pero el
-     `transform: scaleX(.65)` del enlace escalaba tambien al pseudo y el toque
-     real quedaba en 35 px. Un pseudo no se puede sacar de la escala del padre:
-     lo que hay que hacer es no escalar el padre. */
-  nav.indice a {
-    position: relative;
-    display: block;
-    width: 44px; height: 44px;
-    background: none;
-  }
-  nav.indice a::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 50%;
-    width: 22px; height: 2px;
-    background: var(--tinta-apoyo);
-    opacity: .42;
-    transition: width var(--hover) var(--curva), opacity var(--hover) var(--curva);
-  }
-  nav.indice a[aria-current="true"]::before { width: 34px; opacity: 1 }
-  nav.indice { gap: 0 }
-  nav.indice a::after {
-    content: attr(aria-label);
-    position: absolute;
-    left: 44px; top: 50%;
-    translate: 0 -50%;
-    white-space: nowrap;
-    font-size: var(--t-micro);
-    color: var(--tinta-apoyo);
-    opacity: 0;
-    transition: opacity var(--hover) var(--curva);
-    pointer-events: none;
-  }
-  nav.indice a:hover::after, nav.indice a:focus-visible::after { opacity: 1; }
-  /* En reposo era casi invisible; adentro de un mundo oscuro, invisible del
-     todo, porque su tono es tinta. Sube el reposo y se invierte con el bloque
-     que tiene detrás, igual que la barra de arriba. */
-  nav.indice[data-tema="oscuro"] a::before { background: var(--sobre-foto); opacity: .5 }
-  nav.indice[data-tema="oscuro"] a[aria-current="true"]::before { opacity: 1 }
-  nav.indice[data-tema="oscuro"] a::after { color: var(--sobre-foto) }
-  nav.indice a:focus-visible { outline: 2px solid currentColor; outline-offset: 6px }
-}
+/* El indice lateral de rayas se fue el 09/09: lo reemplaza el menu flotante. */
 
 /* ==========================================================================
    Menos movimiento — cada bloque pegado al efecto que apaga
@@ -2113,24 +2044,6 @@ body[data-menu-abierto] { overflow: hidden; }
   overflow: hidden;
   padding-block: clamp(3rem, 9svh, 6rem);
 }
-/* La palabra gigante sangra por el borde izquierdo. Es decorativa: el texto
-   real está en el h2, y por eso va aria-hidden. */
-.contacto__palabra {
-  --deriva: 0;
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 0;
-  translate: calc(-14% + var(--deriva) * 1%) -50%;
-  font-size: clamp(6rem, 30vw, 22rem);
-  font-weight: var(--grueso);
-  line-height: .8;
-  letter-spacing: -.04em;
-  color: var(--tinta-bordo);
-  opacity: .07;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-}
 .contacto__caja {
   position: relative;
   display: grid;
@@ -2145,26 +2058,40 @@ body[data-menu-abierto] { overflow: hidden; }
   margin-block-end: 1.25rem;
   border-block-end: 1px solid var(--linea);
 }
+/* El indicador crece DESDE EL CENTRO (medido en Contactos.mp4): 0 en reposo,
+   un tercio en hover, la celda entera activa. Es un scaleX, no una raya que se
+   desliza de una solapa a la otra. */
 .solapa {
+  position: relative;
+  flex: 1 1 auto;
   min-height: 44px;
-  padding: .6rem 1rem;
+  padding: .6rem .75rem;
   border: 0;
-  border-block-end: 2px solid transparent;
   background: none;
   cursor: pointer;
   font: inherit;
   font-size: var(--t-chico);
   color: var(--tinta-apoyo);
-  transition: color var(--hover) var(--curva), border-color var(--hover) var(--curva);
+  text-align: center;
+  transition: color var(--hover) var(--curva);
 }
-.solapa[aria-pressed="true"] {
-  color: var(--tinta-bordo);
-  border-block-end-color: var(--tinta-bordo);
-  font-weight: var(--medio);
+.solapa::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 2px;
+  background: var(--tinta-bordo);
+  transform-origin: center;
+  scale: 0 1;
+  transition: scale .4s cubic-bezier(.45, 0, .55, 1), background var(--hover) var(--curva);
 }
-.solapa__cuerpo { display: grid; gap: 1rem; justify-items: start }
-.solapa__cuerpo[aria-hidden="true"] { display: none }
-.solapa__cuerpo p { max-width: 44ch; text-wrap: pretty }
+.solapa[aria-selected="true"] { color: var(--tinta-bordo); font-weight: var(--medio); }
+.solapa[aria-selected="true"]::after { scale: 1 1; }
+.solapa:focus-visible { outline: 2px solid var(--tinta-bordo); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  .solapa:not([aria-selected="true"]):hover::after { scale: .33 1; background: var(--linea-acento); transition-duration: .3s; }
+}
+@media (prefers-reduced-motion: reduce) { .solapa::after { transition: none } }
 
 /* --- Los cuatro carriles -------------------------------------------------- */
 
@@ -2209,7 +2136,6 @@ body[data-menu-abierto] { overflow: hidden; }
   .cinta__riel { translate: none }
   .orbita__anillo { stroke-dashoffset: 0 }
   .ciclo__avance { stroke-dashoffset: 0 }
-  .contacto__palabra { translate: -14% -50% }
   .orbita__punto, .ciclo__punto { transition: none }
 }
 
@@ -2335,18 +2261,6 @@ body[data-menu-abierto] { overflow: hidden; }
   .orbita__ayuda { display: none }
 }
 
-/* --- La palabra gigante de contacto: color con alfa, no opacity ----------- */
-/* El motor de reveal le escribe `opacity` a los hijos de la sección, así que
-   un `opacity: .07` propio se lo come al revelar y la palabra queda opaca
-   encima del texto. Con el color tintado el reveal puede hacer lo suyo sin
-   pisar nada. Un elemento, una sola cosa que lo controle. */
-.contacto__palabra {
-  opacity: 1;
-  color: color-mix(in srgb, var(--tinta-bordo) 9%, var(--papel));
-}
-/* En 390 px no hay columna libre donde sangrar: la palabra taparía el texto.
-   Recién desde 64rem, donde la caja es 4fr/6fr, tiene dónde vivir. */
-@media (max-width: 63.99rem) { .contacto__palabra { display: none } }
 
 /* --- Legibilidad adentro de un mundo -------------------------------------- */
 /* Las secciones vienen de la página clara y traen sus propios colores de tinta
@@ -2384,7 +2298,7 @@ body[data-menu-abierto] { overflow: hidden; }
    gráfica más grande. Sin resetear el margen del h2 la cinta se descuadra. */
 h2.cinta__pieza { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit }
 /* El scroll suave necesita que el ancla frene abajo del nav, no debajo de él. */
-html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
+html { scroll-padding-top: 1rem }
 /* Al fijar, GSAP envuelve el riel en un `pin-spacer` que hereda el ancho del
    contenido, no el de la caja: 28 px de desborde medidos en 1512. El recorte
    tiene que estar también en el envoltorio, no sólo adentro. */
@@ -2706,4 +2620,147 @@ html { scroll-padding-top: calc(var(--alto-nav) + 1rem) }
      una pantalla de 375. Se mide contra el alto, como todo lo vertical. */
   .cardenal__video { aspect-ratio: auto; block-size: min(78svh, 18rem); width: auto; justify-self: start }
   .equipo-seccion .personas { gap: 1.25rem }
+}
+
+/* --- FOOT-2: WhatsApp y correo a la vista en el pie ------------------------ */
+.pie__contacto { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: var(--t-nota); }
+.pie__contacto a { display: inline-flex; align-items: center; min-height: 44px; color: var(--tinta-parrafo); }
+.pie__cookies {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font: inherit; font-size: var(--t-nota); color: var(--tinta-apoyo);
+  background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: .2em;
+}
+.pie__abajo .idioma { margin-inline-start: auto; }
+
+/* ==========================================================================
+   Fase 2b (09/09) — la cinta continua y el contacto con formulario
+   ========================================================================== */
+
+/* --- La cinta continua: la unica excepcion a "cero infinitas" ------------ */
+/* Pedido del 08/09 (data-fx="marquee") en tres lugares: el pie del hero, el
+   fondo de la ficha de Cardinal y el titulo vertical del contacto. Corre con
+   un keyframe infinito, pero PAUSADA hasta que el observer la ve (data-vivo)
+   y apagada con reduced-motion. La duracion la escribe el JS para que la
+   velocidad sea constante en px/s: --cinta-dur = (largo / 2) / velocidad. */
+@keyframes mvCinta  { to { translate: -50% 0 } }
+@keyframes mvCintaY { to { translate: 0 -50% } }
+.cinta--continua { --corrida: 0 }
+.cinta--continua .cinta__riel {
+  translate: none;
+  animation: mvCinta var(--cinta-dur, 20s) linear infinite;
+  animation-play-state: paused;
+}
+.cinta--continua[data-vivo] .cinta__riel { animation-play-state: running }
+.cinta--vertical .cinta__riel {
+  flex-direction: column;
+  width: auto;
+  height: max-content;
+  animation-name: mvCintaY;
+}
+/* En vertical cada pieza se lee de abajo hacia arriba y sube en el mismo
+   sentido en que se lee, como en la referencia. */
+.cinta--vertical .cinta__pieza { writing-mode: vertical-rl; rotate: 180deg; line-height: 1; }
+.cinta__pieza--enlace { text-decoration: none; color: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .cinta--continua .cinta__riel { animation: none }
+}
+
+/* --- La marca de agua del contacto: color con alfa, nunca opacity --------- */
+/* El motor de reveal le escribe `opacity` a los hijos directos de la seccion:
+   un `opacity` propio se lo come. Con el color tintado puede hacer lo suyo. */
+.cinta--marca {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  display: none;
+}
+/* La palabra mide lo que mide la columna que la contiene (--ancho-marca): un
+   glifo mas ancho que la columna se corta, y ese corte duro es el de la
+   referencia. Absoluta para que su riel de max-content no le de altura a la
+   caja: estira con ella, no al reves. */
+.cinta--marca .cinta__pieza {
+  font-size: calc(var(--ancho-marca, 8rem) * .92);
+  letter-spacing: -.04em;
+  color: color-mix(in srgb, var(--tinta-bordo) 12%, var(--papel));
+  user-select: none;
+  pointer-events: none;
+}
+.cinta--marca .cinta__riel { gap: clamp(1.5rem, 3vw, 3rem); align-items: center }
+@media (min-width: 64rem) {
+  .contacto__caja { --ancho-marca: clamp(6rem, 8vw, 9rem); grid-template-columns: var(--ancho-marca) 4fr 6fr; }
+  /* La cinta es absoluta (no ocupa celda): las dos columnas de contenido se
+     ubican a mano o la grilla las corre a la primera celda, que es la angosta. */
+  .contacto__datos { grid-column: 2 }
+  .contacto__panel { grid-column: 3 }
+  /* Cuatro opciones largas: dos por fila, no una tira que se envuelve. */
+  .solapas { display: grid; grid-template-columns: 1fr 1fr; }
+  .contacto .cinta--marca {
+    display: block;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--margen-ext) + var(--ancho-marca));
+    text-align: center;
+  }
+  .contacto { overflow: hidden }
+}
+
+/* --- El formulario ---------------------------------------------------------- */
+.contacto__copia { margin-block: .5rem 1.25rem; max-width: 44ch; text-wrap: pretty; color: var(--tinta-parrafo); min-height: 1.5em; }
+.contacto__copia:empty { display: none }
+.formulario { display: grid; gap: 1rem; }
+.formulario__fila { display: grid; }
+.campo { display: grid; gap: .35rem; }
+.campo__rotulo { font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+/* Campos de linea, como la referencia: sin caja, solo la linea de abajo que
+   se enciende con el foco. 44 px de alto por regla de la casa. */
+.campo__entrada {
+  min-height: 44px;
+  padding: .5rem 0;
+  border: 0;
+  border-block-end: 1px solid var(--linea);
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--tinta);
+  transition: border-color var(--hover) var(--curva);
+}
+.campo__entrada:focus { outline: none; border-block-end: 1px solid var(--tinta-bordo); }
+.campo__entrada:focus-visible { outline: 2px solid var(--tinta-bordo); outline-offset: 4px; }
+.campo__entrada[aria-invalid="true"] { border-block-end-color: var(--tinta-bordo); }
+.campo__error { font-size: var(--t-nota); color: var(--tinta-bordo); }
+textarea.campo__entrada { resize: vertical; min-height: 6rem; }
+.formulario__nota { font-size: var(--t-nota); color: var(--tinta-apoyo); }
+.formulario__enviar { justify-self: start; }
+.formulario__estado { font-size: var(--t-nota); color: var(--tinta-parrafo); min-height: 1.5em; }
+.formulario__estado:empty { display: none }
+.formulario__trampa { position: absolute; left: -9999px; opacity: 0; }
+.contacto__alternativa { margin-block-start: 1.25rem; font-size: var(--t-nota); color: var(--tinta-apoyo); }
+.solapas { flex-wrap: wrap; gap: 0; }
+
+/* --- El cambio de opcion en tres tiempos (medido en Contactos.mp4) --------- */
+/* Fade-out del bloque entero (170 ms, sin moverse) -> 150 ms vacio -> las
+   filas entran de arriba hacia abajo cada 65 ms, subiendo 24 px en 420 ms. */
+.contacto__panel[data-saliendo] .formulario__fila,
+.contacto__panel[data-saliendo] .contacto__copia {
+  opacity: 0;
+  transition: opacity .17s cubic-bezier(.55, 0, 1, .45);
+}
+.contacto__panel[data-entrando] .formulario__fila,
+.contacto__panel[data-entrando] .contacto__copia {
+  opacity: 0;
+  translate: 0 24px;
+  transition: none;
+}
+.formulario__fila, .contacto__copia {
+  transition: opacity .42s cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 65ms),
+              translate .42s cubic-bezier(.16, 1, .3, 1) calc(var(--i, 0) * 65ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .formulario__fila, .contacto__copia,
+  .contacto__panel[data-saliendo] .formulario__fila, .contacto__panel[data-saliendo] .contacto__copia,
+  .contacto__panel[data-entrando] .formulario__fila, .contacto__panel[data-entrando] .contacto__copia {
+    transition: none; translate: none; opacity: 1;
+  }
 }

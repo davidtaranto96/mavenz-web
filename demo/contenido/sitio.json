@@ -489,50 +489,61 @@
     ]
   },
   "contacto": {
-    "apertura": "Hay proyectos, ideas y oportunidades que necesitan el movimiento correcto.",
+    "apertura": "Si tenés un proyecto, una oportunidad de inversión o una propuesta para desarrollar, queremos conocerla.",
     "titulo": "Movamos algo juntos",
-    "cta_reunion": "Pedir una reunión",
     "cta_wa": "Escribir por WhatsApp",
-    "_dt": "El diseño no lleva formulario: la entrada es pedir una reunión, que es lo que Vero marcó en el tablero. Sin servidor, cada motivo abre WhatsApp con su propio mensaje escrito. Los cuatro motivos son los tres públicos que nombró en el audio del 04/09 —desarrollador, consumidor final e inversor— más los partners: sin esto, los tres caen en el mismo mensaje y no se sabe quién escribe.",
-    "wa_reunion": "Hola Mavenz, quiero coordinar una reunión.",
-    "wa_general": "Hola Mavenz, vi la web y quiero consultar.",
+    "_dt": "Reescrito el 09/09 por pedido del documento del 08/09: cuatro opciones, cada una con su formulario (el mismo formulario, cambia el motivo y la linea de arriba). El formulario manda por Web3Forms al mail de Mavenz cuando `formulario.clave` tiene la clave publica; sin clave, compone el mensaje y abre WhatsApp. Los copys de alianza y espacio no vinieron en el documento: van vacios hasta que lleguen.",
+    "wa_general": "Hola Mavenz, estuve viendo la web y quisiera ponerme en contacto con ustedes.",
     "rotulo_motivos": "Qué querés mover",
     "motivos": [
       {
         "id": "proyecto",
-        "rotulo": "Presentar un proyecto",
+        "rotulo": "Tengo un proyecto",
+        "copy": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo.",
         "wa": "Hola Mavenz, quiero presentarles un proyecto."
       },
       {
         "id": "oportunidad",
-        "rotulo": "Buscar una oportunidad",
+        "rotulo": "Busco una oportunidad de inversión",
+        "copy": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
         "wa": "Hola Mavenz, estoy buscando una oportunidad de inversión."
       },
       {
         "id": "alianza",
-        "rotulo": "Proponer una alianza",
+        "rotulo": "Quiero generar una alianza",
+        "copy": "",
         "wa": "Hola Mavenz, quiero proponerles una alianza."
       },
       {
         "id": "espacio",
-        "rotulo": "Conocer Espacio Mavenz",
+        "rotulo": "Quiero conocer Espacio Mavenz",
+        "copy": "",
         "wa": "Hola Mavenz, quiero conocer Espacio Mavenz."
       }
     ],
     "palabra": "Contacto",
-    "solapas": [
-      {
-        "id": "invertir",
-        "rotulo": "Quiero invertir",
-        "copy": "Contanos qué estás buscando y con qué horizonte. Te acercamos lo que se mueve."
+    "bloque_datos": "Dónde encontrarnos",
+    "cta_contacto": "Contactanos",
+    "formulario": {
+      "_dt": "`clave` es la clave PUBLICA de Web3Forms (se crea con el mail de Mavenz en web3forms.com). No es un secreto: viaja en el navegador. Vacia = el formulario abre WhatsApp con el mensaje armado.",
+      "servicio": "web3forms",
+      "clave": "",
+      "asunto": "Consulta desde la web de Mavenz",
+      "campos": {
+        "nombre": "Nombre",
+        "correo": "Correo",
+        "telefono": "Teléfono (opcional)",
+        "mensaje": "Mensaje"
       },
-      {
-        "id": "proyecto",
-        "rotulo": "Tengo un proyecto",
-        "copy": "Si tenés un desarrollo, una tierra o una marca para mover, empezamos por escucharlo."
-      }
-    ],
-    "bloque_datos": "Dónde encontrarnos"
+      "privacidad": "Usamos tus datos sólo para responderte.",
+      "enviar": "Enviar",
+      "enviando": "Enviando…",
+      "gracias": "Recibimos tu mensaje. Te respondemos a la brevedad.",
+      "error": "No pudimos enviar el mensaje. Probá de nuevo o escribinos por WhatsApp.",
+      "falta": "Completá este campo.",
+      "correo_invalido": "Revisá el correo."
+    },
+    "alternativa": "O escribinos directo por"
   },
   "idiomas": {
     "_dt": "Cada idioma es una carpeta: el castellano en demo/, el ingles en demo/en/. `genera: false` deja el idioma en el selector como texto deshabilitado hasta que exista el copy. El ingles lo tradujo DT System del castellano de Vero: Mavenz tiene que revisarlo.",
@@ -611,17 +622,43 @@
       "rotulo": "Inicio",
       "titulo": "Mavenz genera movimiento"
     },
-    "nosotros": {
-      "archivo": "nosotros.html",
-      "rotulo": "El equipo",
-      "titulo": "El equipo",
-      "cinta": "El equipo"
+    "universo": {
+      "ancla": "universo",
+      "en": "inicio",
+      "rotulo": "Universo Mavenz"
     },
     "proyectos": {
       "archivo": "proyectos.html",
       "rotulo": "Proyectos",
       "titulo": "Proyectos y oportunidades",
       "cinta": "Proyectos"
+    },
+    "espacio": {
+      "archivo": "espacio.html",
+      "rotulo": "Espacio Mavenz",
+      "titulo": "Espacio Mavenz",
+      "cinta": "Espacio Mavenz",
+      "publicar": false,
+      "_dt": "publicar pasa a true cuando exista la pagina (Fase 5)."
+    },
+    "nosotros": {
+      "archivo": "nosotros.html",
+      "rotulo": "Nosotros",
+      "titulo": "Las personas detrás de Mavenz",
+      "cinta": "Nosotros",
+      "publicar": false,
+      "_dt": "Se publica cuando el equipo este completo (foto, nombre, rol y linea de cada persona). Mientras, se genera con noindex y no entra al menu."
+    },
+    "contacto": {
+      "ancla": "contacto",
+      "rotulo": "Contactanos"
+    },
+    "cardinal": {
+      "archivo": "cardinal.html",
+      "titulo": "Cardinal",
+      "en_menu": false,
+      "publicar": false,
+      "_dt": "La ficha del proyecto. No va en el menu; publicar pasa a true en la Fase 5."
     }
   },
   "mundos": {
@@ -662,5 +699,18 @@
         "href": "proyectos.html#territorio"
       }
     ]
+  },
+  "medicion": {
+    "_dt": "IDs de medicion. Vacios = no hay nada que consentir y el aviso de cookies no aparece. Se activan pegando el ID real.",
+    "ga4": "",
+    "pixel": ""
+  },
+  "cookies": {
+    "titulo": "Cookies",
+    "texto": "Usamos cookies de medición para entender cómo se usa el sitio.",
+    "aceptar": "Aceptar",
+    "rechazar": "Rechazar",
+    "enlace_pie": "Cookies",
+    "_dt": "El texto lo propuso DT System: Mavenz lo aprueba o lo cambia."
   }
 }
