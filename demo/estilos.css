@@ -888,7 +888,6 @@ body[data-menu-abierto] { overflow: hidden; }
    El barrido de luz de la rueda — el fundido solo deja dudando si el clic hizo algo
    ========================================================================== */
 
-@keyframes mvBarrido { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 
 /* ==========================================================================
    Índice lateral de rayas — sólo desde 1180 px
