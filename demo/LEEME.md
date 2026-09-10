@@ -8,10 +8,10 @@ fase) y se publica con el merge a `main` cuando David apruebe las capturas. Las 
 referencias que ella eligió están medidas en el código: realevate.agency (la ficha de proyecto y
 el menú flotante), rogo.ai (la cabecera y el hero) y era-residence.com (el aviso de cookies).
 
-**La idea, en una línea:** papel quieto, tres bloques de tinta (el Universo en bistre, Espacio
-en wenge, la ficha y la red en bordó) y un solo gesto de marca, el trazo de la M, que se dibuja
-con el scroll en Cómo trabajamos y corre como cinta en el hero y en la ficha de Cardinal. Lo que
-no está aprobado no se muestra: se apaga por dato en el generador, nunca con un placeholder.
+**La idea, en una línea:** desde la quinta vuelta del 10/09, una página limpia en papel,
+enmarcada arriba por el zócalo claro y la barra en bistre y abajo por el pie en bistre. Un solo
+gesto de marca: el isotipo, que encabeza el hero y se dibuja con el scroll en Cómo trabajamos.
+Lo que no está aprobado no se muestra: se apaga por dato en el generador, nunca con un placeholder.
 
 ---
 
@@ -19,18 +19,19 @@ no está aprobado no se muestra: se apaga por dato en el generador, nunca con un
 
 | Archivo | Cabecera | Qué tiene, en orden, con su `id` |
 |---|---|---|
-| `index.html` | oscura, sobre el video | hero con video y la cinta de los cinco mundos (`#inicio`) · Somos Mavenz (`#quienes`) · el puente, decorativo · El Universo Mavenz, en bistre (`#universo`) · Cómo trabajamos (`#metodo`) · Proyectos en movimiento (`#mundos`) · Mirada Mavenz con el mapa de seis territorios adentro (`#mirada`) |
-| `proyectos.html` | clara | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) |
-| `cardinal.html` | oscura, sobre bordó | hero que se abre con el scroll, con el nombre del proyecto corriendo detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería en escalera que avanza con el scroll (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó, con el botón a WhatsApp y el enlace al contacto (`#financiacion`) · el visor `<dialog>` |
-| `espacio.html` | clara | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) |
-| `nosotros.html` | clara | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) |
-| `contacto.html` | clara | cinta "Contacto" · Movamos algo juntos (`#contacto`): la palabra corriendo en vertical, las cuatro opciones y el formulario. `?motivo=proyecto|oportunidad|alianza|espacio` abre esa solapa |
+| `index.html` | bistre, con el zócalo | hero con foto quieta, el isotipo, MAVENZ y "genera movimiento" (`#inicio`) · Somos Mavenz (`#quienes`) · El Universo Mavenz, un anillo que gira (`#universo`) · Cómo trabajamos, el isotipo como recorrido (`#metodo`) · Proyectos en movimiento: Cardinal, Cafay y Oportunidades (`#mundos`). Todo en un solo dossier de papel |
+| `proyectos.html` | bistre, con el zócalo | cinta por scroll "Proyectos" · intro · Cardinal resumido (`#cardinal`) · Otros proyectos (`#otros`, hoy no se emite) · Oportunidades de inversión (`#oportunidades`) |
+| `cardinal.html` | bistre, con el zócalo | hero que se abre con el scroll, con el nombre del proyecto corriendo detrás (`#inicio`) · título con marcador, datos y aclaración (`#proyecto`) · galería en escalera que avanza con el scroll (`#galeria`) · el cardenal que se dibuja · sub-items (`#detalles`, hoy no se emite) · franja de video a sangre · Unidades (`#unidades`) · Financiación, en bordó, con el botón a WhatsApp y el enlace al contacto (`#financiacion`) · el visor `<dialog>` |
+| `espacio.html` | bistre, con el zócalo | cinta "Espacio Mavenz" · el bloque plano en wenge (`#espacio-bloque`) |
+| `nosotros.html` | bistre, con el zócalo | cinta "Nosotros" · Las personas detrás de Mavenz (`#equipo`) · La red, en bordó (`#red`) |
+| `contacto.html` | bistre, con el zócalo | cinta "Contacto" · Movamos algo juntos (`#contacto`): la palabra corriendo en vertical, las cuatro opciones y el formulario. `?motivo=proyecto|oportunidad|alianza|espacio` abre esa solapa |
 | `en/` | | las mismas seis en inglés: `<html lang="en">`, canónica propia y `hreflang` es-AR / en / x-default en las doce páginas |
 
-El menú sale de `paginas` del JSON y hoy tiene cinco entradas: Inicio · Universo Mavenz
-(`#universo`, o `index.html#universo` desde otra página) · Proyectos · Espacio Mavenz ·
-Contactanos (`contacto.html`, su propia ventana desde el 10/09). Lo leen la barra, el pie y el flotante desde la
-misma función, `enlaces_menu()`.
+El menú sale de `paginas` del JSON y hoy tiene cinco entradas: Inicio · Proyectos · Espacio
+Mavenz · Nosotros · Contactanos (`contacto.html`). Universo Mavenz salió el 10/09 a la tarde
+(`paginas.universo.en_menu: false`); la sección sigue en Inicio con su ancla. Lo leen la barra,
+el pie y el flotante desde la
+misma función, `enlaces_menu()`.misma función, `enlaces_menu()`.
 
 **Nosotros tiene `publicar: false`**: se genera igual, con `<meta name="robots"
 content="noindex">`, pero no entra al menú hasta que el equipo esté completo. **Cardinal tiene
@@ -61,7 +62,7 @@ se ve.
 | `contenido/sitio.en.json` | la capa en inglés: sólo textos |
 | `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las doce páginas |
 | `estilos.css` | tokens en `:root` y todo lo demás. Siete hex, todos en `:root`; los tres que aparecen más abajo están en comentarios |
-| `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita, puente, gotas de Somos, trazo del método, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
+| `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita que gira, gotas de Somos, trazo del isotipo, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
 | `consent.js` | el aviso de cookies, con su cola de eventos |
 | `auditar.sh` | el auditor de siete carriles sobre las doce URLs |
 | `../img/` | fotos en WebP, dos anchos cada una |
@@ -205,15 +206,50 @@ Cada bloque que depende de material de la clienta tiene una clave. Vacía, el ge
 - **La ficha termina en Financiación**, con el botón a WhatsApp y el enlace al contacto. El
   cierre aparte se fue.
 
+### La quinta vuelta del 10/09, con Vero, a la tarde
+
+Vero vio la demo y la encontró cargada ("yo entro y veo esto y me abruma"): pidió una página
+limpia, menos texto, movimiento limpio, y pasó como referencia de arriba otra web con un zócalo
+claro, la barra marrón y una foto de fondo. David decidió cuatro cosas por pregunta cerrada:
+todo papel, los títulos que corren al quinto del tamaño, foto quieta en el hero y la misma
+Urbanist con más contraste entre título y bajada. La versión anterior quedó congelada en el tag
+`demo-vero-v1` y la rama `demo-congelada-1009`.
+
+- **El zócalo y la barra en bistre**, en todas las páginas (`marca.zocalo`, texto propuesto por
+  DT). La barra dejó de ser casi transparente y se invierte siempre. **ES y EN pegados**; el
+  botón Contactanos, chico, con contorno fino y sin relleno. **Universo Mavenz fuera del menú.**
+- **El hero**: foto quieta de render (la pileta de Cardinal) con un acercamiento lento de 16 s,
+  una sola vez. El isotipo arriba, MAVENZ grande y "genera movimiento" abajo, más chico, con las
+  letras entrando de a una. Una flecha para seguir bajando y Hablemos al costado. Se fueron la
+  bajada, el botón al Universo y la cinta de los mundos. El video `hero.mp4` ya no se usa.
+- **Todo papel**: se fueron el puente, el grano y el bloque bistre del Universo. Inicio es un
+  solo dossier. **Mirada Mavenz salió** de Inicio (sus datos siguen en el JSON).
+- **El Universo es un anillo que gira**: sin triángulo, las cuatro capacidades sobre el anillo
+  (Marca y comunicación pasó de ser el anillo a ser la cuarta) y la elegida viaja a las 3.
+- **Cómo trabajamos usa el isotipo** como recorrido: su contorno se dibuja con el scroll, se
+  rellena al final, y los cinco pasos son puntos numerados sobre el trazo con la fila de pasos
+  debajo. El firulete `ONDA` quedó sin uso en el generador.
+- **Otros proyectos pasa a Cafay**, sin foto ni texto propio hasta que llegue el material.
+- **Los títulos que corren** (Proyectos, Espacio, Nosotros): mismo movimiento, un quinto del
+  tamaño, doce copias. **La escala de títulos bajó un escalón** (`--t-titulo` 32 a 56 px) y la
+  bajada pasó a `--t-chico` en Wenge.
+- **Cardinal**: "(Scroll)" pasó a "Bajá para abrir" con una flecha que se asoma tres veces y se
+  apaga apenas la tarjeta empieza a abrir (`--scroll-op`).
+- **El pie en bistre**, con el isotipo en vector.
+
 ## Cómo funciona cada pieza
 
-**El hero** (`hero()`). Sección de `100svh` con `margin-top` negativo para meterse debajo de la
-cabecera. El video es de fondo y diferido: no tiene `src` hasta que entra en pantalla, y con
-`data-pesado="1"` bajo 64rem no se baja nunca, queda el póster. Título y bajada centrados, el
-título con `data-letras`. Al pie, la cinta continua de los cinco mundos (`cinta(..., continua=True,
-velocidad=70)`), con `mask-image` lateral al 14 y al 86 % para que las piezas entren difuminadas,
-y `filter: blur(var(--foco))` por pieza: `cintasContinuas()` escribe `--foco` según la distancia
-al centro (hasta 3 px, cuantizado a medio píxel), sólo con puntero fino.
+**El zócalo y la barra** (`cabecera()`). El zócalo es una franja de `--alto-zocalo` (2,5rem)
+en Timberwolf con el texto en Bistre; la barra, `--alto-nav` en Bistre, siempre con
+`data-tema="oscuro"` (logo claro, enlaces en papel). Los dos llevan `z-index: 21`: la ficha de
+Cardinal se mete debajo con un margen negativo de los dos altos sumados.
+
+**El hero** (`hero()`). Arranca debajo de la barra y mide `100svh` menos la barra y el zócalo.
+La foto es un `<img>` con `fetchpriority="high"` y `animation: heroAcerca` (de `scale: 1.08` a
+1 en 16 s, una vez; apagada con menos movimiento). El título es un `h1` con el isotipo en SVG
+(`iso_svg()`, `aria-hidden`) y el nombre; "genera movimiento" lleva `data-letras`. La flecha
+(`FLECHA`, un SVG) va a `#quienes` y se asoma tres veces (`asomar`, 1,6 s); Hablemos va al
+contacto. En el celular acostado el texto pasa a `position: relative`.
 
 **El flotante** (`flotante()` en `armar.py`; módulo Flotante al final de `guion.js`). WhatsApp y
 el botón del menú abajo a la derecha, `fixed` con `z-index: 30`. En escritorio nace escondido y
@@ -251,42 +287,30 @@ animación infinita. El medio de adentro se corre un poco en contra, como el agu
 gota. Sólo puntero fino; con menos movimiento quedan quietas. En celular la columna va abajo y
 los videos sí se reproducen (pesan 340 y 380 KB, no llevan `data-pesado`). Sólo vive en Inicio.
 
-**El puente** (`puente()` en los dos archivos). Un `div` decorativo entre Somos y el Universo,
-rehecho el 10/09 como tinta que se filtra en el papel: un gradiente quieto con paradas en curva
-(el papel aguanta hasta la mitad y el bistre se asienta en el cuarto de abajo), cuatro manchas
-de bistre con el borde difuso (`radial-gradient`) ancladas con el centro en el borde de abajo,
-que suben con el scroll cada una a su velocidad (`translate` por `(1 − --mezcla) * --vel`;
-`--mezcla` la escribe `puente()` de guion.js, 0 abajo de la pantalla y 1 en el quinto de
-arriba), y el grano encima. Sin guion o con menos movimiento `--mezcla` vale 1 y la tinta ya
-subió. Lleva `data-decorativo` para que el auditor no le mida tinta.
+**El Universo** (`orbita()`; `giroOrbita()`, `circular()`, `anillo()` y `carrilEsferas()`).
+Sección de papel dentro del dossier. Un anillo (`<circle r="40" pathLength="1">`), MAVENZ al
+centro y las cuatro capacidades sobre el anillo: las tres `esferas` y el `anillo` del JSON como
+cuarta. Cada disco es un `button` con `--a` (su ángulo) y un `transform` de cuatro pasos:
+`rotate(--a) translateX(40cqw) rotate(−(--a + --giro)) translate(−50%, −50%)`, con
+`transform-origin: 0 0`. El contenedor `.orbita__giro` rota `--giro`; como el disco contragira
+con la misma curva y la misma duración, los nombres quedan derechos. `giroOrbita()` escucha
+`mv:activar` y acumula `--giro` por el camino corto, así la elegida siempre llega a las 3, al
+lado de su texto. `circular()` elige por scroll (hasta que alguien toca), clic, toque o foco; el
+hover no, porque con el anillo girando elegiría el disco que pasa por debajo del puntero
+(`data-giratorio` lo apaga). `anillo()` dibuja el anillo en 900 ms al entrar en vista. Bajo
+64rem, el anillo chico y el carril de descripciones con flechas de 44 px.
 
-**El grano** (`.puente__grano` y `.universo::before`). Un SVG de ruido en data URI
-(`feTurbulence` con el contraste subido por `feComponentTransfer`, porque el gris medio que sale
-de fábrica no se ve con ningún blend) repetido en mosaicos de 240 px, `overlay` al 26 %. Imagen
-quieta, `pointer-events: none`, sin `#` en el URI. Hoy sólo en el puente y el Universo; para
-sumarlo a otro bloque oscuro alcanza con agregar el selector.
-
-**El Universo** (`orbita()`; `circular()`, `anillo()` y `carrilEsferas()`). Sección `.oscuro` en
-bistre. `orbita()` reparte las esferas sobre una circunferencia al 36 % del centro arrancando
-arriba (con tres: a las 12, a las 4 y a las 8) y las une con un `<polygon>`; MAVENZ fijo en el
-centro y el anillo de Marca y comunicación afuera, con su rótulo abajo. Tolera de 3 a 6 esferas
-sin tocar CSS. `circular()` activa una esfera por clic, por foco o por `pointerenter` con mouse,
-y hasta que alguien toca avanza sola según la posición de la sección en la pantalla; la activa
-sube a `scale: 1.3` y su descripción se lee al costado, en un bloque `aria-live`. `anillo()`
-dibuja el anillo en 900 ms al entrar en vista (`--dibujo`). Bajo 64rem el diagrama queda chico y
-las descripciones son un carril con `scroll-snap`, una tarjeta por vez y flechas de 44 px:
-`carrilEsferas()` lo sincroniza en los dos sentidos por el evento `mv:activar`.
-
-**Cómo trabajamos** (`metodo()` y `puntos_onda()`; `trazoMetodo()`). El trazo es `ONDA`, un solo
-path de la M con `pathLength="1"`, que se dibuja con `stroke-dashoffset: calc(1 - var(--trazo))`.
-Los cinco pasos se posicionan sobre el trazo a las fracciones .14, .32, .52, .72 y .92 **de su
-longitud**, no del parámetro de cada curva: `puntos_onda()` aplana las seis cúbicas en 120
-segmentos cada una y busca en la tabla de longitud de arco. Rótulos alternados arriba y abajo.
-`trazoMetodo()` escribe `--trazo` con el scroll (0 cuando la caja asoma por abajo, 1 cuando su
-base llega al 40 % de la pantalla) y marca `data-visto` en cada paso cuando el trazo pasó por su
-`data-t`; los dos son acumulativos, al subir no se deshacen. Sin pin. En celular el trazo queda de
-adorno arriba y los pasos son una lista con filete, cada uno entra por IntersectionObserver. Sin
-guion o con menos movimiento todo está a la vista.
+**Cómo trabajamos** (`metodo()` y `puntos_path()`; `trazoMetodo()`). El recorrido es el
+isotipo: `ISO` sale de `img/isotipo.svg` (un solo contorno cerrado de cúbicas) y el viewBox se
+recorta a `ISO_CAJA` (160 160 580 252). Dos paths: el relleno, cuya opacidad sube recién al
+final (`(--trazo − .82) × 5.5`), y el contorno con `pathLength="1"`, que se dibuja con
+`stroke-dashoffset: calc(1 − var(--trazo))`. Los cinco puntos numerados van a las fracciones
+.25, .31, .37, .44 y .55 **del largo** del contorno: es el tramo que barre de izquierda a
+derecha, y `puntos_path()` aplana cada cúbica y busca en la tabla de largo de arco. Los rótulos
+no van sobre el logo porque el contorno pasa dos veces por cada zona: van en la fila de abajo
+(cinco columnas desde 64rem, lista con filete en el celular), y los dos se prenden cuando el
+trazo llega a su `data-t`. `trazoMetodo()` escribe `--trazo` con el scroll y es acumulativo. Sin
+guion o con menos movimiento, el logo entero y relleno.
 
 **Proyectos en movimiento** (`mundos()`; `tilt()`). Tres paneles con aire entre sí, cada uno con
 su tinta por `data-tinta` (bordó, bistre, wenge), la foto abajo (el 30 % en escritorio) y el
@@ -295,9 +319,9 @@ nombre en vertical desde 64rem. Cada tarjeta es un `<a>` con `data-fx="tilt" dat
 `perspective(900px)`, sólo con puntero fino. Los paneles con `data-motivo` eligen esa opción del
 contacto al hacer clic.
 
-**Mirada Mavenz** (`mirada()` y `mapa()`). Las cinco categorías como lista numerada y, debajo, el
-mapa de seis territorios como acordeón `<details name="territorio">` (uno abierto por vez, sin
-JS); en escritorio en dos columnas, y el abierto ocupa el ancho.
+**Mirada Mavenz** (`mirada()` y `mapa()`). Salió de Inicio el 10/09 a la tarde. Las funciones y
+los datos quedan: para volver a mostrarla alcanza con sumar `{cms("mirada", mirada(d))}` al
+dossier de `pagina_inicio()`.
 
 **El contacto** (`contacto()`; `formulario()`). Cuatro opciones como solapas (`role="tab"`) y un
 solo formulario: al elegir cambian la línea de arriba y el `<input type="hidden" name="motivo">`,
@@ -397,7 +421,7 @@ Los videos, con póster y diferidos:
 
 | Video | Peso | Póster | Dónde |
 |---|---|---|---|
-| `hero.mp4` | 707 KB | 112 KB | el hero de Inicio: recorte de 2,9 s del post de Cardinal, en ida y vuelta, sin el subtítulo quemado. En celular sólo el póster |
+| `hero.mp4` | 707 KB | 112 KB | ya no se usa desde el 10/09 a la tarde (el hero es una foto quieta). Su póster sigue siendo la `og:image` |
 | `somos-territorio.mp4` | 344 KB | 71 KB | la gota de fondo de Somos: los cerros, 1,3 s del post (22,9 a 24,2 s) a 1,5× más lento, recorte cuadrado del tercio de arriba para dejar afuera el subtítulo, ida y vuelta. Se baja en todos los carriles |
 | `somos-vida.mp4` | 381 KB | 83 KB | la gota de frente de Somos: la pileta, 1,85 s del post (17,95 a 19,8 s), mismo recorte, ida y vuelta. Se baja en todos los carriles |
 | `cardinal.mp4` | 3,0 MB | 72 KB | la franja de la ficha. En celular sólo el póster |
@@ -410,6 +434,10 @@ Los videos, con póster y diferidos:
 
 ## Trampas
 
+- **`vector-effect="non-scaling-stroke"` rompe `pathLength`** cuando el SVG está ampliado: el
+  guion se achica en la misma proporción que la escala y el dibujo queda corto (el isotipo a
+  1,78× se dibujaba un tercio con `--trazo` en 0,6; el anillo a 4,8× quedaba abierto). Si hay
+  `pathLength`, el grosor va en unidades del dibujo.
 Las que costaron una vuelta, viejas y nuevas.
 
 - **El motor de reveal compara `data-fx="reveal"` por igualdad exacta.** Un
@@ -470,9 +498,10 @@ Cada cosa tiene su clave y, mientras falta, el sitio se ve así.
 
 | Qué falta | Clave | Cómo queda mientras |
 |---|---|---|
-| Metraje de dron limpio, sin subtítulos | `hero.video` | el recorte de 2,9 s del post de Cardinal |
+| Elegir la foto del hero | `hero.foto` | el render de la pileta de Cardinal |
+| La frase del zócalo | `marca.zocalo` | la propuesta de DT: "Estrategia, comercialización y oportunidades en real estate · Salta" |
 | Los dos videos (o fotos) de las gotas de Somos Mavenz | `quienes.gotas` | dos recortes del post de Cardinal (cerros y pileta), provisorios; el campo verde del post (13,7 a 15,2 s) queda como alternativa lista |
-| Proyectos confirmados para Otros proyectos (Porto y WA son de Grupo MDay y no los confirmó) | `proyectos.otros_publicar`, `proyectos.otros`, `mundos.lista[1].foto` | la sección no se emite; el panel de Inicio lleva al formulario, con una aérea provisoria |
+| El material de Cafay: fotos, una línea de qué es, dónde está y en qué etapa; y si lleva ficha propia | `mundos.lista[1]` | la tarjeta con el nombre, sin foto, al contacto con motivo proyecto |
 | Fotos y copy de jardines, cochera, SUM y espacios verdes; copy de la pileta | `proyectos.cardinal.sub_items` | los sub-items no se emiten |
 | Plano o foto de tipologías | `proyectos.cardinal.unidades.foto` | el render interior |
 | Copy de financiación (plazos, anticipo, cuotas) | `proyectos.cardinal.financiacion.copy` | título y CTA |

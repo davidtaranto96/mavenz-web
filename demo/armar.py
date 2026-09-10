@@ -19,6 +19,7 @@ Sin dependencias. Python 3.8+.
 """
 import hashlib
 import json
+import os
 import sys
 import html as H
 from pathlib import Path
@@ -120,6 +121,24 @@ ONDA = ("M 40 296 C 130 240, 206 96, 302 178 C 382 246, 322 336, 240 302 "
         "C 936 174, 898 298, 1002 314 C 1082 326, 1142 300, 1178 272")
 
 
+# El isotipo en vector (img/isotipo.svg): un solo contorno cerrado de cubicas.
+# Lo usan el hero (arriba de MAVENZ), Como trabajamos (es el recorrido) y el
+# pie. ISO_CAJA recorta el viewBox 900x572 a lo que ocupa el dibujo.
+import re as _re
+ISO = _re.findall(r' d="([^"]+)"', open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                  "..", "img", "isotipo.svg"), encoding="utf-8").read())[0]
+ISO_CAJA = (160, 160, 580, 252)
+FLECHA = ('<svg class="flecha" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+          '<path d="M12 4v15M5.5 12.5 12 19l6.5-6.5" fill="none" stroke="currentColor" '
+          'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+
+
+def iso_svg(clase):
+    x, y, w, h = ISO_CAJA
+    return (f'<svg class="{clase}" viewBox="{x} {y} {w} {h}" aria-hidden="true" focusable="false">'
+            f'<path fill-rule="evenodd" fill="currentColor" d="{ISO}"/></svg>')
+
+
 # La dirección con la que entra cada sección. Que no se repita seguida es
 # justamente lo que separa un diseño de un plugin.
 DIRECCION = {"quienes": "izq", "universo": "escala", "metodo": "der", "espacio": "arriba",
@@ -193,7 +212,11 @@ def cabecera(d, lang, aqui, tema="claro"):
     # Sin hamburguesa ni panel (09/09): el unico menu desplegable es el
     # flotante de abajo a la derecha, en todos los carriles. En celular la
     # barra lleva solo el logo y el selector de idioma.
-    return f'''<header class="cabecera" data-cabecera{' data-tema="oscuro"' if tema == "oscuro" else ""}>
+    # Quinta vuelta (Vero, 10/09 tarde, con la referencia al lado): arriba un
+    # zocalo claro con una linea de Mavenz y la barra en bistre, en todas las
+    # paginas. Por eso la barra es siempre de tema oscuro.
+    return f'''<div class="zocalo"><p class="zocalo__texto">{e(m["zocalo"])}</p></div>
+<header class="cabecera" data-cabecera data-tema="oscuro">
   <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
@@ -204,24 +227,23 @@ def cabecera(d, lang, aqui, tema="claro"):
 
 
 def hero(d):
-    """La primera pantalla: video aereo de fondo (diferido, solo poster en el
-    celular), titulo y bajada centrados como la referencia, y al pie la cinta
-    con los mundos del sitio corriendo. Sin el parrafo de relleno y sin el
-    trazo: los dos los saco el documento del 08/09."""
-    h, v = d["hero"], d["hero"]["video"]
+    """Quinta vuelta (Vero, 10/09 tarde): una portada limpia. Foto quieta de
+    render con un acercamiento lento, el isotipo y MAVENZ como titulo, "genera
+    movimiento" abajo mas chico, con las letras entrando de a una. Abajo solo
+    una flecha para seguir bajando y Hablemos al costado. Sin bajada, sin el
+    boton al Universo y sin la cinta de mundos."""
+    h = d["hero"]
     return f'''<section class="hero" id="inicio" data-tema="oscuro">
-  <video class="hero__fondo" data-diferido data-pesado="1" data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
-         muted loop playsinline preload="none" aria-label="{e(v["alt"])}"></video>
+  {img(h["foto"], "100vw", clase="hero__fondo", lazy=False)}
   <div class="hero__velo"></div>
   <div class="hero__texto">
-    <h1 class="hero__titulo" data-letras>{e(h["titulo"])}</h1>
-    <p class="hero__bajada">{e(h["bajada"])}</p>
+    <h1 class="hero__titulo">{iso_svg("hero__iso")}<span class="hero__nombre">{e(h["titulo"])}</span></h1>
+    <p class="hero__sub" data-letras>{e(h["sub"])}</p>
     <div class="hero__acciones">
-      <a class="boton boton--claro" href="{e(h["cta1"]["href"])}">{e(h["cta1"]["rotulo"])}</a>
-      <a class="subrayado subrayado--claro" href="{e(h["cta2"]["href"])}">{e(h["cta2"]["rotulo"])}</a>
+      <a class="hero__bajar" href="#quienes" aria-label="{e(h["bajar"])}">{FLECHA}</a>
+      <a class="subrayado subrayado--claro" href="{e(h["cta"]["href"])}">{e(h["cta"]["rotulo"])}</a>
     </div>
   </div>
-  <div class="hero__cinta">{cinta(h["cinta"], tono="hero", continua=True, velocidad=70)}</div>
 </section>'''
 
 
@@ -263,71 +285,47 @@ def quienes(d):
 </section>'''
 
 
-def puente():
-    """El pliegue entre Somos y el Universo (SOM-6), rehecho el 10/09: la
-    tinta se filtra en el papel. Un gradiente quieto con paradas en curva y,
-    encima, cuatro manchas de bistre con el borde difuso que suben desde
-    abajo con el scroll, cada una a su velocidad (`--vel`; solo transform:
-    translate por (1 - --mezcla), y --mezcla la escribe puente() de
-    guion.js), y una capa de grano arriba de todo. Sin guion o con menos
-    movimiento las manchas ya estan arriba (--mezcla vale 1 por defecto).
-    Decorativo: no tiene texto y el auditor lo saltea."""
-    manchas = "".join(
-        f'<i class="puente__mancha" style="--l: {l}; --an: {an}; --al: {al}; --vel: {vel}"></i>'
-        for l, an, al, vel in (("-10%", "46%", "150%", "85%"), ("22%", "58%", "115%", "45%"),
-                               ("52%", "44%", "175%", "70%"), ("70%", "52%", "125%", "30%")))
-    return ('<div class="puente" data-puente data-decorativo aria-hidden="true">'
-            f'<div class="puente__manchas">{manchas}</div><div class="puente__grano"></div></div>')
-
-
 def orbita(d):
-    """El Universo Mavenz del 08/09 (UNI-1..5): fondo bistre, MAVENZ fijo en
-    el centro, tres esferas alrededor (12h, 4h, 8h) unidas por lineas que no
-    se cortan, y el anillo de Marca y comunicacion rodeandolas. La elegida
-    pasa al primer plano (scale) y su descripcion se lee al costado, en un
-    bloque aria-live. En celular el diagrama queda chico y las descripciones
-    son un carril con una tarjeta por vez, con flechas de 44px (el doc pide
-    toque, swipe o botones). El anillo se dibuja al entrar (anillo() en
-    guion.js). El componente tolera de 3 a 6 esferas sin tocar CSS."""
-    import math
-    u = d["universo"]
-    n = len(u["esferas"])
-    nodos, paneles, puntos = [], [], []
-    for i, sf in enumerate(u["esferas"]):
-        # Repartidas sobre la circunferencia arrancando arriba, a un 36 % del
-        # centro: con tres, quedan a las 12, a las 4 y a las 8.
-        ang = -math.pi / 2 + i * 2 * math.pi / n
-        x, y = 50 + 36 * math.cos(ang), 50 + 36 * math.sin(ang)
-        puntos.append(f"{x:.2f},{y:.2f}")
-        nodos.append(
-            f'<button class="orbita__nodo" type="button" data-esfera="{sf["id"]}" '
-            f'style="--x:{x:.2f}%;--y:{y:.2f}%" '
-            f'aria-pressed="{"true" if i == 0 else "false"}">'
-            f'<span class="orbita__n" aria-hidden="true">{e(sf["numero"])}</span>'
-            f'<span class="orbita__nombre">{e(sf["nombre"])}</span></button>')
-        paneles.append(
-            f'<div class="orbita__panel" data-panel="{sf["id"]}" '
-            f'aria-hidden="{"false" if i == 0 else "true"}">'
-            f'<span class="orbita__panel-n" aria-hidden="true">{e(sf["numero"])}</span>'
-            f'<h3>{e(sf["nombre"])}</h3><p>{e(sf["copy"])}</p></div>')
+    """El Universo Mavenz, quinta vuelta (Vero, 10/09 tarde: "que sea solo un
+    circulo que vaya girando y mostrando todo; el triangulo y el circulo
+    confunden"). Un anillo, MAVENZ al centro y las cuatro capacidades sobre
+    el anillo: las tres esferas y Marca y comunicacion, que antes era el
+    anillo mismo. El anillo gira (--giro, lo escribe giroOrbita() en
+    guion.js) y lleva la elegida a las 3, al lado de su descripcion. Elige el
+    scroll, el clic, el toque o el teclado (circular()); el hover no, porque
+    con el anillo girando elegiria la que pasa por debajo del puntero. Fondo
+    papel, dentro del dossier. En celular el diagrama queda chico y las
+    descripciones son un carril con flechas de 44 px."""
+    u, ui = d["universo"], d["interfaz"]
     a = u["anillo"]
-    ui = d["interfaz"]
-    return f'''<section class="seccion universo oscuro" id="universo" data-tema="oscuro"{fx("universo")}>
-  <div class="seccion__cabeza universo__cabeza">
+    items = [(sf["id"], sf["numero"], sf["nombre"], sf["copy"]) for sf in u["esferas"]]
+    items.append(("marca", f"{len(items) + 1:02d}", a["nombre"], a["copy"]))
+    n = len(items)
+    nodos, paneles = [], []
+    for i, (clave, num, nombre, copy) in enumerate(items):
+        nodos.append(
+            f'<button class="orbita__nodo" type="button" data-esfera="{clave}" '
+            f'style="--a: {i * 360 / n:.2f}deg" aria-pressed="{"true" if i == 0 else "false"}">'
+            f'<span class="orbita__disco"><span class="orbita__n" aria-hidden="true">{e(num)}</span>'
+            f'<span class="orbita__nombre">{e(nombre)}</span></span></button>')
+        paneles.append(
+            f'<div class="orbita__panel" data-panel="{clave}" '
+            f'aria-hidden="{"false" if i == 0 else "true"}">'
+            f'<span class="orbita__panel-n" aria-hidden="true">{e(num)}</span>'
+            f'<h3>{e(nombre)}</h3><p>{e(copy)}</p></div>')
+    return f'''<section class="seccion universo" id="universo"{fx("universo")}>
+  <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(u["titulo"])}</h2>
     <p class="bajada">{e(u["intro"])}</p>
   </div>
   <div class="universo__cuerpo">
-    <div class="orbita" data-orbita style="--esferas:{n}">
+    <div class="orbita" data-orbita data-giratorio style="--esferas: {n}">
       <svg class="orbita__dibujo" viewBox="0 0 100 100" aria-hidden="true">
-        <circle class="orbita__anillo" data-anillo cx="50" cy="50" r="46" fill="none"
-                stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
-        <polygon class="orbita__lineas" points="{" ".join(puntos)}" fill="none"
-                 stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <circle class="orbita__anillo" data-anillo cx="50" cy="50" r="40" pathLength="1" fill="none"
+                stroke="currentColor" stroke-width=".28"/>
       </svg>
-      <p class="orbita__rotulo-anillo" aria-hidden="true">{e(a["nombre"])}</p>
       <p class="orbita__centro" aria-hidden="true">{e(u["centro"])}</p>
-      {"".join(nodos)}
+      <div class="orbita__giro">{"".join(nodos)}</div>
     </div>
     <div class="orbita__detalle">
       <div class="orbita__paneles" data-carril-esferas aria-live="polite">{"".join(paneles)}</div>
@@ -338,7 +336,6 @@ def orbita(d):
       <p class="orbita__ayuda">{e(u["ayuda"])}</p>
     </div>
   </div>
-  <p class="orbita__anillo-copy"><strong>{e(a["nombre"])}.</strong> {e(a["copy"])}</p>
   <p class="universo__cierre">{e(u["cierre"])}</p>
 </section>'''
 
@@ -366,13 +363,12 @@ def mapa(d):
   </div>'''
 
 
-def puntos_onda(fracciones, pasos=120):
-    """Puntos sobre ONDA a ciertas fracciones de su LONGITUD (no del parametro
-    t de cada curva, que no es uniforme). Aplana las seis cubicas en
-    segmentos, arma la tabla de longitud de arco y busca ahi. Devuelve
-    (x%, y%) sobre la caja 1200x400 del trazo."""
-    import re
-    nums = [float(v) for v in re.findall(r"-?\d+(?:\.\d+)?", ONDA)]
+def puntos_path(dd, fracciones, caja, pasos=40):
+    """Puntos sobre un path de cubicas (M ... C ... [Z]) a ciertas fracciones
+    de su LONGITUD, no del parametro t de cada curva, que no es uniforme.
+    Aplana cada cubica, arma la tabla de largo de arco y busca ahi. Devuelve
+    (x%, y%) sobre `caja` (x, y, ancho, alto del viewBox)."""
+    nums = [float(v) for v in _re.findall(r"-?\d+(?:\.\d+)?", dd)]
     p0 = (nums[0], nums[1])
     puntos, largo = [p0], [0.0]
     i = 2
@@ -389,35 +385,37 @@ def puntos_onda(fracciones, pasos=120):
         p0 = p3
         i += 6
     total = largo[-1]
+    cx, cy, cw, ch = caja
     salida = []
     for f in fracciones:
-        objetivo = f * total
-        j = next(k for k, l in enumerate(largo) if l >= objetivo)
+        j = next(k for k, l in enumerate(largo) if l >= f * total)
         x, y = puntos[j]
-        salida.append((x / 12, y / 4))     # a porcentaje de 1200 x 400
+        salida.append(((x - cx) / cw * 100, (y - cy) / ch * 100))
     return salida
 
 
 def metodo(d):
-    """Como trabajamos (MET-1..4, 08/09): el trazo de la M se dibuja con el
-    scroll y los cinco pasos se despliegan desde su cola, uno tras otro, a
-    medida que se baja. Sin pin: la seccion mide lo que mide y el trazo se
-    completa en una pantalla de scroll. Fondo papel, trazo y palabras en
-    bordo. El isotipo arranca el trazo. Sin guion: trazo entero y pasos a la
-    vista; con menos movimiento, igual. En celular el trazo queda de adorno
-    arriba y los pasos son una lista con filete, cada uno entra al verse.
-    Los pasos se muestrean sobre la longitud del trazo (puntos_onda)."""
+    """Como trabajamos, quinta vuelta (Vero, 10/09 tarde: "que el logo sea
+    basicamente cada una de estas cosas"). El isotipo grande es el recorrido:
+    su contorno se dibuja con el scroll (--trazo, trazoMetodo() en guion.js)
+    y al final se rellena. Los cinco pasos son puntos numerados sobre el
+    trazo, en el barrido de izquierda a derecha del contorno (del 25 al 55 %
+    de su largo), y debajo va la fila con nombre y frase: los dos se prenden
+    cuando el dibujo llega. Los rotulos no van sobre el logo porque el
+    contorno pasa dos veces por cada zona y se pisarian. Sin guion o con
+    menos movimiento: el logo entero y todo a la vista."""
     m = d["metodo"]
-    fr = [.14, .32, .52, .72, .92][:len(m["pasos"])]
-    nodos = []
-    for i, (p, (x, y)) in enumerate(zip(m["pasos"], puntos_onda(fr))):
-        arriba = ' data-arriba' if i % 2 == 0 else ''
-        nodos.append(
-            f'<li class="trazo__nodo" data-t="{fr[i]}" style="--x:{x:.2f}%;--y:{y:.2f}%"{arriba}>'
-            f'<span class="trazo__punto" aria-hidden="true"></span>'
-            f'<span class="trazo__rotulo"><span class="trazo__n" aria-hidden="true">{e(p["numero"])}</span>'
-            f'<strong class="trazo__nombre">{e(p["nombre"])}</strong> '
-            f'<span class="trazo__copy">{e(p["copy"])}</span></span></li>')
+    fr = [.25, .31, .37, .44, .55][:len(m["pasos"])]
+    x0, y0, w, h = ISO_CAJA
+    puntos = "".join(
+        f'<li class="trazo__nodo" data-t="{f}" style="--x:{x:.2f}%;--y:{y:.2f}%">'
+        f'<span class="trazo__punto">{e(p["numero"])}</span></li>'
+        for f, p, (x, y) in zip(fr, m["pasos"], puntos_path(ISO, fr, ISO_CAJA)))
+    pasos = "".join(
+        f'<li class="trazo__paso" data-t="{f}"><span class="trazo__n" aria-hidden="true">{e(p["numero"])}</span>'
+        f'<strong class="trazo__nombre">{e(p["nombre"])}</strong> '
+        f'<span class="trazo__copy">{e(p["copy"])}</span></li>'
+        for f, p in zip(fr, m["pasos"]))
     return f'''<section class="seccion metodo" id="metodo"{fx("metodo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(m["titulo"])}</h2>
@@ -425,13 +423,14 @@ def metodo(d):
   </div>
   <div class="trazo" data-trazo>
     <div class="trazo__caja">
-      <img class="trazo__iso" src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async">
-      <svg class="trazo__dibujo" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
-        <path class="trazo__onda" pathLength="1" d="{ONDA}" fill="none" stroke="currentColor"
-              stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <svg class="trazo__dibujo" viewBox="{x0} {y0} {w} {h}" aria-hidden="true" focusable="false">
+        <path class="trazo__relleno" fill-rule="evenodd" fill="currentColor" d="{ISO}"/>
+        <path class="trazo__onda" pathLength="1" d="{ISO}" fill="none" stroke="currentColor"
+              stroke-width="1.3" stroke-linejoin="round"/>
       </svg>
-      <ol class="trazo__nodos">{"".join(nodos)}</ol>
+      <ol class="trazo__nodos" aria-hidden="true">{puntos}</ol>
     </div>
+    <ol class="trazo__pasos">{pasos}</ol>
   </div>
   <p class="metodo__cierre">{e(m["cierre"])}</p>
 </section>'''
@@ -506,7 +505,7 @@ def ficha_hero(d):
       <p class="margen margen--claro">{e(c["meta"])} · {e(c["estado"])}</p>
       <p class="ficha-hero__bajada">{e(c["titulo"])}</p>
     </div>
-    <p class="ficha-hero__scroll" data-ficha-scroll aria-hidden="true">{e(c["scroll"])}</p>
+    <p class="ficha-hero__scroll" data-ficha-scroll aria-hidden="true"><span>{e(c["scroll"])}</span>{FLECHA}</p>
   </div>
 </section>'''
 
@@ -820,10 +819,10 @@ def pie(d, lang, slug):
         (f'<a href="{e(r["href"])}" target="_blank" rel="noopener">{e(r["nombre"])}</a>'
          if r["href"] else f'<span class="pie__pronto" title="{e(ui["idioma_pronto"])}">{e(r["nombre"])}</span>')
         for r in d["redes"])
-    return f'''<footer class="pie" data-tema="claro">
+    return f'''<footer class="pie oscuro" data-tema="oscuro">
   <div class="pie__arriba">
     <div class="pie__marca">
-      <a class="pie__logo" href="index.html" aria-label="{e(m["nombre"])}"><img class="pie__iso" src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></a>
+      <a class="pie__logo" href="index.html" aria-label="{e(m["nombre"])}">{iso_svg("pie__iso")}</a>
       <p class="pie__mensaje">{e(m["mensaje"])}</p>
       <p class="pie__definicion">{e(m["definicion"])}</p>
     </div>
@@ -1001,16 +1000,14 @@ def pagina_inicio(d, lang):
     La cortina (hero sticky con el dossier subiendo encima) se fue: con un
     video de fondo seguia corriendo tapado toda la pagina y MET-5 pide que
     nunca se vea el fondo del inicio al bajar."""
+    # Quinta vuelta (Vero, 10/09 tarde): todo en papel y en un solo dossier.
+    # Se van el puente al bistre y Mirada Mavenz (sus datos quedan en el JSON).
     cuerpo = f'''{cms("hero", hero(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("quienes", quienes(d))}
-</div></div>
-{puente()}
 {cms("universo", orbita(d))}
-<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("metodo", metodo(d))}
 {cms("mundos", mundos(d))}
-{cms("mirada", mirada(d))}
 </div></div>'''
     return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
 
@@ -1122,9 +1119,11 @@ def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
         clases = f'cinta cinta--{tono} cinta--continua{" cinta--vertical" if vertical else ""}'
         attrs = f'data-cinta-continua data-fx="marquee" data-velocidad="{velocidad}" data-sangra'
     else:
-        copias = [pieza(p, i > 0) for i, p in enumerate(piezas * 4)]
+        # Doce copias: al quinto del tamano (10/09 tarde) cuatro no llenaban
+        # ni la mitad del ancho.
+        copias = [pieza(p, i > 0) for i, p in enumerate(piezas * 12)]
         clases = f'cinta cinta--{tono}'
-        attrs = f'data-cinta data-copias="4" data-sangra'
+        attrs = f'data-cinta data-copias="12" data-sangra'
     return (f'<div class="{clases}" {attrs}>'
             f'<div class="cinta__riel" data-cinta-riel>{"".join(copias)}</div></div>')
 

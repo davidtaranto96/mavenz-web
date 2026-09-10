@@ -432,7 +432,7 @@
          o pasar sobre cada una") y congela el auto-avance igual que el clic.
          El toque no entra aca: pointerType es 'touch'. */
       n.addEventListener('pointerenter', function (e) {
-        if (e.pointerType !== 'mouse') return;
+        if (e.pointerType !== 'mouse' || caja.hasAttribute('data-giratorio')) return;
         tocado = true;
         activar(i);
       });
@@ -470,6 +470,25 @@
         activar(Math.floor(p * nodos.length));
       });
     }, { passive: true });
+  }
+
+  /* --- El Universo gira: la elegida va a las 3, al lado de su texto -------- */
+  /* Escucha mv:activar de circular() y acumula --giro por el camino corto
+     (de la cuarta a la primera gira un cuarto, no tres). El CSS interpola
+     el giro del anillo y el contragiro de cada disco con la misma curva, asi
+     los nombres quedan derechos. Con menos movimiento la transicion es cero. */
+  function giroOrbita() {
+    var orb = $('[data-orbita][data-giratorio]');
+    if (!orb) return;
+    var n = $$('.orbita__nodo', orb).length || 1;
+    var paso = 360 / n, giro = 0, actual = 0;
+    orb.addEventListener('mv:activar', function (ev) {
+      var i = ev.detail, d = ((i - actual) % n + n) % n;
+      if (d > n / 2) d -= n;
+      actual = i;
+      giro -= d * paso;
+      orb.style.setProperty('--giro', giro + 'deg');
+    });
   }
 
   /* --- El anillo de Comunicación se dibuja antes que entren las esferas --- */
@@ -743,32 +762,6 @@
     derivar();
   }
 
-  /* --- El puente: el bistre sube con el scroll ---------------------------- */
-  /* Escribe --mezcla (0..1) en el puente: 0 cuando asoma por abajo de la
-     pantalla, 1 cuando su base llega al quinto superior. Solo transform: la
-     capa de bistre se estira desde abajo (scale: 1 var(--mezcla)). */
-  function puente() {
-    var p = $('[data-puente]');
-    if (!p || menos) return;
-    var pedido = false;
-    var medir = function () {
-      pedido = false;
-      var r = p.getBoundingClientRect();
-      var vh = window.innerHeight || 1;
-      if (r.bottom < -vh || r.top > vh * 2) return;
-      var t = (vh - r.top) / (vh * .8 + r.height);
-      t = t < 0 ? 0 : t > 1 ? 1 : t;
-      p.style.setProperty('--mezcla', t.toFixed(3));
-    };
-    window.addEventListener('scroll', function () {
-      if (pedido) return;
-      pedido = true;
-      requestAnimationFrame(medir);
-    }, { passive: true });
-    window.addEventListener('resize', medir);
-    medir();
-  }
-
   /* --- Las gotas de Somos: se corren con el puntero ----------------------- */
   /* Escribe --mx/--my (-1..1) en la caja segun donde esta el puntero dentro
      de la seccion entera, no solo sobre las gotas: asi se mueven apenas uno
@@ -872,7 +865,7 @@
   function trazoMetodo() {
     var caja = $('[data-trazo]');
     if (!caja || menos) return;
-    var nodos = $$('.trazo__nodo', caja);
+    var nodos = $$('[data-t]', caja);
     caja.setAttribute('data-progresivo', '');
     var celular = window.matchMedia('(max-width: 63.99rem)');
 
@@ -967,6 +960,7 @@
       hero.style.setProperty('--h', (t + (vh - t) * ph).toFixed(1) + 'px');
       hero.style.setProperty('--cinta-y', (-p * vh * 1.5).toFixed(1) + 'px');
       hero.style.setProperty('--scroll-y', (-p * vh * .4).toFixed(1) + 'px');
+      hero.style.setProperty('--scroll-op', (1 - Math.min(1, p / .12)).toFixed(3));
       var c = Math.min(1, p / .25);
       hero.style.setProperty('--copia-op', (1 - c).toFixed(3));
       hero.style.setProperty('--copia-y', (c * 24).toFixed(1) + 'px');
@@ -1047,10 +1041,10 @@
     arrancarScroll();
     nubeRed();
     cintas();
+    giroOrbita();
     circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
              'data-esfera', 'data-panel', null, null);
     anillo();
-    puente();
     gotas();
     carrilEsferas();
     trazoMetodo();
