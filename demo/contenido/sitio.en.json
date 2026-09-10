@@ -398,7 +398,9 @@
       "error": "We could not send your message. Try again or write to us on WhatsApp.",
       "falta": "Please fill in this field.",
       "correo_invalido": "Check the email address."
-    }
+    },
+    "palabra": "Contact",
+    "bloque_datos": "Where to find us"
   },
   "interfaz": {
     "cerrar": "Close",
@@ -410,7 +412,8 @@
     "ver_video": "Play video",
     "silenciar": "Mute",
     "correo": "Email",
-    "menu": "Menu"
+    "menu": "Menu",
+    "idioma_pronto": "Coming soon"
   },
   "equipo": {
     "titulo": "The people behind Mavenz",
@@ -423,14 +426,16 @@
   },
   "paginas": {
     "inicio": {
-      "titulo": "Mavenz creates momentum"
+      "titulo": "Mavenz creates momentum",
+      "rotulo": "Home"
     },
     "universo": {
       "rotulo": "Mavenz Universe"
     },
     "proyectos": {
       "titulo": "Projects in motion",
-      "cinta": "Projects"
+      "cinta": "Projects",
+      "rotulo": "Projects"
     },
     "espacio": {
       "rotulo": "Espacio Mavenz",
@@ -450,12 +455,34 @@
     }
   },
   "_iguales": [
-    "marca.nombre",
+    "cookies.enlace_pie",
+    "cookies.titulo",
+    "equipo.personas.0.nombre",
+    "espacio.titulo",
+    "hero.cinta.0.rotulo",
+    "hero.cinta.2.rotulo",
+    "idiomas.es.rotulo",
+    "idiomas.pt.rotulo",
+    "interfaz.whatsapp",
     "marca.lugar",
+    "marca.nombre",
+    "mirada.mapa.territorios.2.nombre",
+    "mirada.mapa.territorios.5.nombre",
+    "mundos.lista.0.nombre",
+    "paginas.cardinal.titulo",
+    "paginas.espacio.cinta",
+    "paginas.espacio.rotulo",
+    "paginas.espacio.titulo",
+    "proyectos.cardinal.meta",
+    "proyectos.cardinal.nombre",
+    "proyectos.cardinal.scroll",
+    "proyectos.otros.0.nombre",
+    "proyectos.otros.1.nombre",
+    "red.nodos.1.nombre",
     "redes.0.nombre",
     "redes.1.nombre",
     "redes.2.nombre",
-    "interfaz.whatsapp"
+    "universo.centro"
   ],
   "cookies": {
     "titulo": "Cookies",

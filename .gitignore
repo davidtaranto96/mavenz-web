@@ -8,3 +8,6 @@ graphify-out/
 
 # páginas temporales de captura
 demo/_cap-*.html
+__pycache__/
+*.pyc
+.DS_Store

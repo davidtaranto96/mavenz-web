@@ -1140,7 +1140,8 @@ PAGINAS = {"inicio": pagina_inicio, "nosotros": pagina_nosotros, "proyectos": pa
 TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "carpeta", "ancla",
             "en", "whatsapp", "correo", "sitio_espacio", "proporcion", "numero", "n", "x", "y",
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
-            "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar"}
+            "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar",
+            "servicio", "motivo"}
 
 
 def hojas(o, ruta=(), vacias=False):
@@ -1244,9 +1245,26 @@ def auditar_enlaces(html, nombre):
     return avisos
 
 
+def buscar_palabra(d, palabra):
+    """`--palabra movimiento` (PRIO-5 del 08/09): Vero pidio no repetir tanto
+    'movimiento'. Lista cada texto que la contiene con su clave, para que ella
+    decida cual cambia. No se reescribe nada sin ella."""
+    import unicodedata
+    def plano(t):
+        return unicodedata.normalize("NFD", t.lower()).encode("ascii", "ignore").decode()
+    hits = [(".".join(map(str, r)), t) for r, t in hojas(d) if plano(palabra) in plano(t)]
+    print(f'"{palabra}" aparece en {len(hits)} textos:')
+    for clave, texto in hits:
+        print(f"  {clave}\n      {texto}")
+    return hits
+
+
 def main(args):
     if "--plantilla" in args:
         print(plantilla(ES, args[args.index("--plantilla") + 1]))
+        return
+    if "--palabra" in args:
+        buscar_palabra(ES, args[args.index("--palabra") + 1])
         return
     escritos = []
     for lang, idi in ES["idiomas"].items():
