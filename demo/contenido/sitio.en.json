@@ -114,95 +114,135 @@
     "cierre": "Every move opens a new opportunity."
   },
   "espacio": {
-    "margen": "Presentations and launches",
-    "titulo": "A space where things happen",
-    "copy": "Espacio Mavenz is not an office: it is where the projects live. The part of the site where the developments Mavenz sells are shown, presented and launched.",
-    "nota": "Presentations and launches.",
+    "titulo": "Espacio Mavenz",
+    "bajada": "A meeting point for projects, people and opportunities.",
+    "copy": "Espacio Mavenz is our office and also a collaborative space within real estate. A place designed to work, connect, present projects, build alliances and get new opportunities moving.",
     "cta": {
-      "rotulo": "Enter Espacio Mavenz"
-    },
-    "hueco": {
-      "rotulo": "Photo of the space",
-      "texto": "Reserved for a photo of the place. No material yet."
-    },
-    "fondo": {
-      "alt": "Aerial view of the Lerma valley"
+      "rotulo": "Discover the space",
+      "externo": "(external site)"
     }
   },
   "proyectos": {
-    "margen": "Render images",
-    "titulo": "Momentum, in practice",
-    "intro": "This is not a catalogue. It is a selection of projects, developments and opportunities Mavenz takes part in or believes in.",
-    "destacado": {
+    "intro": "Projects and opportunities in which Mavenz takes part through strategy, positioning, business development or sales.",
+    "cardinal": {
       "nombre": "Cardinal",
-      "meta": "San Lorenzo Chico, Salta — currently selling",
-      "cta": "See the project",
-      "rotulo_foto": "Render image",
-      "foto": {
-        "alt": "Tree-lined street in Cardinal with families walking"
+      "meta": "San Lorenzo Chico, Salta",
+      "estado": "Now selling",
+      "titulo": "A new way of living in San Lorenzo Chico.",
+      "texto": "A residential project on one of the main avenues of San Lorenzo Chico, designed to bring together contemporary architecture, nature and quality of life.",
+      "datos": [
+        "Units from 74 m²",
+        "Different layouts",
+        "Private gardens",
+        "Parking included",
+        "Pool, clubhouse and green areas",
+        "Financing during construction"
+      ],
+      "aclaracion": "Developed by GRIFIL · Sold by MAVENZ",
+      "cta_principal": "Discover Cardinal",
+      "cta_comercial": "Check availability on WhatsApp",
+      "wa": "Hello Mavenz, I would like to check availability at Cardinal.",
+      "scroll": "(Scroll)",
+      "hero_foto": {
+        "alt": "The pool at Cardinal on a Sunday"
       },
-      "video": {
+      "galeria": [
+        {
+          "epigrafe": "Amenities: pool and grill",
+          "foto": {
+            "alt": "Pool and grill area at Cardinal"
+          }
+        },
+        {
+          "epigrafe": "Inner street",
+          "foto": {
+            "alt": "Inner street at Cardinal"
+          }
+        },
+        {
+          "epigrafe": "The gallery",
+          "foto": {
+            "alt": "The gallery at Cardinal"
+          }
+        },
+        {
+          "epigrafe": "The commercial corner",
+          "foto": {
+            "alt": "Render of the commercial corner"
+          }
+        },
+        {
+          "epigrafe": "Interior of a unit",
+          "foto": {
+            "alt": "Interior of a unit at Cardinal"
+          }
+        },
+        {
+          "epigrafe": "Sunset over the neighbourhood",
+          "foto": {
+            "alt": "Sunset over the neighbourhood"
+          }
+        },
+        {
+          "epigrafe": "San Lorenzo from above",
+          "foto": {
+            "alt": "Aerial view of San Lorenzo"
+          }
+        },
+        {
+          "epigrafe": "The pool, one Sunday",
+          "foto": {
+            "alt": "The pool at Cardinal on a Sunday"
+          }
+        }
+      ],
+      "galeria_titulo": "The project in pictures",
+      "sub_items": [
+        {
+          "nombre": "Private gardens"
+        },
+        {
+          "nombre": "Parking included"
+        },
+        {
+          "nombre": "Pool",
+          "foto": {
+            "alt": "The pool at Cardinal"
+          }
+        },
+        {
+          "nombre": "Clubhouse"
+        },
+        {
+          "nombre": "Green areas"
+        }
+      ],
+      "cardenal": {
         "rotulo": "The cardinal of CARDINAL",
         "copy": "Did you know the cardinal always returns home? A bird that stands for belonging, movement and identity.",
         "cierre": "And this is only starting to move."
+      },
+      "franja": {
+        "alt": "Video walk through Cardinal"
+      },
+      "unidades": {
+        "rotulo": "Units",
+        "titulo": "Units from 74 m²",
+        "texto": "Different layouts for different ways of living. Ask about availability and the plans of each one.",
+        "foto": {
+          "alt": "Interior of a unit at Cardinal"
+        }
+      },
+      "financiacion": {
+        "titulo": "Financing during construction",
+        "cta": "Check availability on WhatsApp"
+      },
+      "cierre": {
+        "cta": "Contact us"
       }
     },
-    "estante": [
-      {
-        "epigrafe": "Amenities — pool and clubhouse",
-        "foto": {
-          "alt": "Pool and clubhouse at Cardinal"
-        }
-      },
-      {
-        "epigrafe": "Inner street",
-        "foto": {
-          "alt": "Inner street at Cardinal"
-        }
-      },
-      {
-        "epigrafe": "Houses — the gallery",
-        "velo": "The gallery, the fire and the garden",
-        "foto": {
-          "alt": "Gallery of a house at Cardinal"
-        }
-      },
-      {
-        "epigrafe": "The commercial corner",
-        "foto": {
-          "alt": "Commercial corner at Cardinal"
-        }
-      },
-      {
-        "epigrafe": "Interior",
-        "foto": {
-          "alt": "Interior of a house at Cardinal"
-        }
-      },
-      {
-        "epigrafe": "Sunset over the neighbourhood",
-        "foto": {
-          "alt": "Sunset over Cardinal"
-        }
-      },
-      {
-        "epigrafe": "San Lorenzo from above",
-        "foto": {
-          "alt": "Aerial view of San Lorenzo"
-        }
-      },
-      {
-        "epigrafe": "The pool, on a Sunday",
-        "foto": {
-          "alt": "Pool at Cardinal with people"
-        }
-      }
-    ],
-    "hueco": {
-      "epigrafe": "Available slot",
-      "texto": "The next projects and opportunities go here"
-    },
-    "otros_rotulo": "Also in movement",
+    "otros_rotulo": "Other projects",
+    "otros_intro": "Confirmed projects with enough information.",
     "otros": [
       {
         "nombre": "Porto",
@@ -220,7 +260,12 @@
           "alt": "WA storage units"
         }
       }
-    ]
+    ],
+    "oportunidades": {
+      "rotulo": "Investment opportunities",
+      "bajada": "Tell us what kind of opportunity you are looking for and we will advise you personally.",
+      "cta": "I am looking for an opportunity"
+    }
   },
   "red": {
     "titulo": "Movement never happens alone",
@@ -368,9 +413,13 @@
     "menu": "Menu"
   },
   "equipo": {
-    "margen": "Who is behind it",
-    "titulo": "The two who move Mavenz",
-    "intro": "Mavenz is not a faceless brand. Behind it there are two people who decide together what moves and how."
+    "titulo": "The people behind Mavenz",
+    "intro": "We are a team with experience in strategy, business, communication and sales. We work collaboratively and bring in specialists according to the needs of each project.",
+    "personas": [
+      {
+        "rol": "Management"
+      }
+    ]
   },
   "paginas": {
     "inicio": {
@@ -380,7 +429,7 @@
       "rotulo": "Mavenz Universe"
     },
     "proyectos": {
-      "titulo": "Projects and opportunities",
+      "titulo": "Projects in motion",
       "cinta": "Projects"
     },
     "espacio": {

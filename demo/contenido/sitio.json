@@ -47,7 +47,7 @@
     "cinta": [
       {
         "rotulo": "Cardinal",
-        "href": "proyectos.html#cardinal"
+        "href": "cardinal.html"
       },
       {
         "rotulo": "Universo Mavenz",
@@ -55,7 +55,7 @@
       },
       {
         "rotulo": "Espacio Mavenz",
-        "href": "proyectos.html#espacio"
+        "href": "espacio.html"
       },
       {
         "rotulo": "Mirada Mavenz",
@@ -163,51 +163,207 @@
     "cierre": "Cada movimiento abre una nueva oportunidad."
   },
   "espacio": {
-    "margen": "Presentaciones y lanzamientos",
-    "titulo": "Un espacio donde las cosas pasan",
-    "copy": "Espacio Mavenz no es una oficina: es donde viven los proyectos. El lugar de la web donde se muestran, se presentan y se lanzan los desarrollos que Mavenz comercializa.",
-    "nota": "",
+    "titulo": "Espacio Mavenz",
+    "bajada": "Un punto de encuentro para proyectos, personas y oportunidades.",
+    "copy": "Espacio Mavenz es nuestra oficina y también un espacio colaborativo dentro del Real Estate. Un lugar pensado para trabajar, conectar, presentar proyectos, generar alianzas y hacer que nuevas oportunidades empiecen a moverse.",
     "cta": {
-      "rotulo": "Entrar al Espacio Mavenz",
-      "href": "https://espaciomavenz.com.ar"
+      "rotulo": "Conocé el espacio",
+      "href": "https://espaciomavenz.com.ar",
+      "externo": "(sitio externo)"
     },
-    "hueco": {
-      "rotulo": "Imagen del espacio",
-      "texto": "Reservado para una foto del lugar. Todavía no hay material."
-    },
-    "fondo": {
-      "src": "img/aerea-amplia",
-      "anchos": [
-        800,
-        1600
-      ],
-      "alt": "Vista aérea del valle de Lerma",
-      "ancho": 1600,
-      "alto": 739
-    }
+    "foto": null,
+    "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una."
   },
   "proyectos": {
-    "margen": "Imágenes de render",
-    "titulo": "El movimiento, en hechos",
-    "intro": "No es un catálogo. Es una selección de proyectos, desarrollos y oportunidades en los que Mavenz participa o cree.",
-    "_dt": "Vero marcó en el tablero que entra SÓLO CARDINAL. Porto y WA los sumó David el 06/09 para que la sección tenga cuerpo, pero son de Grupo MDay: hay que confirmarlos con ella antes de mostrar la web.",
-    "destacado": {
+    "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
+    "_dt": "proyectos.html es un indice liviano (Cardinal resumido, otros, oportunidades); la ficha completa es cardinal.html (proyectos.cardinal). Textos de Cardinal textuales del documento del 08/09 (PROY-2). Los epigrafes y alt que hablaban de 'casas' se reescribieron neutros: el producto son unidades desde 74 m2 con distintas tipologias; Vero confirma la grafia de GRIFIL.",
+    "cardinal": {
       "nombre": "Cardinal",
-      "meta": "San Lorenzo Chico, Salta — en comercialización",
-      "cta": "Ver el proyecto",
-      "href": "#contacto",
-      "rotulo_foto": "Imagen de render",
-      "foto": {
-        "src": "img/casas",
+      "meta": "San Lorenzo Chico, Salta",
+      "estado": "En comercialización",
+      "titulo": "Una nueva forma de habitar San Lorenzo Chico.",
+      "texto": "Un proyecto residencial ubicado sobre una de las principales avenidas de San Lorenzo Chico, pensado para integrar arquitectura contemporánea, naturaleza y calidad de vida.",
+      "datos": [
+        "Unidades desde 74 m²",
+        "Distintas tipologías",
+        "Jardines privados",
+        "Cochera incluida",
+        "Pileta, SUM y espacios verdes",
+        "Financiación durante la obra"
+      ],
+      "aclaracion": "Desarrolla GRIFIL · Comercializa MAVENZ",
+      "cta_principal": "Conocé Cardinal",
+      "cta_comercial": "Consultá disponibilidad",
+      "wa": "Hola Mavenz, quisiera consultar la disponibilidad de Cardinal.",
+      "scroll": "(Scroll)",
+      "hero_foto": {
+        "src": "img/pileta-gente",
         "anchos": [
           800,
           1600
         ],
-        "alt": "Calle arbolada de Cardinal con familias caminando",
+        "alt": "La pileta de Cardinal un domingo",
         "ancho": 1600,
         "alto": 739
       },
-      "video": {
+      "galeria": [
+        {
+          "epigrafe": "Amenities — pileta y quincho",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/amenities",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta y quincho de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Calle interna",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/calle-casas",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Calle interna de Cardinal",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "La galería",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/galeria",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Galería de una unidad de Cardinal",
+            "ancho": 1600,
+            "alto": 901
+          }
+        },
+        {
+          "epigrafe": "La esquina comercial",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/render-comercial",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Esquina comercial de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Interior de una unidad",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/render-interior",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Interior de una unidad de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "epigrafe": "Atardecer sobre el barrio",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/atardecer",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Atardecer sobre Cardinal",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "San Lorenzo desde arriba",
+          "ancho": "ancha",
+          "foto": {
+            "src": "img/sanlorenzo",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Vista aérea de San Lorenzo",
+            "ancho": 1600,
+            "alto": 692
+          }
+        },
+        {
+          "epigrafe": "La pileta, un domingo",
+          "ancho": "angosta",
+          "foto": {
+            "src": "img/pileta-gente",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta de Cardinal con gente",
+            "ancho": 1600,
+            "alto": 692
+          }
+        }
+      ],
+      "galeria_titulo": "El proyecto en imágenes",
+      "sub_items": [
+        {
+          "id": "jardines",
+          "nombre": "Jardines privados",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "cochera",
+          "nombre": "Cochera incluida",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "pileta",
+          "nombre": "Pileta",
+          "copy": "",
+          "foto": {
+            "src": "img/pileta",
+            "anchos": [
+              800,
+              1600
+            ],
+            "alt": "Pileta de Cardinal",
+            "ancho": 1600,
+            "alto": 739
+          }
+        },
+        {
+          "id": "sum",
+          "nombre": "SUM",
+          "copy": "",
+          "foto": null
+        },
+        {
+          "id": "verdes",
+          "nombre": "Espacios verdes",
+          "copy": "",
+          "foto": null
+        }
+      ],
+      "_dt_sub_items": "FICHA-4/5: un sub-item se muestra solo con foto Y copy. Hoy ninguno tiene copy: Vero debe las fotos de jardines, cochera y SUM y el texto de los cinco. Se ocultan por dato, sin placeholder.",
+      "cardenal": {
         "src": "video/cardenal.mp4",
         "poster": "video/cardenal-poster.webp",
         "rotulo": "El cardenal de CARDINAL",
@@ -215,152 +371,43 @@
         "cierre": "Y esto recién se pone en movimiento.",
         "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
       },
-      "fondo": {
+      "franja": {
         "src": "video/cardinal.mp4",
         "poster": "video/cardinal-poster.webp",
-        "_dt": "cardinal-film.mp4 recomprimido de 17 MB a 3 MB. Va de fondo con el póster primero y el video diferido."
-      }
-    },
-    "estante": [
-      {
-        "epigrafe": "Amenities — pileta y quincho",
-        "columnas": 7,
-        "proporcion": "3 / 2",
-        "foto": {
-          "src": "img/amenities",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pileta y quincho de Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
+        "alt": "Recorrido en video por Cardinal"
       },
-      {
-        "epigrafe": "Calle interna",
-        "bn": true,
-        "columnas": 5,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "img/calle-casas",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Calle interna de Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Casas — galería",
-        "velo": "La galería, el fuego y el fondo",
-        "columnas": 5,
-        "proporcion": "1 / 1",
-        "foto": {
-          "src": "img/galeria",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Galería de una casa de Cardinal",
-          "ancho": 1600,
-          "alto": 901
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "La esquina comercial",
-        "columnas": 4,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "img/render-comercial",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Esquina comercial de Cardinal",
-          "ancho": 1600,
-          "alto": 739
-        },
-        "solo_visor": false
-      },
-      {
-        "epigrafe": "Interior",
-        "columnas": 4,
-        "proporcion": "1 / 1",
+      "unidades": {
+        "rotulo": "Unidades",
+        "titulo": "Unidades desde 74 m²",
+        "texto": "Distintas tipologías para distintas formas de vivir. Consultá la disponibilidad y los planos de cada una.",
         "foto": {
           "src": "img/render-interior",
           "anchos": [
             800,
             1600
           ],
-          "alt": "Interior de una casa de Cardinal",
+          "alt": "Interior de una unidad de Cardinal",
           "ancho": 1600,
           "alto": 739
         },
-        "solo_visor": false
+        "_dt": "Falta el plano o la foto de tipologias (FICHA-6); mientras, el render interior."
       },
-      {
-        "epigrafe": "Atardecer sobre el barrio",
-        "bn": true,
-        "columnas": 4,
-        "proporcion": "3 / 2",
-        "foto": {
-          "src": "img/atardecer",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Atardecer sobre Cardinal",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
+      "financiacion": {
+        "titulo": "Financiación durante la obra",
+        "copy": "",
+        "cta": "Consultá disponibilidad",
+        "_dt": "FICHA-7: falta el copy de financiacion (plazos, anticipo, cuotas). Mientras, titulo y CTA."
       },
-      {
-        "epigrafe": "San Lorenzo desde arriba",
-        "columnas": 7,
-        "proporcion": "16 / 9",
-        "foto": {
-          "src": "img/sanlorenzo",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Vista aérea de San Lorenzo",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
-      },
-      {
-        "epigrafe": "La pileta, un domingo",
-        "columnas": 5,
-        "proporcion": "4 / 5",
-        "foto": {
-          "src": "img/pileta-gente",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Pileta de Cardinal con gente",
-          "ancho": 1600,
-          "alto": 692
-        },
-        "solo_visor": true
+      "cierre": {
+        "titulo": "",
+        "cta": "Contactanos",
+        "_dt": "FICHA-8: falta la frase de cierre. Mientras, el boton solo."
       }
-    ],
-    "hueco": {
-      "epigrafe": "Lugar disponible",
-      "texto": "Acá entran los próximos proyectos y oportunidades",
-      "columnas": 4,
-      "proporcion": "1 / 1"
     },
-    "otros_rotulo": "También en movimiento",
+    "otros_rotulo": "Otros proyectos",
+    "otros_intro": "Proyectos confirmados y con información suficiente.",
+    "otros_publicar": false,
+    "_dt_otros": "PROY-3: solo proyectos confirmados. Porto y WA son de Grupo MDay y Vero no los confirmo: otros_publicar queda en false y no se emiten.",
     "otros": [
       {
         "nombre": "Porto",
@@ -391,7 +438,12 @@
           "alto": 733
         }
       }
-    ]
+    ],
+    "oportunidades": {
+      "rotulo": "Oportunidades de inversión",
+      "bajada": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
+      "cta": "Busco una oportunidad"
+    }
   },
   "red": {
     "titulo": "El movimiento nunca se genera solo",
@@ -610,28 +662,16 @@
     "idioma_pronto": "Próximamente"
   },
   "equipo": {
-    "margen": "Quiénes están detrás",
-    "titulo": "Quiénes mueven Mavenz",
-    "intro": "Mavenz no es una marca sin cara. Detrás hay personas que deciden qué se mueve, cómo y con quién.",
-    "_dt": "Vero salio de los retratos por pedido de David del 08/09 (ella ya se habia excluido en la reunion). PENDIENTE de ella: las fotos, los nombres y el rol de los dos bloques nuevos. Los huecos quedan a la vista a proposito.",
+    "titulo": "Las personas detrás de Mavenz",
+    "intro": "Somos un equipo con experiencia en estrategia, negocios, comunicación y comercialización. Trabajamos de forma colaborativa y sumamos especialistas de acuerdo con las necesidades de cada proyecto.",
+    "_dt": "NOS-1..4: cada integrante lleva foto, nombre y apellido, rol real y una linea profesional; un perfil incompleto NO se publica (se genera solo si tiene los cuatro). Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. La pagina queda con noindex y fuera del menu hasta que el equipo este completo (paginas.nosotros.publicar).",
     "personas": [
       {
         "nombre": "Luchi",
+        "apellido": "",
         "rol": "Dirección",
-        "linea": "Decide qué se mueve y con quién.",
-        "hueco": "Retrato"
-      },
-      {
-        "nombre": "Pendiente",
-        "rol": "Comercialización",
         "linea": "",
-        "hueco": "Retrato"
-      },
-      {
-        "nombre": "Pendiente",
-        "rol": "Desarrollo de negocios",
-        "linea": "",
-        "hueco": "Retrato"
+        "foto": null
       }
     ]
   },
@@ -649,7 +689,7 @@
     "proyectos": {
       "archivo": "proyectos.html",
       "rotulo": "Proyectos",
-      "titulo": "Proyectos y oportunidades",
+      "titulo": "Proyectos en movimiento",
       "cinta": "Proyectos"
     },
     "espacio": {
@@ -657,8 +697,7 @@
       "rotulo": "Espacio Mavenz",
       "titulo": "Espacio Mavenz",
       "cinta": "Espacio Mavenz",
-      "publicar": false,
-      "_dt": "publicar pasa a true cuando exista la pagina (Fase 5)."
+      "publicar": true
     },
     "nosotros": {
       "archivo": "nosotros.html",
@@ -676,8 +715,8 @@
       "archivo": "cardinal.html",
       "titulo": "Cardinal",
       "en_menu": false,
-      "publicar": false,
-      "_dt": "La ficha del proyecto. No va en el menu; publicar pasa a true en la Fase 5."
+      "publicar": true,
+      "_dt": "La ficha del proyecto. No va en el menu."
     }
   },
   "mundos": {
@@ -691,7 +730,7 @@
         "tinta": "bordo",
         "bajada": "San Lorenzo Chico, en comercialización",
         "cierre": "Conocé Cardinal",
-        "href": "proyectos.html#cardinal",
+        "href": "cardinal.html",
         "foto": {
           "src": "img/amenities",
           "anchos": [

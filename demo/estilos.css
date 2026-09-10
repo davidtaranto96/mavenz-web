@@ -554,98 +554,13 @@ body[data-menu-abierto] { overflow: hidden; }
 }
 .hueco__texto { font-size: var(--t-nota); font-weight: var(--fino); line-height: 1.5; }
 
-.espacio__hueco {
-  margin-top: clamp(1.625rem, 1.1rem + 1.9vw, 2.75rem);
-  height: auto;
-  max-width: 34rem;
-  padding: 1.25rem 1.5rem;
-  align-items: flex-start;
-  text-align: left;
-}
-.espacio__nota { margin-top: .75rem; font-size: var(--t-nota); font-weight: var(--fino); color: var(--tinta-apoyo); }
-.espacio__cta { margin-top: 1.375rem; }
 
 /* ==========================================================================
    Proyectos: el destacado y el estante
    ========================================================================== */
 
-.proyecto {
-  position: relative;
-  margin-top: clamp(1.75rem, 1.2rem + 2vw, 3.5rem);
-  height: clamp(26.25rem, 15rem + 25vw, 35rem);
-  overflow: hidden;
-  isolation: isolate;
-}
-.proyecto__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.proyecto__velo {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--velo-apenas) 0%, var(--velo-2) 50%, var(--velo-3) 100%);
-}
-.proyecto__pie {
-  position: absolute;
-  left: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  bottom: clamp(1.5rem, 1rem + 1.3vw, 2.75rem);
-  z-index: 2;
-}
-.proyecto__nombre {
-  font-size: clamp(2.5rem, 1.76rem + 3.05vw, 3.75rem);
-  font-weight: var(--grueso);
-  text-transform: uppercase;
-  letter-spacing: -.03em;
-  line-height: 1;
-  color: var(--sobre-foto);
-}
-.proyecto__meta {
-  margin-top: .625rem;
-  font-size: var(--t-nota);
-  font-weight: var(--fino);
-  color: var(--sobre-foto-2);
-}
-.proyecto__rotulo {
-  position: absolute;
-  right: clamp(1.375rem, .9rem + 1.24vw, 3rem);
-  top: clamp(1.25rem, 1rem + .76vw, 2.25rem);
-  z-index: 2;
-  font-size: var(--t-micro);
-  font-weight: var(--ui);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--sobre-foto-2);
-}
-
-.estante {
-  display: flex;
-  gap: clamp(.875rem, .5rem + .95vw, 1.5rem);
-  margin-top: 1rem;
-  padding-bottom: .5rem;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: thin;
-  overscroll-behavior-x: contain;
-}
-.ficha { flex: 0 0 clamp(14.75rem, 8rem + 17vw, 21.5rem); scroll-snap-align: start; }
-.ficha__abrir { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); border-radius: 6px; }
-.ficha__abrir img { width: 100%; height: 100%; object-fit: cover; }
-.ficha__epigrafe { border-top: 1px solid var(--linea); padding-top: .5rem; }
-.ficha--bn img { filter: grayscale(1) contrast(1.04); }
-.ficha__velo {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--velo-nada) 0%, var(--velo-bordo) 100%);
-}
-.ficha__sobretexto {
-  position: absolute;
-  left: 1rem; right: 1rem; bottom: .875rem;
-  font-size: var(--t-sub);
-  font-weight: var(--medio);
-  letter-spacing: -.01em;
-  line-height: 1.2;
-  color: var(--sobre-foto);
-}
-.ficha__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
-.ficha__hueco { height: clamp(10rem, 5rem + 12.8vw, 14.75rem); }
+/* El destacado, el estante y las fichas viejas se fueron el 09/09: la ficha de
+   Cardinal (cardinal.html) esta en el bloque "Fase 5". */
 
 /* ==========================================================================
    La red
@@ -829,25 +744,6 @@ body[data-menu-abierto] { overflow: hidden; }
   /* Grilla asimétrica: 12 columnas con reparto 7/5 y 5/7 invertido, y
      proporciones que no se repiten. Cuatro tarjetas idénticas es el tell
      número uno de una web hecha con IA. */
-  div.estante {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: clamp(1.25rem, -.5rem + 2.6vw, 2rem) clamp(1rem, -.5rem + 2.1vw, 1.5rem);
-    /* start y no stretch: si no, la fila iguala los altos y las proporciones
-       distintas dejan de verse, que es justo lo que se buscaba */
-    align-items: start;
-    overflow: visible;
-  }
-  div.estante .ficha { flex: initial; grid-column: span var(--cols, 6); min-width: 0; }
-  div.estante .ficha__abrir,
-  div.estante .ficha__hueco {
-    height: auto;
-    aspect-ratio: var(--prop, 3 / 2);
-    /* que ninguna ficha se coma media pantalla de alto: la proporción sigue
-       variando, pero la fila no se dispara */
-    max-block-size: 46svh;
-  }
-  div.estante .ficha__abrir img { height: 100%; }
 
   .motivos .motivos__lista { flex-direction: row; flex-wrap: wrap; gap: .25rem clamp(1.25rem, -1rem + 3.4vw, 2.25rem); }
 
@@ -870,7 +766,6 @@ body[data-menu-abierto] { overflow: hidden; }
   body { --ritmo: min(clamp(4rem, 2.7rem + 5.333vw, 7.5rem), 8.5svh); }
 
   div.rueda { width: min(100%, 44rem, 76svh); }
-  article.proyecto { height: min(clamp(26.25rem, 15rem + 25vw, 35rem), 76svh); }
   div.red__nube { max-height: 42svh; }
 }
 
@@ -954,8 +849,6 @@ body[data-menu-abierto] { overflow: hidden; }
    El margen negativo y el padding salen del mismo token: nunca se descalibran.
    Va en la grilla porque es lo último de su sección; en un bloque del medio el
    solape se come a lo que viene abajo en vez de cruzar el corte. */
-.estante { margin-bottom: calc(-1 * var(--solape)); position: relative; z-index: 2; }
-#red { padding-top: calc(var(--ritmo) + var(--solape) + 1rem); }
 
 /* ==========================================================================
    Entrada por sección, con dirección heredada
@@ -1480,7 +1373,6 @@ body[data-menu-abierto] { overflow: hidden; }
   gap: clamp(1.5rem, .8rem + 2.2vw, 2.5rem);
   margin-top: clamp(2rem, 1.4rem + 2.2vw, 3rem);
 }
-.persona__hueco { aspect-ratio: 1; }
 .persona__nombre {
   margin-top: .875rem;
   font-size: var(--t-sub);
@@ -1570,53 +1462,10 @@ body[data-menu-abierto] { overflow: hidden; }
 /* Los paneles de Proyectos en movimiento (09/09) estan en el bloque "Fase 4". */
 
 /* --- Un mundo pleno: la tinta se apodera de la pantalla entera ------------ */
-.mundo-pleno {
-  position: relative;
-  padding-block: clamp(3rem, 9svh, 6rem);
-  color: var(--sobre-foto);
-  scroll-margin-block-start: var(--alto-nav);
-}
-.mundo-pleno[data-tinta="bordo"]  { background: var(--tinta-bordo) }
-.mundo-pleno[data-tinta="bistre"] { background: var(--tinta-parrafo) }
-.mundo-pleno[data-tinta="wenge"]  { background: var(--tinta-apoyo) }
-.mundo-pleno[data-tinta="tinta"]  { background: var(--tinta) }
-
-.mundo-pleno__interior {
-  padding-inline: var(--margen-ext);
-  display: grid;
-  gap: clamp(1.5rem, 4svh, 2.5rem);
-}
-.mundo-pleno__bajada {
-  font-size: var(--t-lead);
-  font-weight: var(--fino);
-  max-width: 44ch;
-  opacity: .85;
-  text-wrap: pretty;
-}
-/* El salto al siguiente. Del último se vuelve al primero: es el loop que pidió
-   Vero, y por eso no hay "anterior". */
-.mundo-pleno__next {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 44px;
-  margin-block-start: clamp(2rem, 6svh, 3.5rem);
-  margin-inline: var(--margen-ext);
-  padding-block: .9rem;
-  border-block-start: 1px solid currentColor;
-  color: inherit;
-  text-decoration: none;
-  font-size: var(--t-nota);
-}
-.mundo-pleno__next-r { font-variant-numeric: tabular-nums; opacity: .7 }
-.mundo-pleno__next-t { font-weight: var(--medio) }
+/* Los mundos plenos (proyectos.html viejo) se fueron el 09/09. */
 
 /* Las secciones que viven adentro de un mundo no ponen su propio fondo: el
    color lo pone el mundo. Si no, se pisan y se pierde el efecto. */
-.adentro { background: transparent; padding-inline: 0; color: inherit }
-.adentro .titulo, .adentro h2, .adentro h3 { color: inherit }
-.adentro .bajada, .adentro p { color: inherit }
 
 /* --- La ventana de contacto ---------------------------------------------- */
 .contacto {
@@ -1710,11 +1559,9 @@ body[data-menu-abierto] { overflow: hidden; }
 /* Un item de grilla es `minmax(auto, 1fr)`: NO encoge por debajo de su
    contenido, así que un video o un título largo empujan la página entera.
    Medido acá: #proyectos-bloque daba 1675 px dentro de un viewport de 812. */
-.mundo-pleno__interior,
-.mundo-pleno__interior > *,
-.contacto__caja > *,
-.adentro { min-width: 0 }
-.adentro img, .adentro video { max-width: 100%; height: auto }
+/* min-width: 0 en los hijos de la grilla del contacto: sin eso un campo o
+   una solapa larga estira la columna y rompe el 4fr / 6fr. */
+.contacto__caja > * { min-width: 0 }
 
 /* Los enlaces de la cabecera medían 20 px de alto. El área táctil se agranda
    sin mover el diseño: el texto queda donde estaba. */
@@ -1728,41 +1575,8 @@ body[data-menu-abierto] { overflow: hidden; }
 /* 38 px de ancho no llega a 44: se agranda con padding, sin mover el texto. */
 .cabecera__enlaces a, .pie__paginas a { padding-inline: .5rem }
 
-/* --- El estante de Cardinal, fijado en horizontal (sólo escritorio) ------- */
-/* Recorre el ancho mientras la pantalla queda quieta: dos pantallas de alto se
-   vuelven una. En celular no se fija — pelear con las barras del navegador es
-   una pelea perdida — y queda el estante nativo con el dedo. */
-@media (min-width: 64rem) {
-  .fijado { position: relative }
-  .fijado .estante {
-    display: flex;
-    grid-template-columns: none;
-    gap: clamp(1rem, 2vw, 2rem);
-    overflow: visible;
-    align-items: end;
-    width: max-content;
-    padding-inline-end: var(--margen-int);
-  }
-  .fijado .estante .ficha {
-    flex: 0 0 clamp(18rem, 24vw, 26rem);
-    grid-column: auto;
-  }
-  /* Las proporciones siguen sin repetirse: es lo que separa esto de una fila
-     de tarjetas iguales. */
-  .fijado .estante .ficha__abrir,
-  .fijado .estante .ficha__hueco {
-    height: auto;
-    aspect-ratio: var(--prop, 3 / 2);
-    max-block-size: 54svh;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .fijado .estante { overflow-x: auto }
-}
-/* El riel mide `max-content`: sin recorte ensancha el documento entero y abre
-   scroll lateral. `clip` y no `hidden` — hidden crea un contexto de scroll que
-   no hace falta. El pin de GSAP usa `fixed`, así que esto no lo rompe. */
-@media (min-width: 64rem) { .fijado { overflow: clip } }
+/* El estante fijado de Cardinal (pin de GSAP) se fue el 09/09 con
+   proyectos.html viejo. */
 
 /* --- Celular: el círculo se despliega en vertical -------------------------- */
 /* --- Legibilidad sobre un bloque oscuro: .oscuro ------------------------- */
@@ -1802,14 +1616,15 @@ body[data-menu-abierto] { overflow: hidden; }
 :is(.oscuro, .mundo-pleno) a { color: inherit }
 /* La cinta es el encabezado de la sección: un h2 que además es la pieza
    gráfica más grande. Sin resetear el margen del h2 la cinta se descuadra. */
-h2.cinta__pieza { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit }
+/* Solo el margen: el cuerpo, el peso y el interlineado son los de .cinta__pieza
+   (con inherit tomaba el cuerpo del body y la primera pieza salia chica). */
+h2.cinta__pieza { margin: 0 }
 /* El scroll suave necesita que el ancla frene abajo del nav, no debajo de él. */
 html { scroll-padding-top: 1rem }
 /* Al fijar, GSAP envuelve el riel en un `pin-spacer` que hereda el ancho del
    contenido, no el de la caja: 28 px de desborde medidos en 1512. El recorte
    tiene que estar también en el envoltorio, no sólo adentro. */
 @media (min-width: 64rem) {
-  .pin-spacer { overflow: clip; max-width: 100% }
 }
 /* El acordeón del mapa trae sus tonos de papel: sobre la tinta casi negra del
    mundo Territorio quedaban al límite de contraste. */
@@ -3348,3 +3163,272 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
   .mundo__foto { height: clamp(5rem, 20svh, 8rem); }
   .mundo__nombre { font-size: clamp(1.25rem, 2.4vw, 1.75rem); }
 }
+
+/* =========================================================================
+   Fase 5 (09/09) — proyectos.html, espacio.html, nosotros.html, cardinal.html
+   ========================================================================= */
+
+.visualmente-oculto {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.titulo--chico { font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem); }
+
+/* --- proyectos.html: el indice liviano --------------------------------- */
+.proyectos-intro { padding-block: clamp(2rem, 6svh, 3.5rem) 0; border-top: 0; }
+.proyectos-intro__texto { max-width: 52ch; }
+.resumen { display: grid; gap: clamp(1.5rem, 4svh, 2.5rem); align-items: center; }
+.resumen__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+.resumen__texto { display: grid; gap: 1rem; }
+.resumen__texto .titulo { max-width: 16ch; }
+.datos { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; margin: .25rem 0 0; padding: 0; }
+.dato {
+  padding: .45rem .8rem;
+  border: 1px solid var(--linea-acento);
+  border-radius: 999px;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  color: var(--tinta-parrafo);
+}
+.oscuro .dato { border-color: color-mix(in srgb, var(--sobre-foto) 45%, transparent); color: inherit; }
+.resumen__aclaracion { font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+.resumen__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: .5rem; }
+.oportunidades__cta { margin-top: 1.25rem; }
+@media (min-width: 64rem) {
+  .resumen { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2.5rem, 6vw, 6rem); }
+}
+
+/* --- espacio.html: un bloque plano en wenge ------------------------------ */
+.espacio { padding-block: calc(var(--ritmo) * 1.15); }
+.espacio[data-tinta="wenge"] { background: var(--tinta-apoyo); }
+.espacio[data-tinta="bistre"] { background: var(--tinta-parrafo); }
+.espacio__interior { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.espacio__texto { display: grid; gap: 1.25rem; max-width: 46ch; }
+.espacio__bajada {
+  font-size: var(--t-lead);
+  font-weight: var(--ui);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.espacio__cta { justify-self: start; margin-top: .5rem; }
+/* El bloque .oscuro pone `a { color: inherit }`: el boton claro quedaba papel
+   sobre papel. Mas especifico, gana. */
+.oscuro .boton.boton--claro { color: var(--tinta-bordo); }
+.espacio__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+@media (min-width: 64rem) {
+  .espacio--con-foto .espacio__interior { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* --- nosotros.html: personas con foto (solo perfiles completos) ---------- */
+.personas { margin-top: clamp(2rem, 6svh, 3rem); }
+.persona__marco { margin: 0; overflow: clip; border-radius: 6px; }
+.persona__marco img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+@media (min-width: 64rem) {
+  div.personas { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
+}
+
+/* --- cardinal.html: el hero que se abre ---------------------------------- */
+/* Una seccion de 220svh con el contenido sticky a 100svh. La foto es un
+   bloque a pantalla completa recortado con clip-path: inset(); --w y --h
+   son el ancho y el alto de la ventana (en px, los escribe fichaHero()).
+   Sin guion o con menos movimiento: --recorrido 0 y la ventana abierta. */
+.ficha-hero {
+  --recorrido: 0px;
+  --tarjeta: clamp(9rem, 12.5vw, 15rem);
+  --w: 100vw;
+  --h: 100svh;
+  position: relative;
+  margin-top: calc(var(--alto-nav) * -1);
+  height: calc(100svh + var(--recorrido));
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+}
+.ficha-hero[data-vivo] { --recorrido: 120svh; --w: var(--tarjeta); --h: var(--tarjeta); }
+.ficha-hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+  display: grid;
+  place-items: center;
+}
+/* La cinta del isotipo detras de todo: al 18 %, y sube mas rapido que el
+   scroll (--cinta-y, 1.5x) hasta salir por arriba. */
+.ficha-hero__cinta {
+  position: absolute;
+  inset: 50% 0 auto 0;
+  translate: 0 calc(-50% + var(--cinta-y, 0px));
+  z-index: 1;
+}
+.ficha-hero__cinta .cinta { padding: 0; border: 0; background: transparent; }
+.ficha-hero__cinta .cinta__riel { gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.ficha-hero__cinta .cinta__pieza--img {
+  display: block;
+  width: clamp(12rem, 26vw, 26rem);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: .18;
+}
+.ficha-hero__foto {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  clip-path: inset(calc((100% - var(--h)) / 2) calc((100% - var(--w)) / 2));
+  will-change: clip-path;
+}
+.ficha-hero__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ficha-hero__copia {
+  position: absolute;
+  inset: auto var(--margen-ext) clamp(5rem, 14svh, 8rem);
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: .5rem;
+  text-align: center;
+  translate: 0 var(--copia-y, 0px);
+  opacity: var(--copia-op, 1);
+}
+.ficha-hero__nombre {
+  margin: 0;
+  font-size: var(--t-hero);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  line-height: .94;
+}
+.ficha-hero__bajada { margin: 0; max-width: 34ch; font-size: var(--t-lead); font-weight: var(--fino); text-wrap: balance; }
+.ficha-hero__scroll {
+  position: absolute;
+  left: var(--margen-ext);
+  bottom: clamp(1.25rem, 4svh, 2.5rem);
+  z-index: 3;
+  margin: 0;
+  font-size: var(--t-nota);
+  font-weight: var(--ui);
+  translate: 0 var(--scroll-y, 0px);
+  opacity: .8;
+}
+/* Con la ventana chica el nombre queda debajo de la tarjeta: el copy va
+   abajo del centro, no encima de la foto. */
+@media (max-width: 63.99rem) {
+  .ficha-hero { --tarjeta: clamp(9rem, 44vw, 14rem); }
+  .ficha-hero__copia { inset-inline: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ficha-hero[data-vivo] { --recorrido: 0px; --w: 100vw; --h: 100svh; }
+  .ficha-hero__cinta, .ficha-hero__copia, .ficha-hero__scroll { translate: none; }
+}
+
+/* --- el marcador: la linea vertical que entra 200 ms antes ---------------- */
+.marcador {
+  display: block;
+  width: 1px;
+  height: 72px;
+  margin: 0 auto clamp(1.25rem, 4svh, 2rem);
+  background: currentColor;
+  transform-origin: 50% 0;
+  scale: 1 0;
+  transition: scale .6s var(--curva);
+}
+.marcador[data-visto] { scale: 1 1; }
+@media (prefers-reduced-motion: reduce) { .marcador { scale: 1 1; transition: none; } }
+
+/* --- titulo de la ficha: centrado, con aire ------------------------------- */
+.ficha-titulo { display: grid; justify-items: center; gap: 1.25rem; text-align: center; color: var(--tinta-bordo); }
+.ficha-titulo__titulo { max-width: 16ch; text-wrap: balance; }
+.ficha-titulo__texto { max-width: 46ch; }
+.ficha-titulo .datos { justify-content: center; }
+
+/* --- la galeria escalonada y arrastrable --------------------------------- */
+.carrusel-seccion { border-top: 0; padding-top: 0; }
+.carrusel {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(.875rem, 1.5vw, 1.5rem);
+  /* A sangre: el carril sale del dossier por los dos lados. */
+  margin-inline: calc(-1 * (var(--margen-ext) + var(--margen-int))) calc(-1 * var(--margen-der));
+  padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
+  padding-top: clamp(4.5rem, 20svh, 9rem);   /* lugar para la escalera */
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: calc(var(--margen-ext) + var(--margen-int)) var(--margen-der);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.carrusel::-webkit-scrollbar { display: none; }
+.carrusel[data-arrastrando] { cursor: grabbing; scroll-snap-type: none; }
+.lamina {
+  flex: 0 0 auto;
+  margin: 0;
+  scroll-snap-align: start;
+  /* La escalera: cada foto un escalon mas arriba que la anterior. */
+  translate: 0 calc(var(--i, 0) * -4.5svh);
+}
+.lamina--ancha { width: clamp(16rem, 36vw, 38rem); }
+.lamina--angosta { width: clamp(11rem, 20vw, 20rem); }
+.lamina__abrir { display: block; width: 100%; overflow: clip; border-radius: 4px; cursor: zoom-in; }
+.lamina__abrir img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; -webkit-user-drag: none; }
+.lamina--angosta .lamina__abrir img { aspect-ratio: 3 / 4; }
+.lamina__epigrafe { margin-top: .625rem; font-size: var(--t-nota); font-weight: var(--ui); color: var(--tinta-apoyo); }
+.carrusel__flechas { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.25rem; color: var(--tinta-bordo); }
+@media (prefers-reduced-motion: reduce) { .lamina { translate: none; } .carrusel { padding-top: 0; } }
+
+/* --- sub-items: foto 3:4 y texto, alternados ------------------------------ */
+.subitems { display: grid; gap: clamp(3rem, 10svh, 6rem); }
+.subitem { display: grid; gap: 1.25rem; }
+.subitem__foto { margin: 0; }
+.subitem__foto img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
+.subitem__nombre { margin: 0 0 .75rem; font-size: var(--t-sub); font-weight: var(--medio); line-height: 1.1; color: var(--tinta-bordo); }
+.subitem__texto p { max-width: 38ch; }
+@media (min-width: 64rem) {
+  .subitem { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .subitem--espejo .subitem__foto { order: 2; }
+  .subitem--abajo { align-items: end; }
+}
+
+/* --- franja de video a sangre -------------------------------------------- */
+.franja-video { position: relative; height: clamp(14rem, 62svh, 40rem); overflow: hidden; background: var(--tinta); }
+.franja-video__video { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- unidades ------------------------------------------------------------ */
+.unidades { display: grid; gap: clamp(1.5rem, 4svh, 2.5rem); align-items: center; }
+.unidades__texto { display: grid; gap: 1rem; }
+.unidades__foto { margin: 0; }
+.unidades__foto img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+@media (min-width: 64rem) {
+  .unidades { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 6rem); }
+}
+
+/* --- franja oscura (financiacion): corta, centrada, en bordo -------------- */
+.franja {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 1.25rem;
+  min-height: 50svh;
+  padding: clamp(3rem, 8svh, 5rem) var(--margen-ext);
+  text-align: center;
+  background: var(--tinta-bordo);
+  color: var(--sobre-foto);
+}
+.franja__titulo {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+  font-weight: var(--grueso);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  line-height: .96;
+  text-wrap: balance;
+}
+.franja__copy { margin: 0; max-width: 46ch; font-size: var(--t-cuerpo); }
+
+/* --- cierre de la ficha --------------------------------------------------- */
+.ficha-cierre { display: grid; justify-items: center; gap: 1.25rem; text-align: center; color: var(--tinta-bordo); }
+.ficha-cierre__frase { margin: 0; max-width: 20ch; font-size: var(--t-cita); font-weight: var(--fino); line-height: 1.3; text-wrap: balance; }

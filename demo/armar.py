@@ -418,81 +418,197 @@ def metodo(d):
 
 
 def espacio(d):
-    """A sangre y sobre una aérea quieta: es la sección que rompe la seguidilla
-    de papel, y de paso existe visualmente aunque falte la foto del lugar."""
+    """Espacio Mavenz (ESP-1..7, 08/09): pagina propia, un bloque plano en
+    wenge con texto en papel, titulo, bajada, copy y el CTA al sitio externo
+    (con "(sitio externo)" solo para lectores de pantalla). Sin foto aprobada
+    no hay foto: el bloque "Todavia no hay material" se fue. Cuando `foto`
+    traiga un dict, entra como columna al lado del texto."""
     x = d["espacio"]
-    return f'''<section class="seccion adentro" id="espacio-bloque"{fx("espacio")}>
-  {img(x["fondo"], "100vw", "sangre__fondo")}
-  <div class="sangre__velo"></div>
-  <div class="sangre__interior">
-    <p class="margen margen--claro">{e(x["margen"])}</p>
-    <div class="seccion__cabeza">
-      <h2 class="titulo titulo--claro" data-letras>{e(x["titulo"])}</h2>
-      <div>
-        <p class="bajada bajada--clara">{e(x["copy"])}</p>
-        {f'<p class="espacio__nota">{e(x["nota"])}</p>' if x.get("nota") else ""}
-        <a class="subrayado subrayado--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}</a>
-      </div>
+    f = x.get("foto")
+    columna = f'<figure class="espacio__foto">{img(f, "(min-width:64rem) 44vw, 100vw")}</figure>' if f else ""
+    return f'''<section class="sangre oscuro espacio{" espacio--con-foto" if f else ""}" id="espacio-bloque" data-tinta="wenge" data-tema="oscuro"{fx("espacio")}>
+  <div class="sangre__interior espacio__interior">
+    <div class="espacio__texto">
+      <h2 class="titulo" data-letras>{e(x["titulo"])}</h2>
+      <p class="espacio__bajada">{e(x["bajada"])}</p>
+      <p class="bajada">{e(x["copy"])}</p>
+      <a class="boton boton--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}<span class="visualmente-oculto"> {e(x["cta"]["externo"])}</span></a>
     </div>
-    <div class="hueco hueco--claro espacio__hueco">
-      <p class="hueco__rotulo">{e(x["hueco"]["rotulo"])}</p>
-      <p class="hueco__texto">{e(x["hueco"]["texto"])}</p>
+    {columna}
+  </div>
+</section>'''
+
+
+def datos_chips(datos):
+    return '<ul class="datos">' + "".join(f'<li class="dato">{e(x)}</li>' for x in datos) + '</ul>'
+
+
+def cardinal_resumen(d):
+    """Cardinal en proyectos.html (PROY-2): titulo, texto, los seis datos, la
+    aclaracion de roles y dos CTAs con destinos distintos: la principal a la
+    ficha propia, la comercial a WhatsApp con su rotulo honesto. Ningun boton
+    dice 'Ver el proyecto' y lleva a WhatsApp."""
+    c = d["proyectos"]["cardinal"]
+    return f'''<section class="seccion resumen" id="cardinal"{fx("proyectos")}>
+  <div class="resumen__foto">{img(c["hero_foto"], "(min-width:64rem) 46vw, 100vw")}</div>
+  <div class="resumen__texto">
+    <p class="margen">{e(c["nombre"])} · {e(c["meta"])} · {e(c["estado"])}</p>
+    <h2 class="titulo titulo--chico" data-letras>{e(c["titulo"])}</h2>
+    <p class="bajada">{e(c["texto"])}</p>
+    {datos_chips(c["datos"])}
+    <p class="resumen__aclaracion">{e(c["aclaracion"])}</p>
+    <div class="resumen__acciones">
+      <a class="boton" href="cardinal.html">{e(c["cta_principal"])}</a>
+      <a class="subrayado" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(c["cta_comercial"])}</a>
     </div>
   </div>
 </section>'''
 
 
-def proyectos(d):
-    p, ui = d["proyectos"], d["interfaz"]
-    dest = p["destacado"]
-    fichas = []
-    for i, f in enumerate(p["estante"]):
-        if f.get("solo_visor"):       # está en el visor, no en la grilla
-            continue
-        velo = ""
-        if f.get("velo"):
-            velo = ('<span class="ficha__velo"></span>'
-                    f'<span class="ficha__sobretexto">{e(f["velo"])}</span>')
-        # La foto abre el visor: en el celular las fichas son estampillas de 236 px.
-        fichas.append(
-            f'<figure class="ficha{" ficha--bn" if f.get("bn") else ""}" '
-            f'style="--cols:{f["columnas"]};--prop:{f["proporcion"]}">'
-            f'<button class="ficha__abrir" type="button" data-foto="{i + 1}" '
-            f'aria-label="{e(ui["abrir_foto"])}: {e(f["epigrafe"])}">'
-            f'{img(f["foto"], "(min-width:64rem) 34rem, 15rem")}{velo}</button>'
-            f'<figcaption class="ficha__epigrafe">{e(f["epigrafe"])}</figcaption></figure>')
-    h = p["hueco"]
-    fichas.append(
-        f'<figure class="ficha" style="--cols:{h["columnas"]};--prop:{h["proporcion"]}">'
-        f'<div class="hueco ficha__hueco"><p class="hueco__texto">{e(h["texto"])}</p></div>'
-        f'<figcaption class="ficha__epigrafe">{e(h["epigrafe"])}</figcaption></figure>')
-    return f'''<section class="seccion adentro" id="proyectos-bloque"{fx("proyectos")}>
-  <p class="margen seccion__margen">{e(p["margen"])}</p>
-  <div class="seccion__cabeza seccion__cabeza--pie">
-    <h2 class="titulo" data-letras>{e(p["titulo"])}</h2>
-    <p class="bajada">{e(p["intro"])}</p>
-  </div>
-  <article class="proyecto">
-    <video class="proyecto__fondo" data-diferido data-pesado="1" data-src="{e(medio(dest["fondo"]["src"]))}" poster="{e(medio(dest["fondo"]["poster"]))}" muted loop playsinline preload="none" aria-hidden="true"></video>
-    <button class="proyecto__abrir" type="button" data-foto="0" aria-label="{e(ui["abrir_foto"])}: {e(dest["nombre"])}">
-      {img(dest["foto"], "(min-width:64rem) 76vw, 100vw", "proyecto__foto")}
-    </button>
-    <div class="proyecto__velo"></div>
-    <p class="proyecto__rotulo">{e(dest["rotulo_foto"])}</p>
-    <div class="proyecto__pie">
-      <h3 class="proyecto__nombre">{e(dest["nombre"])}</h3>
-      <p class="proyecto__meta">{e(dest["meta"])}</p>
-      <a class="subrayado subrayado--claro" href="{e(dest["href"])}">{e(dest["cta"])}</a>
+def ficha_hero(d):
+    """La primera pantalla de cardinal.html (FICHA-1, FICHA-2): una seccion
+    de 220svh con el contenido sticky a 100svh. Detras corre la cinta
+    continua del isotipo; en el centro una tarjeta cuadrada con la foto, que
+    se abre a pantalla completa con el scroll (fichaHero() en guion.js
+    escribe --w y --h por separado, con clip-path: inset(): el encuadre se
+    revela en vez de deformarse, que es lo que se midio en la referencia). El
+    nombre y la bajada se van en el primer cuarto; "(Scroll)" mas lento. Sin
+    GSAP o con menos movimiento: foto entera y sin recorrido."""
+    c = d["proyectos"]["cardinal"]
+    return f'''<section class="ficha-hero oscuro" id="inicio" data-ficha-hero data-tema="oscuro">
+  <div class="ficha-hero__pin">
+    <div class="ficha-hero__cinta" data-ficha-cinta aria-hidden="true">{cinta(["img/isotipo.webp"] * 4, tono="iso", continua=True, velocidad=120, imagen=True)}</div>
+    <div class="ficha-hero__foto" data-ficha-foto>{img(c["hero_foto"], "100vw", lazy=False)}</div>
+    <div class="ficha-hero__copia" data-ficha-copia>
+      <p class="margen margen--claro">{e(c["meta"])} · {e(c["estado"])}</p>
+      <h1 class="ficha-hero__nombre">{e(c["nombre"])}</h1>
+      <p class="ficha-hero__bajada">{e(c["titulo"])}</p>
     </div>
-  </article>
-  <div class="fijado" data-fijado><div class="estante">{"".join(fichas)}</div></div>
+    <p class="ficha-hero__scroll" data-ficha-scroll aria-hidden="true">{e(c["scroll"])}</p>
+  </div>
+</section>'''
+
+
+def marcador():
+    """La linea vertical fina que entra 200 ms antes que el bloque (motor 3
+    de la referencia). marcadores() en guion.js le escribe data-visto."""
+    return '<span class="marcador" data-marcador aria-hidden="true"></span>'
+
+
+def ficha_titulo(d):
+    c = d["proyectos"]["cardinal"]
+    return f'''<section class="seccion ficha-titulo" id="proyecto"{fx("proyectos")}>
+  {marcador()}
+  <h2 class="titulo ficha-titulo__titulo" data-letras>{e(c["titulo"])}</h2>
+  <p class="bajada ficha-titulo__texto">{e(c["texto"])}</p>
+  {datos_chips(c["datos"])}
+  <p class="resumen__aclaracion">{e(c["aclaracion"])}</p>
+  <a class="subrayado" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(c["cta_comercial"])}</a>
+</section>'''
+
+
+def carrusel(d):
+    """La galeria escalonada y arrastrable (FICHA-3, motor 4): un carril con
+    scroll-snap, cada foto un escalon mas arriba que la anterior y anchos
+    alternados; flechas de 44 px; arrastrar() le suma inercia con el puntero
+    y un umbral para no abrir el visor al soltar. La misma lista alimenta el
+    visor: data-foto es el indice en `galeria`."""
+    c, ui = d["proyectos"]["cardinal"], d["interfaz"]
+    fotos = "".join(
+        f'<figure class="lamina lamina--{x["ancho"]}" style="--i:{i}">'
+        f'<button class="lamina__abrir" type="button" data-foto="{i}" aria-label="{e(ui["abrir_foto"])}: {e(x["epigrafe"])}">'
+        f'{img(x["foto"], "(min-width:64rem) 36vw, 80vw")}</button>'
+        f'<figcaption class="lamina__epigrafe">{e(x["epigrafe"])}</figcaption></figure>'
+        for i, x in enumerate(c["galeria"]))
+    return f'''<section class="seccion carrusel-seccion" id="galeria"{fx("proyectos")}>
+  <h2 class="visualmente-oculto">{e(c["galeria_titulo"])}</h2>
+  <div class="carrusel" data-carrusel data-arrastre>{fotos}</div>
+  <div class="carrusel__flechas">
+    <button class="orbita__flecha" type="button" data-carrusel-ant aria-label="{e(ui["anterior"])}"><span aria-hidden="true">&larr;</span></button>
+    <button class="orbita__flecha" type="button" data-carrusel-sig aria-label="{e(ui["siguiente"])}"><span aria-hidden="true">&rarr;</span></button>
+  </div>
+</section>'''
+
+
+def sub_items(d):
+    """Los sub-items de Cardinal (FICHA-4, FICHA-5): foto 3:4 y texto, los
+    pares espejados, el tercero alineado abajo. Solo se emite el que tiene
+    foto Y copy: hoy ninguno, asi que la seccion no existe hasta que Vero
+    mande el material. Sin placeholder."""
+    c = d["proyectos"]["cardinal"]
+    completos = [x for x in c["sub_items"] if x.get("foto") and x.get("copy")]
+    if not completos:
+        return ""
+    bloques = "".join(
+        f'<article class="subitem{" subitem--espejo" if i % 2 else ""}{" subitem--abajo" if i % 3 == 2 else ""}" id="sub-{e(x["id"])}">'
+        f'<figure class="subitem__foto">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>'
+        f'<div class="subitem__texto"><h3 class="subitem__nombre">{e(x["nombre"])}</h3><p>{e(x["copy"])}</p></div>'
+        f'</article>'
+        for i, x in enumerate(completos))
+    return f'<section class="seccion subitems" id="detalles"{fx("proyectos")}>{bloques}</section>'
+
+
+def franja_video(d):
+    """Foto o video a sangre, sin texto (el ritmo de la referencia: bloques
+    de solo imagen entre bloques de aire). Video diferido con poster."""
+    v = d["proyectos"]["cardinal"]["franja"]
+    return (f'<div class="franja-video" aria-label="{e(v["alt"])}" role="img">'
+            f'<video class="franja-video__video" data-diferido data-pesado="1" data-src="{e(medio(v["src"]))}" '
+            f'poster="{e(medio(v["poster"]))}" muted loop playsinline preload="none" aria-hidden="true"></video></div>')
+
+
+def unidades(d):
+    u = d["proyectos"]["cardinal"]["unidades"]
+    f = f'<figure class="unidades__foto">{img(u["foto"], "(min-width:64rem) 50vw, 100vw")}</figure>' if u.get("foto") else ""
+    return f'''<section class="seccion unidades" id="unidades"{fx("proyectos")}>
+  <div class="unidades__texto">
+    <p class="margen">{e(u["rotulo"])}</p>
+    <h2 class="titulo titulo--chico" data-letras>{e(u["titulo"])}</h2>
+    <p class="bajada">{e(u["texto"])}</p>
+  </div>
+  {f}
+</section>'''
+
+
+def financiacion(d):
+    c = d["proyectos"]["cardinal"]
+    fi = c["financiacion"]
+    copia = f'<p class="franja__copy">{e(fi["copy"])}</p>' if fi.get("copy") else ""
+    return f'''<section class="franja oscuro" id="financiacion" data-tema="oscuro"{fx("espacio")}>
+  {marcador()}
+  <h2 class="franja__titulo" data-letras>{e(fi["titulo"])}</h2>
+  {copia}
+  <a class="subrayado subrayado--claro" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(fi["cta"])}</a>
+</section>'''
+
+
+def cierre_ficha(d):
+    ci = d["proyectos"]["cardinal"]["cierre"]
+    frase = f'<p class="ficha-cierre__frase">{e(ci["titulo"])}</p>' if ci.get("titulo") else ""
+    return f'''<section class="seccion ficha-cierre" id="cierre"{fx("contacto")}>
+  {marcador()}
+  {frase}
+  <a class="boton" href="#contacto">{e(ci["cta"])}<span aria-hidden="true"> &rarr;</span></a>
+</section>'''
+
+
+def oportunidades(d):
+    o = d["proyectos"]["oportunidades"]
+    return f'''<section class="seccion oportunidades" id="oportunidades"{fx("proyectos")}>
+  <div class="seccion__cabeza">
+    <h2 class="titulo titulo--chico" data-letras>{e(o["rotulo"])}</h2>
+    <div>
+      <p class="bajada">{e(o["bajada"])}</p>
+      <a class="boton oportunidades__cta" href="#contacto" data-motivo="oportunidad">{e(o["cta"])}</a>
+    </div>
+  </div>
 </section>'''
 
 
 def cardenal(d):
     """La pieza animada de Fractura: el ave se dibuja, se posa sobre la M del
     isotipo y cierra con la frase de ellos. Arranca al entrar en vista, una vez."""
-    v = d["proyectos"]["destacado"]["video"]
+    v = d["proyectos"]["cardinal"]["cardenal"]
     return f'''<figure class="cardenal" data-cardenal>
     <video class="cardenal__video" data-diferido data-reinicia data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}"
            muted playsinline preload="none" aria-label="{e(v["rotulo"])}"></video>
@@ -505,9 +621,12 @@ def cardenal(d):
 
 
 def otros(d):
-    """Porto y WA. Pendientes de confirmar con Vero: en el tablero marcó que
-    entra sólo CARDINAL, y estos son de Grupo MDay."""
+    """Otros proyectos (PROY-3): solo proyectos confirmados y con informacion
+    suficiente. Porto y WA son de Grupo MDay y Vero no los confirmo:
+    `otros_publicar` en false y la seccion no se emite."""
     p = d["proyectos"]
+    if not p.get("otros_publicar") or not p.get("otros"):
+        return ""
     fichas = "".join(
         f'<article class="otro">'
         f'<div class="otro__marco">{img(x["foto"], "(min-width:64rem) 34rem, 90vw")}</div>'
@@ -515,24 +634,26 @@ def otros(d):
         f'<p class="otro__meta">{e(x["meta"])}</p>'
         f'<p class="otro__copy">{e(x["copy"])}</p></article>'
         for x in p["otros"])
-    return f'''<div class="otros">
-    <p class="margen otros__rotulo">{e(p["otros_rotulo"])}</p>
-    <div class="otros__par">{fichas}</div>
-  </div>'''
+    return f'''<section class="seccion otros" id="otros"{fx("proyectos")}>
+  <div class="seccion__cabeza">
+    <h2 class="titulo titulo--chico" data-letras>{e(p["otros_rotulo"])}</h2>
+    <p class="bajada">{e(p["otros_intro"])}</p>
+  </div>
+  <div class="otros__par">{fichas}</div>
+</section>'''
 
 
 def visor(d):
-    """Lightbox de las fotos del proyecto. El swipe lo hace el navegador dentro
-    de un carril con scroll-snap: la inercia y el frenado son los del sistema."""
-    p, ui = d["proyectos"], d["interfaz"]
-    todas = [p["destacado"]["foto"]] + [f["foto"] for f in p["estante"]]
-    epis = [p["destacado"]["nombre"]] + [f["epigrafe"] for f in p["estante"]]
+    """Lightbox de la galeria de Cardinal. El swipe lo hace el navegador dentro
+    de un carril con scroll-snap. Una sola lista (`galeria`) alimenta el
+    carrusel y el visor: data-foto es el indice y no se desincroniza."""
+    c, ui = d["proyectos"]["cardinal"], d["interfaz"]
     laminas = "".join(
         f'<figure class="visor__lamina" data-lamina="{i}">'
-        f'{img(f, "100vw")}'
-        f'<figcaption>{e(t)}</figcaption></figure>'
-        for i, (f, t) in enumerate(zip(todas, epis)))
-    return f'''<dialog class="visor" data-visor aria-label="{e(p["destacado"]["nombre"])}">
+        f'{img(x["foto"], "100vw")}'
+        f'<figcaption>{e(x["epigrafe"])}</figcaption></figure>'
+        for i, x in enumerate(c["galeria"]))
+    return f'''<dialog class="visor" data-visor aria-label="{e(c["nombre"])}">
     <button class="visor__cerrar" type="button" data-visor-cerrar aria-label="{e(ui["cerrar"])}">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -579,33 +700,33 @@ def mirada(d):
 </section>'''
 
 
+def persona_completa(x):
+    return bool(x.get("foto") and x.get("nombre") and x.get("apellido") and x.get("rol") and x.get("linea"))
+
+
 def equipo(d):
-    """Retratos grandes en grilla asimetrica: el primero manda y los otros dos
-    lo acompanan. Los que faltan quedan a la vista como hueco, no disimulados."""
+    """Las personas detras de Mavenz (NOS-1..4): cada una con foto, nombre y
+    apellido, rol real y una linea. Un perfil incompleto no se publica: se
+    emiten solo los completos y, si no hay ninguno, la seccion queda con el
+    titulo y el texto. Sin huecos ni 'Retrato'."""
     q = d["equipo"]
-    personas = []
-    for i, x in enumerate(q["personas"]):
-        pendiente = x["nombre"] == "Pendiente"
-        nombre = x["rol"] if pendiente else x["nombre"]
-        personas.append(
-            f'<article class="persona{" persona--principal" if i == 0 else ""}'
-            f'{" persona--pendiente" if pendiente else ""}" style="--i:{i}">'
-            f'<div class="persona__marco">'
-            f'<div class="hueco persona__hueco"><p class="hueco__rotulo">{e(x["hueco"])}</p></div>'
-            f'</div>'
-            f'<div class="persona__pie">'
-            f'<span class="persona__n" aria-hidden="true">{i + 1:02d}</span>'
-            f'<h3 class="persona__nombre">{e(nombre)}</h3>'
-            f'<p class="persona__rol">{e("Se suma" if pendiente else x["rol"])}</p>'
-            + (f'<p class="persona__linea">{e(x["linea"])}</p>' if x["linea"] else '')
-            + '</div></article>')
-    return f'''<section class="seccion seccion--ancha equipo-seccion" id="equipo"{fx("equipo")}>
-  <p class="margen seccion__margen">{e(q["margen"])}</p>
+    completos = [x for x in q["personas"] if persona_completa(x)]
+    personas = "".join(
+        f'<article class="persona" style="--i:{i}">'
+        f'<figure class="persona__marco">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>'
+        f'<div class="persona__pie">'
+        f'<h3 class="persona__nombre">{e(x["nombre"])} {e(x["apellido"])}</h3>'
+        f'<p class="persona__rol">{e(x["rol"])}</p>'
+        f'<p class="persona__linea">{e(x["linea"])}</p>'
+        f'</div></article>'
+        for i, x in enumerate(completos))
+    grilla = f'<div class="personas">{personas}</div>' if personas else ""
+    return f'''<section class="seccion equipo-seccion" id="equipo"{fx("equipo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["intro"])}</p>
   </div>
-  <div class="personas">{"".join(personas)}</div>
+  {grilla}
 </section>'''
 
 
@@ -868,7 +989,8 @@ def pagina_inicio(d, lang):
 
 
 def pagina_nosotros(d, lang):
-    """Quienes son. Lo que falta se muestra como hueco, no se disimula."""
+    """Las personas detras de Mavenz. Se genera con noindex y fuera del menu
+    hasta que el equipo este completo (paginas.nosotros.publicar)."""
     pg = d["paginas"]["nosotros"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
@@ -882,27 +1004,58 @@ def pagina_nosotros(d, lang):
 
 
 def pagina_proyectos(d, lang):
-    """Cada proyecto es un mundo de color entero, y del ultimo se vuelve al
-    primero. Es literal lo que pidio Vero: que sea un loop."""
-    pg, lista = d["paginas"]["proyectos"], d["mundos"]["lista"]
-    # Lo que va adentro de cada mundo. Son las secciones que ya existian: no se
-    # reescribe contenido, se lo mete en su color.
-    # PROVISORIO hasta la Fase 5 (proyectos.html se rehace como indice liviano):
-    # la lista ya es la del 08/09 (cardinal / otros / oportunidades).
-    dentro = {"cardinal":      proyectos(d) + cardenal(d),
-              "otros":         otros(d),
-              "oportunidades": ""}
-    n = len(lista)
-    bloques = "".join(
-        mundo_pleno(w, i, n, dentro[w["id"]], lista[(i + 1) % n]["id"])
-        for i, w in enumerate(lista))
+    """El indice liviano (PROY-1..3): cinta, intro, Cardinal resumido con su
+    CTA a la ficha, otros proyectos (solo si hay confirmados) y las
+    oportunidades de inversion, que llevan al formulario. Espacio Mavenz y
+    Territorio ya no viven aca: no son proyectos."""
+    pg, p = d["paginas"]["proyectos"], d["proyectos"]
     cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
-<div class="riel" data-riel>{bloques}</div>
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
+<section class="seccion proyectos-intro"{fx("proyectos")}>
+  <p class="bajada bajada--angosta proyectos-intro__texto">{e(p["intro"])}</p>
+</section>
+{cms("cardinal", cardinal_resumen(d))}
+{cms("otros", otros(d))}
+{cms("oportunidades", oportunidades(d))}
+{cms("contacto", contacto(d))}
+</div></div>'''
+    return cascara(d, lang, "proyectos", cuerpo)
+
+
+def pagina_espacio(d, lang):
+    """Espacio Mavenz, con seccion propia en el menu (ESP-1)."""
+    pg = d["paginas"]["espacio"]
+    cuerpo = f'''{cinta(pg["cinta"], titulo=True)}
+{cms("espacio", espacio(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("contacto", contacto(d))}
+</div></div>'''
+    return cascara(d, lang, "espacio", cuerpo)
+
+
+def pagina_cardinal(d, lang):
+    """La ficha de Cardinal (FICHA-1..8, PROY-2), en el orden del documento:
+    hero que se abre, titulo con marcador, galeria escalonada, el cardenal,
+    sub-items (cuando haya material), franja de video, unidades,
+    financiacion en oscuro, cierre al contacto."""
+    cuerpo = f'''{cms("hero", ficha_hero(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("titulo", ficha_titulo(d))}
+{cms("galeria", carrusel(d))}
+{cms("cardenal", cardenal(d))}
+{cms("detalles", sub_items(d))}
+</div></div>
+{cms("franja", franja_video(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("unidades", unidades(d))}
+</div></div>
+{cms("financiacion", financiacion(d))}
+<div class="dossier" data-tema="claro"><div class="dossier__interior">
+{cms("cierre", cierre_ficha(d))}
 {cms("contacto", contacto(d))}
 </div></div>
 {visor(d)}'''
-    return cascara(d, lang, "proyectos", cuerpo)
+    return cascara(d, lang, "cardinal", cuerpo, tema="oscuro")
 
 
 def cinta(piezas, tono="tinta", titulo=False, continua=False, vertical=False,
@@ -980,34 +1133,14 @@ def mundos(d):
 </section>'''
 
 
-DESDE_MUNDO = ("escala", "izq", "der", "arriba")
-
-
-def mundo_pleno(w, i, total, cuerpo, siguiente):
-    paso = f'{i + 1:02d} / {total:02d}'
-    salto = (f'<a class="mundo-pleno__next" href="#{siguiente}">'
-             f'<span class="mundo-pleno__next-r">{e(paso)}</span>'
-             f'<span class="mundo-pleno__next-t">Siguiente'
-             f'<span aria-hidden="true"> &#8595;</span></span></a>')
-    return f'''<section class="mundo-pleno" id="{w["id"]}" data-tinta="{e(w["tinta"])}"
-         data-tema="oscuro" data-mundo="{i}"
-         data-fx="reveal" data-fx-desde="{DESDE_MUNDO[i % len(DESDE_MUNDO)]}">
-  {cinta(w["nombre"], "papel", titulo=True)}
-  <div class="mundo-pleno__interior">
-    <p class="mundo-pleno__bajada">{e(w["bajada"])}</p>
-    {cuerpo}
-  </div>
-  {salto}
-</section>'''
-
-
-PAGINAS = {"inicio": pagina_inicio, "nosotros": pagina_nosotros, "proyectos": pagina_proyectos}
+PAGINAS = {"inicio": pagina_inicio, "nosotros": pagina_nosotros, "proyectos": pagina_proyectos,
+           "espacio": pagina_espacio, "cardinal": pagina_cardinal}
 
 # Claves que no son texto para leer: no se traducen y no se reclaman.
 TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "carpeta", "ancla",
             "en", "whatsapp", "correo", "sitio_espacio", "proporcion", "numero", "n", "x", "y",
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
-            "genera", "publicar", "en_menu", "clave", "ga4", "pixel"}
+            "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar"}
 
 
 def hojas(o, ruta=(), vacias=False):

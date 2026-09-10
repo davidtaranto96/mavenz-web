@@ -851,32 +851,9 @@
   /* --- El estante recorre en horizontal con la pantalla fijada ----------- */
   /* Sólo escritorio y sólo si GSAP llegó. Si no, el CSS deja el estante como
      carril nativo y se sigue pudiendo recorrer con el dedo o la rueda. */
-  function fijarEstante() {
-    var caja = $('[data-fijado]');
-    if (!caja || menos || !window.gsap || !window.ScrollTrigger) return;
-    if (!window.matchMedia('(min-width: 64rem)').matches) return;
-    var riel = $('.estante', caja);
-    if (!riel) return;
-    var recorrido = function () { return Math.max(0, riel.scrollWidth - window.innerWidth * 0.86); };
-    if (recorrido() <= 0) return;
-    window.gsap.to(riel, {
-      x: function () { return -recorrido(); },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: caja,
-        start: 'center center',
-        /* El recorrido horizontal no tiene por que costar un pixel de scroll
-           por pixel de riel: a 1:1 el mundo de Cardinal se comia 4,3 pantallas
-           contra 1,2 de los otros tres. A 0,75 el riel recorre lo mismo y pide
-           un cuarto menos de rueda. */
-        end: function () { return '+=' + Math.round(recorrido() * 0.75); },
-        pin: true,
-        scrub: 0.8,
-        anticipatePin: 1,
-        invalidateOnRefresh: true
-      }
-    });
-  }
+  /* fijarEstante() (el riel de fichas con pin de GSAP) se fue el 09/09 con
+     proyectos.html viejo. La galeria de cardinal.html es un carril nativo con
+     arrastre (arrastrar()), sin pin. */
 
   /* --- 2. La nube de la red: entra escalonada y después deriva ----------- */
   /* El estado oculto lo escribe ACÁ, nunca el CSS: si el JS no corre, la nube
@@ -1099,10 +1076,129 @@
     });
   }
 
+  /* --- cardinal.html: el hero que se abre con el scroll ------------------- */
+  /* La seccion mide 100svh + recorrido; el contenido es sticky. Con
+     ScrollTrigger (scrub, sin pin: el sticky es CSS) se escriben --w y --h
+     por separado: el ancho abre con power1.out y el alto con power1.inOut,
+     asi la ventana pasa de 1:1 a 16:9 revelando encuadre (medido en la
+     referencia). La cinta sube a 1.5x, el copy se va en el primer cuarto, el
+     "(Scroll)" a 0.4x. Sin GSAP o con menos movimiento no se marca data-vivo
+     y la foto queda abierta, sin recorrido. */
+  function fichaHero() {
+    var hero = $('[data-ficha-hero]');
+    if (!hero || menos || !window.gsap || !window.ScrollTrigger) return;
+    window.gsap.registerPlugin(window.ScrollTrigger);
+    hero.setAttribute('data-vivo', '');
+    var pin = $('.ficha-hero__pin', hero);
+    var tarjeta = function () {
+      return parseFloat(getComputedStyle(hero).getPropertyValue('--tarjeta')) || 240;
+    };
+    var pintar = function (p) {
+      var vw = pin.clientWidth || window.innerWidth;
+      var vh = pin.clientHeight || window.innerHeight;
+      var t = tarjeta();
+      var pw = 1 - Math.pow(1 - p, 2);                       /* power1.out */
+      var ph = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   /* power1.inOut */
+      hero.style.setProperty('--w', (t + (vw - t) * pw).toFixed(1) + 'px');
+      hero.style.setProperty('--h', (t + (vh - t) * ph).toFixed(1) + 'px');
+      hero.style.setProperty('--cinta-y', (-p * vh * 1.5).toFixed(1) + 'px');
+      hero.style.setProperty('--scroll-y', (-p * vh * .4).toFixed(1) + 'px');
+      var c = Math.min(1, p / .25);
+      hero.style.setProperty('--copia-op', (1 - c).toFixed(3));
+      hero.style.setProperty('--copia-y', (c * 24).toFixed(1) + 'px');
+    };
+    window.ScrollTrigger.create({
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: true,
+      invalidateOnRefresh: true,
+      onUpdate: function (st) { pintar(st.progress); },
+      onRefresh: function (st) { pintar(st.progress); }
+    });
+    pintar(0);
+  }
+
+  /* --- el marcador: entra 200 ms antes que el bloque -------------------- */
+  function marcadores() {
+    var lista = $$('[data-marcador]');
+    if (!lista.length) return;
+    if (menos || !('IntersectionObserver' in window)) {
+      lista.forEach(function (m) { m.setAttribute('data-visto', ''); });
+      return;
+    }
+    var ojo = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        x.target.setAttribute('data-visto', '');
+        ojo.unobserve(x.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    lista.forEach(function (m) { ojo.observe(m); });
+  }
+
+  /* --- la galeria: arrastre con inercia y flechas -------------------------- */
+  /* El carril ya scrollea solo (rueda, dedo, teclado). Esto suma el arrastre
+     con el puntero: pointerdown fija el origen, pointermove mueve el
+     scrollLeft, y al soltar la velocidad sigue con un factor .92 por
+     fotograma hasta frenar. Umbral de 6 px: un clic sin arrastre sigue
+     abriendo el visor; un arrastre lo cancela (click en captura). */
+  function arrastrar() {
+    var carril = $('[data-arrastre]');
+    if (!carril) return;
+    var raiz = carril.closest('section') || document;
+    var ant = $('[data-carrusel-ant]', raiz);
+    var sig = $('[data-carrusel-sig]', raiz);
+    var paso = function () {
+      var l = carril.querySelector('.lamina');
+      return l ? l.getBoundingClientRect().width + 16 : carril.clientWidth * .6;
+    };
+    if (ant) ant.addEventListener('click', function () { carril.scrollBy({ left: -paso(), behavior: menos ? 'auto' : 'smooth' }); });
+    if (sig) sig.addEventListener('click', function () { carril.scrollBy({ left: paso(), behavior: menos ? 'auto' : 'smooth' }); });
+
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    var activo = false, movio = false, x0 = 0, s0 = 0, vx = 0, xAnt = 0, tAnt = 0, inercia = null;
+
+    carril.addEventListener('pointerdown', function (ev) {
+      if (ev.pointerType !== 'mouse' || ev.button !== 0) return;
+      cancelAnimationFrame(inercia);
+      activo = true; movio = false;
+      x0 = xAnt = ev.clientX; s0 = carril.scrollLeft; vx = 0; tAnt = ev.timeStamp;
+      carril.setPointerCapture(ev.pointerId);
+    });
+    carril.addEventListener('pointermove', function (ev) {
+      if (!activo) return;
+      var dx = ev.clientX - x0;
+      if (!movio && Math.abs(dx) < 6) return;
+      if (!movio) { movio = true; carril.setAttribute('data-arrastrando', ''); }
+      carril.scrollLeft = s0 - dx;
+      var dt = ev.timeStamp - tAnt || 16;
+      vx = (xAnt - ev.clientX) / dt * 16;          /* px por fotograma */
+      xAnt = ev.clientX; tAnt = ev.timeStamp;
+    });
+    var soltar = function () {
+      if (!activo) return;
+      activo = false;
+      if (!movio) return;
+      var v = vx;
+      (function seguir() {
+        if (Math.abs(v) < .5) { carril.removeAttribute('data-arrastrando'); return; }
+        carril.scrollLeft += v;
+        v *= .92;
+        inercia = requestAnimationFrame(seguir);
+      })();
+    };
+    carril.addEventListener('pointerup', soltar);
+    carril.addEventListener('pointercancel', soltar);
+    /* Un arrastre no es un clic: se lo come antes de que llegue al visor. */
+    carril.addEventListener('click', function (ev) {
+      if (movio) { ev.preventDefault(); ev.stopPropagation(); movio = false; }
+    }, true);
+  }
+
   function arrancar() {
     arrancarScroll();
     nubeRed();
-    fijarEstante();
     cintas();
     circular($('[data-orbita]'), '.orbita__nodo', '.orbita__panel',
              'data-esfera', 'data-panel', null, null);
@@ -1111,6 +1207,9 @@
     carrilEsferas();
     trazoMetodo();
     tilt();
+    fichaHero();
+    marcadores();
+    arrastrar();
     cintasContinuas();
     formulario();
   }
