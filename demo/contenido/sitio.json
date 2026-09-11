@@ -5,8 +5,7 @@
     "nombre": "Mavenz",
     "mensaje": "Mavenz genera movimiento",
     "definicion": "Somos el partner estratégico que mueve el real estate.",
-    "lugar": "Salta, Argentina",
-    "zocalo": "Estrategia, comercialización y oportunidades en real estate · Salta"
+    "lugar": "Salta, Argentina"
   },
   "contacto_datos": {
     "whatsapp": "5493875918813",
@@ -146,7 +145,12 @@
       "externo": "(sitio externo)"
     },
     "foto": null,
-    "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una."
+    "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una.",
+    "vista": {
+      "src": "https://www.espaciomavenz.com.ar",
+      "titulo": "El sitio de Espacio Mavenz",
+      "rotulo": "Así se ve espaciomavenz.com.ar"
+    }
   },
   "proyectos": {
     "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
@@ -415,6 +419,34 @@
       "bajada": "Contanos qué tipo de oportunidad estás buscando y te asesoramos de manera personalizada.",
       "cta": "Busco una oportunidad",
       "href": "contacto.html?motivo=oportunidad"
+    },
+    "cafay": {
+      "nombre": "Cafay",
+      "meta": "Cafayate, Salta",
+      "estado": "Departamentos, locales y cocheras",
+      "titulo": "Un proyecto de Mavenz en Cafayate.",
+      "texto": "Departamentos, locales comerciales y cocheras en Cafayate, con un plan de anticipo y cuotas.",
+      "datos": [
+        "Departamentos",
+        "Locales comerciales",
+        "Cocheras",
+        "Anticipo y cuotas"
+      ],
+      "aclaracion": "Comercializa MAVENZ",
+      "cta_comercial": "Consultá disponibilidad",
+      "wa": "Hola Mavenz, quisiera consultar por Cafay.",
+      "scroll": "Seguí bajando",
+      "marquee": "Cafay",
+      "galeria": [],
+      "galeria_titulo": "El proyecto en imágenes",
+      "sub_items": [],
+      "financiacion": {
+        "titulo": "Anticipo y cuotas",
+        "copy": "",
+        "cta": "Consultá disponibilidad",
+        "cta2": "Contactanos"
+      },
+      "_dt": "Pagina propia desde el 10/09 (David: 'como la web de Cardinal'). Sin material de Vero: sin fotos, sin cifras (los numeros de unidades y el ticket estan en documentos privados y el repo es publico). Lo que falta se apaga por dato: con hero_foto aparece la tarjeta que se abre; con galeria, la galeria y el visor; con franja, el video; con unidades, el bloque. Titulo y texto son propuesta de DT a confirmar."
     }
   },
   "red": {
@@ -534,7 +566,8 @@
           "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
           "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
         }
-      ]
+      ],
+      "nombre": "Mapa Mavenz"
     }
   },
   "contacto": {
@@ -629,12 +662,26 @@
   "equipo": {
     "titulo": "Las personas detrás de Mavenz",
     "intro": "Somos un equipo con experiencia en estrategia, negocios, comunicación y comercialización. Trabajamos de forma colaborativa y sumamos especialistas de acuerdo con las necesidades de cada proyecto.",
-    "_dt": "NOS-1..4: cada integrante lleva nombre, rol y, cuando lleguen, apellido, foto y linea. Se publica con nombre y rol (David, 10/09); la foto entra cuando Vero la mande. Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'.",
+    "_dt": "NOS-1..4: cada integrante lleva nombre, rol y, cuando lleguen, apellido, foto y linea. Se publica con nombre y rol (David, 10/09); la foto entra cuando Vero la mande. Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. Sexta vuelta (David, 10/09): dos lugares mas, marcados, para las personas que falta sumar.",
     "personas": [
       {
         "nombre": "Luchi",
         "apellido": "",
         "rol": "Dirección",
+        "linea": "",
+        "foto": null
+      },
+      {
+        "nombre": "Nombre y apellido",
+        "apellido": "",
+        "rol": "Rol",
+        "linea": "",
+        "foto": null
+      },
+      {
+        "nombre": "Nombre y apellido",
+        "apellido": "",
+        "rol": "Rol",
         "linea": "",
         "foto": null
       }
@@ -685,6 +732,13 @@
       "en_menu": false,
       "publicar": true,
       "_dt": "La ficha del proyecto. No va en el menu."
+    },
+    "cafay": {
+      "archivo": "cafay.html",
+      "titulo": "Cafay",
+      "en_menu": false,
+      "publicar": true,
+      "_dt": "La ficha de Cafay. No va en el menu: se llega desde Proyectos en movimiento."
     }
   },
   "mundos": {
@@ -714,10 +768,9 @@
         "id": "cafay",
         "nombre": "Cafay",
         "tinta": "bistre",
-        "bajada": "Consultanos por Cafay.",
-        "cierre": "Consultar por Cafay",
-        "href": "contacto.html?motivo=proyecto",
-        "motivo": "proyecto"
+        "bajada": "Departamentos, locales y cocheras en Cafayate.",
+        "cierre": "Conocé Cafay",
+        "href": "cafay.html"
       },
       {
         "id": "oportunidades",

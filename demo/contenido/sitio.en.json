@@ -5,8 +5,7 @@
     "nombre": "Mavenz",
     "mensaje": "Mavenz creates momentum",
     "definicion": "We are the strategic partner that moves real estate.",
-    "lugar": "Salta, Argentina",
-    "zocalo": "Strategy, sales and opportunities in real estate · Salta"
+    "lugar": "Salta, Argentina"
   },
   "redes": [
     {
@@ -106,6 +105,10 @@
     "cta": {
       "rotulo": "Discover the space",
       "externo": "(external site)"
+    },
+    "vista": {
+      "titulo": "The Espacio Mavenz website",
+      "rotulo": "This is espaciomavenz.com.ar"
     }
   },
   "proyectos": {
@@ -249,6 +252,27 @@
       "rotulo": "Investment opportunities",
       "bajada": "Tell us what kind of opportunity you are looking for and we will advise you personally.",
       "cta": "I am looking for an opportunity"
+    },
+    "cafay": {
+      "estado": "Apartments, shops and parking",
+      "titulo": "A Mavenz project in Cafayate.",
+      "texto": "Apartments, retail units and parking spaces in Cafayate, with a down payment and instalment plan.",
+      "datos": [
+        "Apartments",
+        "Retail units",
+        "Parking",
+        "Down payment and instalments"
+      ],
+      "aclaracion": "Sold by MAVENZ",
+      "cta_comercial": "Check availability on WhatsApp",
+      "wa": "Hello Mavenz, I would like to ask about Cafay.",
+      "scroll": "Keep scrolling",
+      "galeria_titulo": "The project in pictures",
+      "financiacion": {
+        "titulo": "Down payment and instalments",
+        "cta": "Check availability on WhatsApp",
+        "cta2": "Contact us"
+      }
     }
   },
   "red": {
@@ -334,7 +358,8 @@
           "cambia": "Vaqueros is emerging as an eco-cultural answer, more bohemian and open, with a strong sense of community. The new urban and environmental planning code and the widened access road reinforce the area.",
           "quien": "Couples aged 30 to 45 who work downtown or remotely and want their children to grow up close to nature. Artists, architects and designers. Short-stay rental investors."
         }
-      ]
+      ],
+      "nombre": "Mavenz Map"
     }
   },
   "contacto": {
@@ -405,6 +430,14 @@
     "personas": [
       {
         "rol": "Management"
+      },
+      {
+        "nombre": "Name and surname",
+        "rol": "Role"
+      },
+      {
+        "nombre": "Name and surname",
+        "rol": "Role"
       }
     ]
   },
@@ -438,6 +471,9 @@
     },
     "cardinal": {
       "titulo": "Cardinal"
+    },
+    "cafay": {
+      "titulo": "Cafay"
     }
   },
   "_iguales": [
@@ -493,8 +529,8 @@
       },
       {
         "nombre": "Cafay",
-        "bajada": "Ask us about Cafay.",
-        "cierre": "Ask about Cafay"
+        "bajada": "Apartments, shops and parking in Cafayate.",
+        "cierre": "Discover Cafay"
       },
       {
         "nombre": "Investment opportunities",

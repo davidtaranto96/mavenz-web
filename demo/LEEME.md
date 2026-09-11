@@ -237,6 +237,23 @@ Urbanist con más contraste entre título y bajada. La versión anterior quedó 
   apaga apenas la tarjeta empieza a abrir (`--scroll-op`).
 - **El pie en bistre**, con el isotipo en vector.
 
+### La sexta vuelta del 10/09, con David, a la noche
+
+- **Sin zócalo**, y la barra y el pie del mismo bordó. Los enlaces de la barra centrados en la
+  página (grilla de tres columnas) y con una línea que crece desde el centro al pasar el puntero.
+  Los botones suben 2 px; los subrayados se trazan de izquierda a derecha.
+- **Cafay tiene su ficha**, `cafay.html`, con la misma función que Cardinal (`pagina_ficha()`):
+  lo que el proyecto no trae no se emite. Hoy no hay foto, así que arranca con el nombre
+  corriendo, el copy y una flecha, sin tarjeta que se abra. Sin cifras: los números están en
+  documentos privados y el repo es público.
+- **El Mapa Mavenz vuelve** a Inicio después de Proyectos en movimiento (`mapa_seccion()`).
+- **Sin títulos que corren** en ninguna página.
+- **Espacio Mavenz lleva su web embebida** (`espacio.vista`): un `iframe` diferido al lado del
+  texto. espaciomavenz.com.ar no manda cabeceras que lo impidan.
+- **Nosotros**: dos lugares más, marcados como tales en el JSON.
+- **El contacto compacto**: sin la palabra vertical, la apertura, la línea de cada opción y la
+  frase de alternativa; el formulario en dos columnas desde 64rem.
+
 ## Cómo funciona cada pieza
 
 **El zócalo y la barra** (`cabecera()`). El zócalo es una franja de `--alto-zocalo` (2,5rem)
