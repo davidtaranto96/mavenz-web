@@ -397,7 +397,8 @@ def puntos_path(dd, fracciones, caja, pasos=40):
 def metodo(d):
     """Como trabajamos, quinta vuelta (Vero, 10/09 tarde: "que el logo sea
     basicamente cada una de estas cosas"). El isotipo grande es el recorrido:
-    su contorno se dibuja con el scroll (--trazo, trazoMetodo() en guion.js)
+    su contorno se dibuja solo al entrar en pantalla (--trazo, trazoMetodo()
+    en guion.js; David, 10/09: atado al scroll se perdia)
     y al final se rellena. Los cinco pasos son puntos numerados sobre el
     trazo, en el barrido de izquierda a derecha del contorno (del 25 al 55 %
     de su largo), y debajo va la fila con nombre y frase: los dos se prenden

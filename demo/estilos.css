@@ -2427,7 +2427,7 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 
 /* --- Como trabajamos: el isotipo es el recorrido (quinta vuelta) -------- */
 /* El contorno del isotipo se dibuja con --trazo (0..1, trazoMetodo() en
-   guion.js; sin guion vale 1) y al final se rellena. Sin
+   guion.js lo corre solo al entrar en pantalla; sin guion vale 1) y al final se rellena. Sin
    vector-effect="non-scaling-stroke": con el logo ampliado, el guion de
    pathLength se achicaba en la misma proporcion y el dibujo quedaba corto. Los cinco pasos son
    puntos numerados sobre el trazo y, debajo, la fila con nombre y frase;
@@ -2490,8 +2490,12 @@ body[data-menu-abierto] .cookies { visibility: hidden; }
 }
 [data-progresivo] .trazo__nodo[data-visto],
 [data-progresivo] .trazo__paso[data-visto] { opacity: 1; translate: none; }
+/* El numero salta al aparecer: sale chico y rebota apenas a su tamano. */
+[data-progresivo] .trazo__punto { scale: .4; transition: scale .5s cubic-bezier(.34, 1.56, .64, 1); }
+[data-progresivo] .trazo__nodo[data-visto] .trazo__punto { scale: 1; }
 @media (prefers-reduced-motion: reduce) {.trazo__onda, .trazo__relleno { transition: none; }
-  [data-progresivo] .trazo__nodo, [data-progresivo] .trazo__paso { opacity: 1; translate: none; transition: none; }}
+  [data-progresivo] .trazo__nodo, [data-progresivo] .trazo__paso { opacity: 1; translate: none; transition: none; }
+  [data-progresivo] .trazo__punto { scale: 1; transition: none; }}
 .metodo__cierre {
   max-width: 30ch;
   margin: clamp(1.5rem, 5svh, 3rem) 0 0;

@@ -309,8 +309,12 @@ final (`(--trazo − .82) × 5.5`), y el contorno con `pathLength="1"`, que se d
 derecha, y `puntos_path()` aplana cada cúbica y busca en la tabla de largo de arco. Los rótulos
 no van sobre el logo porque el contorno pasa dos veces por cada zona: van en la fila de abajo
 (cinco columnas desde 64rem, lista con filete en el celular), y los dos se prenden cuando el
-trazo llega a su `data-t`. `trazoMetodo()` escribe `--trazo` con el scroll y es acumulativo. Sin
-guion o con menos movimiento, el logo entero y relleno.
+trazo llega a su `data-t`. `trazoMetodo()` ya no depende del scroll (David, 10/09: atado al
+scroll el efecto se perdía): cuando la caja del logo está al 60 % en pantalla, corre `--trazo`
+de 0 a 1 una sola vez, repartiendo el tiempo por tramos (0,8 s hasta el primer punto, 0,7 s por
+paso y 1 s para el resto), así los números con su texto salen de a uno; cada número entra
+chico y rebota a su tamaño. Si alguien salta de largo, queda completo. Sin guion o con menos
+movimiento, el logo entero y relleno.
 
 **Proyectos en movimiento** (`mundos()`; `tilt()`). Tres paneles con aire entre sí, cada uno con
 su tinta por `data-tinta` (bordó, bistre, wenge), la foto abajo (el 30 % en escritorio) y el

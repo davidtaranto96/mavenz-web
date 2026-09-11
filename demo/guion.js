@@ -855,56 +855,69 @@
     if (sig) sig.addEventListener('click', function () { saltar(1); });
   }
 
-  /* --- Como trabajamos: el trazo se dibuja y los pasos salen de su cola --- */
-  /* Escritorio: --trazo es el avance de la caja del trazo por la pantalla
-     (0 cuando asoma por abajo, 1 cuando su base llega al 40 % de la
-     pantalla) y cada paso se marca visto cuando el trazo paso por su punto.
-     Los dos son acumulativos: al subir no se deshacen. Celular: los pasos son
-     una lista y cada uno entra al verse (IO). Sin guion o con menos
-     movimiento no se marca data-progresivo y todo esta a la vista. */
+  /* --- Como trabajamos: el isotipo se dibuja solo al entrar en pantalla --- */
+  /* David, 10/09 tarde: atado al scroll el efecto se perdia. Ahora, cuando la
+     caja del logo esta casi entera en pantalla, --trazo corre de 0 a 1 en
+     unos 4,5 s, una sola vez, y cada paso (el numero sobre el logo y su
+     texto abajo) sale cuando el dibujo llega a su punto. Los cinco puntos
+     estan juntos entre el 25 y el 55 % del contorno: el tiempo se reparte por
+     tramos (arranque en 0,8 s, 0,7 s por paso, el resto del logo en 1 s) para
+     que salgan de a uno y no de golpe. Si alguien salta de largo, queda
+     completo. Sin guion o con menos movimiento no hay data-progresivo y todo
+     esta a la vista. */
   function trazoMetodo() {
     var caja = $('[data-trazo]');
-    if (!caja || menos) return;
+    if (!caja || menos || !('IntersectionObserver' in window)) return;
     var nodos = $$('[data-t]', caja);
-    caja.setAttribute('data-progresivo', '');
-    var celular = window.matchMedia('(max-width: 63.99rem)');
-
-    if (celular.matches && 'IntersectionObserver' in window) {
-      caja.style.setProperty('--trazo', '1');
-      var ojo = new IntersectionObserver(function (ent) {
-        ent.forEach(function (x) {
-          if (!x.isIntersecting) return;
-          x.target.setAttribute('data-visto', '');
-          ojo.unobserve(x.target);
-        });
-      }, { rootMargin: '0px 0px -12% 0px' });
-      nodos.forEach(function (n) { ojo.observe(n); });
-      return;
-    }
-
-    var tope = 0, pedido = false;
-    var medir = function () {
-      pedido = false;
-      var r = caja.getBoundingClientRect();
-      var vh = window.innerHeight || 1;
-      if (r.bottom < -vh || r.top > vh * 1.5) return;
-      var t = (vh - r.top) / (vh * .6 + r.height);
-      t = t < 0 ? 0 : t > 1 ? 1 : t;
-      if (t <= tope) return;
-      tope = t;
-      caja.style.setProperty('--trazo', t.toFixed(3));
+    var fr = nodos.map(function (n) { return parseFloat(n.getAttribute('data-t')); })
+      .filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(function (a, b) { return a - b; });
+    var marcas = [[0, 0]], tiempo = .8;
+    fr.forEach(function (f) { marcas.push([tiempo, f]); tiempo += .7; });
+    marcas.push([tiempo + .3, 1]);
+    var t_de = function (seg) {
+      for (var i = 1; i < marcas.length; i++) {
+        if (seg <= marcas[i][0]) {
+          var a = marcas[i - 1], b = marcas[i];
+          return a[1] + (b[1] - a[1]) * (seg - a[0]) / (b[0] - a[0]);
+        }
+      }
+      return 1;
+    };
+    var pintar = function (t) {
+      caja.style.setProperty('--trazo', t.toFixed(4));
       nodos.forEach(function (n) {
-        if (!n.hasAttribute('data-visto') && parseFloat(n.getAttribute('data-t')) <= t) n.setAttribute('data-visto', '');
+        if (!n.hasAttribute('data-visto') && parseFloat(n.getAttribute('data-t')) <= t + 1e-4) n.setAttribute('data-visto', '');
       });
     };
-    window.addEventListener('scroll', function () {
-      if (pedido) return;
-      pedido = true;
-      requestAnimationFrame(medir);
-    }, { passive: true });
-    window.addEventListener('resize', medir);
-    caja.style.setProperty('--trazo', '0');
-    medir();
+    caja.setAttribute('data-progresivo', '');
+    pintar(0);
+    var hecho = false;
+    var correr = function () {
+      if (hecho) return;
+      hecho = true;
+      var t0 = null;
+      (function paso(ts) {
+        if (t0 === null) t0 = ts;
+        var seg = (ts - t0) / 1000;
+        pintar(t_de(seg));
+        if (seg < marcas[marcas.length - 1][0]) requestAnimationFrame(paso);
+      })(performance.now());
+    };
+    var dibujo = $('.trazo__caja', caja) || caja;
+    var ojo = new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        ojo.disconnect();
+        correr();
+      });
+    }, { threshold: .6 });
+    ojo.observe(dibujo);
+    /* Si se paso de largo (un salto al fondo, el ancla del menu), completo. */
+    var mirar = function () {
+      if (hecho) { window.removeEventListener('scroll', mirar); return; }
+      if (dibujo.getBoundingClientRect().bottom < 0) { hecho = true; ojo.disconnect(); pintar(1); }
+    };
+    window.addEventListener('scroll', mirar, { passive: true });
   }
 
   /* --- Tilt: la tarjeta se inclina hacia el puntero ------------------------ */
