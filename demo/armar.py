@@ -918,7 +918,7 @@ def flotante(d, lang, aqui):
               f'{icono("<path d=\"M2 4.5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z\"/><path d=\"M2.5 5l5.5 4 5.5-4\"/>")}{e(ui["correo"])}</a>'
               if cd.get("correo") else "")
     return f'''<div class="flotante" data-flotante>
-  <a class="flotante__wa" href="{e(href)}"{afuera}><span class="flotante__wa-texto">{e(ui["whatsapp"])}</span></a>
+  <a class="flotante__wa" href="{e(href)}"{afuera}><svg class="flotante__wa-icono" viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H7.5l-3 2.5v-2.5h-1a1 1 0 0 1-1-1z"/><path d="M5.5 7h5"/></svg><span class="flotante__wa-texto">{e(ui["whatsapp"])}</span></a>
   <button class="flotante__boton" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-flotante" aria-label="{e(ui["menu"])}">
     <span class="flotante__raya flotante__raya--larga" aria-hidden="true"></span><span class="flotante__raya flotante__raya--corta" aria-hidden="true"></span>
   </button>

@@ -1018,6 +1018,10 @@
     var caja = $('[data-galeria]');
     var riel = $('[data-galeria-riel]', caja || document);
     if (!caja || !riel || menos) return;
+    /* En el celular la galeria es un carril que se desliza con el dedo
+       (overflow nativo con snap): fijar la pantalla para correr el riel con
+       el scroll dejaba fotos chicas y papel vacio (revision mobile, 10/09). */
+    if (window.matchMedia('(max-width: 63.99rem)').matches) return;
     var pin = riel.parentElement;
     var sobra = 0;
     var medirSobra = function () {
@@ -1067,6 +1071,21 @@
     galeriaRiel();
     cintasContinuas();
     formulario();
+    flotantePie();
+  }
+
+  /* --- El WhatsApp del flotante se va sobre el pie ------------------------ */
+  /* El pie ya lleva WhatsApp: dos veces en la misma pantalla sobra, y la
+     pildora tapaba la ultima fila. data-pie lo pone este observer. */
+  function flotantePie() {
+    var f = $('[data-flotante]'), pie = $('footer.pie');
+    if (!f || !pie || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (ent) {
+      ent.forEach(function (x) {
+        if (x.isIntersecting) f.setAttribute('data-pie', '');
+        else f.removeAttribute('data-pie');
+      });
+    }).observe(pie);
   }
 
   /* Los scripts van con defer, así que el DOM ya está: pero si esto llegara a

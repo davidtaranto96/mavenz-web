@@ -254,6 +254,15 @@ Urbanist con más contraste entre título y bajada. La versión anterior quedó 
 - **El contacto compacto**: sin la palabra vertical, la apertura, la línea de cada opción y la
   frase de alternativa; el formulario en dos columnas desde 64rem.
 
+### La revisión mobile del 10/09, a la noche
+
+El celular se maquetó aparte, todo bajo 64rem: el WhatsApp del flotante es un ícono y se va
+sobre el pie y en contacto (`flotantePie()`); Somos muestra un solo párrafo; el cierre del
+Universo es una línea; Proyectos en movimiento es un carril con snap y la tarjeta siguiente
+asomando; la galería de la ficha es un carril nativo (`galeriaRiel()` no corre en celular) con
+fotos 4:5; la franja de video va entera en 16:9; Nosotros en dos columnas; las opciones del
+contacto en 2×2; el pie con contacto y redes lado a lado.
+
 ## Cómo funciona cada pieza
 
 **El zócalo y la barra** (`cabecera()`). El zócalo es una franja de `--alto-zocalo` (2,5rem)

@@ -3239,3 +3239,86 @@ header.cabecera[data-tema] { background: var(--tinta-bordo); }
 
 /* El contacto compacto: aire entre el titulo y los datos. */
 .dossier--contacto .contacto__lista { margin-top: clamp(1rem, 3svh, 1.75rem); }
+
+/* =========================================================================
+   Revision mobile (David, 10/09 noche): el celular maquetado, no achicado
+   "Que en celular se vea igual de bien que en computadora, sin perder
+   detalle y sin abrumarse por el texto." Todo bajo 64rem.
+   ========================================================================= */
+
+/* El WhatsApp del flotante: icono en el celular, texto en escritorio. Se
+   va sobre el pie y en la pagina de contacto, donde ya esta a la vista. */
+.flotante__wa-icono { display: none; }
+.flotante[data-pie] .flotante__wa,
+body[data-pagina="contacto"] .flotante__wa { opacity: 0; visibility: hidden; pointer-events: none; }
+
+@media (max-width: 63.99rem) {
+  .flotante__wa { width: 44px; padding: 0; justify-content: center; }
+  .flotante__wa-icono { display: block; }
+  .flotante__wa-texto {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  /* Nada del final queda debajo del flotante. */
+  .pie { padding-bottom: 5.5rem; }
+
+  /* Somos: el primer parrafo lleva la idea; el segundo se queda en
+     escritorio. */
+  .quienes__texto .bajada + .bajada { display: none; }
+
+  /* El Universo: el cierre como una linea, sin el "Explora" (las flechas ya
+     lo dicen). */
+  .orbita__ayuda { display: none; }
+  .universo__cierre { max-width: none; margin-top: clamp(1.75rem, 5svh, 2.5rem); text-align: start; font-size: var(--t-lead); }
+
+  /* Proyectos en movimiento: un carril que se desliza con el dedo, la
+     tarjeta que sigue asomando. Las tres en una pantalla en vez de tres. */
+  .mundos {
+    display: flex;
+    gap: .75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    margin-inline-end: calc(-1 * var(--margen-der));
+    padding-inline-end: var(--margen-der);
+    scroll-padding-inline: 0;
+  }
+  .mundos::-webkit-scrollbar { display: none; }
+  .mundo { flex: 0 0 82%; min-height: 24rem; scroll-snap-align: start; }
+  .mundo__foto { height: 10rem; }
+
+  /* La galeria de la ficha: carril nativo con snap, fotos grandes y de la
+     misma proporcion, sin la escalera fija. */
+  .galeria-seccion { height: auto; }
+  .galeria__pin {
+    position: static;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: clamp(1rem, 3svh, 2rem);
+  }
+  .galeria__riel { align-items: start; translate: none; }
+  .lamina, .lamina--ancha, .lamina--angosta { width: 78vw; margin: 0; scroll-snap-align: center; }
+  .lamina__abrir img, .lamina--angosta .lamina__abrir img { aspect-ratio: 4 / 5; }
+
+  /* La franja de video entera, a su proporcion: el cover cortaba el
+     subtitulo a los costados. */
+  .franja-video { height: auto; aspect-ratio: 16 / 9; }
+
+  /* Nosotros: dos por fila, los retratos a escala del celular. */
+  section.equipo-seccion .personas { grid-template-columns: 1fr 1fr; gap: 1.25rem .875rem; }
+  .persona__nombre { font-size: clamp(.9375rem, 3.8vw, 1.125rem); }
+  .persona__marco--sin-foto img { width: 46%; }
+
+  /* Contacto: las cuatro opciones en una grilla de dos por dos. */
+  .dossier--contacto .solapas { display: grid; grid-template-columns: 1fr 1fr; }
+  .dossier--contacto .solapa { font-size: var(--t-nota); padding-inline: .5rem; }
+  .dossier--contacto .contacto { padding-block: clamp(2rem, 5svh, 3rem); }
+  .dossier--contacto .formulario { gap: .5rem; }
+
+  /* El pie: la marca y las secciones a lo ancho, contacto y redes lado a
+     lado. De casi dos pantallas a una. */
+  .pie__arriba { grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; }
+  .pie__marca, nav.pie__col { grid-column: 1 / -1; }
+  .pie__abajo { flex-wrap: wrap; }
+}
