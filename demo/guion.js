@@ -359,7 +359,9 @@
         var el = document.getElementById(a.getAttribute('href').slice(1));
         if (!el) return;
         ev.preventDefault();
-        lenis.scrollTo(el, { offset: -16 });   /* sin barra fija: un respiro y nada mas */
+        /* La barra queda arriba desde el 16/09: el ancla cae debajo de ella. */
+        var barra = document.querySelector('[data-cabecera]');
+        lenis.scrollTo(el, { offset: -((barra ? barra.offsetHeight : 0) + 16) });
       });
     });
   }
@@ -1072,6 +1074,36 @@
     cintasContinuas();
     formulario();
     flotantePie();
+    barraPortada();
+  }
+
+  /* --- La barra de la portada (David, 16/09: "como melou y RETAZOS") ------ */
+  /* Sobre la foto va transparente y sin el logo chico, porque el grande del  */
+  /* hero ya esta en pantalla. Al bajar, el titulo del hero se aleja y se     */
+  /* apaga, y cuando ya paso la mitad del hero el logo chico sube a la barra.  */
+  /* Al terminar el hero la barra se vuelve bordo. data-marca y data-solido   */
+  /* los lee estilos.css; el fondo entra por opacidad de un ::before.         */
+  function barraPortada() {
+    var barra = $('header[data-portada]'), hero = $('.hero');
+    if (!barra || !hero) return;
+    var texto = $('.hero__texto'), pendiente = false;
+    function mirar() {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(function () {
+        pendiente = false;
+        var y = window.scrollY, alto = hero.offsetHeight, nav = barra.offsetHeight;
+        barra.toggleAttribute('data-marca', y > alto * 0.45);
+        barra.toggleAttribute('data-solido', y > alto - nav * 1.5);
+        if (texto && !menos) {
+          var p = Math.min(1, Math.max(0, y / (alto * 0.55)));
+          texto.style.setProperty('--salida', p.toFixed(3));
+        }
+      });
+    }
+    mirar();
+    addEventListener('scroll', mirar, { passive: true });
+    addEventListener('resize', mirar);
   }
 
   /* --- El WhatsApp del flotante se va sobre el pie ------------------------ */

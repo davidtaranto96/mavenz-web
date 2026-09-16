@@ -214,7 +214,11 @@ def cabecera(d, lang, aqui, tema="claro"):
     # barra lleva solo el logo y el selector de idioma.
     # Barra en bordo en todas las paginas (sexta vuelta, 10/09: el zocalo se
     # fue y la barra y el pie van del mismo bordo). Siempre de tema oscuro.
-    return f'''<header class="cabecera" data-cabecera data-tema="oscuro">
+    # La portada (David, 16/09, como melou y RETAZOS): la barra va
+    # transparente sobre la foto y el logo chico no aparece hasta que el
+    # grande del hero se fue. Lo maneja barraPortada() en guion.js.
+    portada = " data-portada" if aqui == "inicio" else ""
+    return f'''<header class="cabecera" data-cabecera data-tema="oscuro"{portada}>
   <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
   <nav class="cabecera__enlaces" aria-label="{e(ui["menu"])}">{enlaces}</nav>
   <div class="cabecera__derecha">
@@ -737,8 +741,10 @@ def red(d):
     <h2 class="titulo titulo--claro" data-letras>{e(r["titulo"])}</h2>
     <p class="bajada bajada--clara bajada--angosta">{e(r["copy"])}</p>
     <div class="red__nube">{nodos}</div>
-    <p class="cita cita--clara red__cierre">{e(r["cierre"])}</p>
-    {f'<figure class="red__foto foto-marca">{img(r["foto"], "(min-width:64rem) 34vw, 100vw")}</figure>' if r.get("foto") else ""}
+    <div class="red__pie">
+      {f'<figure class="red__foto foto-marca">{img(r["foto"], "(min-width:64rem) 34vw, 100vw")}</figure>' if r.get("foto") else ""}
+      <p class="cita cita--clara red__cierre">{e(r["cierre"])}</p>
+    </div>
   </div>
 </section>'''
 

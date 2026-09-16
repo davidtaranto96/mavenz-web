@@ -3375,3 +3375,100 @@ img.hero__fondo { object-position: 70% 50%; }
   .metodo__foto { max-width: 58rem; }
   .equipo__foto { max-width: 58rem; }
 }
+
+/* ==========================================================================
+   Correcciones de David (16/09, tarde)
+   ========================================================================== */
+
+/* --- La barra: arriba siempre; en la portada, transparente como melou ----- */
+header.cabecera { position: sticky; top: 0; isolation: isolate; }
+html { scroll-padding-top: calc(var(--alto-nav) + 1rem); }
+header.cabecera[data-portada] { position: fixed; inset: 0 0 auto 0; background: transparent; }
+/* El bordo entra por opacidad, no animando el color de fondo. */
+header.cabecera[data-portada]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--tinta-bordo);
+  opacity: 0;
+  transition: opacity .5s var(--curva);
+}
+/* Tres maneras de encenderla, como melou: ya salimos del hero (data-solido),
+   el puntero esta sobre la navegacion, o el foco del teclado esta adentro.
+   Solo la primera trae el logo: con el puntero encima el grande sigue abajo. */
+header.cabecera[data-portada][data-solido]::before,
+header.cabecera[data-portada]:has(.cabecera__enlaces:hover)::before,
+header.cabecera[data-portada]:has(.cabecera__derecha:hover)::before,
+header.cabecera[data-portada]:focus-within::before { opacity: 1; }
+header.cabecera[data-portada] .cabecera__marca {
+  opacity: 0;
+  translate: 0 .75rem;
+  pointer-events: none;
+  transition: opacity .45s var(--curva), translate .55s var(--curva);
+}
+header.cabecera[data-portada][data-marca] .cabecera__marca { opacity: 1; translate: 0 0; pointer-events: auto; }
+header.cabecera[data-portada] .cabecera__marca { animation: none; }
+/* Sin la barra en el flujo, el hero mide la pantalla entera. */
+body[data-pagina="inicio"] .hero { height: 100svh; }
+/* El titulo del hero se aleja mientras el logo chico sube a la barra. */
+.hero__texto {
+  opacity: max(0, calc(1 - var(--salida, 0) * 2.2));
+  transform: translateY(calc(var(--salida, 0) * -2rem)) scale(calc(1 - var(--salida, 0) * .05));
+}
+@media (prefers-reduced-motion: reduce) {
+  header.cabecera[data-portada]::before,
+  header.cabecera[data-portada] .cabecera__marca { transition: none; }
+  .hero__texto { opacity: 1; transform: none; }
+}
+
+/* --- El pie: la grilla a todo el ancho (se habia quedado del largo de su
+   contenido y pegada a la izquierda) y la letra un escalon arriba ---------- */
+footer.pie { grid-template-columns: minmax(0, 1fr); justify-content: normal; }
+@media (min-width: 64rem) {
+  .pie__arriba { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); }
+  .pie__paginas a, .pie__contacto, .pie__redes { font-size: var(--t-cuerpo); }
+  .pie__definicion { font-size: var(--t-chico); }
+}
+
+/* --- La red: la foto y la frase de cierre en la misma fila, sin quedar
+   colgadas una debajo de la otra --------------------------------------- */
+.red__pie { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); margin-top: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem); }
+.red__pie .red__cierre { margin-top: 0; }
+.red__pie .red__foto { margin-top: 0; order: 2; }
+@media (min-width: 64rem) {
+  .red__pie { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: end; }
+  .red__pie .red__foto { order: 0; max-width: none; }
+  .red__pie .red__foto img { aspect-ratio: 5 / 4; }
+  .red .red__pie .red__cierre { max-width: 30rem; margin-left: auto; }
+}
+
+/* --- Nosotros y Como trabajamos: las fotos al ancho de la columna, sin el
+   costado vacio ------------------------------------------------------- */
+@media (min-width: 64rem) {
+  .metodo__foto, .equipo__foto { max-width: none; }
+  .metodo__foto img { aspect-ratio: 2 / 1; object-position: 55% 55%; }
+  .equipo__foto img { aspect-ratio: 2 / 1; object-position: 50% 42%; }
+  .equipo-seccion .personas:has(> .persona:nth-child(3):last-child) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
+/* --- Contacto: aire entre las opciones, los campos y el boton ------------ */
+.dossier--contacto .contacto__panel .margen { margin: 0 0 1rem; }
+.dossier--contacto .solapas { gap: .5rem; }
+.dossier--contacto .solapa { min-height: 3.25rem; padding-block: .75rem; }
+.dossier--contacto .formulario { row-gap: 1.5rem; margin-top: clamp(1.75rem, 4svh, 2.5rem); }
+.dossier--contacto .campo { gap: .5rem; }
+.dossier--contacto .formulario__enviar { margin-top: .5rem; }
+.dossier--contacto .contacto__lista { gap: 1rem; margin-top: clamp(1.75rem, 5svh, 3rem); }
+@media (min-width: 64rem) {
+  .dossier--contacto .contacto { padding-block: clamp(3rem, 9svh, 6rem) clamp(4rem, 11svh, 7rem); }
+  .dossier--contacto .contacto__caja { gap: clamp(3rem, 7vw, 8rem); }
+  .dossier--contacto .solapas { gap: .75rem 1.5rem; }
+  .dossier--contacto .solapa { font-size: var(--t-chico); padding-inline: 1rem; }
+  .dossier--contacto .formulario { row-gap: 2rem; column-gap: clamp(2rem, 3vw, 3rem); }
+  .dossier--contacto .campo__entrada { min-height: 3rem; }
+  .dossier--contacto textarea.campo__entrada { min-height: 7rem; }
+}
