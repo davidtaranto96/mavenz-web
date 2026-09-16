@@ -47,6 +47,8 @@ class Rutas:
 
 
 R = Rutas()
+# Los rotulos de la interfaz del idioma que se esta armando (los usa hueco()).
+DATOS_UI = {}
 
 
 def version(archivo):
@@ -88,6 +90,16 @@ def fundir(base, encima):
     return encima if encima is not None else base
 
 
+def hueco(p, clase=""):
+    """Una foto que todavia no llego (David, 16/09): el lugar queda armado y
+    marcado, asi se ve la version entera, y cuando llega la foto el dict
+    `{"pendiente": ...}` se cambia por uno de foto y el hueco desaparece."""
+    c = f" {clase}" if clase else ""
+    return (f'<figure class="hueco{c}" role="img" aria-label="{e(DATOS_UI["foto_pendiente"])}: {e(p["pendiente"])}">'
+            f'<span class="hueco__rotulo" aria-hidden="true">{e(DATOS_UI["foto_pendiente"])}</span>'
+            f'<span class="hueco__que" aria-hidden="true">{e(p["pendiente"])}</span></figure>')
+
+
 def e(t):
     return H.escape(str(t), quote=True)
 
@@ -104,6 +116,8 @@ def img(foto, sizes, clase="", lazy=True):
     srcset = ", ".join(f'{R.raiz}{foto["src"]}-{w}.webp {w}w' for w in anchos)
     carga = (' loading="lazy" decoding="async"' if lazy
              else ' fetchpriority="high" decoding="async"')
+    if foto.get("tratamiento"):
+        clase = (clase + " foto-tratada").strip()
     c = f' class="{clase}"' if clase else ""
     return (f'<img{c} src="{R.raiz}{foto["src"]}-{anchos[-1]}.webp" srcset="{srcset}" '
             f'sizes="{sizes}" alt="{e(foto["alt"])}" '
@@ -469,7 +483,8 @@ def espacio(d):
     columna = f'<figure class="espacio__foto foto-marca">{img(f, "(min-width:64rem) 44vw, 100vw")}</figure>' if f else ""
     # Ronda 16/09 (Vero): oficina, colaboracion y detalle debajo del bloque.
     fotos_e = ('<div class="espacio__fotos">' + "".join(
-        f'<figure class="espacio__foto-chica foto-marca">{img(x2, "(min-width:64rem) 30vw, 100vw")}</figure>'
+        (hueco(x2, "espacio__foto-chica") if x2.get("pendiente") else
+         f'<figure class="espacio__foto-chica foto-marca">{img(x2, "(min-width:64rem) 30vw, 100vw")}</figure>')
         for x2 in x["fotos"]) + '</div>') if x.get("fotos") else ""
     if v and not f:
         # La web de Espacio Mavenz embebida (Vero, 10/09): un iframe diferido
@@ -485,10 +500,12 @@ def espacio(d):
       <p class="espacio__bajada">{e(x["bajada"])}</p>
       <p class="bajada">{e(x["copy"])}</p>
       {f'<p class="bajada">{e(x["copy2"])}</p>' if x.get("copy2") else ""}
-      <a class="boton boton--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}<span class="visualmente-oculto"> {e(x["cta"]["externo"])}</span></a>
     </div>
     {columna}
     {fotos_e}
+    <div class="espacio__final">
+      <a class="boton boton--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}<span class="visualmente-oculto"> {e(x["cta"]["externo"])}</span></a>
+    </div>
   </div>
 </section>'''
 
@@ -779,11 +796,14 @@ def equipo(d):
     def tarjeta(i, x):
         foto = (f'<figure class="persona__marco">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>' if x.get("foto")
                 else f'<figure class="persona__marco persona__marco--sin-foto" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></figure>')
-        nombre = f'{x["nombre"]} {x.get("apellido", "")}'.strip()
-        linea = f'<p class="persona__linea">{e(x["linea"])}</p>' if x.get("linea") else ""
+        demo = set(x.get("demo") or [])
+        def t(k):
+            return f'<span class="demo">{e(x[k])}</span>' if k in demo else e(x[k])
+        nombre = e(x["nombre"]) + (f' {t("apellido")}' if x.get("apellido") else "")
+        linea = f'<p class="persona__linea">{t("linea")}</p>' if x.get("linea") else ""
         return (f'<article class="persona" style="--i:{i}">{foto}'
-                f'<div class="persona__pie"><h3 class="persona__nombre">{e(nombre)}</h3>'
-                + (f'<p class="persona__rol">{e(x["rol"])}</p>' if x.get("rol") else "") + f'{linea}</div></article>')
+                f'<div class="persona__pie"><h3 class="persona__nombre">{nombre}</h3>'
+                + (f'<p class="persona__rol">{t("rol")}</p>' if x.get("rol") else "") + f'{linea}</div></article>')
     grilla = f'<div class="personas">{"".join(tarjeta(i, x) for i, x in enumerate(con))}</div>' if con else ""
     return f'''<section class="seccion equipo-seccion" id="equipo"{fx("equipo")}>
   <div class="seccion__cabeza">
@@ -1061,6 +1081,7 @@ def pagina_inicio(d, lang):
 {cms("metodo", metodo(d))}
 {cms("mundos", mundos(d))}
 {cms("mapa", mapa_seccion(d))}
+{cms("cierre", cierre_inicio(d))}
 </div></div>'''
     return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
 
@@ -1071,8 +1092,37 @@ def pagina_nosotros(d, lang):
     cuerpo = f'''<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("equipo", equipo(d))}
 </div></div>
-{cms("red", red(d))}'''
+{cms("red", red(d))}
+{cms("comunidad", comunidad(d))}'''
     return cascara(d, lang, "nosotros", cuerpo)
+
+
+def comunidad(d):
+    """El cierre de Nosotros con la foto grupal de la inauguracion (doc de
+    Vero, 16/09: 'al final de la pagina, no en las fichas')."""
+    f = d["equipo"].get("comunidad")
+    if not f:
+        return ""
+    adentro = hueco(f) if f.get("pendiente") else f'<figure class="comunidad__foto foto-marca">{img(f, "100vw")}</figure>'
+    return f'<div class="dossier" data-tema="claro"><div class="dossier__interior"><section class="seccion comunidad">{adentro}</section></div></div>'
+
+
+def cierre_inicio(d):
+    """El cierre de Inicio (doc de Vero, 16/09): el slogan con Hablemos, el
+    CTA editorial, y la foto nocturna de la inauguracion como banda."""
+    c = d.get("cierre")
+    if not c:
+        return ""
+    f = c.get("foto")
+    foto = (hueco(f, "cierre-inicio__foto") if f and f.get("pendiente") else
+            f'<figure class="cierre-inicio__foto foto-marca">{img(f, "(min-width:64rem) 56vw, 100vw")}</figure>' if f else "")
+    return f'''<section class="seccion cierre-inicio" id="cierre"{fx("contacto")}>
+  <div class="cierre-inicio__texto">
+    <h2 class="titulo" data-letras>{e(d["marca"]["mensaje"])}</h2>
+    <a class="boton" href="{e(c["cta"]["href"])}">{e(c["cta"]["rotulo"])}</a>
+  </div>
+  {foto}
+</section>'''
 
 
 def pagina_proyectos(d, lang):
@@ -1225,7 +1275,7 @@ TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "ca
             "en", "whatsapp", "correo", "sitio_espacio", "proporcion", "numero", "n", "x", "y",
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
             "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar",
-            "servicio", "motivo"}
+            "servicio", "motivo", "demo", "tratamiento"}
 
 
 def hojas(o, ruta=(), vacias=False):
@@ -1360,6 +1410,7 @@ def main(args):
             chequear_capas(ES, CAPAS[lang], lang)
             d = fundir(ES, CAPAS[lang])
         R.poner(idi["carpeta"])
+        DATOS_UI.clear(); DATOS_UI.update(d["interfaz"])
         carpeta = AQUI / idi["carpeta"]
         carpeta.mkdir(exist_ok=True)
         for slug, pg in d["paginas"].items():

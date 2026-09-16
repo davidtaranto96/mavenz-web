@@ -115,6 +115,9 @@
       },
       {
         "alt": "A table at Espacio Mavenz with flowers and coffee"
+      },
+      {
+        "pendiente": "Library and objects, vertical crop"
       }
     ]
   },
@@ -132,7 +135,7 @@
         "Private gardens",
         "Parking included",
         "Pool, clubhouse and green areas",
-        "Financing during construction"
+        "Preferential financing"
       ],
       "aclaracion": "Developed by GRIFIL · Sold by MAVENZ",
       "cta_principal": "Discover Cardinal",
@@ -269,7 +272,7 @@
         "Apartments",
         "Retail units",
         "Parking",
-        "Down payment and instalments"
+        "Down payment and instalment options"
       ],
       "aclaracion": "Sold by MAVENZ",
       "cta_comercial": "Check availability on WhatsApp",
@@ -434,7 +437,8 @@
     "silenciar": "Mute",
     "correo": "Email",
     "menu": "Menu",
-    "idioma_pronto": "Coming soon"
+    "idioma_pronto": "Coming soon",
+    "foto_pendiente": "Photo to come"
   },
   "equipo": {
     "titulo": "The team that creates momentum",
@@ -444,21 +448,32 @@
         "rol": "Management",
         "foto": {
           "alt": "Luchi, from Mavenz, at her desk"
-        }
+        },
+        "apellido": "Surname",
+        "linea": "Demo text: one line about their work at Mavenz."
       },
       {
         "foto": {
           "alt": "Jota, from Mavenz, at the office"
-        }
+        },
+        "apellido": "Surname",
+        "linea": "Demo text: one line about their work at Mavenz.",
+        "rol": "Role"
       },
       {
         "foto": {
           "alt": "Male, from Mavenz"
-        }
+        },
+        "apellido": "Surname",
+        "linea": "Demo text: one line about their work at Mavenz.",
+        "rol": "Role"
       }
     ],
     "foto": {
       "alt": "Mavenz team members at the office"
+    },
+    "comunidad": {
+      "pendiente": "Group photo from the opening"
     }
   },
   "paginas": {
@@ -567,5 +582,13 @@
     "rotulo_contacto": "Contact",
     "rotulo_redes": "Social",
     "derechos": "Mavenz. Salta, Argentina."
+  },
+  "cierre": {
+    "cta": {
+      "rotulo": "Let us talk"
+    },
+    "foto": {
+      "pendiente": "Night photo from the opening"
+    }
   }
 }

@@ -191,6 +191,9 @@
         "alt": "Detalle de una mesa de Espacio Mavenz con flores y café",
         "ancho": 1600,
         "alto": 2844
+      },
+      {
+        "pendiente": "Biblioteca y objetos, recorte vertical"
       }
     ]
   },
@@ -209,7 +212,7 @@
         "Jardines privados",
         "Cochera incluida",
         "Pileta, SUM y espacios verdes",
-        "Financiación durante la obra"
+        "Financiación preferencial"
       ],
       "aclaracion": "Desarrolla GRIFIL · Comercializa MAVENZ",
       "cta_principal": "Conocé Cardinal",
@@ -473,7 +476,7 @@
         "Departamentos",
         "Locales comerciales",
         "Cocheras",
-        "Anticipo y cuotas"
+        "Opciones de anticipo y cuotas"
       ],
       "aclaracion": "Comercializa MAVENZ",
       "cta_comercial": "Consultá disponibilidad",
@@ -711,18 +714,19 @@
     "siguiente": "Siguiente",
     "ver_video": "Ver el video",
     "silenciar": "Silenciar",
-    "idioma_pronto": "Próximamente"
+    "idioma_pronto": "Próximamente",
+    "foto_pendiente": "Foto pendiente"
   },
   "equipo": {
     "titulo": "El equipo que genera movimiento",
     "intro": "Somos un equipo con experiencia en estrategia, desarrollo de negocios, comunicación y comercialización. Trabajamos de manera colaborativa y articulamos especialistas según lo que cada proyecto necesita.",
-    "_dt": "Ronda 16/09 (Vero): ninguna ficha con 'Nombre y apellido' o 'Rol'. David confirmo quien es quien (Luchi sentada en el escritorio, Male la de blanco). Se publica con nombre y foto; apellido, rol y linea entran cuando Vero los mande.",
+    "_dt": "Ronda 16/09 (Vero): ninguna ficha con 'Nombre y apellido' o 'Rol'. David confirmo quien es quien (Luchi sentada en el escritorio, Male la de blanco). Se publica con nombre y foto; apellido, rol y linea entran cuando Vero los mande. David, 16/09: lo que falta queda marcado como demo o foto pendiente, para que Vero vea la version entera y despues se completa.",
     "personas": [
       {
         "nombre": "Luchi",
-        "apellido": "",
+        "apellido": "Apellido",
         "rol": "Dirección",
-        "linea": "",
+        "linea": "Texto demo: una línea sobre lo que hace en Mavenz.",
         "foto": {
           "src": "img/equipo-luchi",
           "anchos": [
@@ -732,13 +736,17 @@
           "alt": "Luchi, de Mavenz, en su escritorio",
           "ancho": 1600,
           "alto": 1999
-        }
+        },
+        "demo": [
+          "apellido",
+          "linea"
+        ]
       },
       {
         "nombre": "Jota",
-        "apellido": "",
-        "rol": "",
-        "linea": "",
+        "apellido": "Apellido",
+        "rol": "Cargo",
+        "linea": "Texto demo: una línea sobre lo que hace en Mavenz.",
         "foto": {
           "src": "img/equipo-jota",
           "anchos": [
@@ -748,13 +756,18 @@
           "alt": "Jota, de Mavenz, en la oficina",
           "ancho": 1600,
           "alto": 2000
-        }
+        },
+        "demo": [
+          "apellido",
+          "linea",
+          "rol"
+        ]
       },
       {
         "nombre": "Male",
-        "apellido": "",
-        "rol": "",
-        "linea": "",
+        "apellido": "Apellido",
+        "rol": "Cargo",
+        "linea": "Texto demo: una línea sobre lo que hace en Mavenz.",
         "foto": {
           "src": "img/equipo-male",
           "anchos": [
@@ -764,7 +777,12 @@
           "alt": "Male, de Mavenz",
           "ancho": 1600,
           "alto": 2000
-        }
+        },
+        "demo": [
+          "apellido",
+          "linea",
+          "rol"
+        ]
       }
     ],
     "foto": {
@@ -776,6 +794,9 @@
       "alt": "Integrantes de Mavenz en la oficina",
       "ancho": 1600,
       "alto": 900
+    },
+    "comunidad": {
+      "pendiente": "Foto grupal de la inauguración"
     }
   },
   "paginas": {
@@ -879,7 +900,8 @@
           ],
           "alt": "Atardecer sobre San Lorenzo",
           "ancho": 1600,
-          "alto": 692
+          "alto": 692,
+          "tratamiento": true
         }
       }
     ]
@@ -903,5 +925,15 @@
     "rotulo_redes": "Redes",
     "derechos": "Mavenz. Salta, Argentina.",
     "credito": ""
+  },
+  "cierre": {
+    "_dt": "Doc de Vero: 'Hablemos como CTA editorial' y 'Inicio cierre o comunidad: foto de la inauguracion, solo como banda editorial o cierre'. El titulo es marca.mensaje. David, 16/09: lo que falta queda marcado como demo o foto pendiente, para que Vero vea la version entera y despues se completa.",
+    "cta": {
+      "rotulo": "Hablemos",
+      "href": "contacto.html"
+    },
+    "foto": {
+      "pendiente": "Foto nocturna de la inauguración"
+    }
   }
 }

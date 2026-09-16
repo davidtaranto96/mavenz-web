@@ -3472,3 +3472,66 @@ footer.pie { grid-template-columns: minmax(0, 1fr); justify-content: normal; }
   .dossier--contacto .campo__entrada { min-height: 3rem; }
   .dossier--contacto textarea.campo__entrada { min-height: 7rem; }
 }
+
+/* ==========================================================================
+   Pulido del documento de Vero (David, 16/09): el cierre de Inicio, las
+   fotos pendientes, los textos demo
+   ========================================================================== */
+
+/* Una foto que todavia no llego: el lugar armado y marcado. */
+.hueco {
+  margin: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: .5rem;
+  aspect-ratio: 16 / 9;
+  padding: 1.5rem;
+  border: 1px dashed var(--linea-acento);
+  border-radius: 6px;
+  background: var(--papel-hueco);
+  color: var(--tinta-apoyo);
+  text-align: center;
+}
+.hueco__rotulo { font-size: var(--t-micro); font-weight: var(--medio); letter-spacing: .14em; text-transform: uppercase; }
+.hueco__que { font-size: var(--t-chico); max-width: 28ch; text-wrap: balance; }
+.espacio .hueco {
+  background: color-mix(in srgb, var(--sobre-foto) 8%, transparent);
+  border-color: color-mix(in srgb, var(--sobre-foto) 40%, transparent);
+  color: var(--sobre-foto);
+}
+
+/* Lo que falta en las fichas: se lee, pero se nota que es demo. */
+.demo { color: var(--tinta-apoyo); text-decoration: underline dotted; text-underline-offset: .22em; text-decoration-thickness: 1px; }
+
+/* El cierre de Inicio: el slogan con Hablemos, y la banda de la foto. */
+.cierre-inicio { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.cierre-inicio__texto { display: grid; gap: clamp(1.25rem, 3vw, 2rem); justify-items: start; }
+.cierre-inicio__foto img { aspect-ratio: 16 / 9; }
+@media (min-width: 64rem) {
+  .cierre-inicio { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+
+/* Espacio: la biblioteca pendiente como cuarta foto, y el boton al final. */
+.espacio__final { grid-column: 1 / -1; display: flex; justify-content: center; margin-top: clamp(1.5rem, 4vw, 2.5rem); }
+.espacio__final .espacio__cta { margin-top: 0; }
+.espacio__fotos .hueco { aspect-ratio: 3 / 2; }
+@media (min-width: 64rem) {
+  .espacio__fotos:has(> :nth-child(4)) { grid-template-columns: 5fr 5fr 3fr 3fr; }
+  .espacio__fotos .hueco { aspect-ratio: auto; height: clamp(14rem, 22vw, 22rem); }
+}
+
+/* Nosotros: el cierre con la foto grupal. */
+.comunidad .hueco, .comunidad__foto img { aspect-ratio: 21 / 9; }
+
+/* Las aereas reales llevan el mismo tratamiento que las fotos del equipo;
+   los renders de los proyectos quedan como vienen. */
+img.foto-tratada { filter: sepia(.14) saturate(.92) contrast(1.02); }
+
+/* Somos en el celular: los dos parrafos que escribio Vero, los dos a la vista. */
+@media (max-width: 63.99rem) {
+  .quienes__texto .bajada + .bajada { display: block; }
+}
+@media (min-width: 64rem) {
+  .comunidad .hueco { aspect-ratio: 3 / 1; }
+}
