@@ -3322,3 +3322,10 @@ body[data-pagina="contacto"] .flotante__wa { opacity: 0; visibility: hidden; poi
   .pie__marca, nav.pie__col { grid-column: 1 / -1; }
   .pie__abajo { flex-wrap: wrap; }
 }
+
+/* ==========================================================================
+   Septima vuelta (Vero, 16/09): textos y fotos del documento
+   ========================================================================== */
+
+/* "Servicio integral": el unico rotulo chico sobre un titulo, pedido por Vero. */
+.universo__rotulo { text-transform: uppercase; margin-bottom: .75rem; }

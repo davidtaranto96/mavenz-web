@@ -313,6 +313,7 @@ def orbita(d):
             f'<h3>{e(nombre)}</h3><p>{e(copy)}</p></div>')
     return f'''<section class="seccion universo" id="universo"{fx("universo")}>
   <div class="seccion__cabeza">
+    {f'<p class="margen universo__rotulo">{e(u["rotulo"])}</p>' if u.get("rotulo") else ""}
     <h2 class="titulo" data-letras>{e(u["titulo"])}</h2>
     <p class="bajada">{e(u["intro"])}</p>
   </div>
@@ -346,7 +347,7 @@ def mapa_seccion(d):
     return f'''<section class="seccion mapa-seccion" id="mapa"{fx("mirada")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(mp["nombre"])}</h2>
-    <p class="bajada">{e(mp["titulo"])}. {e(mp["intro"])}</p>
+    <p class="bajada">{e(mp.get("bajada") or mp["titulo"] + ". " + mp["intro"])}</p>
   </div>
   {mapa(d, cabeza=False)}
 </section>'''
@@ -472,6 +473,7 @@ def espacio(d):
       <h2 class="titulo" data-letras>{e(x["titulo"])}</h2>
       <p class="espacio__bajada">{e(x["bajada"])}</p>
       <p class="bajada">{e(x["copy"])}</p>
+      {f'<p class="bajada">{e(x["copy2"])}</p>' if x.get("copy2") else ""}
       <a class="boton boton--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}<span class="visualmente-oculto"> {e(x["cta"]["externo"])}</span></a>
     </div>
     {columna}
@@ -556,7 +558,7 @@ def ficha_titulo(d, clave="cardinal"):
     return f'''<section class="seccion ficha-titulo" id="proyecto"{fx("proyectos")}>
   {marcador()}
   <h2 class="titulo ficha-titulo__titulo" data-letras>{e(c["titulo"])}</h2>
-  <p class="bajada ficha-titulo__texto">{e(c["texto"])}</p>
+  <p class="bajada ficha-titulo__texto">{e(c.get("apertura") or c["texto"])}</p>
   {datos_chips(c["datos"])}
   <p class="resumen__aclaracion">{e(c["aclaracion"])}</p>
   <a class="subrayado" href="{e(wa(d, c["wa"]))}" target="_blank" rel="noopener">{e(c["cta_comercial"])}</a>
@@ -977,7 +979,7 @@ def cascara(d, lang, slug, cuerpo, tema="claro"):
     escriben una sola vez o se desincronizan: es el bug que mas caro sale."""
     m, ui, pg, idi = d["marca"], d["interfaz"], d["paginas"][slug], d["idiomas"][lang]
     md = d.get("medicion", {})
-    titulo = f'{pg["titulo"]} — {m["nombre"]}' if slug != "inicio" else f'{m["nombre"]} — {m["mensaje"]}'
+    titulo = f'{pg["titulo"]} — {m["nombre"]}' if slug != "inicio" else m.get("titulo_seo") or f'{m["nombre"]} — {m["mensaje"]}'
     archivo = "" if slug == "inicio" else pg["archivo"]
     canonica = URL + idi["carpeta"] + archivo
     # Cada idioma apunta a los otros y x-default al castellano: asi Google no

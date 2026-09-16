@@ -3,9 +3,10 @@
   "_revisar": "El copy en inglés lo tradujo DT System del castellano de Vero. Mavenz tiene que revisarlo, y sobre todo confirmar el claim del hero: 'Mavenz creates momentum' es la traducción fiel de 'Mavenz genera movimiento', pero un claim de marca lo decide la marca. La alternativa que ya usaba el kit es 'Moving things forward'.",
   "marca": {
     "nombre": "Mavenz",
-    "mensaje": "Mavenz creates momentum",
-    "definicion": "We are the strategic partner that moves real estate.",
-    "lugar": "Salta, Argentina"
+    "mensaje": "We create momentum",
+    "definicion": "We are the strategic partner that moves Real Estate.",
+    "lugar": "Salta, Argentina",
+    "titulo_seo": "Mavenz — Strategic Real Estate partner"
   },
   "redes": [
     {
@@ -20,9 +21,9 @@
   ],
   "hero": {
     "titulo": "Mavenz",
-    "sub": "creates momentum",
+    "sub": "We create momentum",
     "cta": {
-      "rotulo": "Let us talk"
+      "rotulo": "Discover Mavenz"
     },
     "bajar": "Keep scrolling",
     "foto": {
@@ -31,8 +32,8 @@
   },
   "quienes": {
     "titulo": "We are Mavenz",
-    "copy": "We were born with a different way of working in real estate: integral, strategic and collaborative.",
-    "copy2": "We work alongside developers, investors and landowners, connecting strategy, business, communication and sales to turn opportunities into projects that move forward.",
+    "copy": "We are the strategic partner that moves Real Estate. We bring an integral view because, in such a demanding sector, the big picture makes the difference.",
+    "copy2": "We spot opportunities, design strategies and connect the right people to make things happen. We get involved from the idea and the communication to the commercial development of each project.",
     "gotas": {
       "fondo": {
         "video": {
@@ -48,32 +49,33 @@
   },
   "universo": {
     "titulo": "The Mavenz Universe",
-    "intro": "We integrate strategy, sales and opportunities to accompany a project's whole journey: from identifying its potential to turning it into a business that creates value.",
+    "intro": "The Mavenz Universe brings together the capabilities each opportunity needs to move forward: strategy, sales, opportunities, brand and communication.",
     "centro": "Mavenz",
     "ayuda": "Explore each capability",
     "esferas": [
       {
         "nombre": "Strategy",
-        "copy": "We identify opportunities, analyse their potential and design the strategic path to turn them into solid, distinctive projects."
+        "copy": "We identify the potential of each opportunity and design a clear strategy to turn it into a solid, relevant and distinctive project."
       },
       {
         "nombre": "Sales",
-        "copy": "We design and implement sales and positioning strategies to accompany the launch, communication and sale of each project."
+        "copy": "We design and implement the commercial path of each project: positioning, launch, opportunity management and sales."
       },
       {
         "nombre": "Opportunities",
-        "copy": "We detect new investment possibilities, foster alliances and connect projects, people and capital to develop new business."
+        "copy": "We identify investment opportunities, drive alliances and connect projects, people and capital to create new business."
       }
     ],
     "anillo": {
       "nombre": "Brand and communication",
-      "copy": "They accompany the whole process to build identity, positioning and coherence at every point of contact."
+      "copy": "We build a clear identity and consistent communication that support the project at every touchpoint."
     },
-    "cierre": "At Mavenz we do not work in isolated areas. We connect different capabilities according to what each opportunity needs to move forward."
+    "cierre": "At Mavenz, capabilities do not work in isolation: they connect and organise around what each opportunity needs to move forward.",
+    "rotulo": "Integral service"
   },
   "metodo": {
     "titulo": "How we work",
-    "intro": "Every project needs its own perspective. That is why we work with a flexible, strategic and collaborative methodology, connecting capabilities to each challenge.",
+    "intro": "Every opportunity needs its own perspective. That is why we apply a flexible, strategic and collaborative methodology that turns ideas into concrete actions.",
     "pasos": [
       {
         "nombre": "We discover",
@@ -100,25 +102,22 @@
   },
   "espacio": {
     "titulo": "Espacio Mavenz",
-    "bajada": "A meeting point for projects, people and opportunities.",
-    "copy": "Espacio Mavenz is our office and also a collaborative space within real estate. A place designed to work, connect, present projects, build alliances and get new opportunities moving.",
+    "bajada": "Where the Mavenz Universe and Method meet.",
+    "copy": "Espacio Mavenz is where an opportunity stops being an idea and becomes action. Strategy, business development, communication, sales and management come together there to support each opportunity along its whole path.",
     "cta": {
-      "rotulo": "Discover the space",
+      "rotulo": "Discover Espacio Mavenz",
       "externo": "(external site)"
     },
-    "vista": {
-      "titulo": "The Espacio Mavenz website",
-      "rotulo": "This is espaciomavenz.com.ar"
-    }
+    "copy2": "It is not just a sales channel. It is the concrete expression of the Mavenz Method. Because for us a deal is not the end of the process, but the start of the next move."
   },
   "proyectos": {
-    "intro": "Projects and opportunities in which Mavenz takes part through strategy, positioning, business development or sales.",
+    "intro": "Projects and opportunities we drive through strategy, positioning, business development and sales.",
     "cardinal": {
       "nombre": "Cardinal",
       "meta": "San Lorenzo Chico, Salta",
       "estado": "Now selling",
       "titulo": "A new way of living in San Lorenzo Chico.",
-      "texto": "A residential project on one of the main avenues of San Lorenzo Chico, designed to bring together contemporary architecture, nature and quality of life.",
+      "texto": "A residential project on a strategic corner of San Lorenzo Chico, designed to bring together contemporary architecture, nature and quality of life.",
       "datos": [
         "Units from 74 m²",
         "Different layouts",
@@ -208,8 +207,8 @@
       ],
       "cardenal": {
         "rotulo": "The cardinal of CARDINAL",
-        "copy": "Did you know the cardinal always returns home? A bird that stands for belonging, movement and identity.",
-        "cierre": "And this is only starting to move."
+        "copy": "The cardinal always returns home. That is why it inspires a project about belonging, identity and a new way of living San Lorenzo Chico.",
+        "cierre": "A new way of living starts here."
       },
       "franja": {
         "alt": "Video walk through Cardinal"
@@ -217,16 +216,17 @@
       "unidades": {
         "rotulo": "Units",
         "titulo": "Units from 74 m²",
-        "texto": "Different layouts for different ways of living. Ask about availability and the plans of each one.",
+        "texto": "Units from 74 m², with different layouts to live in or invest. Ask about availability, floor plans and launch conditions.",
         "foto": {
           "alt": "Interior of a unit at Cardinal"
         }
       },
       "financiacion": {
-        "titulo": "Financing during construction",
+        "titulo": "Get in today with preferential financing during construction",
         "cta": "Check availability on WhatsApp",
         "cta2": "Contact us"
-      }
+      },
+      "apertura": "On a strategic corner of San Lorenzo Chico, Cardinal proposes a new way of living: contemporary architecture, a connection with nature and spaces designed to be enjoyed every day."
     },
     "otros_rotulo": "Other projects",
     "otros_intro": "Confirmed projects with enough information.",
@@ -255,8 +255,8 @@
     },
     "cafay": {
       "estado": "Apartments, shops and parking",
-      "titulo": "A Mavenz project in Cafayate.",
-      "texto": "Apartments, retail units and parking spaces in Cafayate, with a down payment and instalment plan.",
+      "titulo": "An opportunity to live and invest in Cafayate.",
+      "texto": "Apartments, retail units and parking in one of the towns with the strongest tourism outlook in Salta. Ask about the down payment and instalment options.",
       "datos": [
         "Apartments",
         "Retail units",
@@ -269,16 +269,16 @@
       "scroll": "Keep scrolling",
       "galeria_titulo": "The project in pictures",
       "financiacion": {
-        "titulo": "Down payment and instalments",
+        "titulo": "Discover the financing options",
         "cta": "Check availability on WhatsApp",
         "cta2": "Contact us"
       }
     }
   },
   "red": {
-    "titulo": "Movement never happens alone",
-    "copy": "Team, partners, specialists, developers and allies who connect according to what each project needs to move.",
-    "cierre": "This is not a directory of logos. It is who steps into each movement.",
+    "titulo": "Momentum is built as a network",
+    "copy": "We connect team, partners, specialists, developers and allies according to what each opportunity needs to move forward.",
+    "cierre": "It is not about adding names. It is about connecting the right people at the right time.",
     "nodos": [
       {
         "nombre": "Team"
@@ -359,14 +359,15 @@
           "quien": "Couples aged 30 to 45 who work downtown or remotely and want their children to grow up close to nature. Artists, architects and designers. Short-stay rental investors."
         }
       ],
-      "nombre": "Mavenz Map"
+      "nombre": "Mavenz Map",
+      "bajada": "A strategic look at the territories where Salta is growing and the opportunities opening up in each one."
     }
   },
   "contacto": {
     "apertura": "If you have a project, an investment opportunity or a proposal to develop, we want to hear about it.",
-    "titulo": "Let us move something together",
+    "titulo": "Let us move the next opportunity forward",
     "cta_wa": "Message us on WhatsApp",
-    "rotulo_motivos": "What do you want to move",
+    "rotulo_motivos": "Tell us which opportunity you want to drive",
     "motivos": [
       {
         "rotulo": "I have a project",
@@ -400,8 +401,8 @@
         "telefono": "Phone (optional)",
         "mensaje": "Message"
       },
-      "privacidad": "We only use your details to reply to you.",
-      "enviar": "Send",
+      "privacidad": "We only use your details to answer your enquiry.",
+      "enviar": "Contact us",
       "enviando": "Sending…",
       "gracias": "We received your message. We will get back to you shortly.",
       "error": "We could not send your message. Try again or write to us on WhatsApp.",
@@ -425,8 +426,8 @@
     "idioma_pronto": "Coming soon"
   },
   "equipo": {
-    "titulo": "The people behind Mavenz",
-    "intro": "We are a team with experience in strategy, business, communication and sales. We work collaboratively and bring in specialists according to the needs of each project.",
+    "titulo": "The team that creates momentum",
+    "intro": "We are a team with experience in strategy, business development, communication and sales. We work collaboratively and bring in specialists according to what each project needs.",
     "personas": [
       {
         "rol": "Management"
@@ -443,7 +444,7 @@
   },
   "paginas": {
     "inicio": {
-      "titulo": "Mavenz creates momentum",
+      "titulo": "We create momentum",
       "rotulo": "Home"
     },
     "universo": {
@@ -461,7 +462,7 @@
     },
     "nosotros": {
       "rotulo": "About us",
-      "titulo": "The people behind Mavenz",
+      "titulo": "The team that creates momentum",
       "cinta": "About us"
     },
     "contacto": {
@@ -517,7 +518,7 @@
   },
   "mundos": {
     "rotulo": "Projects in motion",
-    "intro": "Projects and opportunities in which Mavenz takes part through strategy, positioning, business development or sales.",
+    "intro": "Projects and opportunities we drive through strategy, positioning, business development and sales.",
     "lista": [
       {
         "nombre": "Cardinal",

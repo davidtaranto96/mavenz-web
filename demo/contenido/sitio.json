@@ -3,9 +3,10 @@
   "_editable": "Este archivo es la fuente única. Un dato se cambia acá, se corre `python3 armar.py` y se publica. No se escribe dos veces en ningún lado.",
   "marca": {
     "nombre": "Mavenz",
-    "mensaje": "Mavenz genera movimiento",
-    "definicion": "Somos el partner estratégico que mueve el real estate.",
-    "lugar": "Salta, Argentina"
+    "mensaje": "Generamos movimiento",
+    "definicion": "Somos el partner estratégico que mueve el Real Estate.",
+    "lugar": "Salta, Argentina",
+    "titulo_seo": "Mavenz — Partner estratégico de Real Estate"
   },
   "contacto_datos": {
     "whatsapp": "5493875918813",
@@ -29,10 +30,10 @@
   ],
   "hero": {
     "titulo": "Mavenz",
-    "sub": "genera movimiento",
+    "sub": "Generamos movimiento",
     "cta": {
-      "rotulo": "Hablemos",
-      "href": "contacto.html"
+      "rotulo": "Conocé Mavenz",
+      "href": "#quienes"
     },
     "bajar": "Seguir bajando",
     "foto": {
@@ -45,12 +46,12 @@
       "ancho": 1229,
       "alto": 692
     },
-    "_dt": "Quinta vuelta (Vero, 10/09 tarde): MAVENZ con el isotipo, 'genera movimiento' abajo, una flecha y Hablemos. La foto es un render de Cardinal, provisoria hasta que Vero elija. Sin bajada, sin boton al Universo y sin la cinta de mundos."
+    "_dt": "Ronda 16/09 (documento 'Cambios web Mavenz para David' de Vero). 'Generamos movimiento' y el CTA 'Conocé Mavenz' a Somos. Quinta vuelta (Vero, 10/09 tarde): MAVENZ con el isotipo, 'genera movimiento' abajo, una flecha y Hablemos. La foto es un render de Cardinal, provisoria hasta que Vero elija. Sin bajada, sin boton al Universo y sin la cinta de mundos."
   },
   "quienes": {
     "titulo": "Somos Mavenz",
-    "copy": "Nacimos con una manera diferente de trabajar dentro del Real Estate: integral, estratégica y colaborativa.",
-    "copy2": "Acompañamos a desarrolladores, inversores y propietarios de tierras, conectando estrategia, negocios, comunicación y comercialización para transformar oportunidades en proyectos que avanzan.",
+    "copy": "Somos el partner estratégico que mueve el Real Estate. Aportamos una mirada integral porque, en un sector tan exigente, la visión global marca la diferencia.",
+    "copy2": "Detectamos oportunidades, diseñamos estrategias y conectamos a las personas indicadas para que las cosas pasen. Nos involucramos desde la idea y la comunicación hasta el desarrollo comercial de cada proyecto.",
     "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3).",
     "gotas": {
       "_dt": "Dos gotas con video adentro (10/09, pedido de David: que incluyan videos, que sean como gotas que se mueven con el mouse y un 50 % mas grandes). Cada una lleva `video` {src, poster, alt} o `foto` {src, anchos, alt, ancho, alto}. Los clips son recortes cuadrados del post de Cardinal sin el subtitulo quemado, en ida y vuelta: los cerros (22,9 a 24,2 s, a 1,5x mas lento) y la pileta (17,95 a 19,8 s). Alternativa lista si Vero prefiere otra: el campo verde del mismo post, 13,7 a 15,2 s. Las dos aereas provisorias de antes siguen en img/ (aerea-verde, aerea-dia) por si se vuelve a foto. Si `gotas` queda vacio ({}) la columna no se emite y el texto ocupa el ancho.",
@@ -72,7 +73,7 @@
   },
   "universo": {
     "titulo": "El Universo Mavenz",
-    "intro": "Integramos estrategia, comercialización y oportunidades para acompañar todo el recorrido de un proyecto: desde la identificación de su potencial hasta su transformación en un negocio que genera valor.",
+    "intro": "El Universo Mavenz reúne las capacidades que cada oportunidad necesita para avanzar: estrategia, comercialización, oportunidades, marca y comunicación.",
     "centro": "Mavenz",
     "ayuda": "Explorá cada capacidad",
     "_dt": "Tres esferas y el anillo, textuales del documento del 08/09 (UNI-3). Gestion & Evolucion desaparece: el documento fija tres. Marca y comunicacion NO es esfera: es el anillo que las rodea.",
@@ -81,30 +82,31 @@
         "id": "estrategia",
         "numero": "01",
         "nombre": "Estrategia",
-        "copy": "Identificamos oportunidades, analizamos su potencial y diseñamos el camino estratégico para convertirlas en proyectos sólidos y diferenciales."
+        "copy": "Detectamos el potencial de cada oportunidad y diseñamos una estrategia clara para convertirla en un proyecto sólido, relevante y diferencial."
       },
       {
         "id": "comercializacion",
         "numero": "02",
         "nombre": "Comercialización",
-        "copy": "Diseñamos e implementamos estrategias comerciales y de posicionamiento para acompañar el lanzamiento, la comunicación y la comercialización de cada proyecto."
+        "copy": "Diseñamos e implementamos el recorrido comercial de cada proyecto: posicionamiento, lanzamiento, gestión de oportunidades y venta."
       },
       {
         "id": "oportunidades",
         "numero": "03",
         "nombre": "Oportunidades",
-        "copy": "Detectamos nuevas posibilidades de inversión, impulsamos alianzas y conectamos proyectos, personas y capital para desarrollar nuevos negocios."
+        "copy": "Identificamos oportunidades de inversión, impulsamos alianzas y conectamos proyectos, personas y capital para generar nuevos negocios."
       }
     ],
     "anillo": {
       "nombre": "Marca y comunicación",
-      "copy": "Acompañan todo el proceso para construir identidad, posicionamiento y coherencia en cada punto de contacto."
+      "copy": "Construimos una identidad clara y una comunicación coherente que acompañan al proyecto en cada punto de contacto."
     },
-    "cierre": "En Mavenz no trabajamos por áreas aisladas. Conectamos distintas capacidades según lo que cada oportunidad necesita para avanzar."
+    "cierre": "En Mavenz, las capacidades no funcionan de forma aislada: se conectan y se ordenan según lo que cada oportunidad necesita para avanzar.",
+    "rotulo": "Servicio integral"
   },
   "metodo": {
     "titulo": "Cómo trabajamos",
-    "intro": "Cada proyecto necesita una mirada propia. Por eso trabajamos con una metodología flexible, estratégica y colaborativa, conectando capacidades según cada desafío.",
+    "intro": "Cada oportunidad necesita una mirada propia. Por eso aplicamos una metodología flexible, estratégica y colaborativa que transforma ideas en acciones concretas.",
     "_dt": "Textual del documento del 08/09 (MET-1, MET-2). Los cinco pasos se despliegan desde la cola del trazo de la M a medida que se baja (MET-3); fondo papel y trazo en bordo (MET-4).",
     "pasos": [
       {
@@ -137,30 +139,26 @@
   },
   "espacio": {
     "titulo": "Espacio Mavenz",
-    "bajada": "Un punto de encuentro para proyectos, personas y oportunidades.",
-    "copy": "Espacio Mavenz es nuestra oficina y también un espacio colaborativo dentro del Real Estate. Un lugar pensado para trabajar, conectar, presentar proyectos, generar alianzas y hacer que nuevas oportunidades empiecen a moverse.",
+    "bajada": "El lugar donde el Universo y el Método Mavenz se encuentran.",
+    "copy": "Espacio Mavenz es el lugar donde una oportunidad deja de ser una idea para convertirse en acción. Allí convergen la estrategia, el desarrollo de negocios, la comunicación, la comercialización y la gestión para acompañar cada oportunidad durante todo su recorrido.",
     "cta": {
-      "rotulo": "Conocé el espacio",
+      "rotulo": "Conocé Espacio Mavenz",
       "href": "https://espaciomavenz.com.ar",
       "externo": "(sitio externo)"
     },
     "foto": null,
     "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una.",
-    "vista": {
-      "src": "https://www.espaciomavenz.com.ar",
-      "titulo": "El sitio de Espacio Mavenz",
-      "rotulo": "Así se ve espaciomavenz.com.ar"
-    }
+    "copy2": "No es solamente un canal de comercialización. Es la expresión concreta del Método Mavenz. Porque para nosotros una operación no representa el final del proceso, sino el comienzo del próximo movimiento."
   },
   "proyectos": {
-    "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
+    "intro": "Proyectos y oportunidades que impulsamos desde la estrategia, el posicionamiento, el desarrollo de negocios y la comercialización.",
     "_dt": "proyectos.html es un indice liviano (Cardinal resumido, otros, oportunidades); la ficha completa es cardinal.html (proyectos.cardinal). Textos de Cardinal textuales del documento del 08/09 (PROY-2). Los epigrafes y alt que hablaban de 'casas' se reescribieron neutros: el producto son unidades desde 74 m2 con distintas tipologias; Vero confirma la grafia de GRIFIL.",
     "cardinal": {
       "nombre": "Cardinal",
       "meta": "San Lorenzo Chico, Salta",
       "estado": "En comercialización",
       "titulo": "Una nueva forma de habitar San Lorenzo Chico.",
-      "texto": "Un proyecto residencial ubicado sobre una de las principales avenidas de San Lorenzo Chico, pensado para integrar arquitectura contemporánea, naturaleza y calidad de vida.",
+      "texto": "Un proyecto residencial en una esquina estratégica de San Lorenzo Chico, pensado para integrar arquitectura contemporánea, naturaleza y calidad de vida.",
       "datos": [
         "Unidades desde 74 m²",
         "Distintas tipologías",
@@ -345,8 +343,8 @@
         "src": "video/cardenal.mp4",
         "poster": "video/cardenal-poster.webp",
         "rotulo": "El cardenal de CARDINAL",
-        "copy": "¿Sabías que el cardenal siempre vuelve a su hogar? Un ave que representa pertenencia, movimiento e identidad.",
-        "cierre": "Y esto recién se pone en movimiento.",
+        "copy": "El cardenal siempre vuelve a su hogar. Por eso inspira un proyecto que habla de pertenencia, identidad y una nueva forma de vivir San Lorenzo Chico.",
+        "cierre": "Una nueva forma de habitar comienza acá.",
         "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
       },
       "franja": {
@@ -357,7 +355,7 @@
       "unidades": {
         "rotulo": "Unidades",
         "titulo": "Unidades desde 74 m²",
-        "texto": "Distintas tipologías para distintas formas de vivir. Consultá la disponibilidad y los planos de cada una.",
+        "texto": "Unidades desde 74 m², con distintas tipologías para vivir o invertir. Consultá disponibilidad, planos y condiciones de lanzamiento.",
         "foto": {
           "src": "img/render-interior",
           "anchos": [
@@ -371,13 +369,14 @@
         "_dt": "Falta el plano o la foto de tipologias (FICHA-6); mientras, el render interior."
       },
       "financiacion": {
-        "titulo": "Financiación durante la obra",
+        "titulo": "Accedé hoy con financiación preferencial durante la obra",
         "copy": "",
         "cta": "Consultá disponibilidad",
         "_dt": "FICHA-7: falta el copy de financiacion (plazos, anticipo, cuotas). Mientras, titulo y CTA.",
         "cta2": "Contactanos"
       },
-      "marquee": "Cardinal"
+      "marquee": "Cardinal",
+      "apertura": "En una esquina estratégica de San Lorenzo Chico, Cardinal propone una nueva forma de habitar: arquitectura contemporánea, conexión con la naturaleza y espacios pensados para disfrutar todos los días."
     },
     "otros_rotulo": "Otros proyectos",
     "otros_intro": "Proyectos confirmados y con información suficiente.",
@@ -424,8 +423,8 @@
       "nombre": "Cafay",
       "meta": "Cafayate, Salta",
       "estado": "Departamentos, locales y cocheras",
-      "titulo": "Un proyecto de Mavenz en Cafayate.",
-      "texto": "Departamentos, locales comerciales y cocheras en Cafayate, con un plan de anticipo y cuotas.",
+      "titulo": "Una oportunidad para vivir e invertir en Cafayate.",
+      "texto": "Departamentos, locales comerciales y cocheras en una de las ciudades con mayor proyección turística de Salta. Consultá las opciones de anticipo y cuotas.",
       "datos": [
         "Departamentos",
         "Locales comerciales",
@@ -441,7 +440,7 @@
       "galeria_titulo": "El proyecto en imágenes",
       "sub_items": [],
       "financiacion": {
-        "titulo": "Anticipo y cuotas",
+        "titulo": "Conocé las opciones de financiación",
         "copy": "",
         "cta": "Consultá disponibilidad",
         "cta2": "Contactanos"
@@ -450,9 +449,9 @@
     }
   },
   "red": {
-    "titulo": "El movimiento nunca se genera solo",
-    "copy": "Equipo, partners, especialistas, desarrolladores y aliados que se conectan según lo que cada proyecto necesita mover.",
-    "cierre": "No es un directorio de logos. Es quién entra en cada movimiento.",
+    "titulo": "El movimiento se construye en red",
+    "copy": "Conectamos equipo, partners, especialistas, desarrolladores y aliados según lo que cada oportunidad necesita para avanzar.",
+    "cierre": "No se trata de sumar nombres. Se trata de conectar a las personas indicadas en el momento indicado.",
     "_dt": "peso: 1 fuerte y en mayúscula, 2 medio, 3 fino. x e y son la posición en la nube de escritorio, en porcentaje. sangria es la del listado de celular, en píxeles.",
     "nodos": [
       {
@@ -567,16 +566,17 @@
           "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
         }
       ],
-      "nombre": "Mapa Mavenz"
+      "nombre": "Mapa Mavenz",
+      "bajada": "Una mirada estratégica sobre los territorios donde Salta está creciendo y las oportunidades que se abren en cada uno."
     }
   },
   "contacto": {
     "apertura": "Si tenés un proyecto, una oportunidad de inversión o una propuesta para desarrollar, queremos conocerla.",
-    "titulo": "Movamos algo juntos",
+    "titulo": "Hagamos que la próxima oportunidad avance",
     "cta_wa": "Escribir por WhatsApp",
     "_dt": "Reescrito el 09/09 por pedido del documento del 08/09: cuatro opciones, cada una con su formulario (el mismo formulario, cambia el motivo y la linea de arriba). El formulario manda por Web3Forms al mail de Mavenz cuando `formulario.clave` tiene la clave publica; sin clave, compone el mensaje y abre WhatsApp. Los copys de alianza y espacio no vinieron en el documento: van vacios hasta que lleguen.",
     "wa_general": "Hola Mavenz, estuve viendo la web y quisiera ponerme en contacto con ustedes.",
-    "rotulo_motivos": "Qué querés mover",
+    "rotulo_motivos": "Contanos qué oportunidad querés impulsar",
     "motivos": [
       {
         "id": "proyecto",
@@ -617,8 +617,8 @@
         "telefono": "Teléfono (opcional)",
         "mensaje": "Mensaje"
       },
-      "privacidad": "Usamos tus datos sólo para responderte.",
-      "enviar": "Enviar",
+      "privacidad": "Usamos tus datos solo para responder tu consulta.",
+      "enviar": "Contactanos",
       "enviando": "Enviando…",
       "gracias": "Recibimos tu mensaje. Te respondemos a la brevedad.",
       "error": "No pudimos enviar el mensaje. Probá de nuevo o escribinos por WhatsApp.",
@@ -660,8 +660,8 @@
     "idioma_pronto": "Próximamente"
   },
   "equipo": {
-    "titulo": "Las personas detrás de Mavenz",
-    "intro": "Somos un equipo con experiencia en estrategia, negocios, comunicación y comercialización. Trabajamos de forma colaborativa y sumamos especialistas de acuerdo con las necesidades de cada proyecto.",
+    "titulo": "El equipo que genera movimiento",
+    "intro": "Somos un equipo con experiencia en estrategia, desarrollo de negocios, comunicación y comercialización. Trabajamos de manera colaborativa y articulamos especialistas según lo que cada proyecto necesita.",
     "_dt": "NOS-1..4: cada integrante lleva nombre, rol y, cuando lleguen, apellido, foto y linea. Se publica con nombre y rol (David, 10/09); la foto entra cuando Vero la mande. Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. Sexta vuelta (David, 10/09): dos lugares mas, marcados, para las personas que falta sumar.",
     "personas": [
       {
@@ -691,7 +691,7 @@
     "inicio": {
       "archivo": "index.html",
       "rotulo": "Inicio",
-      "titulo": "Mavenz genera movimiento"
+      "titulo": "Generamos movimiento"
     },
     "universo": {
       "ancla": "universo",
@@ -715,7 +715,7 @@
     "nosotros": {
       "archivo": "nosotros.html",
       "rotulo": "Nosotros",
-      "titulo": "Las personas detrás de Mavenz",
+      "titulo": "El equipo que genera movimiento",
       "cinta": "Nosotros",
       "publicar": true
     },
@@ -743,7 +743,7 @@
   },
   "mundos": {
     "rotulo": "Proyectos en movimiento",
-    "intro": "Proyectos y oportunidades en los que Mavenz participa desde la estrategia, el posicionamiento, el desarrollo de negocios o la comercialización.",
+    "intro": "Proyectos y oportunidades que impulsamos desde la estrategia, el posicionamiento, el desarrollo de negocios y la comercialización.",
     "_dt": "PROY-1, 3, 4, 5 del 08/09: tres paneles con foto abajo (mecanica de realevate), tilt al pasar el puntero. Cardinal lleva a su ficha (cardinal.html desde la Fase 5). Otros proyectos y Oportunidades llevan a su opcion del contacto (`motivo`) con copy tomado del contacto, decision de David del 10/09. Las fotos de otros y oportunidades son PROVISORIAS (aereas reales) hasta que Vero mande las suyas. tinta = token de estilos.css. Quinta vuelta (Vero, 10/09 tarde): Otros proyectos pasa a Cafay, sin foto ni texto propio hasta que llegue su material.",
     "lista": [
       {
