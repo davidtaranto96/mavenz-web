@@ -3329,3 +3329,49 @@ body[data-pagina="contacto"] .flotante__wa { opacity: 0; visibility: hidden; poi
 
 /* "Servicio integral": el unico rotulo chico sobre un titulo, pedido por Vero. */
 .universo__rotulo { text-transform: uppercase; margin-bottom: .75rem; }
+
+/* Las fotos propias (Vero: "el mismo tratamiento de color y contraste a todas,
+   tonos tierra y blancos calidos"). Un filtro apenas calido, igual para todas. */
+.foto-marca img, img.hero__fondo { filter: sepia(.14) saturate(.92) contrast(1.02); }
+.foto-marca { margin: 0; }
+.foto-marca img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: 6px; }
+
+/* Somos: la foto horizontal al lado del texto, con aire a la derecha. */
+.quienes__foto img { aspect-ratio: 3 / 2; object-position: 40% 50%; }
+
+/* Como trabajamos: la reunion entera, sin recortar el pizarron. */
+.metodo__foto { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+.metodo__foto img { aspect-ratio: 16 / 9; }
+
+/* Espacio: la fachada en 4:5 y la grilla de tres debajo; el detalle nunca
+   manda, queda del mismo alto que las otras. */
+.espacio__foto img { aspect-ratio: 4 / 5; object-position: 50% 62%; }
+.espacio__fotos { display: grid; gap: clamp(.75rem, 2vw, 1.25rem); grid-column: 1 / -1; margin-top: clamp(1rem, 3vw, 2rem); }
+.espacio__foto-chica img { aspect-ratio: 3 / 2; }
+.espacio__foto-chica:last-child img { aspect-ratio: 3 / 2; object-position: 50% 70%; }
+@media (min-width: 64rem) {
+  .espacio--con-foto .espacio__interior { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .espacio__fotos { grid-template-columns: 5fr 5fr 3fr; }
+  .espacio__foto-chica img, .espacio__foto-chica:last-child img { aspect-ratio: auto; height: clamp(14rem, 22vw, 22rem); }
+}
+
+/* Nosotros: la foto del equipo bajo el titulo, y la de la red a un costado. */
+.equipo__foto { margin-block: clamp(1.5rem, 4vw, 3rem); }
+.equipo__foto img { aspect-ratio: 16 / 9; object-position: 50% 45%; }
+.persona__marco img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: sepia(.14) saturate(.92) contrast(1.02); }
+.red__foto { margin-top: clamp(2rem, 5vw, 3rem); max-width: 26rem; }
+.red__foto img { aspect-ratio: 4 / 5; object-position: 50% 40%; }
+
+/* La portada en el celular: el recorte al centro perdia el pizarron y quien
+   presenta; se corre a la derecha, donde esta la reunion. */
+img.hero__fondo { object-position: 70% 50%; }
+
+/* Tres fichas en el celular: en tres columnas, asi ninguna queda sola. */
+@media (max-width: 63.99rem) {
+  section.equipo-seccion .personas:has(> .persona:nth-child(3):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+  section.equipo-seccion .personas:has(> .persona:nth-child(3):last-child) .persona__nombre { font-size: var(--t-chico); }
+}
+@media (min-width: 64rem) {
+  .metodo__foto { max-width: 58rem; }
+  .equipo__foto { max-width: 58rem; }
+}

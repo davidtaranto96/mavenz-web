@@ -273,13 +273,15 @@ def quienes(d):
                  + gota("fondo", ".45", "-2", "(min-width:64rem) 30vw, 66vw")
                  + gota("frente", "1", "3", "(min-width:64rem) 26vw, 58vw")
                  + '</div>')
-    return f'''<section class="seccion quienes{" quienes--con-gotas" if gotas else ""}" id="quienes"{fx("quienes")}>
+    # Ronda 16/09 (Vero): el equipo en la oficina en lugar de las gotas.
+    foto_q = f'<figure class="quienes__foto foto-marca">{img(q["foto"], "(min-width:64rem) 50vw, 100vw")}</figure>' if q.get("foto") else ""
+    return f'''<section class="seccion quienes{" quienes--con-gotas" if gotas or foto_q else ""}" id="quienes"{fx("quienes")}>
   <div class="quienes__texto">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["copy"])}</p>
     <p class="bajada">{e(q["copy2"])}</p>
   </div>
-  {gotas}
+  {gotas}{foto_q}
 </section>'''
 
 
@@ -447,6 +449,7 @@ def metodo(d):
     </div>
     <ol class="trazo__pasos">{pasos}</ol>
   </div>
+  {f'<figure class="metodo__foto foto-marca">{img(m["foto"], "100vw")}</figure>' if m.get("foto") else ""}
   <p class="metodo__cierre">{e(m["cierre"])}</p>
 </section>'''
 
@@ -459,7 +462,11 @@ def espacio(d):
     traiga un dict, entra como columna al lado del texto."""
     x = d["espacio"]
     f, v = x.get("foto"), x.get("vista")
-    columna = f'<figure class="espacio__foto">{img(f, "(min-width:64rem) 44vw, 100vw")}</figure>' if f else ""
+    columna = f'<figure class="espacio__foto foto-marca">{img(f, "(min-width:64rem) 44vw, 100vw")}</figure>' if f else ""
+    # Ronda 16/09 (Vero): oficina, colaboracion y detalle debajo del bloque.
+    fotos_e = ('<div class="espacio__fotos">' + "".join(
+        f'<figure class="espacio__foto-chica foto-marca">{img(x2, "(min-width:64rem) 30vw, 100vw")}</figure>'
+        for x2 in x["fotos"]) + '</div>') if x.get("fotos") else ""
     if v and not f:
         # La web de Espacio Mavenz embebida (Vero, 10/09): un iframe diferido
         # con su pie.
@@ -477,6 +484,7 @@ def espacio(d):
       <a class="boton boton--claro espacio__cta" href="{e(x["cta"]["href"])}" target="_blank" rel="noopener">{e(x["cta"]["rotulo"])}<span class="visualmente-oculto"> {e(x["cta"]["externo"])}</span></a>
     </div>
     {columna}
+    {fotos_e}
   </div>
 </section>'''
 
@@ -730,6 +738,7 @@ def red(d):
     <p class="bajada bajada--clara bajada--angosta">{e(r["copy"])}</p>
     <div class="red__nube">{nodos}</div>
     <p class="cita cita--clara red__cierre">{e(r["cierre"])}</p>
+    {f'<figure class="red__foto foto-marca">{img(r["foto"], "(min-width:64rem) 34vw, 100vw")}</figure>' if r.get("foto") else ""}
   </div>
 </section>'''
 
@@ -759,7 +768,8 @@ def equipo(d):
     que tenga nombre y rol (David, 10/09); el apellido, la foto y la linea
     entran cuando Vero los mande. Sin foto, la tarjeta lleva el isotipo."""
     q = d["equipo"]
-    con = [x for x in q["personas"] if x.get("nombre") and x.get("rol")]
+    # Ronda 16/09 (Vero): nunca un texto de relleno. Nombre y (rol o foto).
+    con = [x for x in q["personas"] if x.get("nombre") and (x.get("rol") or x.get("foto"))]
     def tarjeta(i, x):
         foto = (f'<figure class="persona__marco">{img(x["foto"], "(min-width:64rem) 30vw, 100vw")}</figure>' if x.get("foto")
                 else f'<figure class="persona__marco persona__marco--sin-foto" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></figure>')
@@ -767,13 +777,14 @@ def equipo(d):
         linea = f'<p class="persona__linea">{e(x["linea"])}</p>' if x.get("linea") else ""
         return (f'<article class="persona" style="--i:{i}">{foto}'
                 f'<div class="persona__pie"><h3 class="persona__nombre">{e(nombre)}</h3>'
-                f'<p class="persona__rol">{e(x["rol"])}</p>{linea}</div></article>')
+                + (f'<p class="persona__rol">{e(x["rol"])}</p>' if x.get("rol") else "") + f'{linea}</div></article>')
     grilla = f'<div class="personas">{"".join(tarjeta(i, x) for i, x in enumerate(con))}</div>' if con else ""
     return f'''<section class="seccion equipo-seccion" id="equipo"{fx("equipo")}>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
     <p class="bajada">{e(q["intro"])}</p>
   </div>
+  {f'<figure class="equipo__foto foto-marca">{img(q["foto"], "100vw")}</figure>' if q.get("foto") else ""}
   {grilla}
 </section>'''
 

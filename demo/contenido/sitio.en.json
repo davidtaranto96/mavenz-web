@@ -27,24 +27,15 @@
     },
     "bajar": "Keep scrolling",
     "foto": {
-      "alt": "The Cardinal pool with loungers, rendered"
+      "alt": "The Mavenz team in a work meeting at Espacio Mavenz, Salta"
     }
   },
   "quienes": {
     "titulo": "We are Mavenz",
     "copy": "We are the strategic partner that moves Real Estate. We bring an integral view because, in such a demanding sector, the big picture makes the difference.",
     "copy2": "We spot opportunities, design strategies and connect the right people to make things happen. We get involved from the idea and the communication to the commercial development of each project.",
-    "gotas": {
-      "fondo": {
-        "video": {
-          "alt": "San Lorenzo from the air, with the hills behind"
-        }
-      },
-      "frente": {
-        "video": {
-          "alt": "The Cardinal pool, rendered"
-        }
-      }
+    "foto": {
+      "alt": "The Mavenz team talking around the work table"
     }
   },
   "universo": {
@@ -98,7 +89,10 @@
         "copy": "We turn the opportunity into concrete action."
       }
     ],
-    "cierre": "Every move opens a new opportunity."
+    "cierre": "Every move opens a new opportunity.",
+    "foto": {
+      "alt": "A Mavenz work meeting in front of the whiteboard"
+    }
   },
   "espacio": {
     "titulo": "Espacio Mavenz",
@@ -108,7 +102,21 @@
       "rotulo": "Discover Espacio Mavenz",
       "externo": "(external site)"
     },
-    "copy2": "It is not just a sales channel. It is the concrete expression of the Mavenz Method. Because for us a deal is not the end of the process, but the start of the next move."
+    "copy2": "It is not just a sales channel. It is the concrete expression of the Mavenz Method. Because for us a deal is not the end of the process, but the start of the next move.",
+    "foto": {
+      "alt": "Two Mavenz team members in front of the Espacio Mavenz building"
+    },
+    "fotos": [
+      {
+        "alt": "A wide view of Espacio Mavenz with the team at work"
+      },
+      {
+        "alt": "Two Mavenz team members working together at Espacio Mavenz"
+      },
+      {
+        "alt": "A table at Espacio Mavenz with flowers and coffee"
+      }
+    ]
   },
   "proyectos": {
     "intro": "Projects and opportunities we drive through strategy, positioning, business development and sales.",
@@ -295,7 +303,10 @@
       {
         "nombre": "Allies"
       }
-    ]
+    ],
+    "foto": {
+      "alt": "Two team members talking about a project"
+    }
   },
   "mirada": {
     "titulo": "Mavenz Outlook",
@@ -430,17 +441,25 @@
     "intro": "We are a team with experience in strategy, business development, communication and sales. We work collaboratively and bring in specialists according to what each project needs.",
     "personas": [
       {
-        "rol": "Management"
+        "rol": "Management",
+        "foto": {
+          "alt": "Luchi, from Mavenz, at her desk"
+        }
       },
       {
-        "nombre": "Name and surname",
-        "rol": "Role"
+        "foto": {
+          "alt": "Jota, from Mavenz, at the office"
+        }
       },
       {
-        "nombre": "Name and surname",
-        "rol": "Role"
+        "foto": {
+          "alt": "Male, from Mavenz"
+        }
       }
-    ]
+    ],
+    "foto": {
+      "alt": "Mavenz team members at the office"
+    }
   },
   "paginas": {
     "inicio": {

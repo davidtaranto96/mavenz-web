@@ -37,38 +37,31 @@
     },
     "bajar": "Seguir bajando",
     "foto": {
-      "src": "img/pileta",
+      "src": "img/hero-reunion",
       "anchos": [
         800,
         1600
       ],
-      "alt": "La pileta de Cardinal con reposeras, en render",
-      "ancho": 1229,
-      "alto": 692
+      "alt": "Equipo de Mavenz en una reunión de trabajo en Espacio Mavenz, Salta",
+      "ancho": 1600,
+      "alto": 900
     },
-    "_dt": "Ronda 16/09 (documento 'Cambios web Mavenz para David' de Vero). 'Generamos movimiento' y el CTA 'Conocé Mavenz' a Somos. Quinta vuelta (Vero, 10/09 tarde): MAVENZ con el isotipo, 'genera movimiento' abajo, una flecha y Hablemos. La foto es un render de Cardinal, provisoria hasta que Vero elija. Sin bajada, sin boton al Universo y sin la cinta de mundos."
+    "_dt": "Ronda 16/09: foto elegida por DT segun la descripcion del documento de Vero (la columna 'Foto elegida' vino vacia). Reunion de trabajo con el pizarron, con velo oscuro. Salio el render de Cardinal: la portada construye la marca."
   },
   "quienes": {
     "titulo": "Somos Mavenz",
     "copy": "Somos el partner estratégico que mueve el Real Estate. Aportamos una mirada integral porque, en un sector tan exigente, la visión global marca la diferencia.",
     "copy2": "Detectamos oportunidades, diseñamos estrategias y conectamos a las personas indicadas para que las cosas pasen. Nos involucramos desde la idea y la comunicación hasta el desarrollo comercial de cada proyecto.",
-    "_dt": "Textos de Vero del 08/09 (SOM-5). Se fueron el rotulo 'Salta, Argentina', la cita y la foto de 'Donde trabajamos' (SOM-1, SOM-3).",
-    "gotas": {
-      "_dt": "Dos gotas con video adentro (10/09, pedido de David: que incluyan videos, que sean como gotas que se mueven con el mouse y un 50 % mas grandes). Cada una lleva `video` {src, poster, alt} o `foto` {src, anchos, alt, ancho, alto}. Los clips son recortes cuadrados del post de Cardinal sin el subtitulo quemado, en ida y vuelta: los cerros (22,9 a 24,2 s, a 1,5x mas lento) y la pileta (17,95 a 19,8 s). Alternativa lista si Vero prefiere otra: el campo verde del mismo post, 13,7 a 15,2 s. Las dos aereas provisorias de antes siguen en img/ (aerea-verde, aerea-dia) por si se vuelve a foto. Si `gotas` queda vacio ({}) la columna no se emite y el texto ocupa el ancho.",
-      "fondo": {
-        "video": {
-          "src": "video/somos-territorio.mp4",
-          "poster": "video/somos-territorio-poster.webp",
-          "alt": "San Lorenzo desde el aire, con los cerros al fondo"
-        }
-      },
-      "frente": {
-        "video": {
-          "src": "video/somos-vida.mp4",
-          "poster": "video/somos-vida-poster.webp",
-          "alt": "La pileta de Cardinal, en render"
-        }
-      }
+    "_dt": "Ronda 16/09: foto elegida por DT segun la descripcion del documento de Vero (la columna 'Foto elegida' vino vacia). Las dos gotas con video se fueron: Vero pide el equipo en la oficina.",
+    "foto": {
+      "src": "img/somos-mesa",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Equipo de Mavenz conversando alrededor de la mesa de trabajo",
+      "ancho": 1600,
+      "alto": 900
     }
   },
   "universo": {
@@ -135,7 +128,17 @@
         "copy": "Convertimos la oportunidad en acción concreta."
       }
     ],
-    "cierre": "Cada movimiento abre una nueva oportunidad."
+    "cierre": "Cada movimiento abre una nueva oportunidad.",
+    "foto": {
+      "src": "img/metodo-pizarron",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Reunión de trabajo de Mavenz frente al pizarrón",
+      "ancho": 1600,
+      "alto": 900
+    }
   },
   "espacio": {
     "titulo": "Espacio Mavenz",
@@ -146,9 +149,50 @@
       "href": "https://espaciomavenz.com.ar",
       "externo": "(sitio externo)"
     },
-    "foto": null,
-    "_dt": "Textual del documento del 08/09 (ESP-1..7). Sin foto aprobada la seccion va sin imagen: el bloque 'Todavia no hay material' se fue. `foto` toma un dict como los demas cuando Vero mande una.",
-    "copy2": "No es solamente un canal de comercialización. Es la expresión concreta del Método Mavenz. Porque para nosotros una operación no representa el final del proceso, sino el comienzo del próximo movimiento."
+    "foto": {
+      "src": "img/espacio-fachada",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Dos integrantes de Mavenz frente a la fachada de Espacio Mavenz",
+      "ancho": 1600,
+      "alto": 2844
+    },
+    "_dt": "Ronda 16/09: foto elegida por DT segun la descripcion del documento de Vero (la columna 'Foto elegida' vino vacia). Salio la web embebida (David, 16/09). Faltan la foto de la biblioteca (detalle 2).",
+    "copy2": "No es solamente un canal de comercialización. Es la expresión concreta del Método Mavenz. Porque para nosotros una operación no representa el final del proceso, sino el comienzo del próximo movimiento.",
+    "fotos": [
+      {
+        "src": "img/espacio-oficina",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Vista amplia de Espacio Mavenz con el equipo trabajando",
+        "ancho": 1600,
+        "alto": 900
+      },
+      {
+        "src": "img/espacio-charla",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Dos integrantes de Mavenz trabajando juntas en Espacio Mavenz",
+        "ancho": 1600,
+        "alto": 900
+      },
+      {
+        "src": "img/espacio-detalle",
+        "anchos": [
+          800,
+          1600
+        ],
+        "alt": "Detalle de una mesa de Espacio Mavenz con flores y café",
+        "ancho": 1600,
+        "alto": 2844
+      }
+    ]
   },
   "proyectos": {
     "intro": "Proyectos y oportunidades que impulsamos desde la estrategia, el posicionamiento, el desarrollo de negocios y la comercialización.",
@@ -489,7 +533,17 @@
         "y": 62.0,
         "sangria": 80
       }
-    ]
+    ],
+    "foto": {
+      "src": "img/nosotros-red",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Dos integrantes del equipo conversando sobre un proyecto",
+      "ancho": 1600,
+      "alto": 2844
+    }
   },
   "mirada": {
     "titulo": "Mirada Mavenz",
@@ -662,30 +716,67 @@
   "equipo": {
     "titulo": "El equipo que genera movimiento",
     "intro": "Somos un equipo con experiencia en estrategia, desarrollo de negocios, comunicación y comercialización. Trabajamos de manera colaborativa y articulamos especialistas según lo que cada proyecto necesita.",
-    "_dt": "NOS-1..4: cada integrante lleva nombre, rol y, cuando lleguen, apellido, foto y linea. Se publica con nombre y rol (David, 10/09); la foto entra cuando Vero la mande. Se fueron 'Se suma', 'Retrato' y 'Decide que se mueve y con quien'. Sexta vuelta (David, 10/09): dos lugares mas, marcados, para las personas que falta sumar.",
+    "_dt": "Ronda 16/09 (Vero): ninguna ficha con 'Nombre y apellido' o 'Rol'. David confirmo quien es quien (Luchi sentada en el escritorio, Male la de blanco). Se publica con nombre y foto; apellido, rol y linea entran cuando Vero los mande.",
     "personas": [
       {
         "nombre": "Luchi",
         "apellido": "",
         "rol": "Dirección",
         "linea": "",
-        "foto": null
+        "foto": {
+          "src": "img/equipo-luchi",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Luchi, de Mavenz, en su escritorio",
+          "ancho": 1600,
+          "alto": 1999
+        }
       },
       {
-        "nombre": "Nombre y apellido",
+        "nombre": "Jota",
         "apellido": "",
-        "rol": "Rol",
+        "rol": "",
         "linea": "",
-        "foto": null
+        "foto": {
+          "src": "img/equipo-jota",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Jota, de Mavenz, en la oficina",
+          "ancho": 1600,
+          "alto": 2000
+        }
       },
       {
-        "nombre": "Nombre y apellido",
+        "nombre": "Male",
         "apellido": "",
-        "rol": "Rol",
+        "rol": "",
         "linea": "",
-        "foto": null
+        "foto": {
+          "src": "img/equipo-male",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Male, de Mavenz",
+          "ancho": 1600,
+          "alto": 2000
+        }
       }
-    ]
+    ],
+    "foto": {
+      "src": "img/nosotros-oficina",
+      "anchos": [
+        800,
+        1600
+      ],
+      "alt": "Integrantes de Mavenz en la oficina",
+      "ancho": 1600,
+      "alto": 900
+    }
   },
   "paginas": {
     "inicio": {
