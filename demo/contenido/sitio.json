@@ -36,24 +36,8 @@
       "href": "#quienes"
     },
     "bajar": "Seguir bajando",
-    "_dt": "David, 17/09: la portada pasa fotos de a una, con fundido, y abajo el lema fijo y el proyecto que esta en pantalla. El logo va en la barra, no al medio. Cafay entra cuando haya fotos.",
+    "_dt": "David, 17/09: la portada pasa fotos de a una, con fundido, y abajo el lema fijo y el proyecto que esta en pantalla. Solo proyectos, la oficina y Salta: nada de fotos del equipo (David, 17/09). El logo va en la barra, no al medio. Cafay entra cuando haya fotos.",
     "fotos": [
-      {
-        "foto": {
-          "src": "img/hero-reunion",
-          "anchos": [
-            800,
-            1600
-          ],
-          "alt": "Equipo de Mavenz en una reunión de trabajo en Espacio Mavenz, Salta",
-          "ancho": 1600,
-          "alto": 900
-        },
-        "proyecto": "Espacio Mavenz",
-        "detalle": "Salta",
-        "posicion": "50% 50%",
-        "posicion_cel": "70% 50%"
-      },
       {
         "foto": {
           "src": "img/amenities",
@@ -72,19 +56,51 @@
       },
       {
         "foto": {
-          "src": "img/espacio-fachada",
+          "src": "img/sanlorenzo",
           "anchos": [
             800,
             1600
           ],
-          "alt": "Dos integrantes de Mavenz frente a Espacio Mavenz",
+          "alt": "Vista aérea de San Lorenzo, en Salta",
+          "ancho": 1600,
+          "alto": 692
+        },
+        "proyecto": "Salta",
+        "detalle": "San Lorenzo",
+        "posicion": "50% 50%",
+        "posicion_cel": "55% 50%"
+      },
+      {
+        "foto": {
+          "src": "img/espacio-edificio",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "El edificio de Espacio Mavenz, en Salta",
           "ancho": 1600,
           "alto": 2844
         },
         "proyecto": "Espacio Mavenz",
-        "detalle": "El lugar donde el Universo y el Método Mavenz se encuentran",
-        "posicion": "50% 58%",
-        "posicion_cel": "50% 45%"
+        "detalle": "Salta",
+        "posicion": "50% 48%",
+        "posicion_cel": "50% 55%"
+      },
+      {
+        "foto": {
+          "src": "img/render-comercial",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Esquina comercial de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        },
+        "proyecto": "Cardinal",
+        "detalle": "La esquina comercial",
+        "posicion": "50% 55%",
+        "posicion_cel": "45% 55%"
       },
       {
         "foto": {

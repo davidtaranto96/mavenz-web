@@ -29,21 +29,25 @@
     "fotos": [
       {
         "foto": {
-          "alt": "The Mavenz team in a work meeting at Espacio Mavenz, Salta"
-        },
-        "detalle": "Salta"
-      },
-      {
-        "foto": {
           "alt": "Pool and grill area at Cardinal"
         },
         "detalle": "San Lorenzo Chico, now selling"
       },
       {
         "foto": {
-          "alt": "Two Mavenz team members in front of Espacio Mavenz"
+          "alt": "Aerial view of San Lorenzo, in Salta"
+        }
+      },
+      {
+        "foto": {
+          "alt": "The Espacio Mavenz building in Salta"
+        }
+      },
+      {
+        "foto": {
+          "alt": "Render of the commercial corner"
         },
-        "detalle": "Where the Mavenz Universe and Method meet"
+        "detalle": "The commercial corner"
       },
       {
         "foto": {
@@ -573,7 +577,9 @@
     "hero.fotos.1.proyecto",
     "hero.fotos.2.proyecto",
     "hero.fotos.3.proyecto",
-    "hero.fotos.0.detalle"
+    "hero.fotos.4.proyecto",
+    "hero.fotos.1.detalle",
+    "hero.fotos.2.detalle"
   ],
   "cookies": {
     "titulo": "Cookies",
