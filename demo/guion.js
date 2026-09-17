@@ -1126,7 +1126,23 @@
     var botones = $$('[data-territorio]', m), lecturas = $$('[data-lectura]', m);
     var marcas = $$('[data-guia], [data-punto]', m);
     if (!botones.length) return;
+    var svg = $('.mapa-mavenz__svg', m), camara = $('[data-camara]', m);
+    var puntos = $$('[data-punto]', m), volver = $('[data-volver]', m);
     function id(el) { return el.getAttribute('data-guia') || el.getAttribute('data-punto'); }
+    /* El mini zoom (David, 17/09): la camara se acerca al territorio y cada
+       punto viaja con ella sin crecer. Los nombres se quedan donde estan
+       porque son los botones: de cerca se apagan sus guias y aparece el
+       "ver todo el mapa". */
+    function acercar(z, tx, ty) {
+      if (!camara || !svg) return;
+      camara.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
+      puntos.forEach(function (p) {
+        var px = +p.getAttribute('data-px'), py = +p.getAttribute('data-py');
+        p.style.transform = 'translate(' + (tx + z * px).toFixed(1) + 'px, ' + (ty + z * py).toFixed(1) + 'px)';
+      });
+      svg.toggleAttribute('data-cerca', z > 1.02);
+      if (volver) volver.toggleAttribute('data-ver', z > 1.02);
+    }
     function elegir(cual) {
       botones.forEach(function (b) {
         b.setAttribute('aria-pressed', b.getAttribute('data-territorio') === cual ? 'true' : 'false');
@@ -1139,12 +1155,16 @@
     }
     botones.forEach(function (b) {
       var cual = b.getAttribute('data-territorio');
-      b.addEventListener('click', function () { elegir(cual); });
+      b.addEventListener('click', function () {
+        elegir(cual);
+        acercar(+b.getAttribute('data-z') || 1, +b.getAttribute('data-tx') || 0, +b.getAttribute('data-ty') || 0);
+      });
       b.addEventListener('mouseenter', function () { sobre(cual); });
       b.addEventListener('focus', function () { sobre(cual); });
       b.addEventListener('mouseleave', function () { sobre(null); });
       b.addEventListener('blur', function () { sobre(null); });
     });
+    if (volver) volver.addEventListener('click', function () { acercar(1, 0, 0); });
     m.setAttribute('data-vivo', '');
     elegir(botones[0].getAttribute('data-territorio'));
   }

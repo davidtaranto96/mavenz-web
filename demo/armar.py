@@ -420,9 +420,12 @@ def mapa_seccion(d):
     17/09): va despues de Somos, en un panel bordo con el contorno, las rutas,
     la trama de calles y el brillo en el centro. Cada territorio tiene sus
     puntos reales, su guia y un halo que se enciende al elegirlo; tocar uno
-    abre su lectura debajo (mapaMavenz() en guion.js). En el celular el mapa
-    queda arriba con el numero junto a cada punto y los seis botones debajo.
-    Sin guion se ven las seis lecturas en lista."""
+    acerca la camara a esa zona y abre su lectura debajo (mapaMavenz() en
+    guion.js). Los territorios con obra muestran ahi su proyecto en vez del
+    parrafo de perfil. En el celular el mapa queda arriba con el numero junto
+    a cada punto y los seis botones debajo. Sin guion se ven las seis lecturas
+    en lista y el mapa entero."""
+    mth = __import__("math")
     mp = d["mirada"]["mapa"]
     ts = mp["territorios"]
     w, h = MAPA_SALTA["caja"]
@@ -444,35 +447,67 @@ def mapa_seccion(d):
             y = max(g["pts"][0][1], y_prev + 36)
             g["ancla"] = (x, min(y, h - 24))
             y_prev = y
+    por_id = {x["id"]: x for x in d["mundos"]["lista"]}
     guias = puntos = marcas = lecturas = ""
     for i, g in enumerate(geo, 1):
         t, (ax, ay) = g["t"], g["ancla"]
         px, py = g["pts"][0]
         ide = e(t["id"])
         der = t.get("lado", "der") == "der"
-        guias += f'<line class="mapa-mavenz__guia" data-guia="{ide}" x1="{ax + (-14 if der else 14)}" y1="{ay:.1f}" x2="{px:.1f}" y2="{py:.1f}"/>'
-        halos = "".join(f'<circle class="mapa-mavenz__halo" cx="{x:.1f}" cy="{y:.1f}" r="{t.get("radio", 22)}"/>' for x, y in g["pts"])
-        dots = "".join(f'<circle class="mapa-mavenz__dot" cx="{x:.1f}" cy="{y:.1f}" r="{4.5 if j == 0 else 3.5}"/>' for j, (x, y) in enumerate(g["pts"]))
-        flecha = ""
+        # El encuadre de cerca: el territorio al medio del lienzo. Lo que esta
+        # fuera del mapa (Cafayate, Cachi) no acerca: no hay nada que mirar.
         if g["borde"]:
-            ang = __import__("math").atan2(py - centro[1], px - centro[0])
-            ca, sa = __import__("math").cos(ang), __import__("math").sin(ang)
-            punta = (px + ca * 14, py + sa * 14)
-            flecha = (f'<path class="mapa-mavenz__flecha" d="M {px + ca * 6 - sa * 6:.1f} {py + sa * 6 + ca * 6:.1f} '
-                      f'L {punta[0]:.1f} {punta[1]:.1f} L {px + ca * 6 + sa * 6:.1f} {py + sa * 6 - ca * 6:.1f}"/>')
-        tx = px + (12 if der else -12)
-        puntos += (f'<g class="mapa-mavenz__punto" data-punto="{ide}">{halos}{dots}{flecha}'
-                   f'<text x="{tx:.1f}" y="{py + 6:.1f}" text-anchor="{"start" if der else "end"}">{i}</text></g>')
+            z, tx, ty = 1, 0, 0
+        else:
+            xs = [p[0] for p in g["pts"]]
+            ys = [p[1] for p in g["pts"]]
+            largo = max(max(xs) - min(xs), max(ys) - min(ys), t.get("radio", 22) * 2)
+            z = round(min(2.4, max(1.5, (h - 150) / largo)), 2)
+            tx = round(w / 2 - z * (min(xs) + max(xs)) / 2, 1)
+            ty = round(h / 2 - z * (min(ys) + max(ys)) / 2, 1)
+        guias += f'<line class="mapa-mavenz__guia" data-guia="{ide}" x1="{ax + (-14 if der else 14)}" y1="{ay:.1f}" x2="{px:.1f}" y2="{py:.1f}"/>'
+        for j, (x, y) in enumerate(g["pts"]):
+            # Cada punto se dibuja en su propio origen y el grupo lo lleva a su
+            # lugar: asi la camara lo mueve con un translate y no lo agranda.
+            cuerpo = (f'<circle class="mapa-mavenz__halo" cx="0" cy="0" r="{t.get("radio", 22)}"/>'
+                      f'<circle class="mapa-mavenz__dot" cx="0" cy="0" r="{4.5 if j == 0 else 3.5}"/>')
+            if g["borde"]:
+                ang = mth.atan2(py - centro[1], px - centro[0])
+                ca, sa = mth.cos(ang), mth.sin(ang)
+                cuerpo += (f'<path class="mapa-mavenz__flecha" d="M {ca * 6 - sa * 6:.1f} {sa * 6 + ca * 6:.1f} '
+                           f'L {ca * 14:.1f} {sa * 14:.1f} L {ca * 6 + sa * 6:.1f} {sa * 6 - ca * 6:.1f}"/>')
+            if j == 0:
+                cuerpo += f'<text x="{12 if der else -12}" y="6" text-anchor="{"start" if der else "end"}">{i}</text>'
+            puntos += (f'<g class="mapa-mavenz__punto" data-punto="{ide}" data-px="{x:.1f}" data-py="{y:.1f}" '
+                       f'style="transform: translate({x:.1f}px, {y:.1f}px)">{cuerpo}</g>')
         marcas += (f'<li class="mapa-mavenz__marca mapa-mavenz__marca--{"der" if der else "izq"}" style="--x: {ax}; --y: {ay:.1f}">'
-                   f'<button type="button" class="mapa-mavenz__boton" data-territorio="{ide}" aria-controls="mm-{ide}" aria-pressed="false">'
+                   f'<button type="button" class="mapa-mavenz__boton" data-territorio="{ide}" '
+                   f'data-z="{z}" data-tx="{tx}" data-ty="{ty}" aria-controls="mm-{ide}" aria-pressed="false">'
                    f'<span class="mapa-mavenz__n" aria-hidden="true">{i}</span><span class="mapa-mavenz__nombre">{e(t["nombre"])}</span></button></li>')
+        # Donde Mavenz tiene obra va el proyecto; donde no, el perfil de la zona.
+        obras = [por_id[k] for k in t.get("proyectos_ids", []) if k in por_id]
+        if obras:
+            tarjetas = ""
+            for p in obras:
+                foto = (img(p["foto"], "(min-width: 64rem) 9rem, 30vw", clase="mapa-mavenz__proy-foto")
+                        if p.get("foto") else
+                        f'<span class="mapa-mavenz__proy-foto mapa-mavenz__proy-foto--vacia" data-tinta="{e(p["tinta"])}" aria-hidden="true"></span>')
+                tarjetas += (f'<li><a class="mapa-mavenz__proy" href="{e(p["href"])}">{foto}'
+                             f'<span class="mapa-mavenz__proy-cuerpo">'
+                             f'<span class="mapa-mavenz__proy-nombre">{e(p["nombre"])}</span>'
+                             f'<span class="mapa-mavenz__proy-dato">{e(p["bajada"])}</span></span>'
+                             f'<span class="mapa-mavenz__proy-ir" aria-hidden="true">&#8594;</span></a></li>')
+            abajo = (f'<div class="mapa-mavenz__proyectos"><p class="mapa-mavenz__proyectos-rotulo">{e(mp["rotulo_proyectos"])}</p>'
+                     f'<ul>{tarjetas}</ul></div>')
+        else:
+            abajo = f'<p class="mapa-mavenz__quien"><span>{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p>'
         lecturas += (f'<article class="mapa-mavenz__lectura" id="mm-{ide}" data-lectura="{ide}">'
                      f'<div class="mapa-mavenz__lectura-cabeza"><p class="mapa-mavenz__lectura-n">{i:02d}</p>'
                      f'<h3 class="mapa-mavenz__lectura-nombre">{e(t["nombre"])}</h3>'
                      f'<p class="mapa-mavenz__lectura-bajada">{e(t["bajada"])}</p></div>'
-                     f'<div class="mapa-mavenz__lectura-texto"><p>{e(t["cambia"])}</p>'
-                     f'<p class="mapa-mavenz__quien"><span>{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p></div></article>')
+                     f'<div class="mapa-mavenz__lectura-texto"><p>{e(t["cambia"])}</p>{abajo}</div></article>')
     cx, cy = centro
+    ui = DATOS_UI
     return f'''<section class="seccion mapa-mavenz" id="mapa"{fx("mirada")} data-mapa>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(mp["nombre"])}</h2>
@@ -485,13 +520,16 @@ def mapa_seccion(d):
           <radialGradient id="mm-brillo"><stop offset="0" class="mapa-mavenz__brillo-a"/><stop offset="1" class="mapa-mavenz__brillo-b"/></radialGradient>
           <radialGradient id="mm-halo"><stop offset="0" class="mapa-mavenz__halo-a"/><stop offset="1" class="mapa-mavenz__halo-b"/></radialGradient>
         </defs>
-        <ellipse class="mapa-mavenz__brillo" cx="{cx:.1f}" cy="{cy:.1f}" rx="170" ry="150" fill="url(#mm-brillo)"/>
-        <image class="mapa-mavenz__calles" href="{R.raiz}img/mapa-salta-calles.svg" x="0" y="0" width="{w}" height="{h}" preserveAspectRatio="none"/>
-        <path class="mapa-mavenz__rutas" d="{MAPA_SALTA["rutas"]}"/>
-        <path class="mapa-mavenz__borde" d="{MAPA_SALTA["contorno"]}"/>
+        <g class="mapa-mavenz__camara" data-camara>
+          <ellipse class="mapa-mavenz__brillo" cx="{cx:.1f}" cy="{cy:.1f}" rx="170" ry="150" fill="url(#mm-brillo)"/>
+          <image class="mapa-mavenz__calles" href="{R.raiz}img/mapa-salta-calles.svg" x="0" y="0" width="{w}" height="{h}" preserveAspectRatio="none"/>
+          <path class="mapa-mavenz__rutas" d="{MAPA_SALTA["rutas"]}"/>
+          <path class="mapa-mavenz__borde" d="{MAPA_SALTA["contorno"]}"/>
+        </g>
         <g class="mapa-mavenz__guias">{guias}</g>
         <g class="mapa-mavenz__puntos">{puntos}</g>
       </svg>
+      <button type="button" class="mapa-mavenz__volver" data-volver>{e(ui["mapa_volver"])}</button>
       <ol class="mapa-mavenz__marcas">{marcas}</ol>
       <p class="mapa-mavenz__credito"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">{e(mp["credito"])}</a></p>
     </div>
@@ -1417,7 +1455,7 @@ TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "ca
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
             "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar",
             "servicio", "motivo", "demo", "tratamiento", "en_barra", "posicion",
-            "posicion_cel", "px", "py", "lado", "puntos", "radio"}
+            "posicion_cel", "px", "py", "lado", "puntos", "radio", "proyectos_ids"}
 
 
 def hojas(o, ruta=(), vacias=False):

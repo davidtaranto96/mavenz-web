@@ -705,7 +705,10 @@
               -65.4881
             ]
           ],
-          "radio": 20
+          "radio": 20,
+          "proyectos_ids": [
+            "cardinal"
+          ]
         },
         {
           "id": "aeropuerto",
@@ -743,7 +746,10 @@
               -66.1654
             ]
           ],
-          "radio": 18
+          "radio": 18,
+          "proyectos_ids": [
+            "cafay"
+          ]
         },
         {
           "id": "vaqueros",
@@ -764,7 +770,9 @@
       "nombre": "Mapa Mavenz",
       "bajada": "Una mirada estratégica sobre los territorios donde Salta está creciendo y las oportunidades que se abren en cada uno.",
       "credito": "Mapa: © colaboradores de OpenStreetMap",
-      "_dt_puntos": "David, 17/09: ubicaciones reales. San Lorenzo lleva el Viejo y el Chico; Aeropuerto, el aeropuerto y San Luis; Cafayate y Cachi estan fuera del mapa y se marcan en el borde, en su direccion. Coordenadas de OpenStreetMap."
+      "_dt_puntos": "David, 17/09: ubicaciones reales. San Lorenzo lleva el Viejo y el Chico; Aeropuerto, el aeropuerto y San Luis; Cafayate y Cachi estan fuera del mapa y se marcan en el borde, en su direccion. Coordenadas de OpenStreetMap.",
+      "rotulo_proyectos": "Lo que Mavenz tiene acá",
+      "_dt_proyectos": "David, 17/09: cada territorio puede listar proyectos de mundos.lista por su id (proyectos_ids). Donde hay obra, la lectura muestra la tarjeta del proyecto en lugar del parrafo de perfil de la zona."
     }
   },
   "contacto": {
@@ -856,7 +864,8 @@
     "silenciar": "Silenciar",
     "idioma_pronto": "Próximamente",
     "foto_pendiente": "Foto pendiente",
-    "whatsapp_flotante": "Escribir por WhatsApp"
+    "whatsapp_flotante": "Escribir por WhatsApp",
+    "mapa_volver": "Ver todo el mapa"
   },
   "equipo": {
     "titulo": "El equipo que genera movimiento",

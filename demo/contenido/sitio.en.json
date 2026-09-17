@@ -405,7 +405,8 @@
       ],
       "nombre": "Mavenz Map",
       "bajada": "A strategic look at the territories where Salta is growing and the opportunities opening up in each one.",
-      "credito": "Map: © OpenStreetMap contributors"
+      "credito": "Map: © OpenStreetMap contributors",
+      "rotulo_proyectos": "What Mavenz has here"
     }
   },
   "contacto": {
@@ -470,7 +471,8 @@
     "menu": "Menu",
     "idioma_pronto": "Coming soon",
     "foto_pendiente": "Photo to come",
-    "whatsapp_flotante": "Message us on WhatsApp"
+    "whatsapp_flotante": "Message us on WhatsApp",
+    "mapa_volver": "See the whole map"
   },
   "equipo": {
     "titulo": "The team that creates momentum",

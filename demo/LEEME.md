@@ -289,6 +289,14 @@ Mavenz quiere una web 100 % institucional, pensada para el desarrollador. Lo que
   Aeropuerto el aeropuerto y San Luis, y Cafayate y Cachi, que quedan fuera del mapa, se marcan con
   una flecha en el borde, en su dirección. Tocar uno enciende el halo de sus puntos y abre su lectura
   (`mapaMavenz()`). El crédito de OpenStreetMap va en el mapa: lo pide la licencia (ODbL).
+  Al elegir un territorio la cámara se acerca a su ubicación real (`acercar()` en `guion.js`):
+  se mueve un `<g>` con las calles, las rutas y el contorno, y cada punto es su propio `<g>` que
+  viaja con la cámara sin crecer. Los nombres no se mueven porque son los botones: de cerca se
+  apagan sus guías y aparece "Ver todo el mapa". Lo que está fuera del mapa (Cafayate, Cachi) no
+  acerca. En la lectura, el territorio que tiene obra muestra la tarjeta del proyecto en lugar del
+  párrafo de perfil: sale de `mundos.lista` por id (`proyectos_ids` en cada territorio), así el
+  proyecto se escribe una sola vez.
+
 - **Cómo trabajamos se mudó a Nosotros**, entre el equipo y la red.
 - **El WhatsApp es un botón verde con su logo**, solo abajo a la derecha (`.wa-flotante`, color
   `--whatsapp`, el único fuera del manual). **El menú flotante se fue**: en escritorio el menú es la
