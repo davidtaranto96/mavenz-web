@@ -3792,3 +3792,37 @@ header.cabecera[data-portada] .cabecera__marca { opacity: 1; translate: none; po
   .mundo-item > .mundo { flex: 1 1 auto; min-height: 26rem; scroll-snap-align: none; }
   .mundo__foto { height: 14rem; }
 }
+
+/* --- La portada clara (David, 17/09: "que no se opaque la pantalla ni la
+   vista de los renders; solo apenas sombreado donde va el texto"). El velo
+   que cubria toda la foto (34 % arriba, 88 % abajo) se va: queda una sombra
+   en la esquina del texto y un toque arriba para que se lea la barra. ------ */
+.hero__velo {
+  background:
+    radial-gradient(ellipse 62% 58% at 0% 100%, color-mix(in srgb, var(--tinta) 52%, transparent) 0%, transparent 72%),
+    linear-gradient(0deg, color-mix(in srgb, var(--tinta) 34%, transparent) 0%, transparent 34%),
+    linear-gradient(180deg, color-mix(in srgb, var(--tinta) 28%, transparent) 0%, transparent 15%);
+}
+@media (max-width: 47.99rem) {
+  /* En el celular el texto ocupa todo el ancho: la sombra va de lado a lado. */
+  .hero__velo {
+    background:
+      linear-gradient(0deg, color-mix(in srgb, var(--tinta) 58%, transparent) 0%, color-mix(in srgb, var(--tinta) 30%, transparent) 30%, transparent 58%),
+      linear-gradient(180deg, color-mix(in srgb, var(--tinta) 28%, transparent) 0%, transparent 16%);
+  }
+}
+/* La foto con su color: sin el tostado de la marca que la apagaba. */
+.hero__foto .hero__fondo { filter: saturate(1.05) contrast(1.02); }
+/* El texto se sostiene con una sombra corta, no oscureciendo la foto. */
+.hero__titulo, .hero__proyecto, .hero__acciones .subrayado {
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--tinta) 45%, transparent), 0 2px 16px color-mix(in srgb, var(--tinta) 38%, transparent);
+}
+.hero__bajar { background: color-mix(in srgb, var(--tinta) 18%, transparent); }
+header.cabecera[data-portada]:not([data-solido]) :is(.cabecera__enlaces, .idioma, .cabecera__contacto) {
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--tinta) 45%, transparent);
+}
+header.cabecera[data-portada]:not([data-solido]) .cabecera__marca { filter: drop-shadow(0 1px 6px color-mix(in srgb, var(--tinta) 40%, transparent)); }
+/* El detalle del proyecto era fino y gris: sobre la pileta o el edificio no
+   se leia. Blanco, un peso mas y una sombra corta un poco mas firme. */
+.hero__proyecto-detalle { color: var(--sobre-foto); font-weight: var(--ui); }
+.hero__proyecto { text-shadow: 0 1px 2px color-mix(in srgb, var(--tinta) 60%, transparent), 0 1px 14px color-mix(in srgb, var(--tinta) 50%, transparent); }
