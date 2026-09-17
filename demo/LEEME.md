@@ -279,12 +279,16 @@ Mavenz quiere una web 100 % institucional, pensada para el desarrollador. Lo que
   está arriba a la izquierda desde el principio; el del medio se fue. Cafay entra cuando haya fotos.
 - **Somos lleva video** (`quienes.video`). Hoy es la toma aérea de San Lorenzo Chico, provisoria:
   el de Salta y la institución lo tiene que mandar Mavenz. Sin video vuelve la foto.
-- **El Mapa Mavenz es interactivo y sube después de Somos**: panel bordo con el contorno, la trama
-  de la ciudad y los seis territorios de `mirada.mapa.territorios`, cada uno con `x`, `y` (su número
-  y nombre) y `px`, `py` (su punto) sobre un lienzo de 1000 × 407. Tocar uno abre su lectura
-  (`mapaMavenz()`). En el celular los seis botones van debajo del dibujo. **El contorno
-  (`MAPA_CONTORNO` en `armar.py`) está dibujado a mano sobre la imagen que mandaron**: con el
-  archivo del diseñador se calca exacto.
+- **El Mapa Mavenz es Salta de verdad, interactivo, y sube después de Somos.** El contorno (los
+  municipios de Salta y San Lorenzo unidos), las rutas y la trama de calles salen de OpenStreetMap
+  con `herramientas/mapa_salta.py`, que escribe `contenido/mapa-salta.json` y
+  `../img/mapa-salta-calles.svg` (277 KB, 92 KB comprimido). Las consultas a Overpass están en
+  `herramientas/osm/`; lo que devolvieron el 17/09 quedó fuera del repo, en
+  `VERONICA/4-referencias/osm-salta-2026-09-17/`. Cada territorio va por su latitud y longitud
+  (`mirada.mapa.territorios[].puntos`, más `lado` y `radio`): San Lorenzo lleva el Viejo y el Chico,
+  Aeropuerto el aeropuerto y San Luis, y Cafayate y Cachi, que quedan fuera del mapa, se marcan con
+  una flecha en el borde, en su dirección. Tocar uno enciende el halo de sus puntos y abre su lectura
+  (`mapaMavenz()`). El crédito de OpenStreetMap va en el mapa: lo pide la licencia (ODbL).
 - **Cómo trabajamos se mudó a Nosotros**, entre el equipo y la red.
 - **El WhatsApp es un botón verde con su logo**, solo abajo a la derecha (`.wa-flotante`, color
   `--whatsapp`, el único fuera del manual). **El menú flotante se fue**: en escritorio el menú es la

@@ -404,7 +404,8 @@
         }
       ],
       "nombre": "Mavenz Map",
-      "bajada": "A strategic look at the territories where Salta is growing and the opportunities opening up in each one."
+      "bajada": "A strategic look at the territories where Salta is growing and the opportunities opening up in each one.",
+      "credito": "Map: © OpenStreetMap contributors"
     }
   },
   "contacto": {

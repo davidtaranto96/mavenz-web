@@ -386,88 +386,93 @@ def orbita(d):
 </section>'''
 
 
-# El Mapa Mavenz se dibuja en un lienzo de 1000 x 407 (la proporcion del dibujo
-# de referencia). El contorno esta trazado a mano sobre esa imagen: es un mapa
-# de marca, no cartografico. Las posiciones de cada territorio viven en el
-# JSON (x, y: el numero con su nombre; px, py: el punto en la ciudad).
-MAPA_CAJA = (1000, 407)
-MAPA_CONTORNO = [
-    (452, 138), (470, 96), (498, 62), (508, 34), (560, 30), (612, 25), (696, 26),
-    (706, 38), (716, 58), (733, 78), (737, 150), (734, 244), (702, 288), (655, 346),
-    (612, 348), (572, 353), (553, 381), (526, 372), (484, 375), (461, 368),
-    (452, 388), (438, 371), (410, 341), (397, 321), (389, 298), (363, 272),
-    (318, 281), (276, 283), (270, 265), (301, 236), (339, 202), (361, 171),
-    (392, 194), (431, 181), (444, 152)]
-MAPA_CIUDAD = [
-    (452, 150), (500, 138), (548, 150), (572, 184), (574, 236), (548, 280),
-    (498, 296), (455, 286), (428, 252), (424, 200)]
-MAPA_RUTAS = [
-    "M 480 150 C 478 120, 470 95, 482 60",          # a Vaqueros
-    "M 430 205 C 400 200, 372 190, 345 196",        # a San Lorenzo
-    "M 470 285 C 462 310, 458 335, 455 380",        # a Cafayate y Cachi
-    "M 545 270 C 590 300, 620 320, 650 345",        # al sudeste
-    "M 572 200 C 620 190, 670 160, 730 150",        # al este
-    "M 530 145 C 560 110, 600 80, 640 30"]          # al norte
+# El Mapa Mavenz es Salta de verdad (David, 17/09): el contorno de los
+# municipios de Salta y San Lorenzo, las rutas y la trama de calles salen de
+# OpenStreetMap con herramientas/mapa_salta.py, que deja contenido/mapa-salta.json
+# y img/mapa-salta-calles.svg. Cada territorio se ubica por su latitud y longitud
+# (sitio.json, `puntos`), con la misma proyeccion que uso el script.
+MAPA_SALTA = json.loads((AQUI / "contenido" / "mapa-salta.json").read_text())
 
 
-def _suave(puntos):
-    """Un contorno cerrado con esquinas apenas redondeadas (cuadraticas por
-    los puntos medios): el trazo a mano sin serrucho."""
-    pm = [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(puntos, puntos[1:] + puntos[:1])]
-    d = f"M {pm[-1][0]:.1f} {pm[-1][1]:.1f} "
-    for p, m in zip(puntos, pm):
-        d += f"Q {p[0]} {p[1]} {m[0]:.1f} {m[1]:.1f} "
-    return d + "Z"
+def _proyectar(lat, lon):
+    p = MAPA_SALTA["proyeccion"]
+    return (p["x0"] + (lon - p["lon_oeste"]) * p["k"] * p["escala"],
+            p["margen"] + (p["lat_norte"] - lat) * p["escala"])
 
 
-def _calles():
-    """La trama de la ciudad: dos grillas giradas que el clipPath recorta con
-    la forma del centro urbano. Deterministas: siempre salen iguales."""
-    import math
-    trazos = []
-    for ang, paso, largo in ((-12, 11, 220), (28, 15, 220)):
-        a = math.radians(ang)
-        ux, uy = math.cos(a), math.sin(a)          # a lo largo de la calle
-        nx, ny = -uy, ux                           # entre una calle y la otra
-        for k in range(-11, 12):
-            cx, cy = 498 + nx * k * paso, 215 + ny * k * paso
-            trazos.append(f"M {cx - ux * largo / 2:.1f} {cy - uy * largo / 2:.1f} "
-                          f"L {cx + ux * largo / 2:.1f} {cy + uy * largo / 2:.1f}")
-    return "".join(f'<path d="{t}"/>' for t in trazos)
+def _al_borde(desde, hacia):
+    """Un lugar fuera del mapa (Cafayate, Cachi) se marca en el borde, en la
+    direccion en la que esta: donde la recta desde el centro sale de la caja."""
+    w, h = MAPA_SALTA["caja"]
+    m = MAPA_SALTA["proyeccion"]["margen"]
+    (x0, y0), (x1, y1) = desde, hacia
+    ts = []
+    for borde, d0, dd in ((m, y0, y1 - y0), (h - m, y0, y1 - y0)):
+        if dd: ts.append((borde - d0) / dd)
+    for borde, d0, dd in ((m, x0, x1 - x0), (w - m, x0, x1 - x0)):
+        if dd: ts.append((borde - d0) / dd)
+    t = min(v for v in ts if v > 0)
+    return (x0 + (x1 - x0) * t, y0 + (y1 - y0) * t)
 
 
 def mapa_seccion(d):
-    """El Mapa Mavenz interactivo (David, 17/09, sobre el dibujo que mando
-    Mavenz): va despues de Somos, en un panel bordo con el contorno, la trama
-    de la ciudad con su brillo y los seis territorios numerados con su guia.
-    Tocar un territorio abre su lectura debajo (mapaMavenz() en guion.js).
-    En el celular el mapa queda de fondo con los numeros en cada punto y los
-    seis botones van debajo. Sin guion se ven las seis lecturas en lista."""
+    """El Mapa Mavenz interactivo, sobre la geografia real de Salta (David,
+    17/09): va despues de Somos, en un panel bordo con el contorno, las rutas,
+    la trama de calles y el brillo en el centro. Cada territorio tiene sus
+    puntos reales, su guia y un halo que se enciende al elegirlo; tocar uno
+    abre su lectura debajo (mapaMavenz() en guion.js). En el celular el mapa
+    queda arriba con el numero junto a cada punto y los seis botones debajo.
+    Sin guion se ven las seis lecturas en lista."""
     mp = d["mirada"]["mapa"]
     ts = mp["territorios"]
-    w, h = MAPA_CAJA
-    guias = "".join(
-        f'<line class="mapa-mavenz__guia" data-guia="{e(t["id"])}" x1="{t["x"]}" y1="{t["y"]}" x2="{t["px"]}" y2="{t["py"]}"/>'
-        for t in ts)
-    puntos = "".join(
-        f'<g class="mapa-mavenz__punto" data-punto="{e(t["id"])}">'
-        f'<circle cx="{t["px"]}" cy="{t["py"]}" r="5"/>'
-        f'<text x="{t["px"] + (12 if t.get("lado") == "der" else -12)}" y="{t["py"] + 6}" '
-        f'text-anchor="{"start" if t.get("lado") == "der" else "end"}">{i}</text></g>'
-        for i, t in enumerate(ts, 1))
-    marcas = "".join(
-        f'<li class="mapa-mavenz__marca mapa-mavenz__marca--{e(t.get("lado", "der"))}" style="--x: {t["x"]}; --y: {t["y"]}">'
-        f'<button type="button" class="mapa-mavenz__boton" data-territorio="{e(t["id"])}" aria-controls="mm-{e(t["id"])}" aria-pressed="false">'
-        f'<span class="mapa-mavenz__n" aria-hidden="true">{i}</span><span class="mapa-mavenz__nombre">{e(t["nombre"])}</span></button></li>'
-        for i, t in enumerate(ts, 1))
-    lecturas = "".join(
-        f'<article class="mapa-mavenz__lectura" id="mm-{e(t["id"])}" data-lectura="{e(t["id"])}">'
-        f'<div class="mapa-mavenz__lectura-cabeza"><p class="mapa-mavenz__lectura-n">{i:02d}</p>'
-        f'<h3 class="mapa-mavenz__lectura-nombre">{e(t["nombre"])}</h3>'
-        f'<p class="mapa-mavenz__lectura-bajada">{e(t["bajada"])}</p></div>'
-        f'<div class="mapa-mavenz__lectura-texto"><p>{e(t["cambia"])}</p>'
-        f'<p class="mapa-mavenz__quien"><span>{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p></div></article>'
-        for i, t in enumerate(ts, 1))
+    w, h = MAPA_SALTA["caja"]
+    centro = _proyectar(*ts[0]["puntos"][0])
+    geo = []
+    for t in ts:
+        pts = [_proyectar(la, lo) for la, lo in t["puntos"]]
+        fuera = [p for p in pts if not (0 <= p[0] <= w and 0 <= p[1] <= h)]
+        if fuera:
+            mx = sum(p[0] for p in pts) / len(pts)
+            my = sum(p[1] for p in pts) / len(pts)
+            pts = [_al_borde(centro, (mx, my))]
+        geo.append({"t": t, "pts": pts, "borde": bool(fuera)})
+    # Los nombres a cada lado, a la altura de su punto y sin pisarse.
+    for lado, x in (("izq", 250), ("der", 750)):
+        grupo = sorted((g for g in geo if g["t"].get("lado", "der") == lado), key=lambda g: g["pts"][0][1])
+        y_prev = -99
+        for g in grupo:
+            y = max(g["pts"][0][1], y_prev + 36)
+            g["ancla"] = (x, min(y, h - 24))
+            y_prev = y
+    guias = puntos = marcas = lecturas = ""
+    for i, g in enumerate(geo, 1):
+        t, (ax, ay) = g["t"], g["ancla"]
+        px, py = g["pts"][0]
+        ide = e(t["id"])
+        der = t.get("lado", "der") == "der"
+        guias += f'<line class="mapa-mavenz__guia" data-guia="{ide}" x1="{ax + (-14 if der else 14)}" y1="{ay:.1f}" x2="{px:.1f}" y2="{py:.1f}"/>'
+        halos = "".join(f'<circle class="mapa-mavenz__halo" cx="{x:.1f}" cy="{y:.1f}" r="{t.get("radio", 22)}"/>' for x, y in g["pts"])
+        dots = "".join(f'<circle class="mapa-mavenz__dot" cx="{x:.1f}" cy="{y:.1f}" r="{4.5 if j == 0 else 3.5}"/>' for j, (x, y) in enumerate(g["pts"]))
+        flecha = ""
+        if g["borde"]:
+            ang = __import__("math").atan2(py - centro[1], px - centro[0])
+            ca, sa = __import__("math").cos(ang), __import__("math").sin(ang)
+            punta = (px + ca * 14, py + sa * 14)
+            flecha = (f'<path class="mapa-mavenz__flecha" d="M {px + ca * 6 - sa * 6:.1f} {py + sa * 6 + ca * 6:.1f} '
+                      f'L {punta[0]:.1f} {punta[1]:.1f} L {px + ca * 6 + sa * 6:.1f} {py + sa * 6 - ca * 6:.1f}"/>')
+        tx = px + (12 if der else -12)
+        puntos += (f'<g class="mapa-mavenz__punto" data-punto="{ide}">{halos}{dots}{flecha}'
+                   f'<text x="{tx:.1f}" y="{py + 6:.1f}" text-anchor="{"start" if der else "end"}">{i}</text></g>')
+        marcas += (f'<li class="mapa-mavenz__marca mapa-mavenz__marca--{"der" if der else "izq"}" style="--x: {ax}; --y: {ay:.1f}">'
+                   f'<button type="button" class="mapa-mavenz__boton" data-territorio="{ide}" aria-controls="mm-{ide}" aria-pressed="false">'
+                   f'<span class="mapa-mavenz__n" aria-hidden="true">{i}</span><span class="mapa-mavenz__nombre">{e(t["nombre"])}</span></button></li>')
+        lecturas += (f'<article class="mapa-mavenz__lectura" id="mm-{ide}" data-lectura="{ide}">'
+                     f'<div class="mapa-mavenz__lectura-cabeza"><p class="mapa-mavenz__lectura-n">{i:02d}</p>'
+                     f'<h3 class="mapa-mavenz__lectura-nombre">{e(t["nombre"])}</h3>'
+                     f'<p class="mapa-mavenz__lectura-bajada">{e(t["bajada"])}</p></div>'
+                     f'<div class="mapa-mavenz__lectura-texto"><p>{e(t["cambia"])}</p>'
+                     f'<p class="mapa-mavenz__quien"><span>{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p></div></article>')
+    cx, cy = centro
     return f'''<section class="seccion mapa-mavenz" id="mapa"{fx("mirada")} data-mapa>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(mp["nombre"])}</h2>
@@ -478,16 +483,17 @@ def mapa_seccion(d):
       <svg class="mapa-mavenz__svg" viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
         <defs>
           <radialGradient id="mm-brillo"><stop offset="0" class="mapa-mavenz__brillo-a"/><stop offset="1" class="mapa-mavenz__brillo-b"/></radialGradient>
-          <clipPath id="mm-ciudad"><path d="{_suave(MAPA_CIUDAD)}"/></clipPath>
+          <radialGradient id="mm-halo"><stop offset="0" class="mapa-mavenz__halo-a"/><stop offset="1" class="mapa-mavenz__halo-b"/></radialGradient>
         </defs>
-        <ellipse class="mapa-mavenz__brillo" cx="498" cy="218" rx="190" ry="150" fill="url(#mm-brillo)"/>
-        <path class="mapa-mavenz__borde" d="{_suave(MAPA_CONTORNO)}"/>
-        <g class="mapa-mavenz__rutas">{"".join(f'<path d="{r}"/>' for r in MAPA_RUTAS)}</g>
-        <g class="mapa-mavenz__calles" clip-path="url(#mm-ciudad)">{_calles()}</g>
+        <ellipse class="mapa-mavenz__brillo" cx="{cx:.1f}" cy="{cy:.1f}" rx="170" ry="150" fill="url(#mm-brillo)"/>
+        <image class="mapa-mavenz__calles" href="{R.raiz}img/mapa-salta-calles.svg" x="0" y="0" width="{w}" height="{h}" preserveAspectRatio="none"/>
+        <path class="mapa-mavenz__rutas" d="{MAPA_SALTA["rutas"]}"/>
+        <path class="mapa-mavenz__borde" d="{MAPA_SALTA["contorno"]}"/>
         <g class="mapa-mavenz__guias">{guias}</g>
         <g class="mapa-mavenz__puntos">{puntos}</g>
       </svg>
       <ol class="mapa-mavenz__marcas">{marcas}</ol>
+      <p class="mapa-mavenz__credito"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">{e(mp["credito"])}</a></p>
     </div>
     <div class="mapa-mavenz__lecturas">{lecturas}</div>
   </div>
@@ -1407,7 +1413,7 @@ TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "ca
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
             "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar",
             "servicio", "motivo", "demo", "tratamiento", "en_barra", "posicion",
-            "posicion_cel", "px", "py", "lado"}
+            "posicion_cel", "px", "py", "lado", "puntos", "radio"}
 
 
 def hojas(o, ruta=(), vacias=False):

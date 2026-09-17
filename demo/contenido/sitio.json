@@ -664,11 +664,14 @@
           "bajada": "Donde el patrimonio comienza a transformarse",
           "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
           "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada.",
-          "x": 783,
-          "y": 207,
-          "px": 498,
-          "py": 214,
-          "lado": "der"
+          "lado": "der",
+          "puntos": [
+            [
+              -24.7883,
+              -65.4106
+            ]
+          ],
+          "radio": 16
         },
         {
           "id": "norte",
@@ -676,11 +679,14 @@
           "bajada": "La ciudad crece hacia la naturaleza",
           "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
           "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad.",
-          "x": 805,
-          "y": 145,
-          "px": 530,
-          "py": 168,
-          "lado": "der"
+          "lado": "der",
+          "puntos": [
+            [
+              -24.718,
+              -65.4045
+            ]
+          ],
+          "radio": 26
         },
         {
           "id": "sanlorenzo",
@@ -688,11 +694,18 @@
           "bajada": "Dos territorios, dos formas distintas de vivir",
           "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
           "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida.",
-          "x": 315,
-          "y": 142,
-          "px": 436,
-          "py": 203,
-          "lado": "izq"
+          "lado": "izq",
+          "puntos": [
+            [
+              -24.7339,
+              -65.4863
+            ],
+            [
+              -24.7908,
+              -65.4881
+            ]
+          ],
+          "radio": 20
         },
         {
           "id": "aeropuerto",
@@ -700,11 +713,18 @@
           "bajada": "Conectividad que impulsa crecimiento",
           "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
           "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad.",
-          "x": 773,
-          "y": 266,
-          "px": 478,
-          "py": 262,
-          "lado": "der"
+          "lado": "izq",
+          "puntos": [
+            [
+              -24.856,
+              -65.4862
+            ],
+            [
+              -24.8452,
+              -65.5159
+            ]
+          ],
+          "radio": 20
         },
         {
           "id": "cafayate",
@@ -712,11 +732,18 @@
           "bajada": "Invertir también es elegir una forma de vivir",
           "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
           "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza.",
-          "x": 324,
-          "y": 334,
-          "px": 457,
-          "py": 350,
-          "lado": "izq"
+          "lado": "izq",
+          "puntos": [
+            [
+              -26.073,
+              -65.9764
+            ],
+            [
+              -25.1198,
+              -66.1654
+            ]
+          ],
+          "radio": 18
         },
         {
           "id": "vaqueros",
@@ -724,15 +751,20 @@
           "bajada": "Una respuesta eco-cultural",
           "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
           "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria.",
-          "x": 391,
-          "y": 79,
-          "px": 482,
-          "py": 120,
-          "lado": "izq"
+          "lado": "der",
+          "puntos": [
+            [
+              -24.6965,
+              -65.4104
+            ]
+          ],
+          "radio": 20
         }
       ],
       "nombre": "Mapa Mavenz",
-      "bajada": "Una mirada estratégica sobre los territorios donde Salta está creciendo y las oportunidades que se abren en cada uno."
+      "bajada": "Una mirada estratégica sobre los territorios donde Salta está creciendo y las oportunidades que se abren en cada uno.",
+      "credito": "Mapa: © colaboradores de OpenStreetMap",
+      "_dt_puntos": "David, 17/09: ubicaciones reales. San Lorenzo lleva el Viejo y el Chico; Aeropuerto, el aeropuerto y San Luis; Cafayate y Cachi estan fuera del mapa y se marcan en el borde, en su direccion. Coordenadas de OpenStreetMap."
     }
   },
   "contacto": {
