@@ -1075,14 +1075,85 @@
     formulario();
     flotantePie();
     barraPortada();
+    portadaFotos();
+    mapaMavenz();
   }
 
-  /* --- La barra de la portada (David, 16/09: "como melou y RETAZOS") ------ */
-  /* Sobre la foto va transparente y sin el logo chico, porque el grande del  */
-  /* hero ya esta en pantalla. Al bajar, el titulo del hero se aleja y se     */
-  /* apaga, y cuando ya paso la mitad del hero el logo chico sube a la barra.  */
-  /* Al terminar el hero la barra se vuelve bordo. data-marca y data-solido   */
-  /* los lee estilos.css; el fondo entra por opacidad de un ::before.         */
+  /* --- La portada: las fotos pasan de a una (David, 17/09) --------------- */
+  /* No es un carrusel: no hay flechas ni puntos. Cada foto dura lo que tarda */
+  /* en llenarse la linea de progreso, y al terminar esa animacion entra la   */
+  /* siguiente con su rotulo. Asi pausar es pausar la animacion: fuera de     */
+  /* pantalla o con el foco del teclado adentro. Con menos movimiento queda   */
+  /* la primera foto quieta.                                                  */
+  function portadaFotos() {
+    var hero = $('[data-portada-fotos]');
+    if (!hero || menos) return;
+    var fotos = $$('.hero__foto', hero), rotulos = $$('.hero__proyecto', hero);
+    var linea = $('.hero__progreso', hero);
+    if (fotos.length < 2 || !linea || !linea.firstElementChild) return;
+    var i = 0;
+    function correr() {
+      linea.classList.remove('corre');
+      void linea.offsetWidth;                /* reinicia la animacion */
+      linea.classList.add('corre');
+    }
+    function ir(n) {
+      fotos[i].classList.remove('is-activa');
+      if (rotulos[i]) rotulos[i].classList.remove('is-activa');
+      i = (n + fotos.length) % fotos.length;
+      fotos[i].classList.add('is-activa');
+      if (rotulos[i]) rotulos[i].classList.add('is-activa');
+      correr();
+    }
+    linea.firstElementChild.addEventListener('animationend', function () { ir(i + 1); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (ent) {
+        hero.toggleAttribute('data-quieta', !ent[0].isIntersecting);
+      }).observe(hero);
+    }
+    hero.addEventListener('focusin', function () { hero.setAttribute('data-foco', ''); });
+    hero.addEventListener('focusout', function () { hero.removeAttribute('data-foco'); });
+    correr();
+  }
+
+  /* --- El Mapa Mavenz (David, 17/09) ------------------------------------- */
+  /* Un territorio elegido a la vez: su boton queda apretado, su punto crece, */
+  /* su guia se enciende y su lectura es la unica que se ve. Sin guion las    */
+  /* seis lecturas quedan a la vista en lista.                                */
+  function mapaMavenz() {
+    var m = $('[data-mapa]');
+    if (!m) return;
+    var botones = $$('[data-territorio]', m), lecturas = $$('[data-lectura]', m);
+    var marcas = $$('[data-guia], [data-punto]', m);
+    if (!botones.length) return;
+    function id(el) { return el.getAttribute('data-guia') || el.getAttribute('data-punto'); }
+    function elegir(cual) {
+      botones.forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-territorio') === cual ? 'true' : 'false');
+      });
+      lecturas.forEach(function (l) { l.hidden = l.getAttribute('data-lectura') !== cual; });
+      marcas.forEach(function (x) { x.classList.toggle('is-activa', id(x) === cual); });
+    }
+    function sobre(cual) {
+      marcas.forEach(function (x) { x.classList.toggle('is-sobre', id(x) === cual); });
+    }
+    botones.forEach(function (b) {
+      var cual = b.getAttribute('data-territorio');
+      b.addEventListener('click', function () { elegir(cual); });
+      b.addEventListener('mouseenter', function () { sobre(cual); });
+      b.addEventListener('focus', function () { sobre(cual); });
+      b.addEventListener('mouseleave', function () { sobre(null); });
+      b.addEventListener('blur', function () { sobre(null); });
+    });
+    m.setAttribute('data-vivo', '');
+    elegir(botones[0].getAttribute('data-territorio'));
+  }
+
+  /* --- La barra de la portada (David, 16/09: "como melou") --------------- */
+  /* Sobre la foto va transparente; al bajar, el texto del hero se aleja y se */
+  /* apaga, y al terminar el hero la barra se vuelve bordo. El logo esta      */
+  /* arriba a la izquierda desde el principio (17/09). data-solido lo lee     */
+  /* estilos.css; el fondo entra por opacidad de un ::before.                 */
   function barraPortada() {
     var barra = $('header[data-portada]'), hero = $('.hero');
     if (!barra || !hero) return;
@@ -1093,7 +1164,6 @@
       requestAnimationFrame(function () {
         pendiente = false;
         var y = window.scrollY, alto = hero.offsetHeight, nav = barra.offsetHeight;
-        barra.toggleAttribute('data-marca', y > alto * 0.45);
         barra.toggleAttribute('data-solido', y > alto - nav * 1.5);
         if (texto && !menos) {
           var p = Math.min(1, Math.max(0, y / (alto * 0.55)));
@@ -1107,10 +1177,11 @@
   }
 
   /* --- El WhatsApp del flotante se va sobre el pie ------------------------ */
-  /* El pie ya lleva WhatsApp: dos veces en la misma pantalla sobra, y la
-     pildora tapaba la ultima fila. data-pie lo pone este observer. */
+  /* El pie ya lleva WhatsApp: dos veces en la misma pantalla sobra, y el
+     boton tapaba la ultima fila. data-pie lo pone este observer (desde el
+     17/09 sobre el boton verde, que vive fuera del menu). */
   function flotantePie() {
-    var f = $('[data-flotante]'), pie = $('footer.pie');
+    var f = $('[data-wa-flotante]'), pie = $('footer.pie');
     if (!f || !pie || !('IntersectionObserver' in window)) return;
     new IntersectionObserver(function (ent) {
       ent.forEach(function (x) {
@@ -1261,6 +1332,8 @@
     /* ------------------------------------------------------------------ */
 
     var contacto = document.getElementById('contacto');
+    /* 17/09: el que se esconde es el WhatsApp; el menu del celular vive en la barra. */
+    var quien = document.querySelector('[data-wa-flotante]') || raiz;
     if (contacto && 'IntersectionObserver' in window) {
       /* Dos medidas y no una: "se ve el 30% de la sección" falla cuando la
          sección es más alta que la pantalla (celular acostado: nunca llega al
@@ -1272,8 +1345,8 @@
         var altoPantalla = (en.rootBounds && en.rootBounds.height) || window.innerHeight || 1;
         var tapa = en.isIntersecting &&
           (en.intersectionRatio >= .3 || en.intersectionRect.height / altoPantalla >= .3);
-        if (tapa) raiz.setAttribute('data-oculto', '');
-        else raiz.removeAttribute('data-oculto');
+        if (tapa) quien.setAttribute('data-oculto', '');
+        else quien.removeAttribute('data-oculto');
       }, { threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] }).observe(contacto);
     }
 

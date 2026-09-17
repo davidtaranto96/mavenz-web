@@ -61,7 +61,7 @@ se ve.
 | `contenido/sitio.json` | todo: textos, fotos, videos, datos de contacto, el mapa de páginas, los idiomas, la medición |
 | `contenido/sitio.en.json` | la capa en inglés: sólo textos |
 | `armar.py` | el generador, sin dependencias. Una función por sección y una cáscara compartida (`cascara()`) para las doce páginas |
-| `estilos.css` | tokens en `:root` y todo lo demás. Siete hex, todos en `:root`; los tres que aparecen más abajo están en comentarios |
+| `estilos.css` | tokens en `:root` y todo lo demás. Ocho hex, todos en `:root`: los siete del manual y el verde de WhatsApp (17/09); los que aparecen más abajo están en comentarios |
 | `guion.js` | motor de reveal, títulos letra por letra, videos diferidos, tema del flotante, visor, Lenis + GSAP, órbita que gira, gotas de Somos, trazo del isotipo, tilt, hero de la ficha, marcadores, carrusel, cintas, formulario y el módulo del flotante |
 | `consent.js` | el aviso de cookies, con su cola de eventos |
 | `auditar.sh` | el auditor de siete carriles sobre las doce URLs |
@@ -262,6 +262,35 @@ Universo es una línea; Proyectos en movimiento es un carril con snap y la tarje
 asomando; la galería de la ficha es un carril nativo (`galeriaRiel()` no corre en celular) con
 fotos 4:5; la franja de video va entera en 16:9; Nosotros en dos columnas; las opciones del
 contacto en 2×2; el pie con contacto y redes lado a lado.
+
+### La ronda del 17/09, con David (después de hablar con Mavenz)
+
+Mavenz quiere una web 100 % institucional, pensada para el desarrollador. Lo que cambió:
+
+- **Minúscula con la primera en mayúscula en todo el sitio**, y los títulos de sección un escalón
+  más chicos y del mismo tamaño: `--t-titulo` va de 28 a 44 px (contacto y financiación también
+  lo usan). Los textos del JSON ya venían escritos así; lo que los subía era la hoja.
+- **La barra ya no repite Contactanos**: queda el botón. Es `paginas.contacto.en_barra: false`,
+  que lee solo la barra; el flotante y el pie siguen con las cinco páginas.
+- **La portada pasa fotos de a una** (`hero.fotos`): cada una con `proyecto`, `detalle`,
+  `posicion` y `posicion_cel`. Abajo a la izquierda, "Generamos movimiento" fijo y el proyecto que
+  está en pantalla; la foto cambia cuando termina la línea de progreso (`portadaFotos()`), así que
+  pausar es pausar esa animación: fuera de pantalla o con el foco del teclado adentro. El logo
+  está arriba a la izquierda desde el principio; el del medio se fue. Cafay entra cuando haya fotos.
+- **Somos lleva video** (`quienes.video`). Hoy es la toma aérea de San Lorenzo Chico, provisoria:
+  el de Salta y la institución lo tiene que mandar Mavenz. Sin video vuelve la foto.
+- **El Mapa Mavenz es interactivo y sube después de Somos**: panel bordo con el contorno, la trama
+  de la ciudad y los seis territorios de `mirada.mapa.territorios`, cada uno con `x`, `y` (su número
+  y nombre) y `px`, `py` (su punto) sobre un lienzo de 1000 × 407. Tocar uno abre su lectura
+  (`mapaMavenz()`). En el celular los seis botones van debajo del dibujo. **El contorno
+  (`MAPA_CONTORNO` en `armar.py`) está dibujado a mano sobre la imagen que mandaron**: con el
+  archivo del diseñador se calca exacto.
+- **Cómo trabajamos se mudó a Nosotros**, entre el equipo y la red.
+- **El WhatsApp es un botón verde con su logo**, solo abajo a la derecha (`.wa-flotante`, color
+  `--whatsapp`, el único fuera del manual). **El menú flotante se fue**: en escritorio el menú es la
+  barra. En el celular, donde la barra no tiene enlaces, el botón del menú subió a la barra (arriba a
+  la derecha) y abre el mismo panel desde esa esquina. Sobre el pie, sobre `#contacto` y en la página
+  de contacto el WhatsApp se esconde, como antes.
 
 ## Cómo funciona cada pieza
 

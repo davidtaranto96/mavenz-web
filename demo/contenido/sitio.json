@@ -36,17 +36,73 @@
       "href": "#quienes"
     },
     "bajar": "Seguir bajando",
-    "foto": {
-      "src": "img/hero-reunion",
-      "anchos": [
-        800,
-        1600
-      ],
-      "alt": "Equipo de Mavenz en una reunión de trabajo en Espacio Mavenz, Salta",
-      "ancho": 1600,
-      "alto": 900
-    },
-    "_dt": "Ronda 16/09: foto elegida por DT segun la descripcion del documento de Vero (la columna 'Foto elegida' vino vacia). Reunion de trabajo con el pizarron, con velo oscuro. Salio el render de Cardinal: la portada construye la marca."
+    "_dt": "David, 17/09: la portada pasa fotos de a una, con fundido, y abajo el lema fijo y el proyecto que esta en pantalla. El logo va en la barra, no al medio. Cafay entra cuando haya fotos.",
+    "fotos": [
+      {
+        "foto": {
+          "src": "img/hero-reunion",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Equipo de Mavenz en una reunión de trabajo en Espacio Mavenz, Salta",
+          "ancho": 1600,
+          "alto": 900
+        },
+        "proyecto": "Espacio Mavenz",
+        "detalle": "Salta",
+        "posicion": "50% 50%",
+        "posicion_cel": "70% 50%"
+      },
+      {
+        "foto": {
+          "src": "img/amenities",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Pileta y quincho de Cardinal",
+          "ancho": 1600,
+          "alto": 739
+        },
+        "proyecto": "Cardinal",
+        "detalle": "San Lorenzo Chico, en comercialización",
+        "posicion": "50% 60%",
+        "posicion_cel": "62% 50%"
+      },
+      {
+        "foto": {
+          "src": "img/espacio-fachada",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Dos integrantes de Mavenz frente a Espacio Mavenz",
+          "ancho": 1600,
+          "alto": 2844
+        },
+        "proyecto": "Espacio Mavenz",
+        "detalle": "El lugar donde el Universo y el Método Mavenz se encuentran",
+        "posicion": "50% 58%",
+        "posicion_cel": "50% 45%"
+      },
+      {
+        "foto": {
+          "src": "img/interior-vivido",
+          "anchos": [
+            800,
+            1600
+          ],
+          "alt": "Interior de una unidad de Cardinal",
+          "ancho": 1600,
+          "alto": 692
+        },
+        "proyecto": "Cardinal",
+        "detalle": "Unidades desde 74 m²",
+        "posicion": "50% 50%",
+        "posicion_cel": "58% 50%"
+      }
+    ]
   },
   "quienes": {
     "titulo": "Somos Mavenz",
@@ -62,6 +118,12 @@
       "alt": "Equipo de Mavenz conversando alrededor de la mesa de trabajo",
       "ancho": 1600,
       "alto": 900
+    },
+    "video": {
+      "src": "video/hero.mp4",
+      "poster": "video/hero-poster.webp",
+      "alt": "Vista aérea de San Lorenzo Chico, en Salta",
+      "_dt": "PROVISORIO (David, 17/09): aca va el video de Salta y de la institucion que tiene que mandar Mavenz. Mientras, la toma aerea que ya estaba. La foto somos-mesa queda de respaldo: sin video vuelve."
     }
   },
   "universo": {
@@ -214,7 +276,7 @@
         "Pileta, SUM y espacios verdes",
         "Financiación preferencial"
       ],
-      "aclaracion": "Desarrolla GRIFIL · Comercializa MAVENZ",
+      "aclaracion": "Desarrolla GRIFIL · Comercializa Mavenz",
       "cta_principal": "Conocé Cardinal",
       "cta_comercial": "Consultá disponibilidad",
       "wa": "Hola Mavenz, quisiera consultar la disponibilidad de Cardinal.",
@@ -389,7 +451,7 @@
       "cardenal": {
         "src": "video/cardenal.mp4",
         "poster": "video/cardenal-poster.webp",
-        "rotulo": "El cardenal de CARDINAL",
+        "rotulo": "El cardenal de Cardinal",
         "copy": "El cardenal siempre vuelve a su hogar. Por eso inspira un proyecto que habla de pertenencia, identidad y una nueva forma de vivir San Lorenzo Chico.",
         "cierre": "Una nueva forma de habitar comienza acá.",
         "_dt": "Pieza animada de Fractura (assets/video/cardinal-trazo.mp4). El ave se dibuja, se posa sobre la M del isotipo de Mavenz y cierra con la frase de ellos."
@@ -478,7 +540,7 @@
         "Cocheras",
         "Opciones de anticipo y cuotas"
       ],
-      "aclaracion": "Comercializa MAVENZ",
+      "aclaracion": "Comercializa Mavenz",
       "cta_comercial": "Consultá disponibilidad",
       "wa": "Hola Mavenz, quisiera consultar por Cafay.",
       "scroll": "Seguí bajando",
@@ -585,42 +647,72 @@
           "nombre": "Micro y Macrocentro",
           "bajada": "Donde el patrimonio comienza a transformarse",
           "cambia": "El centro dejó de crecer por expansión y creció por transformación. Empresas, estudios y oficinas conviven con cafeterías y comercios, y las casonas coloniales quedaron fuera del mercado residencial tradicional.",
-          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada."
+          "quien": "Empresas, estudios profesionales, emprendedores, turismo y gente que prioriza una vida urbana y conectada.",
+          "x": 783,
+          "y": 207,
+          "px": 498,
+          "py": 214,
+          "lado": "der"
         },
         {
           "id": "norte",
           "nombre": "Zona Norte",
           "bajada": "La ciudad crece hacia la naturaleza",
           "cambia": "Uno de los principales corredores de expansión de Salta. Cada desarrollo nuevo consolida un ecosistema residencial que sigue creciendo.",
-          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad."
+          "quien": "Familias jóvenes, profesionales y quienes proyectan una vivienda de largo plazo sin resignar conexión con la ciudad.",
+          "x": 805,
+          "y": 145,
+          "px": 530,
+          "py": 168,
+          "lado": "der"
         },
         {
           "id": "sanlorenzo",
           "nombre": "San Lorenzo",
           "bajada": "Dos territorios, dos formas distintas de vivir",
           "cambia": "San Lorenzo Viejo es un mercado consolidado, de entorno estable. San Lorenzo Chico dejó de ser solo residencial: colegios, oficinas, gimnasios y gastronomía permiten vivir y trabajar en el mismo lugar.",
-          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida."
+          "quien": "Familias establecidas en el Viejo. En el Chico, familias jóvenes, profesionales y emprendedores que integran vivienda, trabajo y calidad de vida.",
+          "x": 315,
+          "y": 142,
+          "px": 436,
+          "py": 203,
+          "lado": "izq"
         },
         {
           "id": "aeropuerto",
           "nombre": "Zona Aeropuerto y San Luis",
           "bajada": "Conectividad que impulsa crecimiento",
           "cambia": "La expansión hacia el sur encuentra acá su motor. La cercanía al aeropuerto y a los accesos principales sostiene una demanda constante, acompañada por barrios, servicios y comercios nuevos.",
-          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad."
+          "quien": "Familias trabajadoras, profesionales y gente vinculada a la actividad comercial y logística que valora la accesibilidad.",
+          "x": 773,
+          "y": 266,
+          "px": 478,
+          "py": 262,
+          "lado": "der"
         },
         {
           "id": "cafayate",
           "nombre": "Cafayate y Cachi",
           "bajada": "Invertir también es elegir una forma de vivir",
           "cambia": "Los Valles Calchaquíes son un mercado distinto: la decisión de compra combina patrimonio, disfrute y renta. Crece la búsqueda de segunda residencia y de inversión ligada al turismo.",
-          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza."
+          "quien": "Quienes buscan una segunda residencia, inversores patrimoniales, emprendedores turísticos y familias que priorizan experiencia y naturaleza.",
+          "x": 324,
+          "y": 334,
+          "px": 457,
+          "py": 350,
+          "lado": "izq"
         },
         {
           "id": "vaqueros",
           "nombre": "Vaqueros",
           "bajada": "Una respuesta eco-cultural",
           "cambia": "Vaqueros emerge como una respuesta eco-cultural, más bohemia y abierta, con un sentido de comunidad fuerte. El nuevo Código de Planeamiento Urbano Ambiental y la ampliación del acceso refuerzan la zona.",
-          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria."
+          "quien": "Parejas de 30 a 45 que trabajan en el centro o en remoto y quieren que sus hijos se críen en contacto con la naturaleza. Artistas, arquitectos y diseñadores. Inversores de renta temporaria.",
+          "x": 391,
+          "y": 79,
+          "px": 482,
+          "py": 120,
+          "lado": "izq"
         }
       ],
       "nombre": "Mapa Mavenz",
@@ -715,7 +807,8 @@
     "ver_video": "Ver el video",
     "silenciar": "Silenciar",
     "idioma_pronto": "Próximamente",
-    "foto_pendiente": "Foto pendiente"
+    "foto_pendiente": "Foto pendiente",
+    "whatsapp_flotante": "Escribir por WhatsApp"
   },
   "equipo": {
     "titulo": "El equipo que genera movimiento",
@@ -836,7 +929,8 @@
       "rotulo": "Contactanos",
       "titulo": "Contacto",
       "cinta": "Contacto",
-      "_dt": "Pagina propia desde el 10/09 (David): el contacto ya no va al pie de cada pagina. ?motivo=proyecto|oportunidad|alianza|espacio abre la solapa elegida."
+      "_dt": "Pagina propia desde el 10/09 (David): el contacto ya no va al pie de cada pagina. ?motivo=proyecto|oportunidad|alianza|espacio abre la solapa elegida.",
+      "en_barra": false
     },
     "cardinal": {
       "archivo": "cardinal.html",

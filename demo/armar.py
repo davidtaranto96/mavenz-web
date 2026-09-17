@@ -164,7 +164,7 @@ def fx(seccion):
     return f' data-fx="reveal" data-fx-desde="{DIRECCION[seccion]}"'
 
 
-def enlaces_menu(d, aqui, rodar=False):
+def enlaces_menu(d, aqui, rodar=False, barra=False):
     """El menu, desde `paginas`: es la unica fuente y la leen la barra, el pie y
     el flotante. Una entrada con `archivo` es una pagina; una con `ancla` es una
     seccion que vive en la pagina `en` (o en todas, si no dice). Lo que tiene
@@ -176,6 +176,9 @@ def enlaces_menu(d, aqui, rodar=False):
     salida = []
     for k, p in d["paginas"].items():
         if p.get("en_menu") is False or p.get("publicar") is False:
+            continue
+        # La barra ya tiene el boton Contactanos (David, 17/09): ahi no se repite.
+        if barra and p.get("en_barra") is False:
             continue
         if "archivo" in p:
             href = p["archivo"]
@@ -222,15 +225,15 @@ def cabecera(d, lang, aqui, tema="claro"):
     el video del hero, claro sobre la cinta de papel) y no una sonda."""
     m, ui, c = d["marca"], d["interfaz"], d["contacto"]
     # Los enlaces ruedan al pasar el puntero, como en el flotante (David, 10/09).
-    enlaces = enlaces_menu(d, aqui, rodar=True)
+    enlaces = enlaces_menu(d, aqui, rodar=True, barra=True)
     # Sin hamburguesa ni panel (09/09): el unico menu desplegable es el
     # flotante de abajo a la derecha, en todos los carriles. En celular la
     # barra lleva solo el logo y el selector de idioma.
     # Barra en bordo en todas las paginas (sexta vuelta, 10/09: el zocalo se
     # fue y la barra y el pie van del mismo bordo). Siempre de tema oscuro.
-    # La portada (David, 16/09, como melou y RETAZOS): la barra va
-    # transparente sobre la foto y el logo chico no aparece hasta que el
-    # grande del hero se fue. Lo maneja barraPortada() en guion.js.
+    # La portada (David, 16/09, como melou): la barra va transparente sobre
+    # la foto. Desde el 17/09 el logo esta arriba a la izquierda desde el
+    # principio; el del medio del hero se fue. Lo maneja barraPortada().
     portada = " data-portada" if aqui == "inicio" else ""
     return f'''<header class="cabecera" data-cabecera data-tema="oscuro"{portada}>
   <a class="cabecera__marca" href="index.html" aria-label="{e(m["nombre"])}"><img class="cabecera__logo cabecera__logo--tinta" src="{R.raiz}img/logo-horizontal.webp" alt="{e(m["nombre"])}" width="800" height="216" loading="eager" decoding="async"><img class="cabecera__logo cabecera__logo--papel" src="{R.raiz}img/logo-horizontal-claro.webp" alt="" width="800" height="216" loading="eager" decoding="async" aria-hidden="true"></a>
@@ -243,18 +246,35 @@ def cabecera(d, lang, aqui, tema="claro"):
 
 
 def hero(d):
-    """Quinta vuelta (Vero, 10/09 tarde): una portada limpia. Foto quieta de
-    render con un acercamiento lento, el isotipo y MAVENZ como titulo, "genera
-    movimiento" abajo mas chico, con las letras entrando de a una. Abajo solo
-    una flecha para seguir bajando y Hablemos al costado. Sin bajada, sin el
-    boton al Universo y sin la cinta de mundos."""
+    """La portada del 17/09 (David): las fotos pasan de a una, con fundido y un
+    acercamiento lento, y abajo a la izquierda va "Generamos movimiento" fijo
+    con el proyecto que esta en pantalla, que cambia con la foto. No es un
+    carrusel: sin flechas ni puntos. El logo ya no va al medio: va en la barra.
+    La primera foto sale sin lazy porque es lo primero que se pinta. El cambio
+    lo hace portadaFotos() en guion.js, atado al final de la linea de
+    progreso. Sin guion o con menos movimiento queda la primera foto quieta."""
     h = d["hero"]
-    return f'''<section class="hero" id="inicio" data-tema="oscuro">
-  {img(h["foto"], "100vw", clase="hero__fondo", lazy=False)}
+    fotos = h.get("fotos") or [{"foto": h["foto"]}]
+    capas, rotulos = [], []
+    for i, f in enumerate(fotos):
+        activa = " is-activa" if i == 0 else ""
+        pos = f.get("posicion", "50% 50%")
+        estilo = f'--pos: {pos}; --pos-cel: {f.get("posicion_cel", pos)}'
+        capas.append(f'<figure class="hero__foto{activa}" style="{estilo}">'
+                     f'{img(f["foto"], "100vw", clase="hero__fondo", lazy=i > 0)}</figure>')
+        if f.get("proyecto"):
+            rotulos.append(f'<p class="hero__proyecto{activa}">'
+                           f'<span class="hero__proyecto-nombre">{e(f["proyecto"])}</span>'
+                           f'<span class="hero__proyecto-detalle">{e(f.get("detalle", ""))}</span></p>')
+    varias = len(fotos) > 1
+    progreso = '<span class="hero__progreso" aria-hidden="true"><span></span></span>' if varias else ""
+    return f'''<section class="hero" id="inicio" data-tema="oscuro"{" data-portada-fotos" if varias else ""}>
+  <div class="hero__fotos">{"".join(capas)}</div>
   <div class="hero__velo"></div>
   <div class="hero__texto">
-    <h1 class="hero__titulo">{iso_svg("hero__iso")}<span class="hero__nombre">{e(h["titulo"])}</span></h1>
-    <p class="hero__sub" data-letras>{e(h["sub"])}</p>
+    <h1 class="hero__titulo" data-letras>{e(h["sub"])}</h1>
+    <div class="hero__proyectos">{"".join(rotulos)}</div>
+    {progreso}
     <div class="hero__acciones">
       <a class="hero__bajar" href="#quienes" aria-label="{e(h["bajar"])}">{FLECHA}</a>
       <a class="subrayado subrayado--claro" href="{e(h["cta"]["href"])}">{e(h["cta"]["rotulo"])}</a>
@@ -293,6 +313,13 @@ def quienes(d):
                  + '</div>')
     # Ronda 16/09 (Vero): el equipo en la oficina en lugar de las gotas.
     foto_q = f'<figure class="quienes__foto foto-marca">{img(q["foto"], "(min-width:64rem) 50vw, 100vw")}</figure>' if q.get("foto") else ""
+    # David, 17/09: en Somos va un video de Salta y de la institucion. Si esta,
+    # reemplaza a la foto. Diferido como los demas: sin src hasta que se ve.
+    if q.get("video"):
+        v = q["video"]
+        foto_q = (f'<figure class="quienes__foto quienes__video foto-marca">'
+                  f'<video data-diferido data-src="{e(medio(v["src"]))}" poster="{e(medio(v["poster"]))}" '
+                  f'muted loop playsinline preload="none" aria-label="{e(v["alt"])}"></video></figure>')
     return f'''<section class="seccion quienes{" quienes--con-gotas" if gotas or foto_q else ""}" id="quienes"{fx("quienes")}>
   <div class="quienes__texto">
     <h2 class="titulo" data-letras>{e(q["titulo"])}</h2>
@@ -359,17 +386,111 @@ def orbita(d):
 </section>'''
 
 
+# El Mapa Mavenz se dibuja en un lienzo de 1000 x 407 (la proporcion del dibujo
+# de referencia). El contorno esta trazado a mano sobre esa imagen: es un mapa
+# de marca, no cartografico. Las posiciones de cada territorio viven en el
+# JSON (x, y: el numero con su nombre; px, py: el punto en la ciudad).
+MAPA_CAJA = (1000, 407)
+MAPA_CONTORNO = [
+    (452, 138), (470, 96), (498, 62), (508, 34), (560, 30), (612, 25), (696, 26),
+    (706, 38), (716, 58), (733, 78), (737, 150), (734, 244), (702, 288), (655, 346),
+    (612, 348), (572, 353), (553, 381), (526, 372), (484, 375), (461, 368),
+    (452, 388), (438, 371), (410, 341), (397, 321), (389, 298), (363, 272),
+    (318, 281), (276, 283), (270, 265), (301, 236), (339, 202), (361, 171),
+    (392, 194), (431, 181), (444, 152)]
+MAPA_CIUDAD = [
+    (452, 150), (500, 138), (548, 150), (572, 184), (574, 236), (548, 280),
+    (498, 296), (455, 286), (428, 252), (424, 200)]
+MAPA_RUTAS = [
+    "M 480 150 C 478 120, 470 95, 482 60",          # a Vaqueros
+    "M 430 205 C 400 200, 372 190, 345 196",        # a San Lorenzo
+    "M 470 285 C 462 310, 458 335, 455 380",        # a Cafayate y Cachi
+    "M 545 270 C 590 300, 620 320, 650 345",        # al sudeste
+    "M 572 200 C 620 190, 670 160, 730 150",        # al este
+    "M 530 145 C 560 110, 600 80, 640 30"]          # al norte
+
+
+def _suave(puntos):
+    """Un contorno cerrado con esquinas apenas redondeadas (cuadraticas por
+    los puntos medios): el trazo a mano sin serrucho."""
+    pm = [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(puntos, puntos[1:] + puntos[:1])]
+    d = f"M {pm[-1][0]:.1f} {pm[-1][1]:.1f} "
+    for p, m in zip(puntos, pm):
+        d += f"Q {p[0]} {p[1]} {m[0]:.1f} {m[1]:.1f} "
+    return d + "Z"
+
+
+def _calles():
+    """La trama de la ciudad: dos grillas giradas que el clipPath recorta con
+    la forma del centro urbano. Deterministas: siempre salen iguales."""
+    import math
+    trazos = []
+    for ang, paso, largo in ((-12, 11, 220), (28, 15, 220)):
+        a = math.radians(ang)
+        ux, uy = math.cos(a), math.sin(a)          # a lo largo de la calle
+        nx, ny = -uy, ux                           # entre una calle y la otra
+        for k in range(-11, 12):
+            cx, cy = 498 + nx * k * paso, 215 + ny * k * paso
+            trazos.append(f"M {cx - ux * largo / 2:.1f} {cy - uy * largo / 2:.1f} "
+                          f"L {cx + ux * largo / 2:.1f} {cy + uy * largo / 2:.1f}")
+    return "".join(f'<path d="{t}"/>' for t in trazos)
+
+
 def mapa_seccion(d):
-    """El Mapa Mavenz como seccion propia de Inicio, despues de Proyectos en
-    movimiento (David, 10/09, sexta vuelta: Mirada salio pero el mapa tiene
-    que seguir). La cabeza la pone la seccion; el mapa va sin su titulo."""
+    """El Mapa Mavenz interactivo (David, 17/09, sobre el dibujo que mando
+    Mavenz): va despues de Somos, en un panel bordo con el contorno, la trama
+    de la ciudad con su brillo y los seis territorios numerados con su guia.
+    Tocar un territorio abre su lectura debajo (mapaMavenz() en guion.js).
+    En el celular el mapa queda de fondo con los numeros en cada punto y los
+    seis botones van debajo. Sin guion se ven las seis lecturas en lista."""
     mp = d["mirada"]["mapa"]
-    return f'''<section class="seccion mapa-seccion" id="mapa"{fx("mirada")}>
+    ts = mp["territorios"]
+    w, h = MAPA_CAJA
+    guias = "".join(
+        f'<line class="mapa-mavenz__guia" data-guia="{e(t["id"])}" x1="{t["x"]}" y1="{t["y"]}" x2="{t["px"]}" y2="{t["py"]}"/>'
+        for t in ts)
+    puntos = "".join(
+        f'<g class="mapa-mavenz__punto" data-punto="{e(t["id"])}">'
+        f'<circle cx="{t["px"]}" cy="{t["py"]}" r="5"/>'
+        f'<text x="{t["px"] + (12 if t.get("lado") == "der" else -12)}" y="{t["py"] + 6}" '
+        f'text-anchor="{"start" if t.get("lado") == "der" else "end"}">{i}</text></g>'
+        for i, t in enumerate(ts, 1))
+    marcas = "".join(
+        f'<li class="mapa-mavenz__marca mapa-mavenz__marca--{e(t.get("lado", "der"))}" style="--x: {t["x"]}; --y: {t["y"]}">'
+        f'<button type="button" class="mapa-mavenz__boton" data-territorio="{e(t["id"])}" aria-controls="mm-{e(t["id"])}" aria-pressed="false">'
+        f'<span class="mapa-mavenz__n" aria-hidden="true">{i}</span><span class="mapa-mavenz__nombre">{e(t["nombre"])}</span></button></li>'
+        for i, t in enumerate(ts, 1))
+    lecturas = "".join(
+        f'<article class="mapa-mavenz__lectura" id="mm-{e(t["id"])}" data-lectura="{e(t["id"])}">'
+        f'<div class="mapa-mavenz__lectura-cabeza"><p class="mapa-mavenz__lectura-n">{i:02d}</p>'
+        f'<h3 class="mapa-mavenz__lectura-nombre">{e(t["nombre"])}</h3>'
+        f'<p class="mapa-mavenz__lectura-bajada">{e(t["bajada"])}</p></div>'
+        f'<div class="mapa-mavenz__lectura-texto"><p>{e(t["cambia"])}</p>'
+        f'<p class="mapa-mavenz__quien"><span>{e(mp["rotulo_quien"])}</span> {e(t["quien"])}</p></div></article>'
+        for i, t in enumerate(ts, 1))
+    return f'''<section class="seccion mapa-mavenz" id="mapa"{fx("mirada")} data-mapa>
   <div class="seccion__cabeza">
     <h2 class="titulo" data-letras>{e(mp["nombre"])}</h2>
     <p class="bajada">{e(mp.get("bajada") or mp["titulo"] + ". " + mp["intro"])}</p>
   </div>
-  {mapa(d, cabeza=False)}
+  <div class="mapa-mavenz__panel" data-tema="oscuro">
+    <div class="mapa-mavenz__lienzo">
+      <svg class="mapa-mavenz__svg" viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="mm-brillo"><stop offset="0" class="mapa-mavenz__brillo-a"/><stop offset="1" class="mapa-mavenz__brillo-b"/></radialGradient>
+          <clipPath id="mm-ciudad"><path d="{_suave(MAPA_CIUDAD)}"/></clipPath>
+        </defs>
+        <ellipse class="mapa-mavenz__brillo" cx="498" cy="218" rx="190" ry="150" fill="url(#mm-brillo)"/>
+        <path class="mapa-mavenz__borde" d="{_suave(MAPA_CONTORNO)}"/>
+        <g class="mapa-mavenz__rutas">{"".join(f'<path d="{r}"/>' for r in MAPA_RUTAS)}</g>
+        <g class="mapa-mavenz__calles" clip-path="url(#mm-ciudad)">{_calles()}</g>
+        <g class="mapa-mavenz__guias">{guias}</g>
+        <g class="mapa-mavenz__puntos">{puntos}</g>
+      </svg>
+      <ol class="mapa-mavenz__marcas">{marcas}</ol>
+    </div>
+    <div class="mapa-mavenz__lecturas">{lecturas}</div>
+  </div>
 </section>'''
 
 
@@ -938,8 +1059,16 @@ def datos_estructurados(d):
 
 # --------------------------------------------------------------------------- #
 
+WA_LOGO = "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+
+
 def flotante(d, lang, aqui):
-    """El menu y el WhatsApp juntos, abajo a la derecha (pedido del 08/09,
+    """17/09 (David): el WhatsApp va solo, abajo a la derecha, como boton verde
+    con su logo, y el boton del menu se fue de ahi: en escritorio el menu es la
+    barra. En el celular la barra no tiene enlaces, asi que el boton del menu
+    sube a la barra (arriba a la derecha) y abre el mismo panel desde arriba.
+
+    Lo de antes: el menu y el WhatsApp juntos, abajo a la derecha (pedido del 08/09,
     mecanica de realevate.agency medida cuadro a cuadro). Reemplaza al globo
     `.wa` suelto, a la hamburguesa y al panel de celular: un solo menu
     desplegable en todos los carriles. En escritorio aparece cuando la
@@ -956,8 +1085,8 @@ def flotante(d, lang, aqui):
     correo = (f'<a class="flotante__dato" href="mailto:{e(cd["correo"])}">'
               f'{icono("<path d=\"M2 4.5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z\"/><path d=\"M2.5 5l5.5 4 5.5-4\"/>")}{e(ui["correo"])}</a>'
               if cd.get("correo") else "")
-    return f'''<div class="flotante" data-flotante>
-  <a class="flotante__wa" href="{e(href)}"{afuera}><svg class="flotante__wa-icono" viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H7.5l-3 2.5v-2.5h-1a1 1 0 0 1-1-1z"/><path d="M5.5 7h5"/></svg><span class="flotante__wa-texto">{e(ui["whatsapp"])}</span></a>
+    return f'''<a class="wa-flotante" href="{e(href)}"{afuera} aria-label="{e(ui["whatsapp_flotante"])}" data-wa-flotante><svg class="wa-flotante__logo" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false"><path fill="currentColor" d="{WA_LOGO}"/></svg></a>
+<div class="flotante" data-flotante>
   <button class="flotante__boton" type="button" data-menu-boton aria-expanded="false" aria-controls="menu-flotante" aria-label="{e(ui["menu"])}">
     <span class="flotante__raya flotante__raya--larga" aria-hidden="true"></span><span class="flotante__raya flotante__raya--corta" aria-hidden="true"></span>
   </button>
@@ -1074,13 +1203,14 @@ def pagina_inicio(d, lang):
     nunca se vea el fondo del inicio al bajar."""
     # Quinta vuelta (Vero, 10/09 tarde): todo en papel y en un solo dossier.
     # Se van el puente al bistre y Mirada Mavenz (sus datos quedan en el JSON).
+    # David, 17/09: el mapa interactivo sube despues de Somos y Como trabajamos
+    # se muda a Nosotros.
     cuerpo = f'''{cms("hero", hero(d))}
 <div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("quienes", quienes(d))}
-{cms("universo", orbita(d))}
-{cms("metodo", metodo(d))}
-{cms("mundos", mundos(d))}
 {cms("mapa", mapa_seccion(d))}
+{cms("universo", orbita(d))}
+{cms("mundos", mundos(d))}
 {cms("cierre", cierre_inicio(d))}
 </div></div>'''
     return cascara(d, lang, "inicio", cuerpo, tema="oscuro")
@@ -1091,6 +1221,7 @@ def pagina_nosotros(d, lang):
     hasta que el equipo este completo (paginas.nosotros.publicar)."""
     cuerpo = f'''<div class="dossier" data-tema="claro"><div class="dossier__interior">
 {cms("equipo", equipo(d))}
+{cms("metodo", metodo(d))}
 </div></div>
 {cms("red", red(d))}
 {cms("comunidad", comunidad(d))}'''
@@ -1275,7 +1406,8 @@ TECNICAS = {"src", "poster", "href", "id", "tinta", "lang", "og", "archivo", "ca
             "en", "whatsapp", "correo", "sitio_espacio", "proporcion", "numero", "n", "x", "y",
             "sangria", "peso", "anchos", "ancho", "alto", "columnas", "solo_visor", "bn",
             "genera", "publicar", "en_menu", "clave", "ga4", "pixel", "otros_publicar",
-            "servicio", "motivo", "demo", "tratamiento"}
+            "servicio", "motivo", "demo", "tratamiento", "en_barra", "posicion",
+            "posicion_cel", "px", "py", "lado"}
 
 
 def hojas(o, ruta=(), vacias=False):

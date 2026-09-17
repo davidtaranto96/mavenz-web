@@ -26,9 +26,32 @@
       "rotulo": "Discover Mavenz"
     },
     "bajar": "Keep scrolling",
-    "foto": {
-      "alt": "The Mavenz team in a work meeting at Espacio Mavenz, Salta"
-    }
+    "fotos": [
+      {
+        "foto": {
+          "alt": "The Mavenz team in a work meeting at Espacio Mavenz, Salta"
+        },
+        "detalle": "Salta"
+      },
+      {
+        "foto": {
+          "alt": "Pool and grill area at Cardinal"
+        },
+        "detalle": "San Lorenzo Chico, now selling"
+      },
+      {
+        "foto": {
+          "alt": "Two Mavenz team members in front of Espacio Mavenz"
+        },
+        "detalle": "Where the Mavenz Universe and Method meet"
+      },
+      {
+        "foto": {
+          "alt": "Interior of a Cardinal unit"
+        },
+        "detalle": "Units from 74 m²"
+      }
+    ]
   },
   "quienes": {
     "titulo": "We are Mavenz",
@@ -36,6 +59,9 @@
     "copy2": "We spot opportunities, design strategies and connect the right people to make things happen. We get involved from the idea and the communication to the commercial development of each project.",
     "foto": {
       "alt": "The Mavenz team talking around the work table"
+    },
+    "video": {
+      "alt": "Aerial view of San Lorenzo Chico, in Salta"
     }
   },
   "universo": {
@@ -137,7 +163,7 @@
         "Pool, clubhouse and green areas",
         "Preferential financing"
       ],
-      "aclaracion": "Developed by GRIFIL · Sold by MAVENZ",
+      "aclaracion": "Developed by GRIFIL · Sold by Mavenz",
       "cta_principal": "Discover Cardinal",
       "cta_comercial": "Check availability on WhatsApp",
       "wa": "Hello Mavenz, I would like to check availability at Cardinal.",
@@ -217,7 +243,7 @@
         }
       ],
       "cardenal": {
-        "rotulo": "The cardinal of CARDINAL",
+        "rotulo": "The cardinal of Cardinal",
         "copy": "The cardinal always returns home. That is why it inspires a project about belonging, identity and a new way of living San Lorenzo Chico.",
         "cierre": "A new way of living starts here."
       },
@@ -274,7 +300,7 @@
         "Parking",
         "Down payment and instalment options"
       ],
-      "aclaracion": "Sold by MAVENZ",
+      "aclaracion": "Sold by Mavenz",
       "cta_comercial": "Check availability on WhatsApp",
       "wa": "Hello Mavenz, I would like to ask about Cafay.",
       "scroll": "Keep scrolling",
@@ -438,7 +464,8 @@
     "correo": "Email",
     "menu": "Menu",
     "idioma_pronto": "Coming soon",
-    "foto_pendiente": "Photo to come"
+    "foto_pendiente": "Photo to come",
+    "whatsapp_flotante": "Message us on WhatsApp"
   },
   "equipo": {
     "titulo": "The team that creates momentum",
@@ -541,7 +568,12 @@
     "redes.2.nombre",
     "universo.centro",
     "proyectos.cardinal.marquee",
-    "pie.derechos"
+    "pie.derechos",
+    "hero.fotos.0.proyecto",
+    "hero.fotos.1.proyecto",
+    "hero.fotos.2.proyecto",
+    "hero.fotos.3.proyecto",
+    "hero.fotos.0.detalle"
   ],
   "cookies": {
     "titulo": "Cookies",
