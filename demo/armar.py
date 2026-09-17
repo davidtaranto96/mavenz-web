@@ -1384,16 +1384,20 @@ def mundos(d, cabeza=True):
     Un panel con `motivo` lleva al contacto con esa opcion preseleccionada."""
     w = d["mundos"]
     def panel(i, x):
-        return (f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" data-fx="tilt" data-fx-grados="5" '
+        # David, 17/09: el "Conoce" sale del bloque de color y va debajo de la
+        # tarjeta, para que la foto del proyecto tenga mas lugar.
+        return (f'<div class="mundo-item" style="--i:{i}">'
+        f'<a class="mundo" href="{e(x["href"])}" data-tinta="{e(x["tinta"])}" data-fx="tilt" data-fx-grados="5" '
         f'style="--i:{i}">'
         f'<span class="mundo__cuerpo">'
         f'<span class="mundo__marca" aria-hidden="true"><img src="{R.raiz}img/isotipo.webp" alt="" width="600" height="381" loading="lazy" decoding="async"></span>'
         f'<span class="mundo__nombre">{e(x["nombre"])}</span>'
         f'<span class="mundo__bajada">{e(x["bajada"])}</span>'
-        f'<span class="mundo__cierre">{e(x["cierre"])}<span aria-hidden="true"> &#8594;</span></span>'
         f'</span>'
         f'{img(x["foto"], "(min-width:64rem) 30vw, 100vw", clase="mundo__foto") if x.get("foto") else ""}'
-        f'</a>')
+        f'</a>'
+        f'<a class="mundo-cta" href="{e(x["href"])}">{e(x["cierre"])}<span aria-hidden="true"> &#8594;</span></a>'
+        f'</div>')
     paneles = "".join(panel(i, x) for i, x in enumerate(w["lista"]))
     cab = (f'<div class="seccion__cabeza"><h2 class="titulo" data-letras>{e(w["rotulo"])}</h2>'
            f'<p class="bajada">{e(w["intro"])}</p></div>') if cabeza else f'<h2 class="visualmente-oculto">{e(w["rotulo"])}</h2>'

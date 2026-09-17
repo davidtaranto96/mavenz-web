@@ -3758,3 +3758,37 @@ header.cabecera[data-portada] .cabecera__marca { opacity: 1; translate: none; po
   .flotante:not([data-abierto]) .flotante__raya { background: var(--papel); }
   header.cabecera .cabecera__derecha { margin-right: calc(46px + .75rem); }
 }
+
+/* --- Proyectos en movimiento: el "Conocé" sale del bloque y la foto crece
+   (David, 17/09: "para darle más protagonismo a las fotos de los proyectos"). */
+.mundo-item { display: flex; flex-direction: column; min-width: 0; }
+.mundo-item > .mundo { flex: 1 1 auto; }
+.mundo__cuerpo { grid-template-rows: auto 1fr auto; }
+.mundo__foto { height: clamp(9rem, 30svh, 14rem); }
+.mundo-cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: .375rem;
+  font-size: var(--t-chico);
+  font-weight: var(--medio);
+  color: var(--tinta-bordo);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .35em;
+}
+.mundo-cta:focus-visible { outline: 2px solid var(--tinta-bordo); outline-offset: 3px; border-radius: 2px; }
+@media (hover: hover) and (pointer: fine) { .mundo-cta:hover { text-decoration-thickness: 2px; } }
+@media (min-width: 64rem) {
+  .mundo__cuerpo { grid-template-areas: "marca nombre" ". nombre" "bajada nombre"; grid-template-rows: auto 1fr auto; }
+  .mundo__foto { flex-basis: 56%; height: 56%; }
+  .mundo__nombre { font-size: clamp(1.375rem, 1.9vw, 1.875rem); }
+}
+@media (min-width: 48rem) and (max-width: 63.99rem) { .mundo__foto { height: clamp(7rem, 28svh, 11rem); } }
+/* En el celular el carril desliza la tarjeta con su enlace abajo. */
+@media (max-width: 63.99rem) {
+  .mundo-item { flex: 0 0 82%; scroll-snap-align: start; }
+  .mundo-item > .mundo { flex: 1 1 auto; min-height: 26rem; scroll-snap-align: none; }
+  .mundo__foto { height: 14rem; }
+}
